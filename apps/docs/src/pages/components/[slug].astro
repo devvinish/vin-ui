@@ -4,13 +4,15 @@ import Example from "../../components/Example.astro";
 import CodeBlock from "../../components/CodeBlock.astro";
 import ReactExample from "../../components/ReactExample";
 import { href, SITE } from "../../lib/site";
-import { SPECS, getExamples, type Spec } from "../../data/registry";
+import { SPECS, getExamples, getImports, needsScript, type Spec } from "../../data/registry";
 
 export function getStaticPaths() {
   return SPECS.map((spec) => ({ params: { slug: spec.name }, props: { spec } }));
 }
 const { spec } = Astro.props as { spec: Spec };
 const examples = getExamples(spec.name);
+const imports = getImports(spec.name);
+const script = needsScript(spec.name);
 const toc = [
   ...examples.map((e) => ({ id: e.id, text: e.title })),
   { id: "install", text: "Installation" },
@@ -39,9 +41,15 @@ const reactImport = `import { ${[...spec.react.components, ...(spec.react.helper
     ))}
 
     <h2 id="install">Installation</h2>
-    <p>React, Vue and Svelte: add the component file to your project with the CLI (it reads your framework from <code>vin.json</code>), then import it. Each example's code starts with the imports it needs. HTML: the classes come with <code>vinui.css</code>.</p>
+    <p>React, Vue and Svelte: add the component to your project with the CLI. It reads your framework from <code>vin.json</code> and also copies any component this one needs. Then import it:</p>
     <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui add ${spec.name}`} />
     <CodeBlock title="React" lang="tsx" code={reactImport} />
+    {imports.vue && <CodeBlock title="Vue" lang="ts" code={imports.vue} />}
+    {imports.svelte && <CodeBlock title="Svelte" lang="ts" code={imports.svelte} />}
+    <p>The import paths assume the default folders: <code>@/components/vin</code> (React and Vue, with the usual <code>@</code> → <code>src</code> alias) and <code>$lib/components/vin</code> (SvelteKit). Use your own if you chose another folder in <code>init</code>. How the Vue and Svelte versions pass values and content is in <a href={href("/docs/frameworks/")}>Frameworks</a>.</p>
+    <p>Plain HTML: the classes come with the style's stylesheet. {script
+      ? <>This component also needs <a href={href("/docs/installation/#html")}><code>vinui.js</code></a> for its keyboard and pointer behaviour.</>
+      : <>It needs no JavaScript.</>}</p>
 
     <h2 id="api">API</h2>
     <p>From <code>spec/{spec.name}.json</code>, which every framework version is tested against.</p>
@@ -65,7 +73,7 @@ const reactImport = `import { ${[...spec.react.components, ...(spec.react.helper
     <h3>Parts</h3>
     <div class="table-wrap">
       <table class="api">
-        <thead><tr><th>React</th><th>HTML classes</th></tr></thead>
+        <thead><tr><th>React, Vue, Svelte</th><th>HTML classes</th></tr></thead>
         <tbody>
           <tr>
             <td>{spec.react.components.map((c) => <code style="margin:0 4px 4px 0;display:inline-block">{`<${c}>`}</code>)}</td>

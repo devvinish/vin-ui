@@ -54,3 +54,57 @@ test("docs · every component is ready: no 'soon' in the sidebar, search or comp
     expect(res.status(), name).toBe(200);
   }
 });
+
+test("header · colour mode: System by default, a choice sticks after reload", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/ui/docs/installation/");
+  const group = page.getByRole("group", { name: "Colour mode" });
+  const html = page.locator("html");
+  await expect(group.getByRole("button", { name: "System" })).toHaveAttribute("aria-pressed", "true");
+  await expect(html).not.toHaveAttribute("data-vin-mode", /./);
+  await group.getByRole("button", { name: "Light" }).click();
+  await expect(html).toHaveAttribute("data-vin-mode", "light");
+  await page.reload();
+  await expect(html).toHaveAttribute("data-vin-mode", "light");
+  await expect(group.getByRole("button", { name: "Light" })).toHaveAttribute("aria-pressed", "true");
+  await group.getByRole("button", { name: "System" }).click();
+  await expect(html).not.toHaveAttribute("data-vin-mode", /./);
+  await page.reload();
+  await expect(group.getByRole("button", { name: "System" })).toHaveAttribute("aria-pressed", "true");
+});
+
+test("header · the style name keeps one width, so the search box doesn't move", async ({ page }) => {
+  await page.goto("/ui/docs/installation/");
+  const trigger = page.locator('[data-pop-trigger="style"]');
+  const widths = new Set<number>();
+  for (const id of STYLE_IDS) {
+    await trigger.click();
+    await page.locator(`[data-set-style="${id}"]`).click();
+    widths.add(Math.round((await trigger.boundingBox())!.width));
+  }
+  expect([...widths]).toHaveLength(1);
+});
+
+for (const path of ["docs/installation", "docs/theming", "docs/frameworks", "docs/cli", "docs/mcp", "components/tabs", "styles"]) {
+  test(`docs · ${path} passes axe (WCAG 2.2 AA) in light and dark`, async ({ page }) => {
+    for (const colorScheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme });
+      await page.goto(`/ui/${path}/`);
+      await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;animation:none!important}" });
+      const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).exclude(".preview").analyze();
+      expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`), colorScheme).toEqual([]);
+    }
+  });
+}
+
+test("header · Docs opens the guides and stays highlighted there", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/ui/");
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Docs" }).click();
+  await expect(page).toHaveURL(/\/ui\/docs\/installation\/$/);
+  await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Docs" })).toHaveAttribute("aria-current", "page");
+  await page.goto("/ui/components/button/");
+  await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Components" })).toHaveAttribute("aria-current", "page");
+  await page.goto("/ui/docs/");
+  await expect(page).toHaveURL(/\/ui\/docs\/installation\/$/);
+});

@@ -1,0 +1,15 @@
+---
+import { href } from "../../lib/site";
+const to = href("/docs/installation/");
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>VinUI docs</title>
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <link rel="canonical" href={to} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body><a href={to}>Go to the VinUI docs</a></body>
+</html>

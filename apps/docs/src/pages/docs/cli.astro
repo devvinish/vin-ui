@@ -2,7 +2,7 @@
 import Docs from "../../layouts/Docs.astro";
 import CodeBlock from "../../components/CodeBlock.astro";
 import { href } from "../../lib/site";
-const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" }, { id: "add", text: "add" }, { id: "diff", text: "diff" }, { id: "config", text: "vin.json" }, { id: "offline", text: "Offline" }];
+const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" }, { id: "frameworks", text: "Frameworks" }, { id: "add", text: "add" }, { id: "diff", text: "diff" }, { id: "config", text: "vin.json" }, { id: "offline", text: "Offline" }];
 ---
 <Docs title="CLI" description="npx @vinish/ui: set up a project, add components, switch styles and see upstream changes." current="cli" toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><span>CLI</span></div>
@@ -29,8 +29,24 @@ const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" },
     <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui init --framework react --style tactile --accent "#0d9488" --radius lg -y`} />
     <p>The "Copy CLI" button in the Customize panel gives you this command for the theme you've built.</p>
 
+    <h2 id="frameworks">Frameworks and folders</h2>
+    <p><code>init</code> reads <code>package.json</code> to pick the framework: Svelte or SvelteKit, then Vue or Nuxt, then React or Next.js. With none of them it sets up plain HTML. <code>--framework</code> overrides it.</p>
+    <div class="table-wrap">
+      <table class="api">
+        <thead><tr><th>Framework</th><th>Files</th><th>Default folder</th></tr></thead>
+        <tbody>
+          <tr><td><code>react</code></td><td><code>.tsx</code></td><td><code>src/components/vin</code> (or <code>components/vin</code> without <code>src</code>)</td></tr>
+          <tr><td><code>vue</code></td><td><code>.vue</code></td><td><code>src/components/vin</code> (or <code>components/vin</code> without <code>src</code>)</td></tr>
+          <tr><td><code>svelte</code></td><td><code>.svelte</code>, one file per part</td><td><code>src/lib/components/vin</code> in SvelteKit, else <code>src/components/vin</code></td></tr>
+          <tr><td><code>html</code></td><td>The examples as <code>.html</code>, plus <code>vinui.js</code> when needed</td><td><code>vin</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Choose another folder with <code>--path</code>. Components import each other with relative paths, so any folder works. See <a href={href("/docs/frameworks/")}>Frameworks</a> for how the versions differ.</p>
+
     <h2 id="add">add</h2>
     <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui add dialog dropdown-menu" />
+    <p>Each component brings the ones it uses: <code>add alert-dialog</code> also adds <code>dialog</code>, and in Svelte <code>add card</code> adds <code>card-header.svelte</code> and the other parts.</p>
     <p>If you've changed a file, <code>add</code> asks before replacing it (or keeps yours with <code>-y</code>). <code>--overwrite</code> replaces without asking. Mistyped names get a suggestion.</p>
 
     <h2 id="diff">diff</h2>

@@ -36,7 +36,7 @@ const isDark = () => theme.mode === "dark" || (theme.mode === "system" && matchM
 
 function syncUi() {
   for (const el of $$("[data-style-name]")) el.textContent = styleName(theme.style);
-  for (const el of $$("[data-set-style]")) el.setAttribute("aria-checked", String(el.dataset.setStyle === theme.style));
+  for (const el of $$("[data-set-style]")) el.setAttribute(el.getAttribute("role") === "menuitemradio" ? "aria-checked" : "aria-pressed", String(el.dataset.setStyle === theme.style));
   for (const el of $$("[data-demo-style]")) el.setAttribute("aria-pressed", String(el.dataset.demoStyle === theme.style));
   for (const el of $$("[data-set-accent]")) el.setAttribute("aria-checked", String(el.dataset.setAccent === theme.accent));
   for (const el of $$<HTMLInputElement>("[data-accent-input]")) el.value = theme.accent;
@@ -47,8 +47,6 @@ function syncUi() {
   const now = `${styleName(theme.style)} · ${isDark() ? "dark" : "light"}`;
   for (const el of $$("[data-style-now]")) el.textContent = now;
   for (const el of $$("[data-current-style]")) el.classList.toggle("current", el.dataset.currentStyle === theme.style);
-  const mt = $("[data-mode-toggle]");
-  if (mt) mt.setAttribute("aria-label", isDark() ? "Switch to light mode" : "Switch to dark mode");
   renderSaved();
 }
 
@@ -93,7 +91,7 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("click", (e) => {
-  const t = (e.target as Element).closest<HTMLElement>("[data-set-style], [data-demo-style], [data-set-accent], [data-opt], [data-mode-toggle]");
+  const t = (e.target as Element).closest<HTMLElement>("[data-set-style], [data-demo-style], [data-set-accent], [data-opt]");
   if (!t) return;
   if (t.dataset.setStyle) { setTheme({ style: t.dataset.setStyle }); closePops(); $("[data-pop-trigger='style']")?.focus(); }
   else if (t.dataset.demoStyle) setTheme({ style: t.dataset.demoStyle });
@@ -107,7 +105,7 @@ document.addEventListener("click", (e) => {
       return;
     }
     setTheme({ [key]: val } as Partial<Theme>);
-  } else if (t.hasAttribute("data-mode-toggle")) setTheme({ mode: isDark() ? "light" : "dark" });
+  }
 });
 
 for (const input of $$<HTMLInputElement>("[data-accent-input]")) {

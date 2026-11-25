@@ -1,0 +1,80 @@
+---
+/* A small screen built from real VinUI components, so a style can be judged on more than buttons. */
+import { href } from "../lib/site";
+import "../styles/preview.css";
+const { id } = Astro.props as { id: string };
+const k = (s: string) => `ss-${id}-${s}`;
+---
+<div class="hero-demo style-sample">
+  <div class="vin-card">
+    <div class="vin-card__header">
+      <div class="hero-demo__row">
+        <p class="vin-card__title">Create your account</p>
+        <span class="vin-badge vin-badge--success">Free</span>
+      </div>
+      <p class="vin-card__desc">Start building with VinUI in seconds.</p>
+    </div>
+    <div class="vin-card__body hero-demo__stack">
+      <div class="vin-field">
+        <label class="vin-label" for={k("name")}>Name</label>
+        <input id={k("name")} class="vin-input" placeholder="Your name" autocomplete="off">
+      </div>
+      <div class="vin-field">
+        <label class="vin-label" for={k("mail")}>Email</label>
+        <input id={k("mail")} class="vin-input" type="email" placeholder="you@example.com" autocomplete="off">
+      </div>
+      <div class="vin-choice">
+        <input id={k("terms")} class="vin-checkbox" type="checkbox" checked>
+        <div class="vin-choice__body"><label class="vin-choice__label" for={k("terms")}>I agree to the terms</label></div>
+      </div>
+      <button type="button" class="vin-btn">Create account</button>
+      <button type="button" class="vin-btn vin-btn--outline">Continue with GitHub</button>
+    </div>
+  </div>
+  <div class="hero-demo__col">
+    <div class="vin-card">
+      <div class="vin-card__header">
+        <div class="hero-demo__row">
+          <p class="vin-card__desc">Monthly visitors</p>
+          <span class="vin-badge vin-badge--success">+12.5%</span>
+        </div>
+        <p class="vin-card__title hero-demo__stat">48,210</p>
+      </div>
+      <div class="vin-card__body">
+        <div class="vin-field">
+          <div class="vin-progress__head">
+            <span class="vin-label" id={k("goal")}>Goal</span>
+            <span class="vin-progress__value">72%</span>
+          </div>
+          <div class="vin-progress" role="progressbar" aria-labelledby={k("goal")} aria-valuemin="0" aria-valuemax="100" aria-valuenow="72" style="--vin-value: 72%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="vin-card">
+      <div class="vin-card__header">
+        <div class="hero-demo__row">
+          <p class="vin-card__title">Notifications</p>
+          <div class="vin-avatar-group" role="group" aria-label="Team">
+            <span class="vin-avatar vin-avatar--sm" role="img" aria-label="Ada Lovelace"><img class="vin-avatar__img" src={href("/avatars/ada.svg")} alt=""><span class="vin-avatar__fallback">AL</span></span>
+            <span class="vin-avatar vin-avatar--sm" role="img" aria-label="Alan Turing"><img class="vin-avatar__img" src={href("/avatars/alan.svg")} alt=""><span class="vin-avatar__fallback">AT</span></span>
+            <span class="vin-avatar vin-avatar--sm" role="img" aria-label="Grace Hopper"><span class="vin-avatar__fallback">GH</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="vin-card__body hero-demo__stack">
+        <div class="vin-choice vin-choice--end">
+          <input id={k("updates")} class="vin-switch" type="checkbox" role="switch" checked>
+          <div class="vin-choice__body"><label class="vin-choice__label" for={k("updates")}>Product updates</label></div>
+        </div>
+        <div class="vin-choice vin-choice--end">
+          <input id={k("digest")} class="vin-switch" type="checkbox" role="switch">
+          <div class="vin-choice__body"><label class="vin-choice__label" for={k("digest")}>Weekly digest</label></div>
+        </div>
+      </div>
+      <div class="vin-card__footer">
+        <button type="button" class="vin-btn vin-btn--secondary vin-btn--sm">Save</button>
+        <button type="button" class="vin-btn vin-btn--ghost vin-btn--sm">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

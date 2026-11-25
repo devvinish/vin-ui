@@ -34,7 +34,56 @@ export function getExamples(name: string): Example[] {
     const mod = tsxMods[`../../../../packages/react/examples/${name}/${ex.id}.tsx`];
     if (html === undefined || react === undefined || !mod) throw new Error(`VinUI docs: ${name}/${ex.id} is missing its HTML snippet or React example`);
     const vue = vueRaw[`../../../../packages/vue/examples/${name}/${ex.id}.vue`];
-    const svelte = svelteRaw[`../../../../packages/svelte/examples/${name}/${ex.id}.svelte`];
+    // SvelteKit projects keep components in src/lib, so show the $lib path the CLI's default folder uses.
+    const svelte = svelteRaw[`../../../../packages/svelte/examples/${name}/${ex.id}.svelte`]?.replaceAll('"@/components/vin/', '"$lib/components/vin/');
     return { ...ex, html, react, vue, svelte, Component: Object.values(mod)[0] };
   });
+}
+
+/* ───────── Install details for a component page ───────── */
+
+const vueIndex = import.meta.glob<string>("../../../../packages/vue/src/index.ts", { eager: true, query: "?raw", import: "default" });
+const svelteIndex = import.meta.glob<string>("../../../../packages/svelte/src/index.ts", { eager: true, query: "?raw", import: "default" });
+const vinuiJs = import.meta.glob<string>("../../../../packages/html/vinui.js", { eager: true, query: "?raw", import: "default" });
+const one = (g: Record<string, string>) => Object.values(g)[0] ?? "";
+
+/** Value exports of an index.ts, by file: { "card.vue": { def: "Card", named: ["CardHeader", …] } }. */
+function exportsByFile(src: string) {
+  const out = new Map<string, { def?: string; named: string[] }>();
+  for (const m of src.matchAll(/^export \{([^}]+)\} from "\.\/([^"]+)";/gm)) {
+    const entry = out.get(m[2]) ?? { named: [] };
+    for (const part of m[1].split(",").map((s) => s.trim()).filter(Boolean)) {
+      const d = part.match(/^default as (\w+)$/);
+      if (d) entry.def = d[1]; else entry.named.push(part);
+    }
+    out.set(m[2], entry);
+  }
+  return out;
+}
+const importLine = (def: string | undefined, named: string[], from: string) =>
+  `import ${[def, named.length ? `{ ${named.join(", ")} }` : ""].filter(Boolean).join(", ")} from "${from}";`;
+
+/** The component a file belongs to: its own name, or the longest component name it starts with (card-header → card). */
+function owner(base: string) {
+  if (getSpec(base)) return base;
+  return SPECS.map((s) => s.name).filter((n) => base.startsWith(`${n}-`)).sort((a, b) => b.length - a.length)[0];
+}
+
+/** Import lines for Vue and Svelte, read from each package's index.ts so they never drift. */
+export function getImports(name: string): { vue?: string; svelte?: string } {
+  const lines = (src: string, ext: string, dir: string) => {
+    const found = [...exportsByFile(src)].filter(([file]) => file.endsWith(`.${ext}`) && owner(file.slice(0, -(ext.length + 1))) === name);
+    found.sort(([a], [b]) => (a === `${name}.${ext}` ? -1 : b === `${name}.${ext}` ? 1 : a.localeCompare(b)));
+    return found.map(([file, e]) => importLine(e.def, e.named, `${dir}/${file}`)).join("\n") || undefined;
+  };
+  return {
+    vue: lines(one(vueIndex), "vue", "@/components/vin"),
+    svelte: lines(one(svelteIndex), "svelte", "$lib/components/vin"),
+  };
+}
+
+/** True when a component's HTML uses an attribute that vinui.js wires up. */
+export function needsScript(name: string) {
+  const attrs = [...one(vinuiJs).matchAll(/"(data-vin-[a-z-]+)": init/g)].map((m) => m[1]);
+  return getExamples(name).some((ex) => attrs.some((a) => ex.html.includes(a)));
 }

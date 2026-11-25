@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 
 /** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */

@@ -6,7 +6,7 @@ import { href, SITE } from "../lib/site";
 
 const { current = "", hasSidebar = false } = Astro.props as { current?: string; hasSidebar?: boolean };
 const nav = [
-  { label: "Docs", path: "/", key: "home" },
+  { label: "Docs", path: "/docs/installation/", key: "docs" },
   { label: "Components", path: "/components/", key: "components" },
   { label: "Styles", path: "/styles/", key: "styles" },
 ];
@@ -32,7 +32,7 @@ const nav = [
 
       <div class="hdr-pop">
         <button class="hdr-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-pop-trigger="style">
-          <span class="lbl">Style</span> <span data-style-name>Precision</span> <Icon name="chev" />
+          <span class="lbl">Style</span> <span class="style-name"><span data-style-name>Precision</span>{STYLES.map((s) => <span class="sizer" aria-hidden="true">{s.name}</span>)}</span> <Icon name="chev" />
         </button>
         <div class="hdr-panel" hidden data-pop="style" role="menu" aria-label="Style">
           <h6>Style · applies to every component</h6>
@@ -64,12 +64,14 @@ const nav = [
         </div>
       </div>
 
-      <button class="icon-btn" type="button" data-mode-toggle aria-label="Switch to dark mode">
-        <span class="mode-sun"><Icon name="sun" /></span><span class="mode-moon"><Icon name="moon" /></span>
-      </button>
       <button class="icon-btn" type="button" data-open-customize aria-label="Customize theme" title="Customize">
         <Icon name="sliders" />
       </button>
+      <div class="mode-switch" role="group" aria-label="Colour mode">
+        <button type="button" data-opt="mode" data-val="light" aria-pressed="false" aria-label="Light" title="Light"><Icon name="sun" /></button>
+        <button type="button" data-opt="mode" data-val="system" aria-pressed="true" aria-label="System" title="System"><Icon name="monitor" /></button>
+        <button type="button" data-opt="mode" data-val="dark" aria-pressed="false" aria-label="Dark" title="Dark"><Icon name="moon" /></button>
+      </div>
       <a class="icon-btn gh" href={SITE.github} aria-label="VinUI on GitHub" rel="noopener"><Icon name="github" /></a>
     </div>
   </div>

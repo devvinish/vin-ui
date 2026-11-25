@@ -67,13 +67,16 @@ function frameworkEntry(spec, fw, scriptAttrs, specNames) {
   const files = paths.map((p) => ({ path: p, content: read(`${F.src}/${p}`) }));
   const examples = spec.examples
     .filter((ex) => has(`${F.examples}/${name}/${ex.id}.${F.ext}`))
-    .map((ex) => ({ ...ex, code: read(`${F.examples}/${name}/${ex.id}.${F.ext}`) }));
+    .map((ex) => ({ ...ex, code: exampleCode(fw, read(`${F.examples}/${name}/${ex.id}.${F.ext}`)) }));
   const deps = siblingDeps(files.map((f) => f.content).join("\n"), spec).filter((d) => d !== name && specNames.includes(d));
   return {
     ...base, components: spec[fw]?.components ?? spec.react?.components ?? [],
     dependencies: deps, files, examples,
   };
 }
+
+/** Svelte examples import from $lib, where SvelteKit (the CLI's default) keeps the components. */
+const exampleCode = (fw, code) => (fw === "svelte" ? code.replaceAll('"@/components/vin/', '"$lib/components/vin/') : code);
 
 /** The extra part files of a component (Svelte), e.g. card → card-header.svelte, card-title.svelte. */
 function partFiles(F, name, specNames) {

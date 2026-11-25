@@ -5,8 +5,9 @@ import RightRail from "../components/RightRail.astro";
 
 export interface Props { title: string; description?: string; current?: string; toc?: { id: string; text: string }[] }
 const { title, description, current, toc = [] } = Astro.props;
+const GUIDES = ["installation", "theming", "frameworks", "cli", "mcp"];
 ---
-<Base title={title} description={description} current={current === "styles" ? "styles" : "components"} hasSidebar>
+<Base title={title} description={description} current={current === "styles" ? "styles" : GUIDES.includes(current ?? "") ? "docs" : "components"} hasSidebar>
   <div class="docs">
     <Sidebar current={current} />
     <main class="main" id="main">

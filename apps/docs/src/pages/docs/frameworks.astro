@@ -1,0 +1,82 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { href } from "../../lib/site";
+const toc = [
+  { id: "same", text: "What stays the same" },
+  { id: "values", text: "Values" },
+  { id: "content", text: "Content and triggers" },
+  { id: "events", text: "Events" },
+  { id: "files", text: "Files and imports" },
+  { id: "notes", text: "Component notes" },
+];
+---
+<Docs title="Frameworks" description="How the React, Vue and Svelte versions of VinUI differ: values, content, events and files." current="frameworks" toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>Frameworks</span></div>
+  <h1 class="page-title">Frameworks</h1>
+  <p class="page-lead">Every component comes for HTML, React, Vue and Svelte. Each version follows its framework's own habits, so the way you pass values and content differs a little. This page lists how.</p>
+  <div class="prose">
+    <h2 id="same">What stays the same</h2>
+    <ul>
+      <li><strong>The markup.</strong> All four render the same tags and classes as the HTML on each component page. Tests check this for every example, so styles and the screenshots apply to all of them.</li>
+      <li><strong>Names.</strong> Components, parts and props have the same names (<code>Card</code>, <code>CardHeader</code>, <code>variant</code>, <code>size</code>). Props are listed on each component page.</li>
+      <li><strong>Behaviour and accessibility.</strong> Keyboard support, focus handling and ARIA are the same in every version.</li>
+    </ul>
+
+    <h2 id="values">Values</h2>
+    <p>React has a controlled <code>value</code> and an uncontrolled <code>defaultValue</code>. Vue and Svelte use two-way binding instead; a plain value is just the starting value.</p>
+    <div class="table-wrap">
+      <table class="api">
+        <thead><tr><th>React</th><th>Vue</th><th>Svelte</th></tr></thead>
+        <tbody>
+          <tr><td><code>value</code> + <code>onValueChange</code></td><td><code>v-model</code></td><td><code>bind:value</code></td></tr>
+          <tr><td><code>defaultValue</code></td><td><code>defaultValue</code> or <code>v-model</code></td><td><code>value</code> (no bind)</td></tr>
+          <tr><td><code>open</code> / <code>defaultOpen</code></td><td><code>v-model:open</code> (some also take <code>defaultOpen</code>)</td><td><code>bind:open</code> / <code>open</code></td></tr>
+          <tr><td><code>checked</code> / <code>defaultChecked</code></td><td><code>v-model</code> / <code>defaultChecked</code></td><td><code>bind:checked</code> / <code>checked</code></td></tr>
+          <tr><td><code>pressed</code> / <code>defaultPressed</code></td><td><code>v-model:pressed</code> / <code>defaultPressed</code></td><td><code>bind:pressed</code> / <code>pressed</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="margin-top:12px">
+      <CodeBlock title="React" lang="tsx" code={`const [plan, setPlan] = useState("pro");\n<Select options={plans} value={plan} onValueChange={setPlan} label="Plan" />`} />
+      <CodeBlock title="Vue" lang="vue" code={`<script setup>\nconst plan = ref("pro");\n</script>\n<template>\n  <Select :options="plans" v-model="plan" label="Plan" />\n</template>`} />
+      <CodeBlock title="Svelte" lang="svelte" code={`<script>\n  let plan = $state("pro");\n</script>\n<Select options={plans} bind:value={plan} label="Plan" />`} />
+    </div>
+    <p>The change callbacks (<code>onValueChange</code>, <code>onOpenChange</code>, <code>onCheckedChange</code>…) exist in Svelte too, for when you want to react to a change without binding. Calendar, Date Picker and Combobox take the same value shapes everywhere: a <code>"YYYY-MM-DD"</code> string, or <code>&#123; from, to &#125;</code> in range mode.</p>
+
+    <h2 id="content">Content and triggers</h2>
+    <p>Where a React prop takes elements (<code>trigger</code>, <code>title</code>, <code>icon</code>, <code>footer</code>…), Vue uses a slot with the same name and Svelte a snippet. Plain text can still be passed as a prop.</p>
+    <CodeBlock title="React" lang="tsx" code={`<Dialog\n  title="Edit profile"\n  trigger={<Button>Edit</Button>}\n  footer={<DialogClose><Button>Save</Button></DialogClose>}\n>\n  …\n</Dialog>`} />
+    <CodeBlock title="Vue" lang="vue" code={`<Dialog title="Edit profile">\n  <template #trigger><Button>Edit</Button></template>\n  …\n  <template #footer><DialogClose><Button>Save</Button></DialogClose></template>\n</Dialog>`} />
+    <CodeBlock title="Svelte" lang="svelte" code={`<Dialog title="Edit profile">\n  {#snippet trigger(props)}<Button {...props}>Edit</Button>{/snippet}\n  …\n  {#snippet footer(close)}<Button onclick={close}>Save</Button>{/snippet}\n</Dialog>`} />
+    <ul>
+      <li><strong>Triggers.</strong> React and Vue take your button (a prop in React, the <code>#trigger</code> slot in Vue) and add the ARIA attributes and handlers to it. Svelte can't change an element it's given, so its <code>trigger</code> snippet receives those props for you to spread: <code>&#123;...props&#125;</code>. This applies to Dialog, Alert Dialog, Sheet, Drawer, Popover, Hover Card, Dropdown Menu, Command Dialog and Tooltip.</li>
+      <li><strong>Closing.</strong> React and Vue wrap a button in <code>DialogClose</code>, <code>SheetClose</code> or <code>DrawerClose</code>. In Svelte the <code>footer</code> and <code>children</code> snippets receive a <code>close</code> function instead.</li>
+      <li><strong>Lists of content.</strong> Svelte can't count or wrap its children, so a few components take data plus a snippet: Carousel takes <code>items</code> and renders each with <code>children(item, i)</code>, and Data Table columns use a <code>cell</code> snippet. In Vue, Data Table cells use a <code>#cell-&lt;key&gt;</code> slot.</li>
+    </ul>
+
+    <h2 id="events">Events</h2>
+    <p>React and Svelte use callback props (<code>onSelect</code>, <code>onComplete</code>, <code>onLayout</code>). Vue emits events with the same name in kebab case: <code>@select</code>, <code>@complete</code>, <code>@layout</code>, <code>@update:open</code>. Plain HTML fires DOM events where a component reports something: <code>vin-resize</code> (Resizable), <code>vin-feedback</code> (Message), <code>vin-submit</code> and <code>vin-skip</code> (Questionnaire).</p>
+
+    <h2 id="files">Files and imports</h2>
+    <div class="table-wrap">
+      <table class="api">
+        <thead><tr><th></th><th>Files</th><th>Import</th></tr></thead>
+        <tbody>
+          <tr><td>React</td><td>One <code>.tsx</code> per component, parts inside</td><td><code>import &#123; Card, CardHeader &#125; from "@/components/vin/card"</code></td></tr>
+          <tr><td>Vue</td><td>One <code>.vue</code> per component, parts exported from it</td><td><code>import Card, &#123; CardHeader &#125; from "@/components/vin/card.vue"</code></td></tr>
+          <tr><td>Svelte</td><td>One <code>.svelte</code> per part (<code>card.svelte</code>, <code>card-header.svelte</code>)</td><td><code>import CardHeader from "$lib/components/vin/card-header.svelte"</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Each component page lists the exact imports for every framework. Helpers such as <code>toast()</code>, <code>buttonClasses</code>, <code>formatBytes</code> and <code>niceTicks</code> are exported from their component's file in every version (in Svelte, from its module script).</p>
+
+    <h2 id="notes">Component notes</h2>
+    <ul>
+      <li><strong>Toast.</strong> Put one <code>Toaster</code> in your layout and call <code>toast()</code> anywhere. In Svelte, import it from <code>toast.svelte</code>.</li>
+      <li><strong>Resizable in Svelte.</strong> Server-rendered handles get their size values once the page loads, because panels register as they render.</li>
+      <li><strong>Attachment.</strong> In plain HTML the remove and retry buttons aren't wired up: your app owns the list. In React and Svelte pass <code>onRemove</code> / <code>onRetry</code>; in Vue listen for <code>@remove</code> / <code>@retry</code>. The buttons only show when you do.</li>
+      <li><strong>Versions.</strong> React 18+, Vue 3.4+, Svelte 5.29+.</li>
+    </ul>
+  </div>
+</Docs>
