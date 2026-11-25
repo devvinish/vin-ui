@@ -24,7 +24,7 @@ for (const spec of specs) {
     test(`${spec.name}/${ex.id}.html: buttons are type="button", icon buttons and inputs are labelled`, () => {
       for (const [tag] of html.matchAll(/<button[^>]*>/g)) {
         assert.match(tag, /type="(button|submit)"/);
-        if (tag.includes("vin-btn--icon")) assert.match(tag, /aria-label="[^"]+"/);
+        if (tag.includes("vin-btn--icon")) assert.match(tag, /aria-label(ledby)?="[^"]+"/);
       }
       for (const [tag] of html.matchAll(/<(input|textarea|select)\b[^>]*>/g)) {
         if (/type="(hidden|submit|button)"/.test(tag)) continue;

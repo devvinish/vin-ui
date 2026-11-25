@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Toast API. Every framework package is tested against this file.",
+  "name": "toast",
+  "title": "Toast",
+  "category": "Feedback",
+  "description": "A short message in the corner after an action, like \"Saved\". It goes away by itself.",
+  "baseClass": "vin-toast",
+  "classes": ["vin-toaster", "vin-toast", "vin-toast--success", "vin-toast--danger", "vin-toast__icon", "vin-toast__content", "vin-toast__title", "vin-toast__description", "vin-toast__actions", "vin-toast__close"],
+  "thumb": "<div class=\"vin-toast vin-toast--success\" style=\"width:190px;padding:10px 12px;font-size:12px\"><div class=\"vin-toast__content\"><p class=\"vin-toast__title\">Changes saved</p><p class=\"vin-toast__description\" style=\"font-size:11px\">Just now</p></div></div>",
+  "props": {
+    "toast(options)": { "type": "function", "description": "Shows a toast: { title, description?, variant?, action?: { label, onClick }, duration? }. Returns an id for dismiss(id).", "html": "VinUI.toast({ … }) or data-vin-toast=\"Title\" on a button (with data-vin-toast-description, -variant)" },
+    "variant": { "values": ["default", "success", "danger"], "default": "default", "class": "vin-toast--{value}" },
+    "duration": { "type": "number", "default": 5000, "description": "Milliseconds before it closes. Hovering or focusing it pauses the timer." },
+    "Toaster": { "type": "component", "description": "Put it once in your app; toasts appear in it.", "html": "section.vin-toaster (vinui.js makes it)" },
+    "Toast": { "type": "component", "description": "The toast itself, if you want to show one inline.", "html": ".vin-toast" }
+  },
+  "react": { "components": ["Toaster", "Toast"], "helpers": ["toast", "dismissToast"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Press the button. In HTML, add data-vin-toast=\"Title\" to a button, or call VinUI.toast({ title })." },
+    { "id": "variants", "title": "Success, error and action", "description": "Icons for success and errors, and an action such as Undo." },
+    { "id": "appearance", "title": "How it looks", "description": "The same toast shown inline, for reference." }
+  ],
+  "a11y": [
+    "Each toast is a status message (role=\"status\"), so screen readers read it without moving focus. Errors use role=\"alert\".",
+    "Toasts sit in a landmark named \"Notifications\", so keyboard users can find them.",
+    "The timer pauses while the pointer or focus is on a toast, and every toast has a close button (WCAG 2.2.1).",
+    "Don't put the only way to do something in a toast: it goes away."
+  ]
+}

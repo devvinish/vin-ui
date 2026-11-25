@@ -1,8 +1,9 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds elements with data-vin-tabs, -select, -toggle, -toggle-group, -textarea, -otp, -slider and -dismiss on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
- * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider (fill). Components that need no
+ * It finds elements with data-vin-tabs, -select, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
+ * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
+ * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
  */
 (function () {
@@ -318,9 +319,145 @@
     });
   }
 
+  /* ---------- Floating placement (Tooltip, Popover): flips when there's no room, stays on screen ---------- */
+  function placeFloating(el, anchor, side, align, gap) {
+    var r = anchor.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+    var vw = document.documentElement.clientWidth, vh = window.innerHeight, m = 8;
+    var opposite = { top: "bottom", bottom: "top", left: "right", right: "left" };
+    var fits = { top: r.top - gap - h >= m, bottom: r.bottom + gap + h <= vh - m, left: r.left - gap - w >= m, right: r.right + gap + w <= vw - m };
+    if (!fits[side] && fits[opposite[side]]) side = opposite[side];
+    if (getComputedStyle(anchor).direction === "rtl") align = align === "start" ? "end" : align === "end" ? "start" : align;
+    var x, y;
+    if (side === "top" || side === "bottom") {
+      y = side === "top" ? r.top - gap - h : r.bottom + gap;
+      x = align === "start" ? r.left : align === "end" ? r.right - w : r.left + (r.width - w) / 2;
+    } else {
+      x = side === "left" ? r.left - gap - w : r.right + gap;
+      y = align === "start" ? r.top : align === "end" ? r.bottom - h : r.top + (r.height - h) / 2;
+    }
+    el.style.left = Math.max(m, Math.min(x, vw - w - m)) + "px";
+    el.style.top = Math.max(m, Math.min(y, vh - h - m)) + "px";
+    el.setAttribute("data-placed", side);
+  }
+
+  /* ---------- Tooltip: hover (after a delay) or keyboard focus; Escape hides ---------- */
+  function initTooltip(trigger) {
+    var tip = document.getElementById(trigger.getAttribute("data-vin-tooltip"));
+    if (!tip) return;
+    var side = tip.getAttribute("data-side") || "top", showTimer, hideTimer;
+    var isOpen = function () { return tip.matches(":popover-open") || tip.style.display === "block"; };
+    function show(now) {
+      clearTimeout(hideTimer); clearTimeout(showTimer);
+      showTimer = setTimeout(function () {
+        if (!isOpen()) tip.showPopover ? tip.showPopover() : (tip.style.display = "block");
+        placeFloating(tip, trigger, side, "center", 6);
+        document.addEventListener("keydown", onKey, true);
+      }, now ? 0 : 300);
+    }
+    function hide(now) {
+      clearTimeout(showTimer); clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () {
+        if (isOpen()) tip.hidePopover ? tip.hidePopover() : (tip.style.display = "");
+        document.removeEventListener("keydown", onKey, true);
+      }, now ? 0 : 100);
+    }
+    function onKey(e) { if (e.key === "Escape" && isOpen()) { e.stopPropagation(); hide(true); } }
+    trigger.addEventListener("pointerenter", function (e) { if (e.pointerType !== "touch") show(); });
+    trigger.addEventListener("pointerleave", function () { hide(); });
+    trigger.addEventListener("focus", function () { if (trigger.matches(":focus-visible")) show(true); });
+    trigger.addEventListener("blur", function () { hide(true); });
+    trigger.addEventListener("pointerdown", function () { hide(true); });
+    tip.addEventListener("pointerenter", function () { clearTimeout(hideTimer); });
+    tip.addEventListener("pointerleave", function () { hide(); });
+  }
+
+  /* ---------- Popover: the browser opens and closes it; this places it by its trigger ---------- */
+  function initPopover(pop) {
+    var trigger = document.querySelector('[popovertarget="' + pop.id + '"]');
+    if (!trigger || !pop.showPopover) return;
+    var side = pop.getAttribute("data-side") || "bottom", align = pop.getAttribute("data-align") || "start";
+    var place = function () { placeFloating(pop, trigger, side, align, 6); };
+    trigger.setAttribute("aria-expanded", "false");
+    pop.addEventListener("toggle", function (e) {
+      var open = e.newState === "open";
+      trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) { place(); window.addEventListener("scroll", place, true); window.addEventListener("resize", place); }
+      else { window.removeEventListener("scroll", place, true); window.removeEventListener("resize", place); }
+    });
+  }
+
+  /* ---------- Toast: VinUI.toast({ title, description, variant, action, duration }) ---------- */
+  var TOAST_ICONS = {
+    success: '<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
+    danger: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><path d="M12 16h.01"/>',
+  };
+  var SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+  function toaster() {
+    // Share a toaster that is already on the page (e.g. a React <Toaster>), so toasts never stack in two piles.
+    var host = document.querySelector("[data-vin-toaster]") || document.querySelector("section.vin-toaster");
+    if (!host) {
+      host = document.createElement("section");
+      host.className = "vin-toaster";
+      host.setAttribute("aria-label", "Notifications");
+      host.setAttribute("data-vin-toaster", "");
+      document.body.appendChild(host);
+    }
+    return host;
+  }
+  function toast(opts) {
+    if (typeof opts === "string") opts = { title: opts };
+    var variant = opts.variant && opts.variant !== "default" ? opts.variant : "";
+    var el = document.createElement("div");
+    el.className = "vin-toast" + (variant ? " vin-toast--" + variant : "");
+    // An empty live region first, then the text: screen readers announce it reliably.
+    el.setAttribute("role", variant === "danger" ? "alert" : "status");
+    toaster().appendChild(el);
+    var timer, left = opts.duration || 5000, started;
+    function dismiss() {
+      clearTimeout(timer);
+      if (!el.isConnected || el.hasAttribute("data-leaving")) return;
+      el.setAttribute("data-leaving", "");
+      var dur = parseFloat(getComputedStyle(el).transitionDuration) * 1000 || 0;
+      setTimeout(function () { el.remove(); }, dur);
+    }
+    function run() { started = Date.now(); timer = setTimeout(dismiss, left); }
+    function pause() { clearTimeout(timer); left -= Date.now() - started; }
+    requestAnimationFrame(function () {
+      var html = (TOAST_ICONS[variant] ? SVG_OPEN + ' class="vin-toast__icon">' + TOAST_ICONS[variant] + "</svg>" : "") +
+        '<div class="vin-toast__content"><p class="vin-toast__title"></p>' + (opts.description ? '<p class="vin-toast__description"></p>' : "") +
+        (opts.action ? '<div class="vin-toast__actions"><button type="button" class="vin-btn vin-btn--outline vin-btn--sm"></button></div>' : "") + "</div>" +
+        '<button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-toast__close" aria-label="Close">' + SVG_OPEN + '><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>';
+      el.innerHTML = html;
+      el.querySelector(".vin-toast__title").textContent = opts.title || "";
+      if (opts.description) el.querySelector(".vin-toast__description").textContent = opts.description;
+      if (opts.action) {
+        var act = el.querySelector(".vin-toast__actions button");
+        act.textContent = opts.action.label;
+        act.addEventListener("click", function () { if (opts.action.onClick) opts.action.onClick(); dismiss(); });
+      }
+      el.querySelector(".vin-toast__close").addEventListener("click", dismiss);
+      el.addEventListener("pointerenter", pause);
+      el.addEventListener("pointerleave", run);
+      el.addEventListener("focusin", pause);
+      el.addEventListener("focusout", function (e) { if (!el.contains(e.relatedTarget)) run(); });
+      run();
+    });
+    return { dismiss: dismiss, element: el };
+  }
+  function initToastTrigger(btn) {
+    btn.addEventListener("click", function () {
+      var d = btn.dataset;
+      toast({
+        title: d.vinToast, description: d.vinToastDescription, variant: d.vinToastVariant,
+        action: d.vinToastAction ? { label: d.vinToastAction, onClick: function () { btn.dispatchEvent(new CustomEvent("vin-toast-action", { bubbles: true })); } } : null,
+      });
+    });
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
+    "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */
@@ -345,7 +482,7 @@
     });
   }
 
-  window.VinUI = { init: init };
+  window.VinUI = { init: init, toast: toast };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { init(); });
   else init();
 })();

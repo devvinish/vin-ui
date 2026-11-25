@@ -1,0 +1,45 @@
+/* ==========================================================================
+   VinUI · Accordion
+   API (see spec/accordion.json):
+     .vin-accordion [.vin-accordion--outline]
+       > details.vin-accordion__item [name="group"] [open]
+           > summary.vin-accordion__trigger
+           > .vin-accordion__content
+   Native <details>: works without JavaScript. Give the items the same name to keep one open at a time.
+   Opening animates where the browser supports ::details-content.
+   ========================================================================== */
+
+.vin-accordion {
+  --vin-accordion-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  box-sizing: border-box; width: 100%; font-family: var(--vin-font); color: var(--vin-fg);
+  interpolate-size: allow-keywords;
+}
+.vin-accordion__item { border-bottom: 1px solid var(--vin-accordion-line); }
+.vin-accordion__trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 2px; font-size: var(--vin-text-md); font-weight: var(--vin-title-weight); line-height: 1.4;
+  list-style: none; cursor: pointer; user-select: none; border-radius: min(var(--vin-radius), 6px);
+}
+.vin-accordion__trigger::-webkit-details-marker { display: none; }
+.vin-accordion__trigger::after {
+  content: ""; flex: none; box-sizing: border-box; width: 8px; height: 8px; margin-inline-end: 4px;
+  border: solid var(--vin-muted); border-width: 0 1.5px 1.5px 0;
+  transform: translateY(-2px) rotate(45deg); transition: transform var(--vin-dur) var(--vin-ease);
+}
+.vin-accordion__item[open] > .vin-accordion__trigger::after { transform: translateY(2px) rotate(-135deg); }
+.vin-accordion__trigger:hover { color: color-mix(in srgb, var(--vin-fg) 80%, var(--vin-accent-text)); }
+.vin-accordion__trigger:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-accordion__content { padding: 0 2px 16px; font-size: var(--vin-text-md); line-height: 1.6; color: color-mix(in srgb, var(--vin-fg) 82%, transparent); }
+.vin-accordion__content > :first-child { margin-top: 0; }
+.vin-accordion__content > :last-child { margin-bottom: 0; }
+.vin-accordion__item::details-content {
+  block-size: 0; overflow: hidden;
+  transition: block-size var(--vin-dur) var(--vin-ease), content-visibility var(--vin-dur) allow-discrete;
+}
+.vin-accordion__item[open]::details-content { block-size: auto; }
+
+.vin-accordion--outline { display: grid; gap: 8px; }
+.vin-accordion--outline .vin-accordion__item {
+  padding: 0 14px; background: var(--vin-surface);
+  border: max(var(--vin-bw), 1px) solid var(--vin-accordion-line); border-radius: var(--vin-radius-lg);
+}

@@ -1,0 +1,25 @@
+/* ==========================================================================
+   VinUI · Popover
+   API (see spec/popover.json):
+     button[popovertarget="pop-id"]                     the trigger (native: works without JavaScript)
+     .vin-popover#pop-id[popover][role=dialog][aria-labelledby]
+       > .vin-popover__title + .vin-popover__description + your content
+   Closes on Escape and on a click outside. vinui.js places it next to the trigger
+   (without it, the browser centres it).
+   ========================================================================== */
+
+.vin-popover {
+  position: fixed; inset: auto; margin: 0; box-sizing: border-box;
+  width: max-content; max-width: min(320px, calc(100vw - 16px)); padding: 16px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.5; color: var(--vin-fg); text-align: start;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-lg);
+  opacity: 0; transform: translateY(-4px);
+  transition: opacity var(--vin-dur) var(--vin-ease), transform var(--vin-dur) var(--vin-ease), display var(--vin-dur) allow-discrete, overlay var(--vin-dur) allow-discrete;
+}
+.vin-popover:popover-open { opacity: 1; transform: none; }
+@starting-style { .vin-popover:popover-open { opacity: 0; transform: translateY(-4px); } }
+.vin-popover:not(:popover-open):not([popover]) { display: block; opacity: 1; transform: none; }
+.vin-popover__title { margin: 0; font-size: var(--vin-text-md); font-weight: var(--vin-title-weight); line-height: 1.35; }
+.vin-popover__description { margin: 2px 0 0; font-size: calc(var(--vin-text-md) - 1px); color: var(--vin-muted); }
+.vin-popover__title + .vin-popover__description + *, .vin-popover__description + * { margin-top: 14px; }

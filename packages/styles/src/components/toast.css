@@ -1,0 +1,38 @@
+/* ==========================================================================
+   VinUI · Toast
+   API (see spec/toast.json):
+     section.vin-toaster[aria-label=Notifications]       fixed corner where toasts stack (made for you)
+       > .vin-toast[role=status] [.vin-toast--success | .vin-toast--danger]
+           > svg.vin-toast__icon? > .vin-toast__content > .vin-toast__title + .vin-toast__description + .vin-toast__actions?
+           > button.vin-toast__close
+   In HTML, call VinUI.toast({ title, description, variant }) or add data-vin-toast="Title" to a button.
+   ========================================================================== */
+
+.vin-toaster {
+  position: fixed; z-index: 2147483000; inset-inline-end: 16px; bottom: 16px;
+  display: flex; flex-direction: column; gap: 8px; width: min(360px, calc(100vw - 32px));
+  margin: 0; padding: 0; pointer-events: none;
+}
+.vin-toaster > * { pointer-events: auto; }
+@media (max-width: 480px) { .vin-toaster { inset-inline: 16px; width: auto; } }
+
+.vin-toast {
+  --vin-toast-tone: var(--vin-fg);
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; column-gap: 10px;
+  box-sizing: border-box; width: 100%; padding: 12px 12px 12px 14px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.45; color: var(--vin-fg); text-align: start;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-lg);
+  transition: opacity var(--vin-dur) var(--vin-ease), transform var(--vin-dur) var(--vin-ease);
+}
+@starting-style { .vin-toaster > .vin-toast { opacity: 0; transform: translateY(8px); } }
+.vin-toast[data-leaving] { opacity: 0; transform: translateY(8px); }
+.vin-toast:not(:has(> .vin-toast__icon)) { grid-template-columns: minmax(0, 1fr) auto; }
+.vin-toast__icon { width: 18px; height: 18px; margin-top: 1px; color: var(--vin-toast-tone); }
+.vin-toast--success { --vin-toast-tone: color-mix(in srgb, var(--vin-success) 70%, var(--vin-fg)); }
+.vin-toast--danger { --vin-toast-tone: color-mix(in srgb, var(--vin-danger) 75%, var(--vin-fg)); }
+.vin-toast__content { display: grid; gap: 2px; min-width: 0; }
+.vin-toast__title { margin: 0; font-weight: var(--vin-title-weight); }
+.vin-toast__description { margin: 0; font-size: calc(var(--vin-text-md) - .5px); color: color-mix(in srgb, var(--vin-fg) 75%, transparent); }
+.vin-toast__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.vin-toast__close.vin-btn { width: var(--vin-h-sm); height: var(--vin-h-sm); margin: -6px -6px -6px 0; }

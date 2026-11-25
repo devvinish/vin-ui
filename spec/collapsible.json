@@ -1,0 +1,26 @@
+{
+  "$comment": "Single source of truth for the Collapsible API. Every framework package is tested against this file.",
+  "name": "collapsible",
+  "title": "Collapsible",
+  "category": "Layout",
+  "description": "One section that shows or hides, behind a small button.",
+  "baseClass": "vin-collapsible",
+  "classes": ["vin-collapsible", "vin-collapsible__trigger", "vin-collapsible__content"],
+  "thumb": "<details class=\"vin-collapsible\" open style=\"width:170px\"><summary class=\"vin-collapsible__trigger\" style=\"font-size:12px\">Advanced</summary><div class=\"vin-collapsible__content\" style=\"font-size:11px\">Hidden options</div></details>",
+  "props": {
+    "trigger": { "type": "ReactNode", "description": "The button text.", "html": "summary.vin-collapsible__trigger" },
+    "open / defaultOpen": { "type": "boolean", "default": false, "description": "Use onOpenChange to hear about changes.", "html": "open attribute on <details>" },
+    "children": { "type": "ReactNode", "html": ".vin-collapsible__content" }
+  },
+  "react": { "components": ["Collapsible"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Closed until someone asks for more." },
+    { "id": "form", "title": "Advanced settings", "description": "Hide options most people don't need. It starts open here." },
+    { "id": "card", "title": "In a card", "description": "A short list with the rest tucked away." }
+  ],
+  "a11y": [
+    "A native <details>: the trigger is a button that says \"expanded\" or \"collapsed\".",
+    "Write the trigger so it makes sense either way (\"Advanced settings\", not \"Show more\" that never changes).",
+    "Content inside is found by find-in-page, which opens it."
+  ]
+}

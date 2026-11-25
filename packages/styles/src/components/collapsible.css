@@ -1,0 +1,31 @@
+/* ==========================================================================
+   VinUI · Collapsible
+   API (see spec/collapsible.json):
+     details.vin-collapsible [open]
+       > summary.vin-collapsible__trigger     the button that shows or hides
+       > .vin-collapsible__content
+   Native <details>: works without JavaScript.
+   ========================================================================== */
+
+.vin-collapsible { box-sizing: border-box; font-family: var(--vin-font); color: var(--vin-fg); interpolate-size: allow-keywords; }
+.vin-collapsible__trigger {
+  display: inline-flex; align-items: center; gap: 8px; box-sizing: border-box; min-height: var(--vin-h-sm);
+  padding: 0 10px; margin-inline-start: -10px; font-size: var(--vin-text-md); font-weight: var(--vin-weight);
+  list-style: none; cursor: pointer; user-select: none; border-radius: var(--vin-radius);
+  transition: background-color var(--vin-dur) var(--vin-ease);
+}
+.vin-collapsible__trigger::-webkit-details-marker { display: none; }
+.vin-collapsible__trigger::before {
+  content: ""; flex: none; box-sizing: border-box; width: 7px; height: 7px;
+  border: solid currentColor; border-width: 0 1.5px 1.5px 0;
+  transform: rotate(-45deg); transition: transform var(--vin-dur) var(--vin-ease);
+}
+.vin-collapsible[open] > .vin-collapsible__trigger::before { transform: translateY(-2px) rotate(45deg); }
+.vin-collapsible__trigger:hover { background: color-mix(in srgb, var(--vin-fg) 6%, transparent); }
+.vin-collapsible__trigger:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-collapsible__content { padding-top: 8px; font-size: var(--vin-text-md); line-height: 1.55; }
+.vin-collapsible::details-content {
+  block-size: 0; overflow: hidden;
+  transition: block-size var(--vin-dur) var(--vin-ease), content-visibility var(--vin-dur) allow-discrete;
+}
+.vin-collapsible[open]::details-content { block-size: auto; }

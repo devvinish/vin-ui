@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Tooltip API. Every framework package is tested against this file.",
+  "name": "tooltip",
+  "title": "Tooltip",
+  "category": "Overlays",
+  "description": "A short hint that appears when you hover over or focus a control.",
+  "baseClass": "vin-tooltip",
+  "classes": ["vin-tooltip"],
+  "thumb": "<div style=\"display:grid;justify-items:center;gap:6px\"><span class=\"vin-tooltip\" style=\"position:static;opacity:1\">Add to library</span><span class=\"vin-btn vin-btn--outline vin-btn--sm\">Hover me</span></div>",
+  "props": {
+    "content": { "type": "ReactNode", "description": "The hint. Keep it short and plain text.", "html": ".vin-tooltip[role=tooltip][popover=manual]" },
+    "side": { "values": ["top", "right", "bottom", "left"], "default": "top", "description": "Where it appears. It flips if there isn't room.", "html": "data-side on .vin-tooltip" },
+    "label": { "type": "boolean", "default": false, "description": "The tooltip is the control's name (icon buttons), not an extra description.", "html": "aria-labelledby instead of aria-describedby on the trigger" },
+    "delay": { "type": "number", "default": 300, "description": "Milliseconds before it shows on hover. Focus shows it at once." }
+  },
+  "react": { "components": ["Tooltip"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Hover or focus the button. In HTML, add data-vin-tooltip=\"id\" to the trigger and include vinui.js." },
+    { "id": "icons", "title": "Icon buttons", "description": "For icon-only buttons the tooltip is the name, so it's linked with aria-labelledby." },
+    { "id": "sides", "title": "Sides", "description": "Top, right, bottom or left. Near the edge of the screen it flips to the side with room." }
+  ],
+  "a11y": [
+    "role=\"tooltip\", linked to the trigger with aria-describedby (or aria-labelledby when it is the name).",
+    "Shows on keyboard focus as well as hover, and Escape hides it without moving focus (WCAG 1.4.13).",
+    "You can move the pointer onto the tooltip without it closing.",
+    "Never put links or buttons in a tooltip: it can't be reached. Use a Popover for that."
+  ]
+}

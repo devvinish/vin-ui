@@ -1,0 +1,18 @@
+/* ==========================================================================
+   VinUI · Tooltip
+   API (see spec/tooltip.json):
+     trigger[data-vin-tooltip="tip-id"][aria-describedby="tip-id"]   (aria-labelledby for icon buttons)
+     .vin-tooltip#tip-id[role=tooltip][popover=manual] [data-side=top|right|bottom|left]
+   Shows on hover (after a short delay) and on keyboard focus; Escape hides it. vinui.js or React place it.
+   ========================================================================== */
+
+.vin-tooltip {
+  position: fixed; inset: auto; margin: 0; box-sizing: border-box; overflow: visible;
+  max-width: min(260px, calc(100vw - 16px)); padding: 6px 10px;
+  font-family: var(--vin-font); font-size: calc(var(--vin-text-sm) - .5px); font-weight: var(--vin-weight); line-height: 1.4;
+  color: var(--vin-stage); background: var(--vin-fg); border: 0; border-radius: min(var(--vin-radius), 8px);
+  box-shadow: var(--vin-shadow-lg);
+  opacity: 0; transition: opacity var(--vin-dur) var(--vin-ease), display var(--vin-dur) allow-discrete, overlay var(--vin-dur) allow-discrete;
+}
+.vin-tooltip:popover-open { opacity: 1; }
+@starting-style { .vin-tooltip:popover-open { opacity: 0; } }

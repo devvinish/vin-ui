@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Popover API. Every framework package is tested against this file.",
+  "name": "popover",
+  "title": "Popover",
+  "category": "Overlays",
+  "description": "A small panel that opens next to a button, for extra details or a quick form.",
+  "baseClass": "vin-popover",
+  "classes": ["vin-popover", "vin-popover__title", "vin-popover__description"],
+  "thumb": "<div class=\"vin-popover\" style=\"position:static;opacity:1;transform:none;width:170px;padding:12px\"><p class=\"vin-popover__title\" style=\"font-size:12px\">Dimensions</p><p class=\"vin-popover__description\" style=\"font-size:11px\">Set the size.</p></div>",
+  "props": {
+    "trigger": { "type": "ReactElement", "description": "The button that opens it.", "html": "button[popovertarget=\"id\"]" },
+    "title / description": { "type": "ReactNode", "html": ".vin-popover__title, .vin-popover__description" },
+    "open / defaultOpen": { "type": "boolean", "description": "Use onOpenChange to hear about changes." },
+    "side": { "values": ["top", "right", "bottom", "left"], "default": "bottom", "html": "data-side on .vin-popover" },
+    "align": { "values": ["start", "center", "end"], "default": "start", "html": "data-align on .vin-popover" }
+  },
+  "react": { "components": ["Popover"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Text and a link. In HTML it's the browser's popover: button popovertarget opens it, Escape and a click outside close it." },
+    { "id": "form", "title": "With a form", "description": "A few fields that apply at once." },
+    { "id": "share", "title": "Share", "description": "A link to copy, lined up with the end of the button." }
+  ],
+  "a11y": [
+    "The panel is a dialog named by its title (aria-labelledby). The trigger says whether it is expanded.",
+    "Escape closes it, as does a click outside; focus goes back to the trigger.",
+    "Tab moves from the trigger into the panel, because it sits right after the trigger in the reading order.",
+    "It isn't modal: the rest of the page still works. Use a Dialog when the user must answer first."
+  ]
+}

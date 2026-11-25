@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Accordion API. Every framework package is tested against this file.",
+  "name": "accordion",
+  "title": "Accordion",
+  "category": "Layout",
+  "description": "A stack of sections that open and close, like an FAQ.",
+  "baseClass": "vin-accordion",
+  "classes": ["vin-accordion", "vin-accordion--outline", "vin-accordion__item", "vin-accordion__trigger", "vin-accordion__content"],
+  "thumb": "<div class=\"vin-accordion\" style=\"width:180px;font-size:12px\"><details class=\"vin-accordion__item\" open><summary class=\"vin-accordion__trigger\" style=\"padding:8px 2px;font-size:12px\">Is it free?</summary><div class=\"vin-accordion__content\" style=\"font-size:11px;padding-bottom:8px\">Yes, MIT.</div></details><details class=\"vin-accordion__item\"><summary class=\"vin-accordion__trigger\" style=\"padding:8px 2px;font-size:12px\">Which styles?</summary></details></div>",
+  "props": {
+    "type": { "values": ["single", "multiple"], "default": "single", "description": "One section open at a time, or any number.", "html": "single: the same name=\"…\" on every <details>" },
+    "items": { "type": "{ value, title, content }[]", "html": "details.vin-accordion__item > summary.vin-accordion__trigger + .vin-accordion__content" },
+    "defaultValue / value": { "type": "string | string[]", "description": "Which sections are open. Use onValueChange to hear about changes.", "html": "open attribute" },
+    "variant": { "values": ["default", "outline"], "default": "default", "class": "vin-accordion--outline" }
+  },
+  "react": { "components": ["Accordion"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "One at a time", "description": "Opening a section closes the others. In HTML, give every <details> the same name; no JavaScript needed." },
+    { "id": "multiple", "title": "Many at a time", "description": "Leave out the name and each section opens on its own." },
+    { "id": "outline", "title": "Outline", "description": "Each section in its own frame." }
+  ],
+  "a11y": [
+    "Built on <details> and <summary>: the browser makes each header a button that says \"expanded\" or \"collapsed\", and Enter or Space toggles it.",
+    "Find-in-page (Ctrl+F) opens a closed section when it finds text inside.",
+    "The chevron is decoration drawn by CSS.",
+    "With reduced motion, sections open without the slide."
+  ]
+}

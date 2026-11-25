@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -99,6 +99,11 @@ export const STYLES = [
       "aspect-ratio": "",
       breadcrumb: "",
       pagination: "",
+      accordion: "",
+      collapsible: "",
+      tooltip: "",
+      popover: "",
+      toast: "",
     },
   },
 
@@ -168,6 +173,11 @@ export const STYLES = [
       "aspect-ratio": "",
       breadcrumb: "",
       pagination: "",
+      accordion: "",
+      collapsible: "",
+      tooltip: "",
+      popover: "",
+      toast: "",
     },
   },
 
@@ -238,6 +248,11 @@ export const STYLES = [
       "aspect-ratio": "",
       breadcrumb: "",
       pagination: "",
+      accordion: "",
+      collapsible: "",
+      tooltip: "",
+      popover: "",
+      toast: "",
     },
   },
 
@@ -305,6 +320,11 @@ export const STYLES = [
       "aspect-ratio": "",
       breadcrumb: "",
       pagination: "",
+      accordion: "",
+      collapsible: "",
+      tooltip: "",
+      popover: "",
+      toast: "",
     },
   },
 
@@ -381,6 +401,13 @@ export const STYLES = [
       breadcrumb: "",
       pagination: `
 & .vin-pagination__page { text-decoration: none; }`,
+      accordion: `
+& .vin-accordion__trigger { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 21px; letter-spacing: -.01em; }
+& .vin-accordion--outline .vin-accordion__item { border-top: 2px solid var(--vin-fg); }`,
+      collapsible: "",
+      tooltip: "",
+      popover: "",
+      toast: "",
     },
   },
 
@@ -466,6 +493,19 @@ export const STYLES = [
       pagination: `
 & .vin-pagination__page:not([aria-current])::before, & .vin-pagination__page:not([aria-current])::after { content: none; }
 & .vin-pagination__page[aria-current] { padding: 0 2px; }`,
+      accordion: `
+& .vin-accordion__trigger::after { content: "+"; width: auto; height: auto; border: 0; transform: none; color: var(--vin-accent-text); }
+& .vin-accordion__item[open] > .vin-accordion__trigger::after { content: "-"; transform: none; }
+& .vin-accordion__item { border-bottom-style: dashed; }
+& .vin-accordion--outline .vin-accordion__item { border-style: dashed; }`,
+      collapsible: `
+& .vin-collapsible__trigger::before { content: ">"; width: auto; height: auto; border: 0; transform: none; color: var(--vin-accent-text); transition: none; }
+& .vin-collapsible[open] > .vin-collapsible__trigger::before { content: "v"; transform: none; }`,
+      tooltip: "",
+      popover: `
+& .vin-popover { border-style: dashed; }`,
+      toast: `
+& .vin-toast { border-style: dashed; }`,
     },
   },
 
@@ -544,6 +584,15 @@ export const STYLES = [
       "aspect-ratio": "",
       breadcrumb: "",
       pagination: "",
+      accordion: `
+& .vin-accordion__trigger { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 3px); }
+& .vin-accordion--outline .vin-accordion__item { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      collapsible: "",
+      tooltip: "",
+      popover: `
+& .vin-popover { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      toast: `
+& .vin-toast { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
     },
   },
 
@@ -605,6 +654,11 @@ export const STYLES = [
       "aspect-ratio": "",
       breadcrumb: "",
       pagination: "",
+      accordion: "",
+      collapsible: "",
+      tooltip: "",
+      popover: "",
+      toast: "",
     },
   },
 ];

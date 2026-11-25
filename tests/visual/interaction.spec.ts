@@ -225,6 +225,94 @@ for (const side of ["html", "react"] as const) {
       await expect(ada.locator(".vin-avatar__fallback")).toHaveText("AL");
     });
 
+    test("accordion: one at a time opens and closes the others; Enter toggles", async ({ page }) => {
+      await ready(page, "accordion");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const items = root.locator("details");
+      await expect(items.nth(0)).toHaveAttribute("open", "");
+      await root.getByText("Do I need React?").click();
+      await expect(items.nth(1)).toHaveAttribute("open", "");
+      await expect(items.nth(0)).not.toHaveAttribute("open");
+      await root.getByText("Can I change the colours?").focus();
+      await page.keyboard.press("Enter");
+      await expect(items.nth(2)).toHaveAttribute("open", "");
+      await expect(items.nth(1)).not.toHaveAttribute("open");
+      const multi = page.locator(`[data-fixture="${side}-multiple"] details`);
+      await page.locator(`[data-fixture="${side}-multiple"]`).getByText("Warranty").click();
+      await expect(multi.locator("[open]")).toHaveCount(0);
+      await expect(page.locator(`[data-fixture="${side}-multiple"] details[open]`)).toHaveCount(3);
+    });
+
+    test("collapsible: the trigger shows and hides the content", async ({ page }) => {
+      await ready(page, "collapsible");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const text = root.getByText("2 items · Ships in 2 days · Free delivery");
+      await expect(text).toBeHidden();
+      await root.getByText("Order details").click();
+      await expect(text).toBeVisible();
+      await page.keyboard.press("Enter");
+      await expect(text).toBeHidden();
+    });
+
+    test("tooltip: keyboard focus shows it, Escape hides it, hover shows it", async ({ page }) => {
+      await ready(page, "tooltip");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const btn = root.getByRole("button", { name: "Save" });
+      const tip = root.getByRole("tooltip");
+      await expect(btn).toHaveAccessibleDescription("Add to your library");
+      await btn.focus();
+      await page.keyboard.press("Shift+Tab");
+      await page.keyboard.press("Tab");
+      await expect(tip).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(tip).toBeHidden();
+      await expect(btn).toBeFocused();
+      await btn.hover();
+      await expect(tip).toBeVisible();
+      const t = (await tip.boundingBox())!, b = (await btn.boundingBox())!;
+      expect(t.y + t.height).toBeLessThanOrEqual(b.y);
+      await page.mouse.move(5, 5);
+      await expect(tip).toBeHidden();
+      const icons = page.locator(`[data-fixture="${side}-icons"]`);
+      await expect(icons.getByRole("button", { name: "Align centre" })).toBeVisible();
+    });
+
+    test("popover: the trigger opens it next to the button; Escape closes and returns focus", async ({ page }) => {
+      await ready(page, "popover");
+      const root = page.locator(`[data-fixture="${side}-form"]`);
+      const btn = root.getByRole("button", { name: "Dimensions" });
+      const dialog = root.getByRole("dialog", { name: "Dimensions" });
+      await expect(dialog).toBeHidden();
+      await btn.click();
+      await expect(dialog).toBeVisible();
+      await expect(btn).toHaveAttribute("aria-expanded", "true");
+      const b = (await btn.boundingBox())!;
+      // Wait for the open animation (a 4px slide) to finish, then check it sits 6px under the button.
+      await expect.poll(async () => Math.abs((await dialog.boundingBox())!.y - (b.y + b.height + 6))).toBeLessThan(1);
+      await dialog.getByRole("textbox", { name: "Width" }).focus();
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(btn).toHaveAttribute("aria-expanded", "false");
+      await expect(btn).toBeFocused();
+      await btn.click();
+      await expect(dialog).toBeVisible();
+      await page.mouse.click(5, 5);
+      await expect(dialog).toBeHidden();
+    });
+
+    test("toast: a button shows a toast that can be closed", async ({ page }) => {
+      await ready(page, "toast");
+      await page.locator(`[data-fixture="${side}-variants"]`).getByRole("button", { name: "Success" }).click();
+      const t = page.locator(".vin-toaster .vin-toast").filter({ hasText: "Payment received" });
+      await expect(t).toHaveCount(1);
+      await expect(t).toHaveAttribute("role", "status");
+      await expect(t).toContainText("We've emailed your receipt.");
+      await t.getByRole("button", { name: "Close" }).click();
+      await expect(t).toHaveCount(0);
+      await page.locator(`[data-fixture="${side}-variants"]`).getByRole("button", { name: "Error" }).click();
+      await expect(page.locator(".vin-toaster").getByRole("alert")).toContainText("Upload failed");
+    });
+
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {
       await ready(page, "switch");
       const root = page.locator(`[data-fixture="${side}-basic"]`);
