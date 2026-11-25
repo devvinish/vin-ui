@@ -1,17 +1,15 @@
 ---
 /**
- * Right-sidebar ad unit (Mediavine), same as the 3D models site.
+ * Right-sidebar ad unit (Mediavine siderail), same markup pattern as the vinish.dev game pages.
  * Settings live in src/config/ads.ts.
  */
 import { ads } from "../config/ads";
+const showPlaceholder = import.meta.env.DEV && ads.placeholderInDev;
 ---
-{ads.enabled ? (
-  <div class="ad-slot">
-    <div id={ads.sidebarId} class={ads.sidebarClass || undefined}></div>
-  </div>
-) : ads.showPlaceholder ? (
-  <div class="ad-slot" aria-hidden="true">
-    <span class="ad-label">Advertisement</span>
-    <div class="ad-placeholder"><span>Mediavine sidebar<br />300 × 600</span></div>
-  </div>
-) : null}
+{ads.enabled && (
+  <aside class="ad-slot mv-siderail-slot" aria-label="Advertisement">
+    <div id={ads.slotId}>
+      {showPlaceholder && <div class="ad-placeholder" aria-hidden="true"><span>Mediavine siderail<br />300 × 600 (dev preview)</span></div>}
+    </div>
+  </aside>
+)}

@@ -58,7 +58,9 @@ The site is built under `/ui`, so a vinish.dev route (Worker or redirect rule) c
 
 ### Ads
 
-The docs pages have a right-sidebar ad unit for Mediavine, like the 3D models site. Configure it in `apps/docs/src/config/ads.ts` (script URL and slot id), set `enabled: true` and `showPlaceholder: false` before launch.
+The docs pages have a right-sidebar Mediavine unit, using the same markup as the vinish.dev game pages: an `<aside class="mv-siderail-slot">` with an empty `300x600` slot inside. Mediavine fills it.
+
+These pages come from Cloudflare Pages, not WordPress, so the Mediavine plugin does not add its script. Put the site's Mediavine script URL in `apps/docs/src/config/ads.ts` (`scriptSrc`) before launch. In `npm run dev` the slot shows a dashed 300 × 600 preview.
 
 ## Contributing
 
