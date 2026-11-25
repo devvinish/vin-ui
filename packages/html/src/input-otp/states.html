@@ -1,0 +1,23 @@
+<div style="display: grid; gap: 16px">
+  <div class="vin-field">
+    <label class="vin-label" for="otp-err">Code</label>
+    <div class="vin-otp" data-vin-otp>
+      <input id="otp-err" class="vin-otp__input" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" value="482193" aria-invalid="true" aria-describedby="otp-err-error">
+      <div class="vin-otp__slots" aria-hidden="true">
+        <span class="vin-input vin-otp__slot">4</span><span class="vin-input vin-otp__slot">8</span><span class="vin-input vin-otp__slot">2</span>
+        <span class="vin-otp__sep"></span>
+        <span class="vin-input vin-otp__slot">1</span><span class="vin-input vin-otp__slot">9</span><span class="vin-input vin-otp__slot">3</span>
+      </div>
+    </div>
+    <p class="vin-error" id="otp-err-error">That code has expired. Request a new one.</p>
+  </div>
+  <div class="vin-field">
+    <label class="vin-label" for="otp-off">Backup PIN</label>
+    <div class="vin-otp" data-vin-otp>
+      <input id="otp-off" class="vin-otp__input" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="4" value="1234" disabled>
+      <div class="vin-otp__slots" aria-hidden="true">
+        <span class="vin-input vin-otp__slot">1</span><span class="vin-input vin-otp__slot">2</span><span class="vin-input vin-otp__slot">3</span><span class="vin-input vin-otp__slot">4</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Toggle Group API. Every framework package is tested against this file.",
+  "name": "toggle-group",
+  "title": "Toggle Group",
+  "category": "Actions",
+  "description": "A set of toggles: pick one, or turn on any number.",
+  "baseClass": "vin-toggle-group",
+  "classes": ["vin-toggle-group", "vin-toggle-group--outline"],
+  "thumb": "<div class=\"vin-toggle-group vin-toggle-group--outline\"><span class=\"vin-toggle\">List</span><span class=\"vin-toggle\" aria-checked=\"true\">Grid</span><span class=\"vin-toggle\">Board</span></div>",
+  "props": {
+    "type": { "values": ["single", "multiple"], "description": "single: exactly one on (a radio group). multiple: any number on.", "html": "role=\"radiogroup\" + role=\"radio\" aria-checked, or role=\"group\" + aria-pressed" },
+    "value / defaultValue": { "type": "string | string[]", "description": "What is on (a string for single, an array for multiple). Use onValueChange to hear about changes.", "html": "aria-checked / aria-pressed on the items" },
+    "variant": { "values": ["default", "outline"], "default": "default", "class": "vin-toggle-group--outline" },
+    "size": { "values": ["sm", "md", "lg", "icon"], "default": "md", "description": "Applied to every item.", "class": "vin-toggle--{value} on each item" },
+    "aria-label": { "type": "string", "description": "Names the group for screen readers.", "html": "aria-label" }
+  },
+  "react": { "components": ["ToggleGroup", "ToggleGroupItem"] },
+  "examples": [
+    { "id": "single", "title": "Pick one", "description": "type=\"single\" works like a radio group: arrow keys move and choose. In HTML, add data-vin-toggle-group and include vinui.js." },
+    { "id": "multiple", "title": "Pick any", "description": "type=\"multiple\" for independent on/off options, like text formatting. Arrow keys move, Space toggles." },
+    { "id": "alignment", "title": "Icons", "description": "Icon-only items need an aria-label each." }
+  ],
+  "a11y": [
+    "Single choice uses role=\"radiogroup\" with role=\"radio\" and aria-checked; multiple choice uses aria-pressed buttons.",
+    "One Tab stop for the whole group; ← → (and ↑ ↓) move between items, Home/End jump. Right-to-left flips the arrows.",
+    "The group has an aria-label; icon-only items each have an aria-label.",
+    "The on state is a filled background, not only a text colour."
+  ]
+}

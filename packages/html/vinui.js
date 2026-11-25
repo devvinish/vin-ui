@@ -1,8 +1,8 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds elements with data-vin-tabs, -select, -toggle and -textarea on load. For markup added later, call VinUI.init(element).
- * Used by: Tabs, Select, Toggle, Textarea (count and auto-grow). Components that need no
+ * It finds elements with data-vin-tabs, -select, -toggle, -toggle-group, -textarea, -otp and -slider on load. For markup added later, call VinUI.init(element).
+ * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider (fill). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
  */
 (function () {
@@ -170,7 +170,142 @@
     update();
   }
 
-  var KINDS = { "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea };
+  /* ---------------- Toggle Group: single (radiogroup) or multiple (pressed buttons) ---------------- */
+  function initToggleGroup(root) {
+    var single = root.getAttribute("role") === "radiogroup";
+    var items = function () { return Array.prototype.slice.call(root.querySelectorAll(".vin-toggle:not(:disabled)")); };
+    function sync(focusOn) {
+      var all = items(), on = all.filter(function (b) { return b.getAttribute(single ? "aria-checked" : "aria-pressed") === "true"; });
+      var stop = focusOn || on[0] || all[0];
+      all.forEach(function (b) { b.tabIndex = b === stop ? 0 : -1; });
+    }
+    function choose(btn) {
+      if (single) {
+        items().forEach(function (b) { b.setAttribute("aria-checked", b === btn ? "true" : "false"); });
+      } else {
+        btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      }
+      sync(btn);
+      root.dispatchEvent(new CustomEvent("vin-change", { bubbles: true }));
+    }
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest(".vin-toggle");
+      if (btn && !btn.disabled && root.contains(btn)) choose(btn);
+    });
+    root.addEventListener("keydown", function (e) {
+      var all = items(), i = all.indexOf(document.activeElement);
+      if (i < 0) return;
+      var rtl = getComputedStyle(root).direction === "rtl";
+      var step = { ArrowRight: rtl ? -1 : 1, ArrowDown: 1, ArrowLeft: rtl ? 1 : -1, ArrowUp: -1 }[e.key];
+      var target = step ? all[(i + step + all.length) % all.length] : e.key === "Home" ? all[0] : e.key === "End" ? all[all.length - 1] : null;
+      if (!target) return;
+      e.preventDefault();
+      target.focus();
+      if (single) choose(target); else sync(target);
+    });
+    sync();
+  }
+
+  /* ---------------- Input OTP: mirror the one real input into the slots ---------------- */
+  function initOtp(root) {
+    var input = root.querySelector(".vin-otp__input");
+    var slots = Array.prototype.slice.call(root.querySelectorAll(".vin-otp__slot"));
+    if (!input) return;
+    var re = input.getAttribute("inputmode") === "numeric" ? /\D/g : /[^a-z0-9]/gi;
+    function render() {
+      var clean = input.value.replace(re, "").slice(0, slots.length);
+      if (clean !== input.value) input.value = clean;
+      var focused = document.activeElement === input;
+      slots.forEach(function (s, i) {
+        s.textContent = clean[i] || "";
+        s.toggleAttribute("data-active", focused && i === Math.min(clean.length, slots.length - 1));
+      });
+      input.setSelectionRange(clean.length, clean.length);
+      if (clean.length === slots.length) root.dispatchEvent(new CustomEvent("vin-complete", { bubbles: true, detail: { value: clean } }));
+    }
+    ["input", "focus", "blur", "click", "keyup"].forEach(function (ev) { input.addEventListener(ev, function () { setTimeout(render, 0); }); });
+    render();
+  }
+
+  /* ---------------- Slider: native single slider fill, or a two-thumb range ---------------- */
+  function initSlider(el) {
+    if (!el.classList.contains("vin-range")) {
+      var pct = function () { var min = +el.min || 0, max = el.max === "" ? 100 : +el.max; return ((+el.value - min) / (max - min)) * 100 + "%"; };
+      var update = function () {
+        el.style.setProperty("--vin-fill", pct());
+        var out = el.id && document.querySelector('output[for~="' + el.id + '"]');
+        if (out) out.textContent = (out.getAttribute("data-format") || "{value}").replace("{value}", el.value);
+      };
+      el.addEventListener("input", update);
+      update();
+      return;
+    }
+    // Range: WAI-ARIA multi-thumb slider.
+    var thumbs = Array.prototype.slice.call(el.querySelectorAll('[role="slider"]'));
+    var hidden = Array.prototype.slice.call(el.querySelectorAll('input[type="hidden"]'));
+    var min = +(el.getAttribute("data-min") || 0), max = +(el.getAttribute("data-max") || 100), step = +(el.getAttribute("data-step") || 1);
+    var fmt = el.getAttribute("data-format") || "{value}";
+    var vals = thumbs.map(function (t) { return +t.getAttribute("aria-valuenow"); });
+    var rtl = function () { return getComputedStyle(el).direction === "rtl"; };
+    function render() {
+      el.style.setProperty("--vin-from", String((vals[0] - min) / (max - min)));
+      el.style.setProperty("--vin-to", String((vals[1] - min) / (max - min)));
+      thumbs.forEach(function (t, i) {
+        t.setAttribute("aria-valuenow", vals[i]);
+        t.setAttribute("aria-valuetext", fmt.replace("{value}", vals[i]));
+        t.setAttribute("aria-valuemin", i === 0 ? min : vals[0]);
+        t.setAttribute("aria-valuemax", i === 0 ? vals[1] : max);
+        if (hidden[i]) hidden[i].value = vals[i];
+      });
+      var out = thumbs[0].id && document.querySelector('output[for~="' + thumbs[0].id + '"]');
+      if (out) { var f = out.getAttribute("data-format") || fmt; out.textContent = f.replace("{value}", vals[0]) + " – " + f.replace("{value}", vals[1]); }
+    }
+    function set(i, v) {
+      v = Math.round((v - min) / step) * step + min;
+      var lo = i === 0 ? min : vals[0], hi = i === 0 ? vals[1] : max;
+      v = Math.min(hi, Math.max(lo, v));
+      if (v === vals[i]) return;
+      vals[i] = v;
+      render();
+      el.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { value: vals.slice() } }));
+    }
+    thumbs.forEach(function (t, i) {
+      t.addEventListener("keydown", function (e) {
+        var dir = rtl() ? -1 : 1, big = Math.max(step, (max - min) / 10);
+        var d = { ArrowRight: step * dir, ArrowLeft: -step * dir, ArrowUp: step, ArrowDown: -step, PageUp: big, PageDown: -big }[e.key];
+        if (d !== undefined) { e.preventDefault(); set(i, vals[i] + d); }
+        else if (e.key === "Home") { e.preventDefault(); set(i, min); }
+        else if (e.key === "End") { e.preventDefault(); set(i, max); }
+      });
+    });
+    function valueAt(x) {
+      var r = el.getBoundingClientRect(), size = thumbs[0].offsetWidth;
+      var f = (x - r.left - size / 2) / (r.width - size);
+      if (rtl()) f = 1 - f;
+      return min + Math.min(1, Math.max(0, f)) * (max - min);
+    }
+    el.addEventListener("pointerdown", function (e) {
+      if (el.getAttribute("aria-disabled") === "true") return;
+      var v = valueAt(e.clientX);
+      var i = thumbs.indexOf(e.target) >= 0 ? thumbs.indexOf(e.target) : Math.abs(v - vals[0]) <= Math.abs(v - vals[1]) && !(v > vals[1]) ? 0 : 1;
+      if (vals[0] === vals[1]) i = v < vals[0] ? 0 : 1;
+      e.preventDefault();
+      thumbs[i].focus();
+      if (thumbs.indexOf(e.target) < 0) set(i, v);
+      el.setPointerCapture(e.pointerId);
+      var move = function (ev) { set(i, valueAt(ev.clientX)); };
+      var up = function () { el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up); };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerup", up);
+      el.addEventListener("pointercancel", up);
+    });
+    render();
+  }
+
+  var KINDS = {
+    "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
+    "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider,
+  };
 
   function init(scope) {
     scope = scope || document;

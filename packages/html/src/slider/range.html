@@ -1,0 +1,12 @@
+<div class="vin-field" style="width: 100%; max-width: 320px" role="group" aria-labelledby="price-label">
+  <div class="vin-slider__head">
+    <span class="vin-label" id="price-label">Price</span>
+    <output class="vin-slider__value" for="price-from price-to">₹200 – ₹700</output>
+  </div>
+  <div class="vin-range" style="--vin-from: .2; --vin-to: .7" data-min="0" data-max="1000" data-step="50" data-format="₹{value}" data-vin-slider>
+    <span class="vin-range__thumb" id="price-from" role="slider" tabindex="0" aria-label="Minimum price" aria-valuemin="0" aria-valuemax="700" aria-valuenow="200" aria-valuetext="₹200"></span>
+    <span class="vin-range__thumb" id="price-to" role="slider" tabindex="0" aria-label="Maximum price" aria-valuemin="200" aria-valuemax="1000" aria-valuenow="700" aria-valuetext="₹700"></span>
+    <input type="hidden" name="price-min" value="200">
+    <input type="hidden" name="price-max" value="700">
+  </div>
+</div>

@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Input OTP API. Every framework package is tested against this file.",
+  "name": "input-otp",
+  "title": "Input OTP",
+  "category": "Forms",
+  "description": "Enter a one-time code, one box per character.",
+  "baseClass": "vin-otp",
+  "classes": ["vin-otp", "vin-otp__input", "vin-otp__slots", "vin-otp__slot", "vin-otp__sep"],
+  "thumb": "<div class=\"vin-otp\"><div class=\"vin-otp__slots\"><span class=\"vin-input vin-otp__slot\">4</span><span class=\"vin-input vin-otp__slot\">8</span><span class=\"vin-input vin-otp__slot\">2</span><span class=\"vin-otp__sep\"></span><span class=\"vin-input vin-otp__slot\">1</span><span class=\"vin-input vin-otp__slot\"></span><span class=\"vin-input vin-otp__slot\"></span></div></div>",
+  "props": {
+    "length": { "type": "number", "default": 6, "description": "Number of characters.", "html": "maxlength + one .vin-otp__slot per character" },
+    "groups": { "type": "number[]", "description": "Split the boxes into groups, e.g. [3, 3].", "html": "<span class=\"vin-otp__sep\"> between groups" },
+    "value / defaultValue": { "type": "string", "description": "The code typed so far. Use onValueChange; onComplete fires when every box is filled.", "html": "value attribute" },
+    "charset": { "values": ["numeric", "alphanumeric"], "default": "numeric", "html": "inputmode=\"numeric\" or \"text\"" },
+    "label / hint / error": { "type": "ReactNode", "description": "Same as Input's Field.", "html": ".vin-field, .vin-label, .vin-hint, .vin-error" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["InputOTP"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Six digits in two groups. Paste a code or let the phone fill it from an SMS. In HTML, add data-vin-otp and include vinui.js." },
+    { "id": "pin", "title": "Four-digit PIN", "description": "Any length, in one group." },
+    { "id": "states", "title": "Error and disabled", "description": "An error outlines every box and is read out with the field." }
+  ],
+  "a11y": [
+    "One real text input (not six), so screen readers, paste, password managers and SMS autofill (autocomplete=\"one-time-code\") all work.",
+    "The boxes are drawn for sight only and hidden from screen readers; the input carries the value.",
+    "inputmode=\"numeric\" brings up the number pad on phones.",
+    "The input has a label; errors set aria-invalid and are linked with aria-describedby."
+  ]
+}

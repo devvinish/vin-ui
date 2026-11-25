@@ -1,0 +1,84 @@
+{
+  "$comment": "Single source of truth for the Slider API. Every framework package is tested against this file.",
+  "name": "slider",
+  "title": "Slider",
+  "category": "Forms",
+  "description": "Choose a number, or a range, by dragging.",
+  "baseClass": "vin-slider",
+  "classes": [
+    "vin-slider",
+    "vin-range",
+    "vin-range__thumb",
+    "vin-slider__head",
+    "vin-slider__value"
+  ],
+  "thumb": "<div style=\"width:200px\"><span class=\"vin-range\" style=\"display:block;--vin-from:.25;--vin-to:.7\"></span></div>",
+  "props": {
+    "value / defaultValue": {
+      "type": "number | [number, number]",
+      "description": "One number, or [from, to] for a range with two thumbs. Use onValueChange to hear about changes.",
+      "html": "value + style=\"--vin-fill: 40%\"; a range: aria-valuenow on each thumb + style=\"--vin-from: .2; --vin-to: .7\""
+    },
+    "min / max / step": {
+      "type": "number",
+      "default": "0 / 100 / 1",
+      "html": "min, max, step attributes (a range: data-min, data-max, data-step)"
+    },
+    "label": {
+      "type": "ReactNode",
+      "description": "Visible label. Without it, pass an aria-label.",
+      "html": "<label class=\"vin-label\" for=\"…\">"
+    },
+    "showValue": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show the value next to the label.",
+      "html": "<output class=\"vin-slider__value\" for=\"…\">"
+    },
+    "formatValue": {
+      "type": "(v: number) => string",
+      "description": "Format the shown value.",
+      "html": "data-format=\"₹{value}\" on the output (a range: also on .vin-range, for aria-valuetext)"
+    },
+    "thumbLabels": {
+      "type": "[string, string]",
+      "default": "[\"Minimum\", \"Maximum\"]",
+      "description": "Range only: names for the two thumbs.",
+      "html": "aria-label on each .vin-range__thumb"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "html": "disabled attribute (a range: aria-disabled=\"true\" on .vin-range)"
+    }
+  },
+  "react": {
+    "components": [
+      "Slider"
+    ]
+  },
+  "examples": [
+    {
+      "id": "basic",
+      "title": "Basic",
+      "description": "A native range input with its label and value. In HTML, add data-vin-slider and include vinui.js so the fill and the value follow the thumb."
+    },
+    {
+      "id": "range",
+      "title": "Range",
+      "description": "Pass [from, to] for two thumbs. Each thumb is its own slider with its own name, and they can't cross. Click the track to move the nearest thumb."
+    },
+    {
+      "id": "states",
+      "title": "Steps and disabled",
+      "description": "Snap to steps with step. A disabled slider keeps its value visible."
+    }
+  ],
+  "a11y": [
+    "One value: a native <input type=\"range\">; arrow keys, Page Up/Down, Home/End and touch all work, and screen readers announce the value.",
+    "A range follows the WAI-ARIA multi-thumb slider pattern: two role=\"slider\" thumbs with aria-valuenow, aria-valuemin/max and aria-valuetext, each in the Tab order.",
+    "Every thumb has a name: the label, or an aria-label for each thumb of a range.",
+    "The value is also shown as text in an <output>, so it is not only conveyed by position.",
+    "Thumbs have a 30px touch area and a visible focus ring in every style and mode."
+  ]
+}

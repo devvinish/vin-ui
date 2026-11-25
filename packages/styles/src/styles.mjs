@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -80,6 +80,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -131,6 +135,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -183,6 +191,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -221,8 +233,8 @@ export const STYLES = [
       card: "",
       input: `
 & .vin-input { border-radius: 12px 12px 4px 4px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--vin-accent) 55%, transparent); }
-& .vin-input:focus { box-shadow: inset 0 -3px 0 var(--vin-accent); }
-& .vin-input[aria-invalid="true"] { box-shadow: inset 0 -2px 0 var(--vin-danger); }`,
+& :is(.vin-input:focus, .vin-input.vin-input-group:focus-within, .vin-input.vin-otp__slot[data-active]) { box-shadow: inset 0 -3px 0 var(--vin-accent); }
+& :is(.vin-input[aria-invalid="true"], .vin-input-group:has(> [aria-invalid="true"]), .vin-otp:has(> [aria-invalid="true"]) .vin-otp__slot) { box-shadow: inset 0 -2px 0 var(--vin-danger); }`,
       checkbox: "",
       switch: "",
       "native-select": "",
@@ -232,6 +244,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -271,7 +287,7 @@ export const STYLES = [
       input: `
 & :is(.vin-label, .vin-radio-group__legend) { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--vin-muted); }
 & .vin-input { border-width: 0 0 1px; border-radius: 0; padding-left: 0; background-color: transparent; }
-& .vin-input:focus { box-shadow: inset 0 -1px 0 var(--vin-fg); }
+& :is(.vin-input:focus, .vin-input.vin-input-group:focus-within, .vin-input.vin-otp__slot[data-active]) { box-shadow: inset 0 -1px 0 var(--vin-fg); }
 & textarea.vin-input { border-width: 1px; padding-left: 10px; }`,
       checkbox: "",
       switch: "",
@@ -282,6 +298,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -332,6 +352,10 @@ export const STYLES = [
       toggle: "",
       "button-group": `
 & .vin-btn-group > .vin-btn::after, & .vin-btn-group > :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost)::before { content: none; }`,
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -386,6 +410,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 
@@ -429,6 +457,10 @@ export const STYLES = [
       textarea: "",
       toggle: "",
       "button-group": "",
+      "toggle-group": "",
+      "input-group": "",
+      "input-otp": "",
+      slider: "",
     },
   },
 ];

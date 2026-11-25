@@ -1,0 +1,27 @@
+/* ==========================================================================
+   VinUI · Input Group
+   API (see spec/input-group.json):
+     .vin-input.vin-input-group > .vin-input-group__addon + input.vin-input-group__input + .vin-input-group__addon
+     An addon holds text, an icon or a small Button.
+     .vin-input--{sm|lg} on the group for sizes (from Input)
+   The group is drawn as an Input, so every style's input look applies.
+   ========================================================================== */
+
+.vin-input.vin-input-group { display: flex; align-items: center; gap: 8px; cursor: text; }
+.vin-input.vin-input-group:focus-within { box-shadow: var(--vin-input-shadow), var(--vin-focus); }
+.vin-input.vin-input-group:has(> .vin-input-group__input[aria-invalid="true"]) { border-color: var(--vin-danger); box-shadow: var(--vin-input-shadow), 0 0 0 1px var(--vin-danger); }
+.vin-input.vin-input-group:has(> .vin-input-group__input:disabled) { opacity: .55; cursor: not-allowed; }
+
+.vin-input-group__input {
+  flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0;
+  font: inherit; color: inherit; background: none; border: 0; outline: none; box-shadow: none;
+}
+.vin-input-group__input::placeholder { color: var(--vin-muted); opacity: 1; }
+.vin-input-group__input:disabled { cursor: not-allowed; }
+
+.vin-input-group__addon { display: inline-flex; align-items: center; gap: 6px; flex: none; height: 100%; color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 22%); white-space: nowrap; }
+.vin-input-group__addon svg { width: 16px; height: 16px; flex: none; }
+.vin-input-group__addon > .vin-btn { height: calc(100% - 8px); padding: 0 10px; font-size: var(--vin-text-sm); }
+.vin-input-group__addon > .vin-btn--icon { width: auto; aspect-ratio: 1; padding: 0; }
+.vin-input-group:has(> .vin-input-group__addon:last-child > .vin-btn) { padding-inline-end: 4px; }
+.vin-input-group:has(> .vin-input-group__addon:first-child > .vin-btn) { padding-inline-start: 4px; }

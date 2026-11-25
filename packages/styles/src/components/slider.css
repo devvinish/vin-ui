@@ -1,0 +1,70 @@
+/* ==========================================================================
+   VinUI · Slider
+   API (see spec/slider.json):
+     input[type=range].vin-slider  style="--vin-fill: 40%"          one value
+     .vin-range style="--vin-from: .2; --vin-to: .7" > .vin-range__thumb[role=slider] ×2   a range
+     .vin-slider__head > .vin-label + output.vin-slider__value      label and live value
+   One value: a native range input. A range: two role="slider" thumbs (vinui.js or React drive them).
+   ========================================================================== */
+
+.vin-slider, .vin-range {
+  --vin-slider-track: color-mix(in srgb, var(--vin-track), var(--vin-fg) 16%);
+  --vin-slider-fill-color: var(--vin-accent);
+  --vin-thumb: 18px;
+}
+.vin-slider__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.vin-slider__value { font-size: calc(var(--vin-text-md) - 1px); font-variant-numeric: tabular-nums; color: var(--vin-muted); }
+
+/* Native single slider. */
+.vin-slider {
+  appearance: none; -webkit-appearance: none; box-sizing: border-box;
+  width: 100%; height: var(--vin-thumb); margin: 0; padding: 0; background: transparent; cursor: pointer;
+}
+.vin-slider:focus { outline: none; }
+.vin-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; box-sizing: border-box;
+  width: var(--vin-thumb); height: var(--vin-thumb); margin-top: calc((6px - var(--vin-thumb)) / 2);
+  border-radius: 50%; background: var(--vin-surface); border: 2px solid var(--vin-slider-fill-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / .25); transition: box-shadow var(--vin-dur);
+}
+.vin-slider::-moz-range-thumb {
+  box-sizing: border-box; width: var(--vin-thumb); height: var(--vin-thumb);
+  border-radius: 50%; background: var(--vin-surface); border: 2px solid var(--vin-slider-fill-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / .25);
+}
+.vin-slider:focus-visible::-webkit-slider-thumb { box-shadow: 0 1px 3px rgb(0 0 0 / .25), var(--vin-focus); }
+.vin-slider:focus-visible::-moz-range-thumb { box-shadow: 0 1px 3px rgb(0 0 0 / .25), var(--vin-focus); }
+
+/* Single slider: the filled part comes from --vin-fill. */
+.vin-slider::-webkit-slider-runnable-track {
+  height: 6px; border-radius: var(--vin-pill);
+  background: linear-gradient(to right, var(--vin-slider-fill-color) var(--vin-fill, 0%), var(--vin-slider-track) var(--vin-fill, 0%));
+}
+.vin-slider::-moz-range-track { height: 6px; border-radius: var(--vin-pill); background: var(--vin-slider-track); }
+.vin-slider::-moz-range-progress { height: 6px; border-radius: var(--vin-pill); background: var(--vin-slider-fill-color); }
+[dir="rtl"] .vin-slider::-webkit-slider-runnable-track { background: linear-gradient(to left, var(--vin-slider-fill-color) var(--vin-fill, 0%), var(--vin-slider-track) var(--vin-fill, 0%)); }
+.vin-slider:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Range: one track, two slider thumbs (role="slider"). --vin-from / --vin-to are fractions 0–1. */
+.vin-range {
+  position: relative; height: var(--vin-thumb); min-width: 0; touch-action: none; cursor: pointer;
+  --vin-from-x: calc(var(--vin-thumb) / 2 + (100% - var(--vin-thumb)) * var(--vin-from, 0));
+  --vin-to-x: calc(var(--vin-thumb) / 2 + (100% - var(--vin-thumb)) * var(--vin-to, 1));
+}
+.vin-range::before {
+  content: ""; position: absolute; inset-inline: 0; top: 50%; height: 6px; margin-top: -3px; border-radius: var(--vin-pill);
+  background: linear-gradient(to right, var(--vin-slider-track) var(--vin-from-x), var(--vin-slider-fill-color) var(--vin-from-x), var(--vin-slider-fill-color) var(--vin-to-x), var(--vin-slider-track) var(--vin-to-x));
+}
+[dir="rtl"] .vin-range::before { transform: scaleX(-1); }
+.vin-range__thumb {
+  position: absolute; top: 0; box-sizing: border-box; width: var(--vin-thumb); height: var(--vin-thumb);
+  border-radius: 50%; background: var(--vin-surface); border: 2px solid var(--vin-slider-fill-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / .25); cursor: grab; transition: box-shadow var(--vin-dur);
+}
+.vin-range__thumb:first-of-type { inset-inline-start: calc((100% - var(--vin-thumb)) * var(--vin-from, 0)); }
+.vin-range__thumb:last-of-type { inset-inline-start: calc((100% - var(--vin-thumb)) * var(--vin-to, 1)); }
+.vin-range__thumb::before { content: ""; position: absolute; inset: -6px; border-radius: 50%; }
+.vin-range__thumb:focus { outline: none; }
+.vin-range__thumb:focus-visible { box-shadow: 0 1px 3px rgb(0 0 0 / .25), var(--vin-focus); z-index: 1; }
+.vin-range__thumb:active { cursor: grabbing; }
+.vin-range[aria-disabled="true"] { opacity: .5; cursor: not-allowed; pointer-events: none; }

@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Input Group API. Every framework package is tested against this file.",
+  "name": "input-group",
+  "title": "Input Group",
+  "category": "Forms",
+  "description": "An input with text, icons or buttons attached.",
+  "baseClass": "vin-input-group",
+  "classes": ["vin-input-group", "vin-input-group__input", "vin-input-group__addon"],
+  "thumb": "<div class=\"vin-input vin-input-group\" style=\"width:210px\"><span class=\"vin-input-group__addon\">https://</span><span class=\"vin-input-group__input\" style=\"display:flex;align-items:center;color:var(--vin-muted)\">vinish.dev</span></div>",
+  "props": {
+    "start / end": { "type": "ReactNode", "description": "Text, an icon or a small Button before or after the input.", "html": "<span class=\"vin-input-group__addon\">" },
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-input--{value} on the group" },
+    "label / hint / error": { "type": "ReactNode", "description": "Same as Input's Field.", "html": ".vin-field, .vin-label, .vin-hint, .vin-error" },
+    "…input props": { "type": "InputHTMLAttributes", "description": "Everything else goes to the <input>.", "html": "on input.vin-input-group__input" }
+  },
+  "react": { "components": ["InputGroup"] },
+  "examples": [
+    { "id": "addons", "title": "Text before and after", "description": "Prefixes and suffixes such as a protocol or a currency. The whole group is drawn as an Input, so it matches every style." },
+    { "id": "icons", "title": "Icons", "description": "An icon at the start, a shortcut hint at the end." },
+    { "id": "buttons", "title": "With a button", "description": "Put a small Button inside an addon for copy, submit or show-password actions." }
+  ],
+  "a11y": [
+    "The <input> has its own label; addons are visual and not part of its name.",
+    "If an addon carries meaning the label doesn't (a currency, a domain), say it in the label or hint too.",
+    "Buttons inside keep their own labels; icon-only buttons have an aria-label.",
+    "The focus ring wraps the whole group, so you always see where you are typing."
+  ]
+}

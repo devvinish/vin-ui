@@ -133,6 +133,78 @@ for (const side of ["html", "react"] as const) {
       await expect(page.locator(`[data-fixture="${side}-outline"]`).getByRole("button", { name: "Locked" })).toBeDisabled();
     });
 
+    test("toggle group: single moves and chooses with arrows; multiple toggles with Space", async ({ page }) => {
+      await ready(page, "toggle-group");
+      const single = page.locator(`[data-fixture="${side}-single"]`);
+      const grid = single.getByRole("radio", { name: "Grid" });
+      await expect(grid).toHaveAttribute("aria-checked", "true");
+      await grid.focus();
+      await page.keyboard.press("ArrowRight");
+      const board = single.getByRole("radio", { name: "Board" });
+      await expect(board).toBeFocused();
+      await expect(board).toHaveAttribute("aria-checked", "true");
+      await expect(grid).toHaveAttribute("aria-checked", "false");
+      await expect(single.locator('[tabindex="0"]')).toHaveCount(1);
+      const multi = page.locator(`[data-fixture="${side}-multiple"]`);
+      const bold = multi.getByRole("button", { name: "Bold" });
+      await bold.focus();
+      await page.keyboard.press("ArrowRight");
+      const italic = multi.getByRole("button", { name: "Italic" });
+      await expect(italic).toBeFocused();
+      await expect(italic).toHaveAttribute("aria-pressed", "false");
+      await page.keyboard.press("Space");
+      await expect(italic).toHaveAttribute("aria-pressed", "true");
+      await expect(bold).toHaveAttribute("aria-pressed", "true");
+    });
+
+    test("input otp: typing fills the boxes, letters are ignored, paste works", async ({ page }) => {
+      await ready(page, "input-otp");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const input = root.getByRole("textbox", { name: "Verification code" });
+      const slots = root.locator(".vin-otp__slot");
+      await input.focus();
+      await expect(slots.nth(0)).toHaveAttribute("data-active", "");
+      await page.keyboard.type("12a3");
+      await expect(input).toHaveValue("123");
+      await expect(slots.nth(2)).toHaveText("3");
+      await expect(slots.nth(3)).toHaveAttribute("data-active", "");
+      await page.keyboard.press("Backspace");
+      await expect(slots.nth(2)).toHaveText("");
+      await input.fill("987654321");
+      await expect(input).toHaveValue("987654");
+      await expect(slots.nth(5)).toHaveText("4");
+      await expect(root.getByRole("textbox", { name: "Verification code" })).toHaveAttribute("autocomplete", "one-time-code");
+    });
+
+    test("slider: keys move the value, the fill and the shown value; range thumbs can't cross", async ({ page }) => {
+      await ready(page, "slider");
+      const basic = page.locator(`[data-fixture="${side}-basic"]`);
+      const vol = basic.getByRole("slider", { name: "Volume" });
+      await vol.focus();
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("ArrowRight");
+      await expect(vol).toHaveValue("42");
+      await expect(basic.locator("output")).toHaveText("42");
+      expect(await vol.evaluate((e) => e.style.getPropertyValue("--vin-fill"))).toBe("42%");
+      const range = page.locator(`[data-fixture="${side}-range"]`);
+      const lo = range.getByRole("slider", { name: "Minimum price" });
+      await lo.focus();
+      for (let i = 0; i < 14; i++) await page.keyboard.press("ArrowRight");
+      await expect(lo).toHaveAttribute("aria-valuenow", "700"); // stopped at the other thumb
+      await expect(range.locator("output")).toHaveText("₹700 – ₹700");
+      await page.keyboard.press("Home");
+      await expect(lo).toHaveAttribute("aria-valuenow", "0");
+      await expect(lo).toHaveAttribute("aria-valuetext", "₹0");
+      await expect(range.locator("output")).toHaveText("₹0 – ₹700");
+      await expect(range.locator('input[name="price-min"]')).toHaveValue("0");
+      // Click near the right end of the track: the nearer thumb (Maximum) jumps there.
+      const hi = range.getByRole("slider", { name: "Maximum price" });
+      const box = (await range.locator(".vin-range").boundingBox())!;
+      await page.mouse.click(box.x + box.width - 4, box.y + box.height / 2);
+      await expect(hi).toHaveAttribute("aria-valuenow", "1000");
+      await expect(hi).toBeFocused();
+    });
+
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {
       await ready(page, "switch");
       const root = page.locator(`[data-fixture="${side}-basic"]`);
