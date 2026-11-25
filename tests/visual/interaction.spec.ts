@@ -670,6 +670,181 @@ for (const side of ["html", "react"] as const) {
       await expect(btn).toBeFocused();
     });
 
+    test("menubar: arrows move across the bar and between menus; Down and Up open; Escape returns focus", async ({ page }) => {
+      await ready(page, "menubar");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const bar = root.getByRole("menubar", { name: "Editor" });
+      const trigger = (name: string) => bar.getByRole("menuitem", { name, exact: true });
+      const menu = (name: string) => root.getByRole("menu", { name });
+      await expect(trigger("File")).toHaveAttribute("tabindex", "0");
+      await expect(trigger("Edit")).toHaveAttribute("tabindex", "-1");
+      await trigger("File").focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(trigger("Edit")).toBeFocused();
+      await expect(trigger("Edit")).toHaveAttribute("tabindex", "0");
+      await page.keyboard.press("End");
+      await expect(trigger("View")).toBeFocused();
+      await page.keyboard.press("ArrowRight");
+      await expect(trigger("File")).toBeFocused();
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("ArrowLeft");
+      await expect(trigger("Edit")).toBeFocused();
+      await page.keyboard.press("ArrowDown");
+      await expect(menu("Edit")).toBeVisible();
+      await expect(trigger("Edit")).toHaveAttribute("aria-expanded", "true");
+      await expect(menu("Edit").getByRole("menuitem", { name: "Undo" })).toBeFocused();
+      await page.keyboard.press("ArrowRight");
+      await expect(menu("View")).toBeVisible();
+      await expect(menu("Edit")).toBeHidden();
+      await expect(menu("View").getByRole("menuitem", { name: "Zoom in" })).toBeFocused();
+      await page.keyboard.press("ArrowLeft");
+      await expect(menu("Edit").getByRole("menuitem", { name: "Undo" })).toBeFocused();
+      await page.keyboard.press("ArrowLeft");
+      await expect(menu("File").getByRole("menuitem", { name: "New tab" })).toBeFocused();
+      await page.keyboard.press("ArrowUp"); // wraps past the disabled item to the last
+      await expect(menu("File").getByRole("menuitem", { name: "Print…" })).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(menu("File")).toBeHidden();
+      await expect(trigger("File")).toBeFocused();
+      await expect(trigger("File")).toHaveAttribute("aria-expanded", "false");
+      await page.keyboard.press("ArrowUp");
+      await expect(menu("File").getByRole("menuitem", { name: "Print…" })).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(menu("File")).toBeHidden();
+      await expect(trigger("File")).toBeFocused();
+
+      // Mouse: click opens, pointing at another button switches menus.
+      await trigger("Edit").click();
+      await expect(menu("Edit")).toBeVisible();
+      await trigger("View").hover();
+      await expect(menu("View")).toBeVisible();
+      await expect(menu("Edit")).toBeHidden();
+      await page.keyboard.press("Escape");
+      await expect(menu("View")).toBeHidden();
+      await expect(trigger("View")).toBeFocused();
+    });
+
+    test("menubar: checkbox and radio items change without closing", async ({ page }) => {
+      await ready(page, "menubar");
+      const root = page.locator(`[data-fixture="${side}-options"]`);
+      await root.getByRole("menuitem", { name: "Show", exact: true }).click();
+      const show = root.getByRole("menu", { name: "Show" });
+      const bookmarks = show.getByRole("menuitemcheckbox", { name: "Bookmarks bar" });
+      await expect(bookmarks).toBeFocused();
+      await page.keyboard.press("Space");
+      await expect(bookmarks).toHaveAttribute("aria-checked", "false");
+      await expect(show).toBeVisible();
+      await page.keyboard.press("ArrowRight");
+      const profiles = root.getByRole("menu", { name: "Profiles" });
+      await expect(profiles).toBeVisible();
+      await profiles.getByRole("menuitemradio", { name: "Grace" }).click();
+      await expect(profiles.getByRole("menuitemradio", { name: "Grace" })).toHaveAttribute("aria-checked", "true");
+      await expect(profiles.getByRole("menuitemradio", { name: "Ada" })).toHaveAttribute("aria-checked", "false");
+      await expect(profiles).toBeVisible();
+    });
+
+    test("navigation menu: click, keyboard and hover open panels; Escape and leaving close them", async ({ page }) => {
+      await ready(page, "navigation-menu");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const products = root.getByRole("button", { name: "Products" });
+      const resources = root.getByRole("button", { name: "Resources" });
+      const panel = (btn: typeof products) => btn.locator("xpath=following-sibling::*[1]");
+      await expect(root.getByRole("navigation", { name: "Main" })).toBeVisible();
+      await expect(root.getByRole("link", { name: "Docs" })).toHaveAttribute("aria-current", "page");
+
+      await products.click();
+      await expect(panel(products)).toBeVisible();
+      await expect(products).toHaveAttribute("aria-expanded", "true");
+      await page.mouse.move(600, 600); // opened by a click, it stays open when the pointer leaves
+      await page.waitForTimeout(400);
+      await expect(panel(products)).toBeVisible();
+      await products.click();
+      await expect(panel(products)).toBeHidden();
+      await expect(products).toHaveAttribute("aria-expanded", "false");
+
+      await products.focus();
+      await page.keyboard.press("ArrowDown");
+      await expect(panel(products)).toBeVisible();
+      await expect(root.getByRole("link", { name: /Analytics/ })).toBeFocused();
+      await page.keyboard.press("ArrowDown");
+      await expect(root.getByRole("link", { name: /Automation/ })).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(panel(products)).toBeHidden();
+      await expect(products).toBeFocused();
+      await page.keyboard.press("ArrowRight");
+      await expect(resources).toBeFocused();
+      await page.keyboard.press("End");
+      await expect(root.getByRole("link", { name: "Pricing" })).toBeFocused();
+      await page.keyboard.press("Home");
+      await expect(products).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(panel(products)).toBeVisible();
+      await page.keyboard.press("Shift+Tab"); // focus leaves: it closes
+      await expect(panel(products)).toBeHidden();
+
+      await resources.hover();
+      await expect(panel(resources)).toBeVisible();
+      await expect(resources).toHaveAttribute("aria-expanded", "true");
+      await root.getByRole("link", { name: /Guides/ }).hover();
+      await page.waitForTimeout(300);
+      await expect(panel(resources)).toBeVisible();
+      await page.mouse.move(600, 600);
+      await expect(panel(resources)).toBeHidden();
+    });
+
+    test("sidebar: the trigger folds it to icons and back; names stay for screen readers", async ({ page }) => {
+      await ready(page, "sidebar");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const layout = root.locator(".vin-sidebar-layout");
+      const nav = root.getByRole("navigation", { name: "App" });
+      const trigger = root.getByRole("button", { name: "Toggle sidebar" });
+      const current = nav.getByRole("link", { name: "Dashboard" });
+      await expect(current).toHaveAttribute("aria-current", "page");
+      await expect(nav.getByRole("list", { name: "Platform" })).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(trigger).toHaveAttribute("aria-controls", (await nav.getAttribute("id"))!);
+      const wide = (await nav.boundingBox())!.width;
+      await trigger.click();
+      await expect(layout).toHaveAttribute("data-state", "collapsed");
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      await expect.poll(async () => (await nav.boundingBox())!.width).toBeLessThan(60);
+      await expect(current).toBeVisible();
+      await expect(current).toHaveAttribute("title", "Dashboard");
+      await expect(nav.getByRole("link", { name: "Website" })).toBeHidden();
+      // A nested list's button unfolds the sidebar.
+      await nav.locator("summary").click();
+      await expect(layout).not.toHaveAttribute("data-state", "collapsed");
+      await expect(nav.getByRole("link", { name: "Website" })).toBeVisible();
+      await expect.poll(async () => (await nav.boundingBox())!.width).toBe(wide);
+      await expect(current).not.toHaveAttribute("title");
+
+      const folded = page.locator(`[data-fixture="${side}-collapsed"]`);
+      await expect(folded.getByRole("button", { name: "Toggle sidebar" })).toHaveAttribute("aria-expanded", "false");
+      await expect(folded.getByRole("link", { name: "Messages" })).toHaveAttribute("title", "Messages");
+    });
+
+    test("sidebar: on a phone the trigger slides it in; Escape closes and returns focus", async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 760 });
+      await ready(page, "sidebar");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const nav = root.getByRole("navigation", { name: "App" });
+      const trigger = root.getByRole("button", { name: "Toggle sidebar" });
+      await expect(nav).toBeHidden();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      await trigger.click();
+      await expect(nav).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(nav.getByRole("link", { name: "Dashboard" })).toBeFocused();
+      await expect.poll(async () => Math.round((await nav.boundingBox())!.x)).toBe(0);
+      await page.keyboard.press("Escape");
+      await expect(nav).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      await trigger.click();
+      await nav.getByRole("link", { name: "Inbox" }).click();
+      await expect(nav).toBeHidden();
+    });
+
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {
       await ready(page, "switch");
       const root = page.locator(`[data-fixture="${side}-basic"]`);

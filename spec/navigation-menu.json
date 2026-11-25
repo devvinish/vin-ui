@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Navigation Menu API. Every framework package is tested against this file.",
+  "name": "navigation-menu",
+  "title": "Navigation Menu",
+  "category": "Navigation",
+  "description": "A site's main links, with panels of related pages that open on hover, click or the keyboard.",
+  "baseClass": "vin-nav-menu",
+  "classes": ["vin-nav-menu", "vin-nav-menu__list", "vin-nav-menu__item", "vin-nav-menu__trigger", "vin-nav-menu__link", "vin-nav-menu__panel", "vin-nav-menu__grid", "vin-nav-menu__grid--list", "vin-nav-menu__card", "vin-nav-menu__card-title", "vin-nav-menu__card-text"],
+  "thumb": "<div style=\"position:relative;width:210px;height:110px\"><div class=\"vin-nav-menu\" style=\"font-size:11px\"><ul class=\"vin-nav-menu__list\" style=\"gap:2px\"><li class=\"vin-nav-menu__item\"><span class=\"vin-nav-menu__trigger\" aria-expanded=\"true\" style=\"height:24px;padding:0 8px;font-size:11px\">Products</span></li><li class=\"vin-nav-menu__item\"><span class=\"vin-nav-menu__link\" style=\"height:24px;padding:0 8px;font-size:11px\">Docs</span></li></ul></div><div class=\"vin-nav-menu__panel\" style=\"position:absolute;left:0;top:30px;padding:4px;opacity:1;transform:none\"><span class=\"vin-nav-menu__card\" style=\"padding:4px 8px\"><span class=\"vin-nav-menu__card-title\" style=\"font-size:11px\">Analytics</span><span class=\"vin-nav-menu__card-text\" style=\"font-size:10px\">See what's working.</span></span><span class=\"vin-nav-menu__card\" style=\"padding:4px 8px\"><span class=\"vin-nav-menu__card-title\" style=\"font-size:11px\">Automation</span><span class=\"vin-nav-menu__card-text\" style=\"font-size:10px\">Less busywork.</span></span></div></div>",
+  "props": {
+    "label": { "type": "string", "description": "Name for the navigation, read by screen readers.", "html": "aria-label on nav.vin-nav-menu" },
+    "NavigationMenuItem": { "type": "{ trigger: ReactNode, children }", "description": "A top-level button with a panel of links.", "html": "li.vin-nav-menu__item > button.vin-nav-menu__trigger[aria-expanded][popovertarget] + .vin-nav-menu__panel[popover]" },
+    "NavigationMenuLink": { "type": "{ href, active }", "description": "A top-level link. active marks the current page.", "html": "li.vin-nav-menu__item > a.vin-nav-menu__link[aria-current=page]" },
+    "NavigationMenuGrid": { "type": "{ list }", "description": "The panel's links in two columns, or one with list.", "html": "ul.vin-nav-menu__grid (.vin-nav-menu__grid--list)" },
+    "NavigationMenuCard": { "type": "{ href, title, children }", "description": "A link in a panel, with a title and an optional line of text.", "html": "li > a.vin-nav-menu__card > .vin-nav-menu__card-title + .vin-nav-menu__card-text" }
+  },
+  "react": { "components": ["NavigationMenu", "NavigationMenuItem", "NavigationMenuLink", "NavigationMenuGrid", "NavigationMenuCard"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Two panels and a plain link. Point at a button, click it, or focus it and press Enter or Down Arrow. In HTML, add data-vin-nav-menu and include vinui.js once." },
+    { "id": "list", "title": "Simple list", "description": "A panel with one column of links, for shorter menus." }
+  ],
+  "a11y": [
+    "It's a nav landmark with a list of links and disclosure buttons, so links stay links and Tab reaches every one in order.",
+    "Each button says whether its panel is open (aria-expanded). Enter or Space opens and closes it; Down Arrow opens it on the first link.",
+    "Left and Right Arrow move between the top-level items; Up and Down Arrow move between the links in an open panel.",
+    "Escape closes the panel and puts focus back on its button. Moving focus or the pointer away closes it too, unless it was opened with a click.",
+    "Mark the link to the current page with aria-current=\"page\"."
+  ]
+}

@@ -1,8 +1,8 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds elements with data-vin-tabs, -select, -combobox, -calendar, -date-picker, -context-menu, -drawer, -hover-card, -command, -resizable, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
- * Used by: Tabs, Select, Combobox, Calendar, Date Picker, Context Menu, Drawer (drag), Hover Card, Command, Resizable, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
+ * It finds elements with data-vin-tabs, -select, -combobox, -calendar, -date-picker, -context-menu, -drawer, -hover-card, -command, -menubar, -nav-menu, -sidebar, -resizable, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
+ * Used by: Tabs, Select, Combobox, Calendar, Date Picker, Context Menu, Drawer (drag), Hover Card, Command, Menubar, Navigation Menu, Sidebar, Resizable, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select, Scroll Area…) don't use it.
  * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel), data-vin-chart (Chart tooltips),
@@ -1432,6 +1432,212 @@
     });
   });
 
+  /* ---------- Menubar: a row of Dropdown Menus (WAI-ARIA menubar) ---------- */
+  function initMenubar(bar) {
+    var triggers = function () {
+      return Array.prototype.filter.call(bar.querySelectorAll(".vin-menubar__trigger"), function (t) { return !t.disabled; });
+    };
+    var menuOf = function (t) { return document.getElementById(t.getAttribute("popovertarget")); };
+    var rtl = function () { return getComputedStyle(bar).direction === "rtl"; };
+    function roam(t, focus) {
+      triggers().forEach(function (x) { x.tabIndex = x === t ? 0 : -1; });
+      if (focus) t.focus();
+    }
+    function open(t, last) {
+      var menu = menuOf(t);
+      if (!menu || !menu.showPopover) return;
+      roam(t, false);
+      menu._vinLast = !!last;
+      if (menu.matches(":popover-open")) menu._vinMove(last ? -1 : 0);
+      else menu.showPopover();
+    }
+    var anyOpen = function () { return triggers().some(function (t) { var m = menuOf(t); return m && m.matches(":popover-open"); }); };
+    var all = triggers();
+    if (all.length && !all.some(function (t) { return t.tabIndex === 0; })) roam(all[0], false);
+
+    all.forEach(function (t) {
+      var menu = menuOf(t);
+      if (!menu || !menu.showPopover) return;
+      t.setAttribute("aria-haspopup", "menu");
+      t.setAttribute("aria-expanded", "false");
+      var place = function () { placeFloating(menu, t, "bottom", "start", 6); };
+      var m = wireMenu(menu, function () { t.focus(); });
+      menu._vinMove = m.move;
+      menu.addEventListener("beforetoggle", function (e) {
+        if (e.newState === "closed" && menu.contains(document.activeElement)) t.focus();
+      });
+      menu.addEventListener("toggle", function (e) {
+        var on = e.newState === "open";
+        t.setAttribute("aria-expanded", on ? "true" : "false");
+        if (on) {
+          roam(t, false);
+          place(); window.addEventListener("scroll", place, true); window.addEventListener("resize", place);
+          m.move(menu._vinLast ? -1 : 0); menu._vinLast = false;
+        } else { window.removeEventListener("scroll", place, true); window.removeEventListener("resize", place); }
+      });
+      // Left and Right Arrow inside a menu open the next menu along.
+      menu.addEventListener("keydown", function (e) {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        e.preventDefault();
+        var list = triggers(), i = list.indexOf(t), step = (e.key === "ArrowRight") !== rtl() ? 1 : -1;
+        open(list[(i + step + list.length) % list.length]);
+      });
+      // Once a menu is open, pointing at another button opens that one.
+      t.addEventListener("pointerenter", function (e) {
+        if (e.pointerType !== "touch" && !menu.matches(":popover-open") && anyOpen()) open(t);
+      });
+    });
+
+    bar.addEventListener("keydown", function (e) {
+      var t = e.target.closest && e.target.closest(".vin-menubar__trigger");
+      if (!t || !bar.contains(t)) return;
+      var list = triggers(), i = list.indexOf(t), next = null;
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") next = list[(i + ((e.key === "ArrowRight") !== rtl() ? 1 : -1) + list.length) % list.length];
+      else if (e.key === "Home") next = list[0];
+      else if (e.key === "End") next = list[list.length - 1];
+      else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); open(t, e.key === "ArrowUp"); return; }
+      if (next) { e.preventDefault(); roam(next, true); }
+    });
+  }
+
+  /* ---------- Navigation Menu: disclosure buttons with panels (hover, click, keyboard) ---------- */
+  function initNavMenu(nav) {
+    var tops = function () {
+      return Array.prototype.slice.call(nav.querySelectorAll(".vin-nav-menu__item > .vin-nav-menu__trigger, .vin-nav-menu__item > .vin-nav-menu__link"));
+    };
+    nav.addEventListener("keydown", function (e) {
+      var list = tops(), i = list.indexOf(e.target);
+      if (i < 0) return;
+      var rtl = getComputedStyle(nav).direction === "rtl", next = null;
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") next = list[(i + ((e.key === "ArrowRight") !== rtl ? 1 : -1) + list.length) % list.length];
+      else if (e.key === "Home") next = list[0];
+      else if (e.key === "End") next = list[list.length - 1];
+      if (next) { e.preventDefault(); next.focus(); }
+    });
+
+    Array.prototype.forEach.call(nav.querySelectorAll(".vin-nav-menu__trigger"), function (t) {
+      var panel = document.getElementById(t.getAttribute("aria-controls") || t.getAttribute("popovertarget"));
+      if (!panel || !panel.showPopover) return;
+      var item = t.parentNode, pinned = false, focusFirst = false, timer;
+      var isOpen = function () { return panel.matches(":popover-open"); };
+      var links = function () { return Array.prototype.slice.call(panel.querySelectorAll("a[href], button:not(:disabled)")); };
+      var place = function () { placeFloating(panel, t, "bottom", "start", 6); };
+      var later = function (fn, ms) { clearTimeout(timer); timer = setTimeout(fn, ms); };
+      function show(pin) { clearTimeout(timer); pinned = pin; if (!isOpen()) panel.showPopover(); }
+      function hide() { clearTimeout(timer); if (isOpen()) panel.hidePopover(); }
+      t.setAttribute("aria-expanded", "false");
+
+      // The click is ours: a panel opened by hover stays open when clicked, a second click closes it.
+      t.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (isOpen() && !pinned) { pinned = true; clearTimeout(timer); }
+        else if (isOpen()) hide();
+        else show(true);
+      });
+      t.addEventListener("pointerenter", function (e) {
+        if (e.pointerType === "touch") return;
+        if (isOpen()) clearTimeout(timer);
+        else later(function () { show(false); }, 120);
+      });
+      t.addEventListener("pointerleave", function (e) { if (e.pointerType !== "touch" && !pinned) later(hide, 200); });
+      panel.addEventListener("pointerenter", function () { clearTimeout(timer); });
+      panel.addEventListener("pointerleave", function (e) { if (e.pointerType !== "touch" && !pinned) later(hide, 200); });
+      // Focus leaving the button and its panel closes it.
+      item.addEventListener("focusout", function (e) {
+        if (e.relatedTarget) { if (!item.contains(e.relatedTarget)) hide(); }
+        else setTimeout(function () { if (!item.contains(document.activeElement)) hide(); }, 0);
+      });
+
+      t.addEventListener("keydown", function (e) {
+        if (e.key !== "ArrowDown") return;
+        e.preventDefault();
+        if (isOpen()) { var l = links(); if (l[0]) l[0].focus(); pinned = true; }
+        else { focusFirst = true; show(true); }
+      });
+      panel.addEventListener("keydown", function (e) {
+        var l = links(), i = l.indexOf(document.activeElement), to = null;
+        if (e.key === "ArrowDown") to = l[(i + 1) % l.length];
+        else if (e.key === "ArrowUp") to = l[(i - 1 + l.length) % l.length];
+        else if (e.key === "Home") to = l[0];
+        else if (e.key === "End") to = l[l.length - 1];
+        if (to) { e.preventDefault(); to.focus(); }
+      });
+      panel.addEventListener("beforetoggle", function (e) {
+        if (e.newState === "closed" && panel.contains(document.activeElement)) t.focus();
+      });
+      panel.addEventListener("toggle", function (e) {
+        var on = e.newState === "open";
+        t.setAttribute("aria-expanded", on ? "true" : "false");
+        if (on) {
+          place(); window.addEventListener("scroll", place, true); window.addEventListener("resize", place);
+          if (focusFirst) { var l = links(); if (l[0]) l[0].focus(); }
+        } else {
+          pinned = false;
+          window.removeEventListener("scroll", place, true); window.removeEventListener("resize", place);
+        }
+        focusFirst = false;
+      });
+    });
+  }
+
+  /* ---------- Sidebar: folds to icons on wide screens, slides in as a popover on phones ---------- */
+  function initSidebar(layout) {
+    var nav = layout.querySelector(".vin-sidebar");
+    if (!nav || !window.matchMedia) return;
+    var mq = window.matchMedia("(max-width: 767px)");
+    var triggers = Array.prototype.slice.call(nav.id ? document.querySelectorAll('.vin-sidebar__trigger[aria-controls="' + nav.id + '"]') : layout.querySelectorAll(".vin-sidebar__trigger"));
+    var collapsed = function () { return layout.getAttribute("data-state") === "collapsed"; };
+    var popoverOpen = function () { return !!nav.showPopover && nav.matches(":popover-open"); };
+    var opener = null;
+    function sync() {
+      var folded = !mq.matches && collapsed();
+      var open = mq.matches ? popoverOpen() : !collapsed();
+      triggers.forEach(function (t) { t.setAttribute("aria-expanded", open ? "true" : "false"); });
+      // Folded, each item shows its name as a tooltip.
+      Array.prototype.forEach.call(nav.querySelectorAll(".vin-sidebar__item"), function (a) {
+        var text = a.querySelector(".vin-sidebar__text");
+        if (folded && text && !a.hasAttribute("title")) { a.title = text.textContent.trim(); a.setAttribute("data-vin-tip", ""); }
+        else if (!folded && a.hasAttribute("data-vin-tip")) { a.removeAttribute("title"); a.removeAttribute("data-vin-tip"); }
+      });
+    }
+    function setCollapsed(on) {
+      layout.setAttribute("data-state", on ? "collapsed" : "expanded");
+      sync();
+      layout.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { collapsed: on } }));
+    }
+    triggers.forEach(function (t) {
+      t.addEventListener("click", function () {
+        if (!mq.matches) setCollapsed(!collapsed());
+        else if (nav.showPopover) { opener = t; popoverOpen() ? nav.hidePopover() : nav.showPopover(); }
+      });
+    });
+    nav.addEventListener("beforetoggle", function (e) {
+      if (e.newState === "closed" && nav.contains(document.activeElement) && opener) opener.focus();
+    });
+    nav.addEventListener("toggle", function (e) {
+      sync();
+      if (e.newState === "open") {
+        var first = nav.querySelector('[aria-current="page"]') || nav.querySelector("a[href], summary, button:not(:disabled)");
+        if (first) first.focus();
+      }
+    });
+    nav.addEventListener("click", function (e) {
+      var target = e.target.closest && e.target.closest("a[href], summary");
+      if (!target) return;
+      // On a phone, following a link closes the sidebar.
+      if (mq.matches && target.tagName === "A" && popoverOpen()) nav.hidePopover();
+      // Folded, a nested list's button unfolds the sidebar to show it.
+      if (!mq.matches && collapsed() && target.tagName === "SUMMARY") {
+        e.preventDefault();
+        target.parentNode.open = true;
+        setCollapsed(false);
+      }
+    });
+    var onChange = function () { if (!mq.matches && popoverOpen()) nav.hidePopover(); sync(); };
+    if (mq.addEventListener) mq.addEventListener("change", onChange); else mq.addListener(onChange);
+    sync();
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
@@ -1439,6 +1645,7 @@
     "data-vin-combobox": initCombobox, "data-vin-calendar": initCalendar, "data-vin-date-picker": initDatePicker,
     "data-vin-context-menu": initContextMenu, "data-vin-drawer": initDrawer, "data-vin-hover-card": initHoverCard, "data-vin-command": initCommand,
     "data-vin-resizable": initResizable,
+    "data-vin-menubar": initMenubar, "data-vin-nav-menu": initNavMenu, "data-vin-sidebar": initSidebar,
     "data-vin-copy": initCopy, "data-vin-carousel": initCarousel, "data-vin-chart": initChart, "data-vin-data-table": initDataTable,
     "data-vin-message": initMessage, "data-vin-message-scroller": initMessageScroller, "data-vin-questionnaire": initQuestionnaire,
   };

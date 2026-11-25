@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command", "scroll-area", "resizable", "code-block", "carousel", "chart", "data-table", "message", "bubble", "message-scroller", "attachment", "marker", "questionnaire", "trace"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command", "scroll-area", "resizable", "code-block", "carousel", "chart", "data-table", "message", "bubble", "message-scroller", "attachment", "marker", "questionnaire", "trace", "navigation-menu", "menubar", "sidebar"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -129,6 +129,9 @@ export const STYLES = [
       marker: "",
       questionnaire: "",
       trace: "",
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 
@@ -234,6 +237,9 @@ export const STYLES = [
       marker: "",
       questionnaire: "",
       trace: "",
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 
@@ -351,6 +357,9 @@ export const STYLES = [
       questionnaire: `
 & .vin-questionnaire { border-color: transparent; box-shadow: var(--vin-shadow-lg); }`,
       trace: "",
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 
@@ -456,6 +465,9 @@ export const STYLES = [
       marker: "",
       questionnaire: "",
       trace: "",
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 
@@ -592,6 +604,9 @@ export const STYLES = [
 & .vin-questionnaire__hint { margin-top: -4px; text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }`,
       trace: `
 & .vin-trace__meta { text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }`,
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 
@@ -752,6 +767,10 @@ export const STYLES = [
       trace: `
 & .vin-trace__step:not(:last-child)::before { width: 0; background: none; border-inline-start: 1.5px dashed var(--vin-trace-line); border-radius: 0; }
 & .vin-trace__icon { border-radius: 2px; }`,
+      "navigation-menu": "",
+      menubar: `
+& .vin-menubar { border-style: dashed; box-shadow: none; }`,
+      sidebar: "",
     },
   },
 
@@ -884,6 +903,9 @@ export const STYLES = [
 & :is(.vin-questionnaire__title, .vin-questionnaire__prompt) { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 3px); font-weight: 700; }`,
       trace: `
 & .vin-trace__code { border-radius: 12px 4px 14px 5px / 5px 14px 4px 12px; }`,
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 
@@ -978,6 +1000,9 @@ export const STYLES = [
       marker: "",
       questionnaire: "",
       trace: "",
+      "navigation-menu": "",
+      menubar: "",
+      sidebar: "",
     },
   },
 ];

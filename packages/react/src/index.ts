@@ -119,3 +119,11 @@ export { Questionnaire } from "./questionnaire";
 export type { QuestionnaireProps, Question, QuestionOption, QuestionnaireAnswers, QuestionnaireState } from "./questionnaire";
 export { Trace, TraceStep } from "./trace";
 export type { TraceProps, TraceStepProps, TraceStatus } from "./trace";
+export { Menubar, MenubarMenu } from "./menubar";
+export type { MenubarProps, MenubarMenuProps } from "./menubar";
+export { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuGrid, NavigationMenuCard } from "./navigation-menu";
+export type { NavigationMenuProps, NavigationMenuItemProps, NavigationMenuLinkProps, NavigationMenuGridProps, NavigationMenuCardProps } from "./navigation-menu";
+export {
+  SidebarLayout, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarGroup, SidebarMenu, SidebarItem, SidebarSub, SidebarTrigger, SidebarInset,
+} from "./sidebar";
+export type { SidebarLayoutProps, SidebarProps, SidebarGroupProps, SidebarItemProps, SidebarSubProps, SidebarTriggerProps } from "./sidebar";

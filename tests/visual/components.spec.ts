@@ -38,9 +38,10 @@ for (const name of components) {
  * Overlays, open: the first HTML example's trigger is clicked, then the whole screen is checked
  * (axe + a screenshot), because the panel sits in the top layer, outside the fixture.
  */
-const OPEN: Record<string, string | [role: "button" | "combobox", name: string]> = {
+const OPEN: Record<string, string | [role: "button" | "combobox" | "menuitem", name: string]> = {
   dialog: "Edit profile", "alert-dialog": "Delete project", sheet: "Filters", "dropdown-menu": "My account", popover: "Dimensions",
   combobox: ["combobox", "Framework"], "date-picker": "Due date", drawer: "Set daily goal", command: "Search docs",
+  menubar: ["menuitem", "File"], "navigation-menu": "Products",
 };
 for (const [name, opener] of Object.entries(OPEN)) {
   const [role, trigger] = typeof opener === "string" ? (["button", opener] as const) : opener;

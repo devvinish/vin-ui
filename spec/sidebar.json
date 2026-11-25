@@ -1,0 +1,35 @@
+{
+  "$comment": "Single source of truth for the Sidebar API. Every framework package is tested against this file.",
+  "name": "sidebar",
+  "title": "Sidebar",
+  "category": "Navigation",
+  "description": "An app's side navigation, in groups, that folds down to icons and slides in from the edge on phones.",
+  "baseClass": "vin-sidebar",
+  "classes": ["vin-sidebar-layout", "vin-sidebar", "vin-sidebar__header", "vin-sidebar__content", "vin-sidebar__footer", "vin-sidebar__group", "vin-sidebar__label", "vin-sidebar__menu", "vin-sidebar__item", "vin-sidebar__text", "vin-sidebar__badge", "vin-sidebar__sub", "vin-sidebar__submenu", "vin-sidebar__trigger", "vin-sidebar-inset"],
+  "dependencies": ["button"],
+  "thumb": "<div class=\"vin-sidebar-layout\" style=\"--vin-sidebar-min-height:110px;width:200px;border:1px solid var(--vin-border);border-radius:6px;overflow:hidden;font-size:10px\"><div class=\"vin-sidebar\" style=\"--vin-sidebar-width:96px;padding:6px;position:static;display:flex\"><span class=\"vin-sidebar__label\" style=\"font-size:9px;padding:2px 6px\">Platform</span><span class=\"vin-sidebar__item\" aria-current=\"page\" style=\"min-height:20px;padding:2px 6px;font-size:10px\">Dashboard</span><span class=\"vin-sidebar__item\" style=\"min-height:20px;padding:2px 6px;font-size:10px\">Inbox</span><span class=\"vin-sidebar__item\" style=\"min-height:20px;padding:2px 6px;font-size:10px\">Settings</span></div><div class=\"vin-sidebar-inset\" style=\"padding:8px\"></div></div>",
+  "props": {
+    "SidebarLayout": { "type": "{ collapsed, defaultCollapsed, onCollapsedChange }", "description": "Holds the sidebar and the page beside it. Collapsed shows only the icons.", "html": ".vin-sidebar-layout[data-vin-sidebar][data-state=\"collapsed\"]" },
+    "Sidebar": { "type": "{ label: string }", "description": "The navigation. On screens under 768px wide it's hidden and the trigger slides it in.", "html": "nav.vin-sidebar[popover][aria-label]" },
+    "SidebarHeader / SidebarContent / SidebarFooter": { "html": ".vin-sidebar__header, .vin-sidebar__content (scrolls), .vin-sidebar__footer" },
+    "SidebarMenu": { "description": "A list of items outside a group, e.g. in the header or footer.", "html": "ul.vin-sidebar__menu" },
+    "SidebarGroup": { "type": "{ label: string }", "description": "A heading and its list of items.", "html": ".vin-sidebar__group > .vin-sidebar__label + ul.vin-sidebar__menu[aria-labelledby]" },
+    "SidebarItem": { "type": "{ href, icon, active, badge }", "description": "A link. active marks the current page. Give it an icon so it still shows when folded.", "html": "li > a.vin-sidebar__item[aria-current=page] > svg + .vin-sidebar__text + .vin-sidebar__badge?" },
+    "SidebarSub": { "type": "{ label, icon, defaultOpen }", "description": "An item that opens a nested list.", "html": "li > details.vin-sidebar__sub > summary.vin-sidebar__item + ul.vin-sidebar__submenu" },
+    "SidebarTrigger": { "description": "Folds the sidebar to icons, or opens it on phones.", "html": "button.vin-btn.vin-btn--ghost.vin-btn--icon.vin-sidebar__trigger[aria-controls][aria-expanded]" },
+    "SidebarInset": { "description": "The page next to the sidebar.", "html": ".vin-sidebar-inset" },
+    "--vin-sidebar-width / --vin-sidebar-min-height": { "type": "CSS", "description": "Open width (16rem) and the layout's height (100dvh)." }
+  },
+  "react": { "components": ["SidebarLayout", "Sidebar", "SidebarHeader", "SidebarContent", "SidebarFooter", "SidebarGroup", "SidebarMenu", "SidebarItem", "SidebarSub", "SidebarTrigger", "SidebarInset"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Groups, a current page, a count and a nested list. The button folds it to icons; on a phone it slides the sidebar in. In HTML, add data-vin-sidebar and include vinui.js once." },
+    { "id": "collapsed", "title": "Folded to icons", "description": "Starts folded. Each link keeps its name for screen readers and shows it as a tooltip." }
+  ],
+  "a11y": [
+    "A nav landmark with its own name. Each group is a list named by its heading.",
+    "The current page is marked with aria-current=\"page\".",
+    "The trigger is a button with aria-controls and aria-expanded, so screen readers hear whether the sidebar is open.",
+    "Folded, the text is hidden visually but still read out, and shown as a tooltip on hover.",
+    "On phones it opens above the page: Escape or a tap outside closes it, and focus goes back to the trigger."
+  ]
+}
