@@ -40,3 +40,17 @@ test("landing hero · the components work", async ({ page }) => {
   await page.keyboard.press("Escape");
   await expect(page.locator("#hd-more")).toBeHidden();
 });
+
+test("docs · every component is ready: no 'soon' in the sidebar, search or component list", async ({ page }) => {
+  await page.goto("/ui/components/");
+  await expect(page.locator(".side-group .soon")).toHaveCount(0);
+  await expect(page.getByText("Coming soon")).toHaveCount(0);
+  const links = await page.locator(".side-group a[href*='/components/']").evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).pathname));
+  const fs = await import("node:fs");
+  const specs = fs.readdirSync("spec").filter((f) => f.endsWith(".json")).map((f) => f.replace(".json", ""));
+  for (const name of specs) expect(links, `sidebar link for ${name}`).toContain(`/ui/components/${name}/`);
+  for (const name of specs) {
+    const res = await page.request.get(`/ui/components/${name}/`);
+    expect(res.status(), name).toBe(200);
+  }
+});
