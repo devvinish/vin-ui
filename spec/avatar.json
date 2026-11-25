@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Avatar API. Every framework package is tested against this file.",
+  "name": "avatar",
+  "title": "Avatar",
+  "category": "Data display",
+  "description": "A person's picture, with their initials when there's no picture.",
+  "baseClass": "vin-avatar",
+  "classes": ["vin-avatar", "vin-avatar--sm", "vin-avatar--lg", "vin-avatar--square", "vin-avatar__img", "vin-avatar__fallback", "vin-avatar__status", "vin-avatar__status--online", "vin-avatar__status--busy", "vin-avatar__status--away", "vin-avatar-group"],
+  "thumb": "<span class=\"vin-avatar-group\"><span class=\"vin-avatar\"><img class=\"vin-avatar__img\" src=\"/ui/avatars/ada.svg\" alt=\"\"></span><span class=\"vin-avatar\"><img class=\"vin-avatar__img\" src=\"/ui/avatars/alan.svg\" alt=\"\"></span><span class=\"vin-avatar\"><span class=\"vin-avatar__fallback\">GH</span></span></span>",
+  "props": {
+    "name": { "type": "string", "description": "Who it is. Becomes the accessible name, and the initials when there is no picture.", "html": "role=\"img\" aria-label=\"…\" on .vin-avatar, initials in .vin-avatar__fallback" },
+    "src": { "type": "string", "description": "Picture URL. If it fails to load, the initials show.", "html": "<img class=\"vin-avatar__img\" alt=\"\">" },
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-avatar--{value}" },
+    "shape": { "values": ["circle", "square"], "default": "circle", "class": "vin-avatar--square" },
+    "status": { "values": ["online", "busy", "away"], "description": "A presence dot. Say it in the name too: \"Ada Lovelace (online)\".", "html": "<span class=\"vin-avatar__status vin-avatar__status--{value}\"></span>" },
+    "AvatarGroup": { "type": "children", "description": "Wrap avatars to overlap them.", "html": ".vin-avatar-group" }
+  },
+  "react": { "components": ["Avatar", "AvatarGroup"], "helpers": ["initials"] },
+  "examples": [
+    { "id": "basic", "title": "Picture, initials and status", "description": "A picture, the initials fallback, a square avatar for teams and a presence dot. A picture that fails to load shows the initials underneath." },
+    { "id": "sizes", "title": "Sizes", "description": "Small (28px), medium (36px) and large (48px). Initials scale with the size." },
+    { "id": "group", "title": "Group", "description": "Avatars overlap with a ring in the background colour. End with a count for the rest." }
+  ],
+  "a11y": [
+    "The avatar has role=\"img\" and the person's name as its aria-label; the picture inside has alt=\"\" so the name is read once.",
+    "The initials and the status dot are part of the image, so screen readers don't read them on their own. Put the status in the name.",
+    "Initials meet 4.5:1 contrast in every style and mode.",
+    "A \"+3\" counter gets a name like \"3 more people\"."
+  ]
+}

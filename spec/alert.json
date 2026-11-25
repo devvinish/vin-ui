@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Alert API. Every framework package is tested against this file.",
+  "name": "alert",
+  "title": "Alert",
+  "category": "Feedback",
+  "description": "A message on the page that needs attention: information, success, a warning or an error.",
+  "baseClass": "vin-alert",
+  "classes": ["vin-alert", "vin-alert--primary", "vin-alert--success", "vin-alert--warning", "vin-alert--danger", "vin-alert__icon", "vin-alert__content", "vin-alert__title", "vin-alert__description", "vin-alert__actions", "vin-alert__close"],
+  "thumb": "<div class=\"vin-alert vin-alert--success\" style=\"width:190px;padding:10px 12px;font-size:12px\"><div class=\"vin-alert__content\"><p class=\"vin-alert__title\">Payment received</p><p class=\"vin-alert__description\">Thanks!</p></div></div>",
+  "props": {
+    "variant": { "values": ["neutral", "primary", "success", "warning", "danger"], "default": "neutral", "class": "vin-alert--{value}" },
+    "title": { "type": "ReactNode", "html": "<p class=\"vin-alert__title\">" },
+    "children": { "type": "ReactNode", "description": "The description.", "html": "<p class=\"vin-alert__description\">" },
+    "icon": { "type": "ReactNode | false", "description": "An icon for the variant is built in. Pass your own, or false for none.", "html": "<svg class=\"vin-alert__icon\" aria-hidden=\"true\">" },
+    "actions": { "type": "ReactNode", "description": "Buttons under the text.", "html": "<div class=\"vin-alert__actions\">" },
+    "onDismiss": { "type": "() => void", "description": "Shows a close button.", "html": "<button class=\"vin-btn vin-btn--ghost vin-btn--icon vin-alert__close\" aria-label=\"Dismiss\" data-vin-dismiss>; vinui.js removes the alert" }
+  },
+  "react": { "components": ["Alert"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A title and a description, with an icon." },
+    { "id": "variants", "title": "Variants", "description": "Primary for news, then success, warning and danger. Each has its own icon." },
+    { "id": "actions", "title": "Actions and dismiss", "description": "Buttons under the text, and a close button. In HTML, add data-vin-dismiss to the close button and include vinui.js." }
+  ],
+  "a11y": [
+    "An alert that is on the page from the start needs no role. Give role=\"alert\" only to one that appears after an action, so it's announced.",
+    "The title says what happened in words; the colour and icon only support it. Icons are hidden from screen readers.",
+    "The close button has an aria-label (\"Dismiss\"). After it closes, focus moves to the next control (or the one before), so keyboard users don't get lost.",
+    "Text meets 4.5:1 contrast on every tinted background."
+  ]
+}

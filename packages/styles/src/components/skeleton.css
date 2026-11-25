@@ -1,0 +1,27 @@
+/* ==========================================================================
+   VinUI · Skeleton
+   API (see spec/skeleton.json):
+     .vin-skeleton             a block; size it with width/height
+     .vin-skeleton--text       a line of text
+     .vin-skeleton--circle     a round shape (avatars)
+   Put the shapes in a container with role="status" and an aria-label ("Loading profile").
+   The shimmer stops when motion is reduced or off.
+   ========================================================================== */
+
+.vin-skeleton {
+  position: relative; display: block; flex: none; overflow: hidden; box-sizing: border-box;
+  height: 16px; border-radius: var(--vin-radius);
+  background: color-mix(in srgb, var(--vin-fg) 9%, transparent);
+}
+.vin-skeleton::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--vin-fg) 7%, transparent), transparent);
+  animation: vin-shimmer 1.6s ease-in-out infinite;
+}
+.vin-skeleton--text { height: 12px; border-radius: min(var(--vin-radius), 4px); }
+.vin-skeleton--circle { width: 40px; height: auto; aspect-ratio: 1; border-radius: 50%; }
+@keyframes vin-shimmer { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  [data-vin-style]:not([data-vin-motion="full"]) .vin-skeleton::after { animation: none; }
+}
+[data-vin-motion="reduced"] .vin-skeleton::after { animation: none; }

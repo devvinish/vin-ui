@@ -1,0 +1,31 @@
+/* ==========================================================================
+   VinUI · Alert
+   API (see spec/alert.json):
+     .vin-alert [.vin-alert--{primary|success|warning|danger}]
+       > svg.vin-alert__icon            optional
+       > .vin-alert__content > .vin-alert__title + .vin-alert__description [+ .vin-alert__actions]
+       > button.vin-alert__close        optional; data-vin-dismiss removes the alert (vinui.js)
+   Static alerts need no role. Add role="alert" only to one that appears after an action.
+   ========================================================================== */
+
+.vin-alert {
+  --vin-alert-tone: var(--vin-fg);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; align-items: start;
+  box-sizing: border-box; width: 100%; padding: 14px 16px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.5; color: var(--vin-fg);
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-border); border-radius: var(--vin-radius-lg);
+  box-shadow: var(--vin-shadow-soft);
+}
+.vin-alert:not(:has(> .vin-alert__icon)) { grid-template-columns: minmax(0, 1fr); }
+.vin-alert:has(> .vin-alert__close) { grid-template-columns: auto minmax(0, 1fr) auto; }
+.vin-alert:not(:has(> .vin-alert__icon)):has(> .vin-alert__close) { grid-template-columns: minmax(0, 1fr) auto; }
+.vin-alert__icon { width: 18px; height: 18px; margin-top: 2px; color: var(--vin-alert-tone); }
+.vin-alert__content { display: grid; gap: 2px; min-width: 0; }
+.vin-alert__title { margin: 0; font-weight: var(--vin-title-weight); }
+.vin-alert__description { margin: 0; color: color-mix(in srgb, var(--vin-fg) 80%, transparent); }
+.vin-alert__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.vin-alert__close.vin-btn { width: var(--vin-h-sm); height: var(--vin-h-sm); margin: -5px -8px -5px 0; }
+.vin-alert--primary { --vin-alert-tone: var(--vin-accent-text); background: color-mix(in srgb, var(--vin-accent) 7%, var(--vin-surface)); border-color: color-mix(in srgb, var(--vin-accent) 30%, transparent); }
+.vin-alert--success { --vin-alert-tone: color-mix(in srgb, var(--vin-success) 70%, var(--vin-fg)); background: color-mix(in srgb, var(--vin-success) 8%, var(--vin-surface)); border-color: color-mix(in srgb, var(--vin-success) 32%, transparent); }
+.vin-alert--warning { --vin-alert-tone: color-mix(in srgb, var(--vin-warning) 70%, var(--vin-fg)); background: color-mix(in srgb, var(--vin-warning) 8%, var(--vin-surface)); border-color: color-mix(in srgb, var(--vin-warning) 32%, transparent); }
+.vin-alert--danger  { --vin-alert-tone: color-mix(in srgb, var(--vin-danger) 75%, var(--vin-fg));  background: color-mix(in srgb, var(--vin-danger) 7%, var(--vin-surface));  border-color: color-mix(in srgb, var(--vin-danger) 32%, transparent); }

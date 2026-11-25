@@ -1,7 +1,7 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds elements with data-vin-tabs, -select, -toggle, -toggle-group, -textarea, -otp and -slider on load. For markup added later, call VinUI.init(element).
+ * It finds elements with data-vin-tabs, -select, -toggle, -toggle-group, -textarea, -otp, -slider and -dismiss on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
  * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider (fill). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
  */
@@ -302,13 +302,38 @@
     render();
   }
 
+  /* ---------- Dismiss (Alert close button) ---------- */
+  var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  function initDismiss(btn) {
+    btn.addEventListener("click", function () {
+      var box = btn.closest(".vin-alert") || btn.parentElement;
+      var had = box.contains(document.activeElement);
+      // Focus the next control after the alert (or the one before it), so keyboard users stay in place.
+      var all = Array.prototype.filter.call(document.querySelectorAll(FOCUSABLE), function (el) { return !box.contains(el); });
+      var after = all.filter(function (el) { return box.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING; });
+      var next = after[0] || all[all.length - after.length - 1];
+      box.dispatchEvent(new CustomEvent("vin-dismiss", { bubbles: true }));
+      box.remove();
+      if (had && next) next.focus();
+    });
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
-    "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider,
+    "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
   };
+
+  /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */
+  function hideBroken(img) { img.hidden = true; }
+  document.addEventListener("error", function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains("vin-avatar__img")) hideBroken(e.target);
+  }, true);
 
   function init(scope) {
     scope = scope || document;
+    Array.prototype.forEach.call(scope.querySelectorAll(".vin-avatar__img"), function (img) {
+      if (img.complete && img.naturalWidth === 0 && img.getAttribute("src")) hideBroken(img);
+    });
     Object.keys(KINDS).forEach(function (attr) {
       var found = Array.prototype.slice.call(scope.querySelectorAll("[" + attr + "]"));
       if (scope.hasAttribute && scope.hasAttribute(attr)) found.unshift(scope);

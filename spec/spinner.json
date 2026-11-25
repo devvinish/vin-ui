@@ -1,0 +1,27 @@
+{
+  "$comment": "Single source of truth for the Spinner API. Every framework package is tested against this file.",
+  "name": "spinner",
+  "title": "Spinner",
+  "category": "Feedback",
+  "description": "A turning circle that says something is loading.",
+  "baseClass": "vin-spinner",
+  "classes": ["vin-spinner", "vin-spinner--sm", "vin-spinner--lg", "vin-spinner--primary", "vin-loading"],
+  "thumb": "<span class=\"vin-spinner vin-spinner--lg vin-spinner--primary\" style=\"animation:none\"></span><span class=\"vin-loading\"><span class=\"vin-spinner\" style=\"animation:none\"></span>Loading…</span>",
+  "props": {
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-spinner--{value}" },
+    "variant": { "values": ["current", "primary"], "default": "current", "class": "vin-spinner--primary", "description": "Text colour, or the accent colour." },
+    "label": { "type": "string", "default": "Loading", "description": "What screen readers hear. Leave it out (decorative) when text next to the spinner says it.", "html": "role=\"status\" aria-label=\"…\", or aria-hidden=\"true\"" },
+    "Loading": { "type": "children", "description": "A spinner with a message, announced politely.", "html": "<div class=\"vin-loading\" role=\"status\">" }
+  },
+  "react": { "components": ["Spinner", "Loading"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Sizes and colour", "description": "On its own, a spinner has role=\"status\" and a label. It takes the text colour, or the accent with primary." },
+    { "id": "button", "title": "In a button", "description": "Put a small spinner before the label and say what's happening (\"Saving…\"). Disable the button while it works." },
+    { "id": "with-text", "title": "With a message", "description": "Loading shows a spinner with text, on the page or inside a card." }
+  ],
+  "a11y": [
+    "A spinner on its own has role=\"status\" and a label, so screen readers say \"Loading\".",
+    "Next to text that already says it, the spinner is hidden (aria-hidden) so nothing is said twice.",
+    "With reduced motion the spinner turns slowly; with motion off it stops (still shown as an arc)."
+  ]
+}

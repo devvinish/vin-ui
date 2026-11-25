@@ -205,6 +205,26 @@ for (const side of ["html", "react"] as const) {
       await expect(hi).toBeFocused();
     });
 
+    test("alert: the close button removes the alert and focus moves on", async ({ page }) => {
+      await ready(page, "alert");
+      const root = page.locator(`[data-fixture="${side}-actions"]`);
+      await expect(root.locator(".vin-alert")).toHaveCount(1);
+      await root.getByRole("button", { name: "Dismiss" }).focus();
+      await page.keyboard.press("Enter");
+      await expect(root.locator(".vin-alert")).toHaveCount(0);
+      await expect(page.locator("body")).not.toBeFocused();
+    });
+
+    test("avatar: a picture that fails to load shows the initials", async ({ page }) => {
+      await ready(page, "avatar");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const ada = root.getByRole("img", { name: "Ada Lovelace" });
+      await expect(ada.locator("img")).toBeVisible();
+      await ada.locator("img").evaluate((img: HTMLImageElement) => (img.src = "/ui/avatars/missing.svg"));
+      await expect(ada.locator("img")).toBeHidden();
+      await expect(ada.locator(".vin-avatar__fallback")).toHaveText("AL");
+    });
+
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {
       await ready(page, "switch");
       const root = page.locator(`[data-fixture="${side}-basic"]`);

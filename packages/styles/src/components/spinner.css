@@ -1,0 +1,28 @@
+/* ==========================================================================
+   VinUI · Spinner
+   API (see spec/spinner.json):
+     span.vin-spinner role="status" aria-label="Loading"     on its own
+     span.vin-spinner aria-hidden="true"                     next to text that says what's loading
+     .vin-spinner--{sm|lg}  .vin-spinner--primary (accent colour; default is the text colour)
+     div.vin-loading role="status" > .vin-spinner + text     spinner with a message
+   ========================================================================== */
+
+.vin-spinner {
+  --vin-spinner: 16px;
+  display: inline-block; flex: none; box-sizing: border-box;
+  width: var(--vin-spinner); height: var(--vin-spinner);
+  border: max(2px, calc(var(--vin-spinner) / 9)) solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor; border-radius: 50%; vertical-align: middle;
+  animation: vin-spin .7s linear infinite;
+}
+.vin-spinner--sm { --vin-spinner: 12px; }
+.vin-spinner--lg { --vin-spinner: 24px; }
+.vin-spinner--primary { color: var(--vin-accent-text); }
+@keyframes vin-spin { to { transform: rotate(1turn); } }
+@media (prefers-reduced-motion: reduce) {
+  [data-vin-style]:not([data-vin-motion="full"]) .vin-spinner { animation-duration: 1.6s; }
+}
+.vin-loading {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--vin-font); font-size: var(--vin-text-sm); color: var(--vin-muted);
+}

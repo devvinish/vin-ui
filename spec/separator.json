@@ -1,0 +1,26 @@
+{
+  "$comment": "Single source of truth for the Separator API. Every framework package is tested against this file.",
+  "name": "separator",
+  "title": "Separator",
+  "category": "Data display",
+  "description": "A thin line that separates content, across or up and down.",
+  "baseClass": "vin-separator",
+  "classes": ["vin-separator", "vin-separator--vertical", "vin-separator--label"],
+  "thumb": "<div style=\"display:grid;gap:10px;width:150px\"><hr class=\"vin-separator\"><div class=\"vin-separator vin-separator--label\">or</div><hr class=\"vin-separator\"></div>",
+  "props": {
+    "orientation": { "values": ["horizontal", "vertical"], "default": "horizontal", "class": "vin-separator--vertical", "html": "<hr>, with aria-orientation=\"vertical\" when vertical" },
+    "decorative": { "type": "boolean", "default": false, "description": "Purely visual: hidden from screen readers.", "html": "<div class=\"vin-separator\" aria-hidden=\"true\"> instead of <hr>" },
+    "label": { "type": "string", "description": "A word in the middle of the line, like \"or\".", "html": "<div class=\"vin-separator vin-separator--label\">or</div>" }
+  },
+  "react": { "components": ["Separator"], "helpers": [] },
+  "examples": [
+    { "id": "horizontal", "title": "Horizontal", "description": "Between the parts of a card. A separator inside a card runs edge to edge." },
+    { "id": "vertical", "title": "Vertical", "description": "Between items in a row. It takes the height of the row." },
+    { "id": "label", "title": "With a label", "description": "A word in the middle, for choices like signing in with GitHub or with email." }
+  ],
+  "a11y": [
+    "An <hr> is a separator to screen readers, and aria-orientation says when it is vertical.",
+    "A separator that is only decoration should be hidden (decorative), so it isn't read between every item.",
+    "The labelled version is plain text between two lines, so the word (\"or\") is read."
+  ]
+}

@@ -1,0 +1,39 @@
+/* ==========================================================================
+   VinUI · Avatar
+   API (see spec/avatar.json):
+     .vin-avatar[role=img][aria-label]          the person; 36px circle
+       > img.vin-avatar__img alt=""             picture (optional; a broken one shows the fallback)
+       > span.vin-avatar__fallback              initials, sits under the picture
+       > span.vin-avatar__status--{online|busy|away}   presence dot (optional)
+     .vin-avatar--{sm|lg}  .vin-avatar--square
+     .vin-avatar-group > .vin-avatar ...         overlapping stack
+   ========================================================================== */
+
+.vin-avatar {
+  --vin-avatar: 36px;
+  --vin-avatar-ring: var(--vin-stage);
+  position: relative; display: inline-flex; align-items: center; justify-content: center; flex: none;
+  box-sizing: border-box; width: var(--vin-avatar); height: var(--vin-avatar);
+  font-family: var(--vin-font); font-size: calc(var(--vin-avatar) * .36); font-weight: var(--vin-title-weight); line-height: 1;
+  color: var(--vin-fg); background: color-mix(in srgb, var(--vin-fg) 11%, var(--vin-surface));
+  border-radius: 50%; vertical-align: middle; user-select: none;
+}
+.vin-avatar--sm { --vin-avatar: 28px; }
+.vin-avatar--lg { --vin-avatar: 48px; }
+.vin-avatar--square { border-radius: var(--vin-radius); }
+.vin-avatar__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.vin-avatar__img[hidden] { display: none; }
+.vin-avatar__fallback { text-transform: uppercase; letter-spacing: .02em; }
+.vin-avatar__status {
+  position: absolute; inset-inline-end: 0; bottom: 0; box-sizing: border-box;
+  width: max(8px, calc(var(--vin-avatar) * .28)); height: max(8px, calc(var(--vin-avatar) * .28));
+  border-radius: 50%; background: var(--vin-muted); box-shadow: 0 0 0 2px var(--vin-avatar-ring);
+}
+.vin-avatar__status--online { background: var(--vin-success); }
+.vin-avatar__status--busy { background: var(--vin-danger); }
+.vin-avatar__status--away { background: var(--vin-warning); }
+
+.vin-avatar-group { display: inline-flex; align-items: center; vertical-align: middle; }
+.vin-avatar-group > .vin-avatar { box-shadow: 0 0 0 2px var(--vin-avatar-ring); }
+.vin-avatar-group > .vin-avatar + .vin-avatar { margin-inline-start: calc(var(--vin-avatar) * -.25); }
+.vin-card .vin-avatar { --vin-avatar-ring: var(--vin-surface); }

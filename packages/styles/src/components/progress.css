@@ -1,0 +1,29 @@
+/* ==========================================================================
+   VinUI · Progress
+   API (see spec/progress.json):
+     div.vin-progress role="progressbar" aria-valuenow="64" style="--vin-value: 64%"
+     .vin-progress--{sm|lg}  .vin-progress--success
+     .vin-progress--indeterminate     no aria-valuenow: the bar slides
+     .vin-progress__head > .vin-label + .vin-progress__value    label and number
+   ========================================================================== */
+
+.vin-progress {
+  --vin-progress-h: 8px;
+  --vin-progress-color: var(--vin-accent);
+  position: relative; display: block; overflow: hidden; box-sizing: border-box;
+  width: 100%; height: var(--vin-progress-h);
+  background: color-mix(in srgb, var(--vin-track), var(--vin-fg) 14%); border-radius: var(--vin-pill);
+}
+.vin-progress::before {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
+  width: var(--vin-value, 0%); background: var(--vin-progress-color); border-radius: inherit;
+  transition: width var(--vin-dur) var(--vin-ease);
+}
+.vin-progress--sm { --vin-progress-h: 4px; }
+.vin-progress--lg { --vin-progress-h: 12px; }
+.vin-progress--success { --vin-progress-color: var(--vin-success); }
+.vin-progress--indeterminate::before { width: 40%; animation: vin-progress 1.4s ease-in-out infinite; }
+@keyframes vin-progress { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+[dir="rtl"] .vin-progress--indeterminate::before { animation-direction: reverse; }
+.vin-progress__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.vin-progress__value { font-family: var(--vin-font); font-size: calc(var(--vin-text-md) - 1px); font-variant-numeric: tabular-nums; color: var(--vin-muted); }

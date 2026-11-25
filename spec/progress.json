@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Progress API. Every framework package is tested against this file.",
+  "name": "progress",
+  "title": "Progress",
+  "category": "Feedback",
+  "description": "A bar that shows how far a task has got.",
+  "baseClass": "vin-progress",
+  "classes": ["vin-progress", "vin-progress--sm", "vin-progress--lg", "vin-progress--success", "vin-progress--indeterminate", "vin-progress__head", "vin-progress__value"],
+  "thumb": "<div style=\"display:grid;gap:10px;width:150px\"><div class=\"vin-progress\" style=\"--vin-value:64%\"></div><div class=\"vin-progress vin-progress--sm vin-progress--success\" style=\"--vin-value:100%\"></div></div>",
+  "props": {
+    "value": { "type": "number", "description": "0–100. Leave it out while the amount is unknown: the bar slides (indeterminate).", "html": "aria-valuenow=\"64\" style=\"--vin-value: 64%\", or .vin-progress--indeterminate" },
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-progress--{value}" },
+    "variant": { "values": ["default", "success"], "default": "default", "class": "vin-progress--success" },
+    "label": { "type": "ReactNode", "description": "Shown above the bar and used as its name.", "html": ".vin-progress__head > .vin-label[id], aria-labelledby on the bar" },
+    "showValue": { "type": "boolean", "default": false, "description": "Show the percentage next to the label.", "html": ".vin-progress__value" }
+  },
+  "react": { "components": ["Progress"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "With a label", "description": "A label and the percentage above the bar. Turn it green when the task is done." },
+    { "id": "sizes", "title": "Sizes", "description": "Small (4px), medium (8px) and large (12px)." },
+    { "id": "indeterminate", "title": "Unknown length", "description": "While you can't say how far along it is, leave out the value: the bar slides." }
+  ],
+  "a11y": [
+    "role=\"progressbar\" with aria-valuenow, -min and -max: screen readers say the percentage.",
+    "Every bar has a name: the visible label (aria-labelledby) or an aria-label.",
+    "An indeterminate bar has no aria-valuenow, which tells screen readers the amount is unknown.",
+    "The sliding bar stops when motion is off."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$comment": "Single source of truth for the Kbd API. Every framework package is tested against this file.",
+  "name": "kbd",
+  "title": "Kbd",
+  "category": "Data display",
+  "description": "A key on the keyboard, or a shortcut made of several keys.",
+  "baseClass": "vin-kbd",
+  "classes": ["vin-kbd", "vin-kbd-group"],
+  "thumb": "<kbd class=\"vin-kbd-group\"><kbd class=\"vin-kbd\">⌘</kbd><kbd class=\"vin-kbd\">K</kbd></kbd>",
+  "props": {
+    "Kbd": { "type": "children", "description": "One key.", "html": "<kbd class=\"vin-kbd\">" },
+    "KbdGroup": { "type": "children", "description": "A shortcut: several Kbd inside.", "html": "<kbd class=\"vin-kbd-group\">" }
+  },
+  "react": { "components": ["Kbd", "KbdGroup"], "helpers": [] },
+  "examples": [
+    { "id": "keys", "title": "Keys", "description": "Single keys, including the arrows." },
+    { "id": "shortcuts", "title": "Shortcuts", "description": "Group keys for a shortcut. Mac shortcuts usually go without the plus; the others read better with it." },
+    { "id": "in-context", "title": "In context", "description": "In a button and at the end of a search field, the key takes the colour around it." }
+  ],
+  "a11y": [
+    "Uses the <kbd> element, which means keyboard input; a shortcut is a <kbd> holding one <kbd> per key, as the HTML spec suggests.",
+    "Screen readers say symbols like ⌘ and ⇧ in different ways. For an important shortcut, also write it in words nearby (\"Command K\"), or show Ctrl on Windows.",
+    "The shortcut must work as well: Kbd only shows it."
+  ]
+}

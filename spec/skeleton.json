@@ -1,0 +1,25 @@
+{
+  "$comment": "Single source of truth for the Skeleton API. Every framework package is tested against this file.",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "category": "Data display",
+  "description": "Grey shapes that stand in for content while it loads.",
+  "baseClass": "vin-skeleton",
+  "classes": ["vin-skeleton", "vin-skeleton--text", "vin-skeleton--circle"],
+  "thumb": "<div style=\"display:flex;gap:10px;align-items:center;width:160px\"><span class=\"vin-skeleton vin-skeleton--circle\" style=\"width:32px\"></span><span style=\"flex:1;display:grid;gap:6px\"><span class=\"vin-skeleton vin-skeleton--text\"></span><span class=\"vin-skeleton vin-skeleton--text\" style=\"width:60%\"></span></span></div>",
+  "props": {
+    "shape": { "values": ["block", "text", "circle"], "default": "block", "class": "vin-skeleton--{value}" },
+    "width / height": { "type": "CSS size", "description": "Size each shape like the content it replaces.", "html": "style=\"width: …; height: …\"" }
+  },
+  "react": { "components": ["Skeleton"], "helpers": [] },
+  "examples": [
+    { "id": "profile", "title": "Profile", "description": "A round picture and two lines of text." },
+    { "id": "card", "title": "Card", "description": "A media block, a title, text and a button, inside a Card." },
+    { "id": "list", "title": "List", "description": "Repeat a row for a list. Vary the line widths so it looks like text." }
+  ],
+  "a11y": [
+    "Wrap the shapes in one element with role=\"status\" and an aria-label (\"Loading profile\"), so screen readers hear one message, not a list of empty boxes.",
+    "Remove the skeleton when the content arrives; the real content takes its place.",
+    "The shimmer stops when the user asks for reduced motion."
+  ]
+}

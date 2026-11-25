@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -84,6 +84,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -139,6 +146,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -195,6 +209,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -248,6 +269,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -302,6 +330,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -356,6 +391,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -414,6 +456,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 
@@ -461,6 +510,13 @@ export const STYLES = [
       "input-group": "",
       "input-otp": "",
       slider: "",
+      avatar: "",
+      kbd: "",
+      separator: "",
+      skeleton: "",
+      spinner: "",
+      progress: "",
+      alert: "",
     },
   },
 ];

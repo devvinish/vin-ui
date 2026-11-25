@@ -1,0 +1,21 @@
+/* ==========================================================================
+   VinUI · Separator
+   API (see spec/separator.json):
+     hr.vin-separator                                  horizontal line
+     hr.vin-separator.vin-separator--vertical aria-orientation="vertical"
+     div.vin-separator.vin-separator--label            a line with a word in the middle ("or")
+   ========================================================================== */
+
+.vin-separator {
+  /* Mixed with the text colour, so the line shows in styles whose border is transparent. */
+  --vin-separator-color: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  flex: none; align-self: stretch; box-sizing: border-box;
+  width: auto; height: 0; margin: 0; border: 0;
+  border-top: 1px solid var(--vin-separator-color);
+}
+.vin-separator--vertical { width: 0; height: auto; min-height: 16px; border-top: 0; border-inline-start: 1px solid var(--vin-separator-color); }
+.vin-separator--label {
+  display: flex; align-items: center; gap: 12px; height: auto; border: 0;
+  font-family: var(--vin-font); font-size: 12px; line-height: 1.4; color: var(--vin-muted); white-space: nowrap;
+}
+.vin-separator--label::before, .vin-separator--label::after { content: ""; flex: 1; border-top: 1px solid var(--vin-separator-color); }
