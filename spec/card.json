@@ -1,0 +1,24 @@
+{
+  "$comment": "Single source of truth for the Card API. Every framework package is tested against this file.",
+  "name": "card",
+  "title": "Card",
+  "category": "Data display",
+  "description": "A container that groups related content and actions.",
+  "baseClass": "vin-card",
+  "classes": ["vin-card", "vin-card__header", "vin-card__title", "vin-card__desc", "vin-card__body", "vin-card__footer"],
+  "thumb": "<div class=\"vin-card\" style=\"width:180px;padding-bottom:12px;--vin-card-pad:12px\"><div class=\"vin-card__header\"><p class=\"vin-card__title\" style=\"font-size:13px\">Team plan</p><p class=\"vin-card__desc\" style=\"font-size:11px\">Shared workspaces</p></div><div class=\"vin-card__footer\"><span class=\"vin-btn vin-btn--sm\">Upgrade</span></div></div>",
+  "props": {
+    "as (CardTitle)": { "values": ["h2", "h3", "h4", "p"], "default": "h3", "description": "Heading level for the title, so it fits your page outline.", "html": "the tag of .vin-card__title" }
+  },
+  "react": { "components": ["Card", "CardHeader", "CardTitle", "CardDescription", "CardBody", "CardFooter"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Header, body and footer. Every part is optional, and the spacing follows Customize → Density." },
+    { "id": "stat", "title": "Stat card", "description": "A big number with a trend badge: the building block of dashboards." },
+    { "id": "form", "title": "With a form", "description": "Cards hold form fields and actions without any extra CSS." }
+  ],
+  "a11y": [
+    "The title is a real heading (h3 by default), so it appears in the page outline. Pick the level that fits your page.",
+    "A card is a plain container: put links and buttons inside it rather than making the whole card clickable.",
+    "Text and description meet 4.5:1 contrast in every style and mode."
+  ]
+}

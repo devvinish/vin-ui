@@ -1,0 +1,26 @@
+/* ==========================================================================
+   VinUI · Badge
+   API (see spec/badge.json):
+     .vin-badge                                 neutral
+     .vin-badge--{primary|success|warning|danger|outline}
+     .vin-badge__dot                            status dot, first child
+   Status text is mixed toward the text colour so it reads at 4.5:1 in every style.
+   ========================================================================== */
+
+.vin-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  box-sizing: border-box; height: 22px; padding: 0 8px;
+  font: inherit; font-size: calc(var(--vin-text-sm) - 1px); font-weight: var(--vin-weight);
+  line-height: 1; white-space: nowrap; vertical-align: middle;
+  color: var(--vin-secondary-fg); background: var(--vin-secondary);
+  border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-pill);
+}
+.vin-badge--primary { color: var(--vin-primary-fg); background: var(--vin-primary-bg); border-color: transparent; }
+.vin-badge--success { color: color-mix(in srgb, var(--vin-success) 60%, var(--vin-fg)); background: color-mix(in srgb, var(--vin-success) 12%, var(--vin-surface)); border-color: color-mix(in srgb, var(--vin-success) 32%, transparent); }
+.vin-badge--warning { color: color-mix(in srgb, var(--vin-warning) 55%, var(--vin-fg)); background: color-mix(in srgb, var(--vin-warning) 12%, var(--vin-surface)); border-color: color-mix(in srgb, var(--vin-warning) 32%, transparent); }
+.vin-badge--danger  { color: color-mix(in srgb, var(--vin-danger) 65%, var(--vin-fg));  background: color-mix(in srgb, var(--vin-danger) 10%, var(--vin-surface));  border-color: color-mix(in srgb, var(--vin-danger) 32%, transparent); }
+.vin-badge--outline { color: var(--vin-fg); background: transparent; border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-fg) 22%, transparent); }
+.vin-badge__dot { width: 6px; height: 6px; flex: none; border-radius: 50%; background: currentColor; }
+
+/* Inside a button, a badge sits a little tighter. */
+.vin-btn .vin-badge { height: 18px; padding: 0 6px; }

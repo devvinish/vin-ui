@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Input API (with Field, Label, Hint and Error). Every framework package is tested against this file.",
+  "name": "input",
+  "title": "Input",
+  "category": "Forms",
+  "description": "A text field with its label, hint and error message.",
+  "baseClass": "vin-input",
+  "classes": ["vin-field", "vin-label", "vin-input", "vin-input--sm", "vin-input--lg", "vin-hint", "vin-error"],
+  "thumb": "<div class=\"vin-field\" style=\"width:190px\"><span class=\"vin-label\">Email</span><span class=\"vin-input\" style=\"display:flex;align-items:center;color:var(--vin-muted)\">you@example.com</span></div>",
+  "props": {
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-input--{value}" },
+    "label (Field)": { "type": "string", "description": "Field only: the visible label, linked to the input.", "html": "<label class=\"vin-label\" for=\"…\">" },
+    "hint (Field)": { "type": "string", "description": "Field only: help text under the input.", "html": "<p class=\"vin-hint\" id=\"…\"> + aria-describedby" },
+    "error (Field)": { "type": "string", "description": "Field only: an error message. Also marks the input invalid.", "html": "<p class=\"vin-error\"> + aria-invalid=\"true\"" },
+    "multiline (Field)": { "type": "boolean", "default": false, "description": "Field only: render a textarea.", "html": "<textarea class=\"vin-input\">" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["Field", "Input", "Textarea", "Label"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Field connects the label, the input and the hint for you. In HTML, match the for/id and aria-describedby yourself." },
+    { "id": "sizes", "title": "Sizes", "description": "Three heights that line up with the Button sizes. Inputs without a visible label need an aria-label." },
+    { "id": "states", "title": "Error, disabled, multi-line", "description": "An error message marks the input invalid and is read out with it. Use multiline for longer text." }
+  ],
+  "a11y": [
+    "Every input has a label: a visible <label for> or, if there is no visible label, an aria-label.",
+    "Hints and errors are linked with aria-describedby, so screen readers read them with the field.",
+    "An error sets aria-invalid=\"true\" and is shown as text, not only as a red border.",
+    "Visible focus ring in every style and mode."
+  ]
+}

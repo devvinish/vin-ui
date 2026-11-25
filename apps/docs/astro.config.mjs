@@ -13,10 +13,10 @@ export default defineConfig({
   integrations: [react()],
   vite: {
     resolve: {
-      alias: {
-        // React examples import the component the way a user's project would.
-        "@/components/vin/button": fileURLToPath(new URL("../../packages/react/src/button.tsx", import.meta.url)),
-      },
+      alias: [
+        // React examples import components the way a user's project would: "@/components/vin/<name>".
+        { find: /^@\/components\/vin\/(.*)$/, replacement: fileURLToPath(new URL("../../packages/react/src/", import.meta.url)) + "$1.tsx" },
+      ],
     },
   },
 });

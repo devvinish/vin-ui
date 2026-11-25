@@ -8,7 +8,7 @@ npx @vinish/ui init
 npx @vinish/ui add button
 ```
 
-> Status: **Phase 0**. Button is ready end to end in all 8 styles, in HTML and React. More components follow in Phase 1.
+> Status: **Phase 1 in progress**. Ready in all 8 styles, HTML and React: Button, Badge, Card, Input.
 
 ## How it works
 

@@ -7,12 +7,23 @@
   "baseClass": "vin-btn",
   "props": {
     "variant": {
-      "values": ["primary", "secondary", "outline", "ghost", "danger"],
+      "values": [
+        "primary",
+        "secondary",
+        "outline",
+        "ghost",
+        "danger"
+      ],
       "default": "primary",
       "class": "vin-btn--{value}"
     },
     "size": {
-      "values": ["sm", "md", "lg", "icon"],
+      "values": [
+        "sm",
+        "md",
+        "lg",
+        "icon"
+      ],
       "default": "md",
       "class": "vin-btn--{value}"
     },
@@ -31,5 +42,41 @@
     "type=\"button\" by default so it never submits a form by accident.",
     "Icon-only buttons (size=\"icon\") need an aria-label.",
     "Visible focus ring in every style and mode."
+  ],
+  "classes": [
+    "vin-btn",
+    "vin-btn--secondary",
+    "vin-btn--outline",
+    "vin-btn--ghost",
+    "vin-btn--danger",
+    "vin-btn--sm",
+    "vin-btn--lg",
+    "vin-btn--icon"
+  ],
+  "react": {
+    "components": [
+      "Button"
+    ],
+    "helpers": [
+      "buttonClasses"
+    ]
+  },
+  "thumb": "<button type=\"button\" class=\"vin-btn\">Button</button><button type=\"button\" class=\"vin-btn vin-btn--outline\">Outline</button>",
+  "examples": [
+    {
+      "id": "variants",
+      "title": "Variants",
+      "description": "Use primary for the main action on a screen, and the quieter variants for everything else."
+    },
+    {
+      "id": "sizes",
+      "title": "Sizes",
+      "description": "Sizes come from the style's scale, and Customize \u2192 Density adjusts all of them together. Icon buttons need an aria-label."
+    },
+    {
+      "id": "states",
+      "title": "Icons, disabled, links",
+      "description": "Pass href and the React Button renders a link. A disabled link gets aria-disabled and leaves the tab order."
+    }
   ]
 }

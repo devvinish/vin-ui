@@ -1,0 +1,80 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import Example from "../../components/Example.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { href, SITE } from "../../lib/site";
+import { SPECS, getExamples, type Spec } from "../../data/registry";
+
+export function getStaticPaths() {
+  return SPECS.map((spec) => ({ params: { slug: spec.name }, props: { spec } }));
+}
+const { spec } = Astro.props as { spec: Spec };
+const examples = getExamples(spec.name);
+const toc = [
+  ...examples.map((e) => ({ id: e.id, text: e.title })),
+  { id: "install", text: "Installation" },
+  { id: "api", text: "API" },
+  { id: "accessibility", text: "Accessibility" },
+];
+const props = Object.entries(spec.props);
+const reactImport = `import { ${[...spec.react.components, ...(spec.react.helpers ?? [])].join(", ")} } from "@/components/vin/${spec.name}";`;
+---
+<Docs title={spec.title} description={`VinUI ${spec.title}: ${spec.description} In 8 styles, for HTML and React.`} current={spec.name} toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><a href={href("/components/")}><span>Components</span></a><span>{spec.title}</span></div>
+  <h1 class="page-title">{spec.title}</h1>
+  <p class="page-lead">{spec.description} Same markup and props in every style: switch the style in the header to see it change.</p>
+  <div class="meta-links">
+    <a href={href(`/fixtures/${spec.name}/`)}>Test fixture</a>
+    <a href={`${SITE.github}/blob/main/spec/${spec.name}.json`} rel="noopener">spec/{spec.name}.json</a>
+  </div>
+
+  <div class="prose">
+    {examples.map((ex) => (
+      <>
+        <h2 id={ex.id}>{ex.title}</h2>
+        <p>{ex.description}</p>
+        <Example id={`${spec.name}-${ex.id}`} html={ex.html} react={ex.react}><ex.Component slot="react" /></Example>
+      </>
+    ))}
+
+    <h2 id="install">Installation</h2>
+    <p>React: add the component file to your project with the CLI, then import it. HTML: the classes come with <code>vinui.css</code>.</p>
+    <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui add ${spec.name}`} />
+    <CodeBlock title="React" lang="tsx" code={reactImport} />
+
+    <h2 id="api">API</h2>
+    <p>From <code>spec/{spec.name}.json</code>, which every framework version is tested against.</p>
+    {props.length > 0 && (
+      <div class="table-wrap">
+        <table class="api">
+          <thead><tr><th>Prop</th><th>Values</th><th>Default</th><th>In HTML</th></tr></thead>
+          <tbody>
+            {props.map(([name, p]) => (
+              <tr>
+                <td><code>{name}</code>{p.description && <div class="muted" style="font-size:12.5px;margin-top:4px">{p.description}</div>}</td>
+                <td>{p.values ? p.values.map((v) => <code style="margin-right:4px">{v}</code>) : <code>{p.type ?? "boolean"}</code>}</td>
+                <td>{p.default !== undefined ? <code>{String(p.default)}</code> : "—"}</td>
+                <td>{p.class ? <code>{p.class}</code> : p.html ? <code>{p.html}</code> : "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+    <h3>Parts</h3>
+    <div class="table-wrap">
+      <table class="api">
+        <thead><tr><th>React</th><th>HTML classes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>{spec.react.components.map((c) => <code style="margin:0 4px 4px 0;display:inline-block">{`<${c}>`}</code>)}</td>
+            <td>{spec.classes.map((c) => <code style="margin:0 4px 4px 0;display:inline-block">.{c}</code>)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="accessibility">Accessibility</h2>
+    <ul class="checklist">{spec.a11y.map((item) => <li>{item}</li>)}</ul>
+  </div>
+</Docs>

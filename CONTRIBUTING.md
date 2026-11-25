@@ -16,12 +16,15 @@ That means:
 
 ## Adding a component
 
-1. Write `spec/<name>.json`.
-2. Add `packages/styles/src/components/<name>.css` and a `tweaks.<name>` entry in all 8 styles.
-3. Add HTML snippets in `packages/html/src/<name>/` and the React component + examples in `packages/react`.
-4. Add a fixture page in `apps/docs/src/pages/fixtures/` and a spec in `tests/visual/`.
-5. Add the docs page and set `ready: true` in `apps/docs/src/data/components.ts`.
-6. Run `npm test`, `npm run build` and `npm run test:visual`. Check the screenshots for all 16 combinations before committing them.
+Everything is driven by `spec/<name>.json`, so a new component is just its own files:
+
+1. `spec/<name>.json`: props, every class it uses (`classes`), React parts, examples and accessibility notes.
+2. `packages/styles/src/components/<name>.css`, add `<name>` to `COMPONENTS` in `styles.mjs`, and a `tweaks.<name>` entry in all 8 styles.
+3. `packages/html/src/<name>/<example>.html` for each example in the spec.
+4. `packages/react/src/<name>.tsx`, export it from `src/index.ts`, and `packages/react/examples/<name>/<example>.tsx` for each example.
+5. Run `npm test`, `npm run build` and `npm run test:visual:update`, then check the 16 new screenshots before committing them.
+
+The docs page (`/ui/components/<name>/`), the test fixture, the parity tests and the visual and accessibility tests are all generated from the spec. Nothing else to edit.
 
 ## Before you open a pull request
 

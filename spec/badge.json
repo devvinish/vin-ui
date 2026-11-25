@@ -1,0 +1,26 @@
+{
+  "$comment": "Single source of truth for the Badge API. Every framework package is tested against this file.",
+  "name": "badge",
+  "title": "Badge",
+  "category": "Data display",
+  "description": "A small label for a status, a count or a category.",
+  "baseClass": "vin-badge",
+  "classes": ["vin-badge", "vin-badge--primary", "vin-badge--success", "vin-badge--warning", "vin-badge--danger", "vin-badge--outline", "vin-badge__dot"],
+  "thumb": "<span class=\"vin-badge vin-badge--success\"><span class=\"vin-badge__dot\" aria-hidden=\"true\"></span>Active</span><span class=\"vin-badge vin-badge--primary\">New</span><span class=\"vin-badge\">Draft</span>",
+  "props": {
+    "variant": { "values": ["neutral", "primary", "success", "warning", "danger", "outline"], "default": "neutral", "class": "vin-badge--{value}" },
+    "dot": { "type": "boolean", "default": false, "html": "<span class=\"vin-badge__dot\" aria-hidden=\"true\"></span> as the first child" }
+  },
+  "react": { "components": ["Badge"], "helpers": ["badgeClasses"] },
+  "examples": [
+    { "id": "variants", "title": "Variants", "description": "Neutral for plain labels, primary to draw the eye, and the status colours for success, warning and danger." },
+    { "id": "dot", "title": "With a status dot", "description": "Add a dot for live status. The dot follows the badge's text colour." },
+    { "id": "in-context", "title": "In context", "description": "Badges sit inside buttons and next to headings without extra CSS." }
+  ],
+  "a11y": [
+    "Badges are plain text, so screen readers read them as they are.",
+    "Never rely on colour alone: the label says the status (\"Failed\", not just a red badge).",
+    "The status dot is decorative and hidden from screen readers.",
+    "Text meets 4.5:1 contrast in every style and mode."
+  ]
+}

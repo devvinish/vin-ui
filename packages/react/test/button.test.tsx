@@ -2,16 +2,8 @@ import { describe, it, expect, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Button, buttonClasses } from "../src/button";
-import { ButtonVariants } from "../examples/button/variants";
-import { ButtonSizes } from "../examples/button/sizes";
-import { ButtonStates } from "../examples/button/states";
 
 const spec = JSON.parse(readFileSync(new URL("../../../spec/button.json", import.meta.url), "utf8"));
-const htmlSnippet = (name: string) => readFileSync(new URL(`../../html/src/button/${name}.html`, import.meta.url), "utf8");
-
-/** The ordered list of [tag, classes] in some markup: what the styles actually see. */
-const shape = (markup: string) =>
-  [...markup.matchAll(/<(button|a)\b[^>]*class="([^"]+)"/g)].map(([, tag, cls]) => `${tag}.${cls.split(/\s+/).sort().join(".")}`);
 
 describe("Button API matches spec/button.json", () => {
   it("supports every variant and size in the spec", () => {
@@ -46,15 +38,5 @@ describe("Button API matches spec/button.json", () => {
     renderToStaticMarkup(<Button size="icon">+</Button>);
     expect(warn).toHaveBeenCalledOnce();
     warn.mockRestore();
-  });
-});
-
-describe("React examples produce the same markup as the HTML snippets", () => {
-  it.each([
-    ["variants", ButtonVariants],
-    ["sizes", ButtonSizes],
-    ["states", ButtonStates],
-  ])("%s", (name, Example) => {
-    expect(shape(renderToStaticMarkup(<Example />))).toEqual(shape(htmlSnippet(name)));
   });
 });

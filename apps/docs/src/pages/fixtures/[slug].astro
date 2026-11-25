@@ -1,0 +1,50 @@
+---
+/**
+ * Visual-test fixture: every example of one component, HTML and React, with no site chrome.
+ * Usage: /ui/fixtures/<name>/?style=clay&mode=dark
+ * The Playwright suite screenshots this page in all 8 styles × light/dark and runs axe on it.
+ */
+import "@vinui/styles/vinui.css";
+import { STYLES, DEFAULT_STYLE } from "@vinui/styles";
+import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
+import { fontsHref } from "../../lib/site";
+import { SPECS, getExamples, type Spec } from "../../data/registry";
+
+export function getStaticPaths() {
+  return SPECS.map((spec) => ({ params: { slug: spec.name }, props: { spec } }));
+}
+const { spec } = Astro.props as { spec: Spec };
+const examples = getExamples(spec.name);
+const { vars } = themeToAttributes(DEFAULT_THEME);
+const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
+---
+<!doctype html>
+<html lang="en" data-vin-style={DEFAULT_STYLE} data-vin-mode="light" style={rootStyle}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{spec.title} fixture · VinUI</title>
+    <link rel="stylesheet" href={fontsHref(STYLES.map((s) => s.fonts))} />
+    <script is:inline>
+      (function () {
+        var p = new URLSearchParams(location.search), d = document.documentElement;
+        if (p.get("style")) d.setAttribute("data-vin-style", p.get("style"));
+        if (p.get("mode")) d.setAttribute("data-vin-mode", p.get("mode"));
+      })();
+    </script>
+    <style>
+      body { margin: 0; font-family: var(--vin-font); color: var(--vin-fg); background: var(--vin-surface); }
+      main { display: grid; gap: 1px; }
+      section { padding: 22px 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+      h2 { width: 100%; margin: 0 0 4px; font: 500 12px ui-monospace, monospace; color: var(--vin-muted); }
+      .row { display: contents; }
+    </style>
+  </head>
+  <body>
+    <main id="fixture">
+      {examples.map((ex) => <section class="vin-stage" data-fixture={`html-${ex.id}`}><h2>HTML · {ex.id}</h2><div class="row" set:html={ex.html} /></section>)}
+      {examples.map((ex) => <section class="vin-stage" data-fixture={`react-${ex.id}`}><h2>React · {ex.id}</h2><ex.Component /></section>)}
+    </main>
+  </body>
+</html>

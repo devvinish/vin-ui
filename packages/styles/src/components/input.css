@@ -1,0 +1,35 @@
+/* ==========================================================================
+   VinUI · Input (with Field, Label, Hint, Error)
+   API (see spec/input.json):
+     .vin-field > .vin-label + .vin-input + .vin-hint | .vin-error
+     .vin-input--{sm|lg}                 sizes (md is the default)
+     textarea.vin-input                  multi-line
+     [aria-invalid="true"], [disabled]   states
+   ========================================================================== */
+
+.vin-field { display: grid; gap: 6px; min-width: 0; text-align: left; }
+.vin-label { font-size: calc(var(--vin-text-md) - 1px); font-weight: var(--vin-weight); line-height: 1.3; color: var(--vin-fg); }
+
+.vin-input {
+  box-sizing: border-box; width: 100%; min-width: 0;
+  height: var(--vin-h-md); padding: 0 calc(var(--vin-px-md) - 4px);
+  font: inherit; font-size: var(--vin-text-md); color: var(--vin-fg);
+  background: var(--vin-input-bg);
+  border: var(--vin-bw) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 12%);
+  border-radius: var(--vin-radius);
+  box-shadow: var(--vin-input-shadow);
+  transition: box-shadow var(--vin-dur) var(--vin-ease), border-color var(--vin-dur);
+}
+.vin-input::placeholder { color: var(--vin-muted); opacity: 1; }
+.vin-input:focus { outline: none; box-shadow: var(--vin-input-shadow), var(--vin-focus); }
+.vin-input[aria-invalid="true"] { border-color: var(--vin-danger); }
+.vin-input[aria-invalid="true"]:focus { box-shadow: var(--vin-input-shadow), 0 0 0 3px color-mix(in srgb, var(--vin-danger) 28%, transparent); }
+.vin-input:disabled { opacity: .55; cursor: not-allowed; }
+textarea.vin-input { height: auto; min-height: calc(var(--vin-h-md) * 2.2); padding-block: 8px; line-height: 1.5; resize: vertical; }
+
+.vin-input--sm { height: var(--vin-h-sm); padding: 0 calc(var(--vin-px-sm) - 2px); font-size: var(--vin-text-sm); }
+.vin-input--lg { height: var(--vin-h-lg); padding: 0 calc(var(--vin-px-lg) - 6px); font-size: var(--vin-text-lg); }
+
+.vin-hint, .vin-error { margin: 0; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.4; }
+.vin-hint { color: var(--vin-muted); }
+.vin-error { color: color-mix(in srgb, var(--vin-danger) 60%, var(--vin-fg)); font-weight: var(--vin-weight); }

@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button"];
+export const COMPONENTS = ["button", "badge", "card", "input"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -65,7 +65,13 @@ export const STYLES = [
       "shadow-lg": "inset 0 1px 0 rgb(255 255 255 / .04), 0 16px 32px -16px rgb(0 0 0 / .7)",
       "input-shadow": "none",
     },
-    tweaks: { button: "" },
+    tweaks: {
+      button: "",
+      badge: "",
+      card: `
+& .vin-card__title { letter-spacing: -.015em; }`,
+      input: "",
+    },
   },
 
   /* 2 ─────────────────────────────────────────────────────────────── */
@@ -103,6 +109,10 @@ export const STYLES = [
     tweaks: {
       button: `
 & .vin-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgb(0 0 0 / .28); filter: none; }`,
+      badge: `
+& .vin-badge--primary { box-shadow: inset 0 1px 0 rgb(255 255 255 / .3); }`,
+      card: "",
+      input: "",
     },
   },
 
@@ -142,6 +152,10 @@ export const STYLES = [
 & .vin-btn--outline { background: var(--vin-secondary); }
 & .vin-btn:hover { filter: none; transform: translateY(-2px); }
 & .vin-btn:active { transform: scale(.96); }`,
+      badge: `
+& .vin-badge { border-color: transparent; }`,
+      card: "",
+      input: "",
     },
   },
 
@@ -176,6 +190,12 @@ export const STYLES = [
       button: `
 & .vin-btn { border-radius: var(--vin-pill); transition: border-radius calc(var(--vin-dur) * 2.4) var(--vin-ease), transform var(--vin-dur), filter var(--vin-dur); }
 & .vin-btn:active { border-radius: var(--vin-radius); transform: none; }`,
+      badge: "",
+      card: "",
+      input: `
+& .vin-input { border-radius: 12px 12px 4px 4px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--vin-accent) 55%, transparent); }
+& .vin-input:focus { box-shadow: inset 0 -3px 0 var(--vin-accent); }
+& .vin-input[aria-invalid="true"] { box-shadow: inset 0 -2px 0 var(--vin-danger); }`,
     },
   },
 
@@ -207,6 +227,16 @@ export const STYLES = [
 & .vin-btn { text-transform: uppercase; font-size: calc(var(--vin-text-md) - 2.5px); letter-spacing: .1em; }
 & .vin-btn--secondary { border-color: var(--vin-fg); }
 & .vin-btn--ghost { text-decoration: underline; text-underline-offset: 4px; }`,
+      badge: `
+& .vin-badge { text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }`,
+      card: `
+& .vin-card { border-top: 2px solid var(--vin-fg); }
+& .vin-card__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 10px); line-height: 1.1; }`,
+      input: `
+& .vin-label { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--vin-muted); }
+& .vin-input { border-width: 0 0 1px; border-radius: 0; padding-left: 0; background: transparent; }
+& .vin-input:focus { box-shadow: inset 0 -1px 0 var(--vin-fg); }
+& textarea.vin-input { border-width: 1px; padding-left: 10px; }`,
     },
   },
 
@@ -239,6 +269,14 @@ export const STYLES = [
 & :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost) { gap: .4em; border-style: dashed; }
 & :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost)::before { content: "["; color: var(--vin-accent-text); }
 & :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost)::after { content: "]"; color: var(--vin-accent-text); }`,
+      badge: `
+& .vin-badge { text-transform: lowercase; border-style: dashed; }`,
+      card: `
+& .vin-card { border-style: dashed; }
+& .vin-card__title::before { content: "# "; color: var(--vin-accent-text); }`,
+      input: `
+& .vin-input { border-style: dashed; }
+& .vin-label::before { content: "$ "; color: var(--vin-accent-text); }`,
     },
   },
 
@@ -276,6 +314,14 @@ export const STYLES = [
       button: `
 & .vin-btn { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 2px); font-weight: 700; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
 & .vin-btn:hover { filter: none; transform: rotate(-1deg); }`,
+      badge: `
+& .vin-badge { font-family: "Kalam", "Inter", cursive; font-size: 13px; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
+      card: `
+& .vin-card { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
+& .vin-card__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 6px); }`,
+      input: `
+& .vin-input { border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+& textarea.vin-input { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
     },
   },
 
@@ -305,7 +351,12 @@ export const STYLES = [
       secondary: "#2c2c2e", "secondary-fg": "#f5f5f7", "input-bg": "#2c2c2e", track: "#3a3a3c",
       "shadow-lg": "none", "outline-shadow": "inset 0 0 0 1px #48484a",
     },
-    tweaks: { button: "" },
+    tweaks: {
+      button: "",
+      badge: "",
+      card: "",
+      input: "",
+    },
   },
 ];
 

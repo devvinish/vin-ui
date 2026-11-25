@@ -338,3 +338,6 @@ a.comp-card:hover { border-color: var(--border-strong); transform: translateY(-2
   .hdr-trigger svg { display: none; }
   .header-actions [data-mode-toggle] { display: none; }
 }
+
+/* Component cards inside .prose sections are not text links. */
+.prose a.comp-card { color: inherit; text-decoration: none; }

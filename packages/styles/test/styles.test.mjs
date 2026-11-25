@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { STYLES, COMPONENTS } from "../src/styles.mjs";
 import { validateStyles, buildCss, tintValue, parseHex } from "../src/generate.mjs";
 
@@ -34,17 +34,20 @@ test("the full stylesheet has light, dark, system-dark and grey blocks for every
   assert.ok(!css.includes("&"), "tweak placeholders must all be replaced");
 });
 
-test("every Button class in the spec exists in button.css", () => {
-  const spec = JSON.parse(read("../../../spec/button.json"));
-  const css = components.button;
-  assert.ok(css.includes(`.${spec.baseClass} {`));
-  for (const prop of ["variant", "size"]) {
-    for (const v of spec.props[prop].values) {
-      if (v === spec.props[prop].default) continue;
-      assert.ok(css.includes(`.vin-btn--${v}`), `missing .vin-btn--${v}`);
-    }
-  }
+/* Every component has a spec and a stylesheet, and every class in the spec is styled. */
+const specDir = new URL("../../../spec/", import.meta.url);
+const specs = readdirSync(specDir).filter((f) => f.endsWith(".json")).map((f) => JSON.parse(readFileSync(new URL(f, specDir), "utf8")));
+
+test("COMPONENTS matches the spec folder", () => {
+  assert.deepEqual([...COMPONENTS].sort(), specs.map((s) => s.name).sort());
 });
+
+for (const spec of specs) {
+  test(`${spec.name}: every class in spec/${spec.name}.json exists in ${spec.name}.css`, () => {
+    const css = components[spec.name];
+    for (const cls of spec.classes) assert.ok(new RegExp(`\\.${cls}(?![\\w-])`).test(css), `missing .${cls}`);
+  });
+}
 
 test("tintValue shifts hex and rgb colours but leaves other text alone", () => {
   assert.equal(tintValue("#ffffff", "#000000", 50), "#808080");

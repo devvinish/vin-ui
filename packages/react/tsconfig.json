@@ -7,8 +7,8 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "types": ["node"],
-    "paths": { "@/components/vin/button": ["./src/button.tsx"] }
+    "types": ["node", "vite/client"],
+    "paths": { "@/components/vin/*": ["./src/*"] }
   },
   "include": ["src", "examples", "test"]
 }

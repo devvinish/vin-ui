@@ -2,6 +2,7 @@
 import Docs from "../../layouts/Docs.astro";
 import { COMPONENTS, CATEGORIES } from "../../data/components";
 import { href } from "../../lib/site";
+import { getSpec } from "../../data/registry";
 const toc = CATEGORIES.map((c) => ({ id: c.toLowerCase().replace(/\s+/g, "-"), text: c }));
 ---
 <Docs title="Components" description="Every VinUI component, in 8 styles, for HTML and React." current="components" toc={toc}>
@@ -15,9 +16,7 @@ const toc = CATEGORIES.map((c) => ({ id: c.toLowerCase().replace(/\s+/g, "-"), t
         {COMPONENTS.filter((c) => c.category === cat).map((c) =>
           c.ready ? (
             <a class="comp-card" href={href(`/components/${c.slug}/`)}>
-              <div class="thumb vin-stage">
-                <span class="vin-btn">Button</span><span class="vin-btn vin-btn--outline">Outline</span>
-              </div>
+              <div class="thumb vin-stage" inert set:html={getSpec(c.slug)?.thumb ?? ""} />
               <div class="info"><h3>{c.name} <span class="status ready">Ready</span></h3><p>{c.description}</p></div>
             </a>
           ) : (
