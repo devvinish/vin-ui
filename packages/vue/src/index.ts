@@ -59,3 +59,5 @@ export { default as HoverCard } from "./hover-card.vue";
 export { default as ContextMenu } from "./context-menu.vue";
 export { default as Command, CommandDialog } from "./command.vue";
 export type { CommandItem, CommandGroup } from "./command.vue";
+export { default as ScrollArea } from "./scroll-area.vue";
+export { default as ResizableGroup, ResizablePanel, ResizableHandle } from "./resizable.vue";
