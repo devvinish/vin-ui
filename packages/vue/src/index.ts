@@ -77,3 +77,11 @@ export { default as Questionnaire } from "./questionnaire.vue";
 export type { Question, QuestionOption, QuestionnaireAnswers, QuestionnaireState } from "./questionnaire.vue";
 export { default as Trace, TraceStep } from "./trace.vue";
 export type { TraceStatus } from "./trace.vue";
+export { default as Menubar, MenubarMenu } from "./menubar.vue";
+export {
+  default as NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuGrid, NavigationMenuCard,
+} from "./navigation-menu.vue";
+export {
+  default as SidebarLayout, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarGroup, SidebarMenu, SidebarItem, SidebarSub,
+  SidebarTrigger, SidebarInset,
+} from "./sidebar.vue";
