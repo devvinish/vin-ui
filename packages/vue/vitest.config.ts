@@ -11,5 +11,5 @@ export default defineConfig({
   resolve: {
     alias: [{ find: /^@\/components\/vin\/(.*)$/, replacement: `${src}$1` }],
   },
-  test: { environment: "happy-dom" },
+  test: { environment: "happy-dom", setupFiles: ["./test/setup.ts"] },
 });
