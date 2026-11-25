@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command", "scroll-area", "resizable"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command", "scroll-area", "resizable", "code-block", "carousel", "chart", "data-table"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -118,6 +118,10 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": "",
+      carousel: "",
+      chart: "",
+      "data-table": "",
     },
   },
 
@@ -205,6 +209,15 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block { box-shadow: var(--vin-shadow-soft); }
+& .vin-code-block__pre { box-shadow: inset 0 1px 3px rgb(0 0 0 / .08); }`,
+      carousel: `
+& .vin-carousel__dot[aria-current="true"]::before { background: var(--vin-primary-bg); box-shadow: inset 0 1px 0 rgb(255 255 255 / .35), 0 1px 1px rgb(0 0 0 / .15); }`,
+      chart: `
+& .vin-chart__bar { filter: drop-shadow(0 1px 1px rgb(0 0 0 / .18)); }
+& .vin-chart__tooltip { border-color: transparent; }`,
+      "data-table": "",
     },
   },
 
@@ -293,6 +306,22 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block { box-shadow: var(--vin-shadow-soft); }
+& .vin-code-block__header { border-bottom: 0; padding-bottom: 0; }
+& .vin-code-block__pre { margin: 8px; border-radius: calc(var(--vin-radius-lg) - 10px); background: var(--vin-input-bg); box-shadow: var(--vin-input-shadow); }
+& .vin-code-block > .vin-code-block__copy { top: 18px; inset-inline-end: 16px; }`,
+      carousel: `
+& .vin-carousel { --vin-carousel-gap: 16px; }
+& .vin-carousel__dot::before { width: 9px; height: 9px; }
+& .vin-carousel__dot[aria-current="true"]::before { width: 22px; box-shadow: inset 1px 1px 2px rgb(255 255 255 / .45), inset -1px -2px 3px rgb(0 0 0 / .18); }`,
+      chart: `
+& .vin-chart__bar { rx: 9px; }
+& .vin-chart__swatch { border-radius: 4px; }
+& .vin-chart__tooltip { border-color: transparent; border-radius: 16px; }
+& .vin-chart__line { stroke-width: 3; }`,
+      "data-table": `
+& .vin-data-table__sort { border-radius: 10px; }`,
     },
   },
 
@@ -378,6 +407,19 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block__header { border-bottom-color: transparent; }
+& .vin-code-block__pre { background: color-mix(in srgb, var(--vin-accent) 7%, transparent); }`,
+      carousel: `
+& .vin-carousel__dot::before { background: color-mix(in srgb, var(--vin-accent) 40%, var(--vin-muted)); }
+& .vin-carousel__dot[aria-current="true"]::before { width: 22px; height: 8px; background: var(--vin-accent); }`,
+      chart: `
+& .vin-chart__bar { rx: 12px; }
+& .vin-chart__swatch { border-radius: var(--vin-pill); }
+& .vin-chart__tooltip { border-color: transparent; border-radius: 16px; }`,
+      "data-table": `
+& .vin-data-table__sort { border-radius: var(--vin-pill); }
+& .vin-data-table tbody tr[data-selected] > * { background: color-mix(in srgb, var(--vin-accent) 14%, transparent); }`,
     },
   },
 
@@ -479,6 +521,24 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block { border-radius: 0; border-width: 2px 0 1px; border-top-color: var(--vin-fg); background: transparent; }
+& :is(.vin-code-block__title, .vin-code-block__lang) { font-family: var(--vin-font); text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }
+& .vin-code-block__pre { background: transparent; }`,
+      carousel: `
+& .vin-carousel__dot { width: 30px; border-radius: 0; }
+& .vin-carousel__dot::before { width: 16px; height: 2px; border-radius: 0; }
+& .vin-carousel__dot[aria-current="true"]::before { width: 26px; background: var(--vin-fg); }`,
+      chart: `
+& .vin-chart__bar { rx: 0; }
+& .vin-chart__swatch { border-radius: 0; }
+& .vin-chart__legend { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }
+& .vin-chart__grid { stroke-dasharray: 1 4; stroke: color-mix(in srgb, var(--vin-fg) 30%, transparent); }
+& .vin-chart__axis { stroke: var(--vin-fg); }
+& .vin-chart__tooltip { border-top: 2px solid var(--vin-fg); }`,
+      "data-table": `
+& .vin-data-table__sort svg { width: 11px; height: 11px; }
+& .vin-data-table__status { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }`,
     },
   },
 
@@ -598,6 +658,27 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block { border-style: dashed; }
+& .vin-code-block__header { border-bottom-style: dashed; }
+& .vin-code-block__title::before { content: "~/"; color: var(--vin-accent-text); }
+& .vin-code-block__lang::before { content: "["; }
+& .vin-code-block__lang::after { content: "]"; }`,
+      carousel: `
+& .vin-carousel__track { border-radius: 0; }
+& .vin-carousel__dot { border-radius: 0; }
+& .vin-carousel__dot::before { box-sizing: border-box; width: 9px; height: 9px; border-radius: 0; background: transparent; border: 1px solid var(--vin-muted); }
+& .vin-carousel__dot[aria-current="true"]::before { width: 9px; background: var(--vin-accent); border-color: var(--vin-accent); }`,
+      chart: `
+& .vin-chart__bar { rx: 0; }
+& .vin-chart__swatch { border-radius: 0; }
+& .vin-chart__grid { stroke-dasharray: 4 4; stroke: color-mix(in srgb, var(--vin-fg) 22%, transparent); }
+& .vin-chart__line { stroke-linejoin: miter; stroke-linecap: square; stroke-width: 2; }
+& .vin-chart__tooltip { border-style: dashed; border-radius: var(--vin-radius); }
+& .vin-chart__tooltip-title::before { content: "$ "; color: var(--vin-accent-text); }`,
+      "data-table": `
+& .vin-data-table__status::before { content: "> "; color: var(--vin-accent-text); }
+& .vin-data-table tbody tr[data-selected] > :first-child { box-shadow: inset 2px 0 0 var(--vin-accent); }`,
     },
   },
 
@@ -702,6 +783,19 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
+& .vin-code-block__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 2px); }`,
+      carousel: `
+& .vin-carousel__dot::before { width: 9px; height: 8px; border-radius: 60% 40% 55% 45% / 45% 60% 40% 55%; }
+& .vin-carousel__dot[aria-current="true"]::before { width: 20px; height: 9px; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
+      chart: `
+& .vin-chart__bar { rx: 3px; }
+& :is(.vin-chart__legend, .vin-chart__tooltip-title) { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-sm) + 2px); }
+& .vin-chart__tooltip { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
+& .vin-chart__line { stroke-width: 2.5; }`,
+      "data-table": `
+& .vin-data-table__status { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 1px); }`,
     },
   },
 
@@ -781,6 +875,14 @@ export const STYLES = [
       command: "",
       "scroll-area": "",
       resizable: "",
+      "code-block": `
+& .vin-code-block, & .vin-code-block__header { border-color: transparent; }`,
+      carousel: "",
+      chart: `
+& .vin-chart__bar { rx: 6px; }
+& .vin-chart__swatch { border-radius: var(--vin-pill); }
+& .vin-chart__tooltip { border-color: transparent; border-radius: 14px; }`,
+      "data-table": "",
     },
   },
 ];

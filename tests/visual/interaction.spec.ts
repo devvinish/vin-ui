@@ -792,3 +792,167 @@ for (const side of ["html", "react"] as const) {
     });
   });
 }
+
+/* Data display: Code Block, Carousel, Chart, Data Table. */
+for (const side of ["html", "react"] as const) {
+  test.describe(`${side} · data display`, () => {
+    test("code block: copy puts the code on the clipboard and says Copied", async ({ page, context }) => {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+      await ready(page, "code-block");
+      const root = page.locator(`[data-fixture="${side}-lines"]`);
+      const btn = root.getByRole("button", { name: "Copy code" });
+      await btn.click();
+      await expect(root.getByRole("status")).toHaveText("Copied");
+      await expect(btn).toHaveAttribute("data-copied", "");
+      const text = await page.evaluate(() => navigator.clipboard.readText());
+      expect(text.split("\n")).toHaveLength(6);
+      expect(text).toContain('import { Button } from "@/components/vin/button";');
+      expect(text).toContain("return <Button disabled={saving}");
+      expect(text).not.toMatch(/^\d/m); // line numbers are not copied
+      await expect(root.getByRole("status")).toHaveText("", { timeout: 4000 });
+    });
+
+    test("carousel: next, previous, dots and arrow keys move one slide; the ends are aria-disabled", async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await ready(page, "carousel");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const carousel = root.getByRole("region", { name: "Getting started" });
+      const prev = root.getByRole("button", { name: "Previous slide" });
+      const next = root.getByRole("button", { name: "Next slide" });
+      const dot = (n: number) => root.getByRole("button", { name: `Slide ${n}`, exact: true });
+      const slide = (n: number) => root.locator(`.vin-carousel__slide[aria-label="${n} of 4"]`);
+      await expect(carousel).toHaveAttribute("aria-roledescription", "carousel");
+      await expect(dot(1)).toHaveAttribute("aria-current", "true");
+      await expect(prev).toHaveAttribute("aria-disabled", "true");
+      await expect(slide(2)).toHaveJSProperty("inert", true);
+
+      await next.click();
+      await expect(dot(2)).toHaveAttribute("aria-current", "true");
+      await expect(slide(2)).toHaveJSProperty("inert", false);
+      await expect(slide(1)).toHaveJSProperty("inert", true);
+      await expect(prev).not.toHaveAttribute("aria-disabled");
+
+      await next.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(dot(3)).toHaveAttribute("aria-current", "true");
+      await page.keyboard.press("ArrowRight");
+      await expect(dot(4)).toHaveAttribute("aria-current", "true");
+      await expect(next).toHaveAttribute("aria-disabled", "true");
+      await expect(next).toBeFocused(); // focus isn't lost at the end
+      await page.keyboard.press("ArrowLeft");
+      await expect(dot(3)).toHaveAttribute("aria-current", "true");
+
+      await dot(1).click();
+      await expect(dot(1)).toHaveAttribute("aria-current", "true");
+      await expect(prev).toHaveAttribute("aria-disabled", "true");
+
+      // The track itself is a scroller: scrolling it (a swipe) updates the dots too.
+      await root.locator(".vin-carousel__track").evaluate((t) => t.scrollTo({ left: t.scrollWidth, behavior: "instant" }));
+      await expect(dot(4)).toHaveAttribute("aria-current", "true");
+    });
+
+    test("chart: focus and arrow keys show a tooltip per category; hover follows the pointer; Escape hides it", async ({ page }) => {
+      await ready(page, "chart");
+      const root = page.locator(`[data-fixture="${side}-bar"]`);
+      const svg = root.getByRole("img", { name: "Visitors by month, January to June (bar chart)" });
+      const tip = root.locator(".vin-chart__tooltip");
+      await expect(root.getByRole("table", { name: "Visitors by month, January to June" })).toHaveCount(1);
+      await expect(tip).toHaveCount(0);
+
+      await svg.focus();
+      await expect(tip).toContainText("Jan");
+      await expect(tip.locator(".vin-chart__tooltip-row").first()).toContainText("Desktop186");
+      await expect(root.locator('.vin-chart__bar[data-i="0"][data-active]')).toHaveCount(2);
+      await page.keyboard.press("ArrowRight");
+      await expect(tip).toContainText("Feb");
+      await expect(tip.locator(".vin-chart__tooltip-row").nth(1)).toContainText("Mobile200");
+      await page.keyboard.press("End");
+      await expect(tip).toContainText("Jun");
+      await page.keyboard.press("Escape");
+      await expect(tip).toHaveCount(0);
+
+      await root.locator('.vin-chart__hit[data-i="3"]').hover();
+      await expect(tip).toContainText("Apr");
+      await expect(root.locator('.vin-chart__hit[data-i="3"]')).toHaveAttribute("data-active", "");
+      await page.mouse.move(5, 5);
+      await expect(tip).toHaveCount(0);
+    });
+
+    test("data table: sorts with aria-sort, filters, pages and selects rows", async ({ page }) => {
+      await ready(page, "data-table");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const visible = root.locator("tbody tr:not([hidden])");
+      const firstCells = () => visible.locator("td:nth-child(2)").allTextContents();
+      const status = root.locator(".vin-data-table__status");
+      const pageText = root.locator(".vin-pagination__status");
+      const prev = root.getByRole("button", { name: "Previous" });
+      const next = root.getByRole("button", { name: "Next" });
+
+      // Paging: five rows at a time.
+      await expect(visible).toHaveCount(5);
+      await expect(pageText).toHaveText("Page 1 of 3");
+      await expect(prev).toBeDisabled();
+      await next.click();
+      await expect(pageText).toHaveText("Page 2 of 3");
+      expect(await firstCells()).toEqual(["INV-1037", "INV-1036", "INV-1035", "INV-1034", "INV-1033"]);
+      await next.click();
+      await expect(visible).toHaveCount(2);
+      await expect(next).toBeDisabled();
+
+      // Sorting: numbers sort as numbers; a second click reverses; only one column has aria-sort.
+      const amount = root.getByRole("columnheader", { name: "Amount" });
+      await amount.getByRole("button").click();
+      await expect(amount).toHaveAttribute("aria-sort", "ascending");
+      await prev.click(); await prev.click();
+      await expect(visible.first().locator("td").last()).toHaveText("₹2,350");
+      await amount.getByRole("button").click();
+      await expect(amount).toHaveAttribute("aria-sort", "descending");
+      await expect(visible.first().locator("td").last()).toHaveText("₹18,200");
+      await root.getByRole("columnheader", { name: "Customer" }).getByRole("button").click();
+      await expect(amount).not.toHaveAttribute("aria-sort");
+      expect(await firstCells()).toEqual(["INV-1042", "INV-1041", "INV-1040", "INV-1039", "INV-1038"]);
+
+      // Filtering: back to page 1, and an empty state when nothing matches.
+      const filter = root.getByRole("searchbox", { name: "Filter invoices" });
+      await filter.fill("overdue");
+      await expect(visible).toHaveCount(2);
+      await expect(pageText).toHaveText("Page 1 of 1");
+      await filter.fill("zzz");
+      await expect(root.locator(".vin-data-table__empty")).toHaveText("No results.");
+      await filter.fill("pending");
+      await expect(visible).toHaveCount(3);
+
+      // Selection: the header box selects what matches the filter and shows "mixed" for some.
+      const all = root.getByRole("checkbox", { name: "Select all rows" });
+      await all.check();
+      await expect(status).toHaveText("3 of 12 selected");
+      await filter.fill("");
+      await expect(all).toHaveJSProperty("indeterminate", true);
+      await root.getByRole("checkbox", { name: "Select INV-1041" }).uncheck();
+      await expect(status).toHaveText("2 of 12 selected");
+      await expect(root.locator("tbody tr[data-selected]")).toHaveCount(2);
+      await all.click();
+      await expect(status).toHaveText("12 of 12 selected");
+      await expect(all).toBeChecked();
+      await all.click();
+      await expect(status).toHaveText("0 of 12 selected");
+    });
+
+    test("data table: starts sorted and mixed where the markup says so", async ({ page }) => {
+      await ready(page, "data-table");
+      const sorting = page.locator(`[data-fixture="${side}-sorting"]`);
+      const commits = sorting.getByRole("columnheader", { name: "Commits" });
+      await expect(commits).toHaveAttribute("aria-sort", "descending");
+      await commits.getByRole("button").click();
+      await expect(commits).toHaveAttribute("aria-sort", "ascending");
+      await expect(sorting.locator("tbody tr").first().locator("td").first()).toHaveText("Ravi Menon");
+      const joined = sorting.getByRole("columnheader", { name: "Joined" });
+      await joined.getByRole("button").click();
+      await expect(sorting.locator("tbody tr").first().locator("td").first()).toHaveText("Tom Okafor");
+
+      const selection = page.locator(`[data-fixture="${side}-selection"]`);
+      await expect(selection.getByRole("checkbox", { name: "Select all rows" })).toHaveJSProperty("indeterminate", true);
+      await expect(selection.locator(".vin-data-table__status")).toHaveText("2 of 4 selected");
+    });
+  });
+}

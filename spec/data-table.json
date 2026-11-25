@@ -1,0 +1,49 @@
+{
+  "$comment": "Single source of truth for the Data Table API. Every framework package is tested against this file.",
+  "name": "data-table",
+  "title": "Data Table",
+  "category": "Data display",
+  "description": "A table you can sort, filter, select rows in and page through.",
+  "baseClass": "vin-data-table",
+  "classes": [
+    "vin-data-table",
+    "vin-data-table__toolbar",
+    "vin-data-table__search",
+    "vin-data-table__sort",
+    "vin-data-table__select",
+    "vin-data-table__empty",
+    "vin-data-table__footer",
+    "vin-data-table__status"
+  ],
+  "dependencies": ["table", "pagination", "checkbox", "input", "input-group", "button"],
+  "thumb": "<div class=\"vin-data-table\" style=\"width:200px;gap:6px\"><div class=\"vin-table-wrap\"><table class=\"vin-table\" style=\"font-size:10px\"><thead><tr><th class=\"vin-data-table__select\" style=\"padding:5px 6px\"><span class=\"vin-checkbox\" style=\"display:inline-block;width:11px;height:11px\"></span></th><th aria-sort=\"ascending\" style=\"padding:5px 6px;font-size:10px\"><span class=\"vin-data-table__sort\" style=\"font-size:10px\">Name ↑</span></th><th class=\"vin-table__num\" style=\"padding:5px 6px;font-size:10px\">Amount</th></tr></thead><tbody><tr data-selected><td class=\"vin-data-table__select\" style=\"padding:5px 6px\"><span class=\"vin-checkbox\" style=\"display:inline-block;width:11px;height:11px;background:var(--vin-primary-bg)\"></span></td><td style=\"padding:5px 6px\">Asha</td><td class=\"vin-table__num\" style=\"padding:5px 6px\">₹250</td></tr><tr><td class=\"vin-data-table__select\" style=\"padding:5px 6px\"><span class=\"vin-checkbox\" style=\"display:inline-block;width:11px;height:11px\"></span></td><td style=\"padding:5px 6px\">Ben</td><td class=\"vin-table__num\" style=\"padding:5px 6px\">₹150</td></tr></tbody></table></div><div class=\"vin-data-table__footer\" style=\"font-size:9px\"><span class=\"vin-data-table__status\" style=\"font-size:9px\">1 of 2 selected</span><span class=\"vin-data-table__status\" style=\"font-size:9px\">Page 1 of 1</span></div></div>",
+  "props": {
+    "columns": { "type": "{ key; header; cell?; sortValue?; filterValue?; sortable?; numeric? }[]", "description": "What each column shows. Columns sort unless sortable is false; numeric right-aligns them.", "html": "th[scope=col] > button.vin-data-table__sort (th.vin-table__num for numbers)" },
+    "data": { "type": "T[]", "description": "The rows. Sorting, filtering and paging happen in the browser." },
+    "rowKey": { "type": "keyof T | (row: T) => string | number", "description": "Identifies each row, for selection." },
+    "label": { "type": "string", "description": "Names the table's scrolling region (and the filter box).", "html": "aria-label on .vin-table-wrap[role=region]" },
+    "pageSize": { "type": "number", "default": 0, "description": "Rows per page; 0 shows them all. The pager is Pagination's simple version.", "html": "data-page-size on .vin-data-table; nav.vin-pagination in .vin-data-table__footer" },
+    "selectable": { "type": "boolean", "default": false, "description": "A checkbox per row and a \"select all\" checkbox in the header, which shows a dash when some rows are selected.", "html": "th / td.vin-data-table__select > input.vin-checkbox; tr[data-selected]" },
+    "defaultSelected / onSelectionChange": { "type": "(string | number)[]", "description": "Rows selected at first, and a callback with the keys after each change." },
+    "filterable": { "type": "boolean", "default": false, "description": "A search box that hides rows whose text doesn't match.", "html": ".vin-data-table__toolbar > .vin-input.vin-input-group.vin-data-table__search > input[type=search]" },
+    "filterLabel / filterPlaceholder": { "type": "string", "description": "The filter box's name (default \"Filter invoices\") and placeholder." },
+    "defaultSort": { "type": "{ key: string; direction: \"ascending\" | \"descending\" }", "description": "Sort on first render. Clicking a header sorts ascending, then descending.", "html": "aria-sort on the th" },
+    "rowLabel": { "type": "(row: T) => string", "description": "Name of a row's checkbox. Default: \"Select\" + the first column." },
+    "emptyText": { "type": "ReactNode", "default": "No results.", "html": "tr.vin-data-table__empty > td[colspan]" },
+    "sort value (HTML)": { "type": "attribute", "description": "In HTML, cells sort by their text (numbers like ₹12,400 sort as numbers). Put data-value on a cell to sort by something else.", "html": "td[data-value=\"12400\"]" }
+  },
+  "react": { "components": ["DataTable"], "helpers": ["dataTableStatus"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Sort by a header, filter by text, select rows and page through 12 invoices, five at a time. In HTML, add data-vin-data-table (and data-page-size) and include vinui.js; every row is in the markup and the script hides the ones on other pages." },
+    { "id": "sorting", "title": "Sorting only", "description": "Starts sorted by commits, highest first. Click a header to sort by it; click again to reverse." },
+    { "id": "selection", "title": "Selection", "description": "Two rows start selected, so the header checkbox shows a dash (mixed). Clicking it selects every row." }
+  ],
+  "a11y": [
+    "A real table with th[scope] headers. Sortable headers hold a button, and the sorted column has aria-sort=\"ascending\" or \"descending\", so screen readers say how it's sorted.",
+    "The sort arrows are hidden from screen readers; the button's name is the column name.",
+    "Each row checkbox has a name (\"Select INV-1042\"). The header checkbox is \"Select all rows\" and is mixed (indeterminate) when some are selected.",
+    "The status line (\"2 of 12 selected\") is a polite live region, so changes are announced.",
+    "The filter box is a labelled search input; paging uses Pagination's Previous / Next buttons, which are disabled at the ends.",
+    "On small screens the table scrolls sideways inside its focusable region instead of squashing the columns."
+  ]
+}

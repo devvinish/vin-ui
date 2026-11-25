@@ -1,0 +1,93 @@
+/* ==========================================================================
+   VinUI · Code Block
+   API (see spec/code-block.json):
+     div.vin-code-block [.vin-code-block--numbered]
+       > div.vin-code-block__header                       (optional)
+           > span.vin-code-block__title                   file name
+           > span.vin-code-block__lang                    "tsx", "bash"…
+           > button.vin-btn.vin-btn--ghost.vin-btn--icon.vin-btn--sm.vin-code-block__copy[data-vin-copy][aria-label]
+               > svg (copy) + svg (check)                 the check shows while [data-copied]
+       > button…vin-code-block__copy                      without a header: sits in the corner
+       > pre.vin-code-block__pre[tabindex=0] > code
+           plain text, or one span.vin-code-block__line per line (no newlines between them)
+           span.vin-code-block__line--highlight           a highlighted line
+           span.vin-code-block__{keyword|string|number|comment}   optional token colours
+       > span.vin-code-block__status[role=status]         visually hidden; says "Copied"
+     --vin-code-gutter: width of the line numbers (default 2ch, use 3ch past 99 lines)
+   ========================================================================== */
+
+.vin-code-block {
+  --vin-code-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  --vin-code-font: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --vin-code-tint: color-mix(in srgb, var(--vin-fg) 3.5%, transparent);
+  position: relative; box-sizing: border-box; width: 100%; min-width: 0; overflow: hidden;
+  font-family: var(--vin-font); color: var(--vin-fg); text-align: start;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-code-line); border-radius: var(--vin-radius-lg);
+}
+
+.vin-code-block__header {
+  display: flex; align-items: center; gap: 10px; box-sizing: border-box; min-height: 42px;
+  padding: 5px 6px 5px 16px; border-bottom: 1px solid var(--vin-code-line);
+}
+.vin-code-block__title {
+  flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--vin-code-font); font-size: calc(var(--vin-text-sm) - .5px); font-weight: var(--vin-weight);
+  color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 30%);
+}
+.vin-code-block__lang {
+  flex: none; margin-inline-start: auto; font-family: var(--vin-code-font); font-size: 11px; line-height: 1;
+  letter-spacing: .02em; text-transform: lowercase; color: var(--vin-muted);
+}
+.vin-code-block__title + .vin-code-block__lang { margin-inline-start: 0; }
+
+.vin-code-block .vin-code-block__copy { flex: none; width: var(--vin-h-sm); height: var(--vin-h-sm); color: var(--vin-muted); }
+.vin-code-block .vin-code-block__copy:hover { color: var(--vin-fg); }
+.vin-code-block__copy svg { width: 15px; height: 15px; }
+.vin-code-block__copy svg + svg, .vin-code-block__copy[data-copied] svg:first-child { display: none; }
+.vin-code-block__copy[data-copied] svg + svg { display: block; color: var(--vin-success); }
+/* No header: the button floats in the top corner. */
+.vin-code-block > .vin-code-block__copy { position: absolute; top: 10px; inset-inline-end: 9px; z-index: 1; }
+.vin-code-block > .vin-code-block__copy ~ .vin-code-block__pre > code { padding-inline-end: calc(var(--vin-h-sm) + 14px); }
+
+.vin-code-block__pre {
+  margin: 0; padding: 14px 0; overflow-x: auto; overscroll-behavior-x: contain;
+  font-family: var(--vin-code-font); font-size: 13px; line-height: 1.7; tab-size: 2;
+  color: var(--vin-fg); background: var(--vin-code-tint);
+}
+.vin-code-block__pre:focus-visible { outline: none; box-shadow: inset var(--vin-focus); }
+.vin-code-block__pre > code {
+  display: block; box-sizing: border-box; width: max-content; min-width: 100%; padding: 0 16px;
+  font: inherit; color: inherit; background: none; border: 0; white-space: pre;
+}
+.vin-code-block__pre > code:has(> .vin-code-block__line) { padding: 0; }
+.vin-code-block__line { display: block; min-height: 1lh; padding-inline: 16px; }
+.vin-code-block__line--highlight {
+  background: color-mix(in srgb, var(--vin-accent) 10%, transparent);
+  box-shadow: inset 3px 0 0 var(--vin-accent);
+}
+/* Tokens step a little toward the text colour on the tinted line, to keep 4.5:1. */
+.vin-code-block__line--highlight > * { --vin-code-pull: 28%; }
+[dir="rtl"] .vin-code-block__line--highlight { box-shadow: inset -3px 0 0 var(--vin-accent); }
+
+/* Line numbers: CSS counters with empty alt text, so they're never copied or read out. */
+.vin-code-block--numbered .vin-code-block__pre > code { counter-reset: vin-code-line; }
+.vin-code-block--numbered .vin-code-block__line { padding-inline-start: 12px; }
+.vin-code-block--numbered .vin-code-block__line::before {
+  counter-increment: vin-code-line;
+  content: counter(vin-code-line);
+  content: counter(vin-code-line) / "";
+  display: inline-block; width: var(--vin-code-gutter, 2ch); margin-inline-end: 18px;
+  text-align: end; color: var(--vin-muted); user-select: none;
+}
+.vin-code-block--numbered .vin-code-block__line--highlight::before { color: var(--vin-accent-text); }
+
+/* Token colours for hand-written highlighting. All 4.5:1 on the code background. */
+.vin-code-block__keyword { color: color-mix(in srgb, var(--vin-accent-text), var(--vin-fg) calc(18% + var(--vin-code-pull, 0%))); }
+.vin-code-block__string { color: color-mix(in srgb, var(--vin-success) calc(68% - var(--vin-code-pull, 0%)), var(--vin-fg)); }
+.vin-code-block__number { color: color-mix(in srgb, var(--vin-warning) calc(66% - var(--vin-code-pull, 0%)), var(--vin-fg)); }
+.vin-code-block__comment { color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) var(--vin-code-pull, 0%)); font-style: italic; }
+
+.vin-code-block__status {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}

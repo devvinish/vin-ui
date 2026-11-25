@@ -5,6 +5,8 @@
  * Used by: Tabs, Select, Combobox, Calendar, Date Picker, Context Menu, Drawer (drag), Hover Card, Command, Resizable, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select, Scroll Area…) don't use it.
+ * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel), data-vin-chart (Chart tooltips),
+ * data-vin-data-table (Data Table: sorting, filtering, selection and paging).
  */
 (function () {
   "use strict";
@@ -1065,6 +1067,232 @@
     render();
   }
 
+  /* ---------- Code Block: [data-vin-copy] copies the block's code (or data-vin-copy="#id"'s text) ---------- */
+  function copyText(text, done) {
+    var fallback = function () {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      ta.remove(); done(ok);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    else fallback();
+  }
+  function initCopy(btn) {
+    var timer;
+    btn.addEventListener("click", function () {
+      var block = btn.closest(".vin-code-block");
+      var sel = btn.getAttribute("data-vin-copy");
+      var src = sel ? document.querySelector(sel) : block && block.querySelector(".vin-code-block__pre code, .vin-code-block__pre");
+      if (!src) return;
+      var lines = src.querySelectorAll(".vin-code-block__line");
+      var text = "value" in src && src.tagName !== "BUTTON" ? src.value : lines.length
+        ? Array.prototype.map.call(lines, function (l) { return l.textContent; }).join("\n")
+        : src.textContent;
+      copyText(text, function (ok) {
+        var status = block && block.querySelector(".vin-code-block__status");
+        clearTimeout(timer);
+        if (ok) btn.setAttribute("data-copied", ""); else btn.removeAttribute("data-copied");
+        if (status) status.textContent = ok ? "Copied" : "Couldn't copy";
+        timer = setTimeout(function () { btn.removeAttribute("data-copied"); if (status) status.textContent = ""; }, 2000);
+      });
+    });
+  }
+
+  /* ---------- Carousel: buttons, dots and arrow keys scroll the snap track; out-of-view slides are inert ---------- */
+  function reducedMotion(el) {
+    if (el.closest('[data-vin-motion="off"], [data-vin-motion="reduced"]')) return true;
+    return !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) && !el.closest('[data-vin-motion="full"]');
+  }
+  function initCarousel(root) {
+    var track = root.querySelector(".vin-carousel__track");
+    if (!track) return;
+    var slides = Array.prototype.filter.call(track.children, function (s) { return s.classList.contains("vin-carousel__slide"); });
+    var prev = root.querySelector(".vin-carousel__prev"), next = root.querySelector(".vin-carousel__next");
+    var dots = Array.prototype.slice.call(root.querySelectorAll(".vin-carousel__dot"));
+    var current = 0, atStart = true, atEnd = false, frame = 0;
+    var setDisabled = function (btn, off) { if (!btn) return; if (off) btn.setAttribute("aria-disabled", "true"); else btn.removeAttribute("aria-disabled"); };
+
+    function measure() {
+      var box = track.getBoundingClientRect(), first = -1;
+      slides.forEach(function (s, i) {
+        var r = s.getBoundingClientRect();
+        var shown = Math.min(r.right, box.right) - Math.max(r.left, box.left) >= r.width * 0.5 - 1;
+        s.inert = !shown;
+        if (shown && first < 0) first = i;
+      });
+      current = Math.max(first, 0);
+      var max = track.scrollWidth - track.clientWidth, pos = Math.abs(track.scrollLeft);
+      atStart = pos <= 1; atEnd = pos >= max - 1;
+      setDisabled(prev, atStart); setDisabled(next, atEnd);
+      dots.forEach(function (d, i) { if (i === current) d.setAttribute("aria-current", "true"); else d.removeAttribute("aria-current"); });
+    }
+    function schedule() { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); }
+    function goTo(i) {
+      var slide = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      if (!slide) return;
+      var box = track.getBoundingClientRect(), r = slide.getBoundingClientRect();
+      var rtl = getComputedStyle(track).direction === "rtl";
+      track.scrollBy({ left: rtl ? r.right - box.right : r.left - box.left, behavior: reducedMotion(track) ? "instant" : "smooth" });
+    }
+    function step(by) { if ((by < 0 && atStart) || (by > 0 && atEnd)) return; goTo(current + by); }
+
+    track.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    if (prev) prev.addEventListener("click", function () { step(-1); });
+    if (next) next.addEventListener("click", function () { step(1); });
+    dots.forEach(function (d, i) { d.addEventListener("click", function () { goTo(i); }); });
+    root.addEventListener("keydown", function (e) {
+      if (e.defaultPrevented || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+      if (e.target !== track && !e.target.closest(".vin-carousel__controls")) return;
+      e.preventDefault();
+      var rtl = getComputedStyle(root).direction === "rtl";
+      step((e.key === "ArrowRight") !== rtl ? 1 : -1);
+    });
+    measure();
+  }
+
+  /* ---------- Chart: a tooltip for the category under the pointer or picked with the arrow keys ---------- */
+  function initChart(root) {
+    var svg = root.querySelector(".vin-chart__svg"), plot = root.querySelector(".vin-chart__plot");
+    var rows = root.querySelectorAll(".vin-chart__table tbody tr");
+    if (!svg || !plot || !rows.length) return;
+    var names = Array.prototype.slice.call(root.querySelectorAll(".vin-chart__table thead th"), 1).map(function (th) { return th.textContent; });
+    var colours = Array.prototype.map.call(svg.querySelectorAll(".vin-chart__series"), function (g) { return g.getAttribute("style") || ""; });
+    var n = rows.length, active = null, tip = null;
+    var el = function (tag, cls, text) { var e = document.createElement(tag); e.className = cls; if (text != null) e.textContent = text; return e; };
+
+    function show(i) {
+      if (i === null) {
+        active = null; svg.removeAttribute("data-active");
+        Array.prototype.forEach.call(svg.querySelectorAll("[data-active]"), function (e) { e.removeAttribute("data-active"); });
+        if (tip) { tip.remove(); tip = null; }
+        return;
+      }
+      i = Math.max(0, Math.min(n - 1, i));
+      if (i === active) return;
+      show(null); active = i;
+      svg.setAttribute("data-active", "");
+      Array.prototype.forEach.call(svg.querySelectorAll('[data-i="' + i + '"]'), function (e) { e.setAttribute("data-active", ""); });
+      var cells = rows[i].children;
+      tip = el("div", "vin-chart__tooltip"); tip.setAttribute("aria-hidden", "true");
+      tip.appendChild(el("p", "vin-chart__tooltip-title", cells[0].textContent));
+      names.forEach(function (name, s) {
+        var row = el("div", "vin-chart__tooltip-row"), sw = el("span", "vin-chart__swatch");
+        sw.setAttribute("style", colours[s] || "");
+        row.appendChild(sw); row.appendChild(document.createTextNode(name));
+        row.appendChild(el("span", "vin-chart__value", cells[s + 1] ? cells[s + 1].textContent : ""));
+        tip.appendChild(row);
+      });
+      if (i < n / 2) tip.style.left = "calc(" + ((i + 1) / n) * 100 + "% + 8px)";
+      else tip.style.right = "calc(" + (1 - i / n) * 100 + "% + 8px)";
+      plot.appendChild(tip);
+    }
+    svg.addEventListener("pointermove", function (e) {
+      var hit = e.target.closest && e.target.closest("[data-i]");
+      if (hit) show(Number(hit.getAttribute("data-i")));
+    });
+    svg.addEventListener("pointerleave", function () { show(null); });
+    svg.addEventListener("focus", function () { if (active === null) show(0); });
+    svg.addEventListener("blur", function () { show(null); });
+    svg.addEventListener("keydown", function (e) {
+      var rtl = getComputedStyle(svg).direction === "rtl", at = active === null ? -1 : active;
+      var to = { ArrowRight: rtl ? at - 1 : at + 1, ArrowLeft: rtl ? at + 1 : at - 1, ArrowDown: at + 1, ArrowUp: at - 1, Home: 0, End: n - 1 }[e.key];
+      if (e.key === "Escape") { e.preventDefault(); show(null); }
+      else if (to !== undefined) { e.preventDefault(); show(to); }
+    });
+  }
+
+  /* ---------- Data Table: sort (aria-sort), filter, select rows and page a real <table> ---------- */
+  function initDataTable(root) {
+    var table = root.querySelector("table"), tbody = table && table.tBodies[0];
+    if (!tbody) return;
+    var rows = Array.prototype.filter.call(tbody.rows, function (r) { return !r.classList.contains("vin-data-table__empty"); });
+    var size = parseInt(root.getAttribute("data-page-size"), 10) || 0;
+    var search = root.querySelector('.vin-data-table__search input, input[type="search"]');
+    var all = table.tHead && table.tHead.querySelector(".vin-checkbox");
+    var status = root.querySelector(".vin-data-table__status");
+    var nav = root.querySelector(".vin-data-table__footer .vin-pagination");
+    var navButtons = nav ? nav.querySelectorAll("button") : [];
+    var prev = navButtons[0], next = navButtons[navButtons.length - 1], pageText = nav && nav.querySelector(".vin-pagination__status");
+    var page = 1, query = "", empty = null;
+    var collator = window.Intl ? new Intl.Collator(undefined, { numeric: true, sensitivity: "base" }) : null;
+    var boxOf = function (row) { return row.querySelector(".vin-data-table__select .vin-checkbox"); };
+    var cols = table.tHead ? table.tHead.rows[0].cells.length : 1;
+
+    function value(row, i) {
+      var cell = row.cells[i];
+      if (!cell) return "";
+      var v = cell.getAttribute("data-value");
+      if (v === null) v = cell.textContent.trim();
+      // "₹12,400", "1,290", "-3.5%" sort as numbers; anything else as text.
+      if (/^-?[^\w\s-]{0,3}\s?-?[\d,]*\.?\d+\s?[^\d\s]{0,3}$/.test(v)) return parseFloat(v.replace(/[^\d.-]/g, ""));
+      return v;
+    }
+    function shown() {
+      return rows.filter(function (r) { return !query || r.textContent.toLowerCase().indexOf(query) >= 0; });
+    }
+    function render() {
+      var list = shown(), pages = size ? Math.max(1, Math.ceil(list.length / size)) : 1;
+      page = Math.min(page, pages);
+      rows.forEach(function (r) { r.hidden = true; });
+      list.forEach(function (r, i) { r.hidden = !!size && (i < (page - 1) * size || i >= page * size); });
+      if (!list.length && !empty) {
+        empty = document.createElement("tr"); empty.className = "vin-data-table__empty";
+        var td = document.createElement("td"); td.colSpan = cols; td.textContent = root.getAttribute("data-empty-text") || "No results.";
+        empty.appendChild(td); tbody.appendChild(empty);
+      } else if (list.length && empty) { empty.remove(); empty = null; }
+      if (prev) prev.disabled = page <= 1;
+      if (next) next.disabled = page >= pages;
+      if (pageText) pageText.textContent = "Page " + page + " of " + pages;
+      // Selection: the header box covers the rows that match the filter.
+      var picked = rows.filter(function (r) { var b = boxOf(r); return b && b.checked; });
+      rows.forEach(function (r) { var b = boxOf(r); if (b && b.checked) r.setAttribute("data-selected", ""); else r.removeAttribute("data-selected"); });
+      if (all) {
+        var on = list.filter(function (r) { var b = boxOf(r); return b && b.checked; }).length;
+        all.checked = list.length > 0 && on === list.length;
+        all.indeterminate = on > 0 && on < list.length;
+      }
+      if (status) {
+        var from = list.length ? (page - 1) * size + 1 : 0, to = size ? Math.min(page * size, list.length) : list.length;
+        status.textContent = all ? picked.length + " of " + rows.length + " selected"
+          : size && to - from + 1 < rows.length ? "Showing " + from + "–" + to + " of " + rows.length
+          : rows.length + (rows.length === 1 ? " row" : " rows");
+      }
+    }
+
+    if (table.tHead) table.tHead.addEventListener("click", function (e) {
+      var btn = e.target.closest(".vin-data-table__sort");
+      if (!btn) return;
+      var th = btn.closest("th"), i = th.cellIndex;
+      var dir = th.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
+      Array.prototype.forEach.call(table.tHead.querySelectorAll("th[aria-sort]"), function (h) { h.removeAttribute("aria-sort"); });
+      th.setAttribute("aria-sort", dir);
+      var order = rows.map(function (r, k) { return { r: r, k: k, v: value(r, i) }; });
+      order.sort(function (a, b) {
+        var c = typeof a.v === "number" && typeof b.v === "number" ? a.v - b.v
+          : collator ? collator.compare(String(a.v), String(b.v)) : String(a.v) < String(b.v) ? -1 : String(a.v) > String(b.v) ? 1 : 0;
+        return (dir === "ascending" ? c : -c) || a.k - b.k;
+      });
+      rows = order.map(function (o) { return o.r; });
+      rows.forEach(function (r) { tbody.appendChild(r); });
+      if (empty) tbody.appendChild(empty);
+      render();
+    });
+    if (search) search.addEventListener("input", function () { query = search.value.trim().toLowerCase(); page = 1; render(); });
+    if (all) all.addEventListener("change", function () {
+      var on = all.checked;
+      shown().forEach(function (r) { var b = boxOf(r); if (b) b.checked = on; });
+      render();
+    });
+    tbody.addEventListener("change", function (e) { if (e.target.classList.contains("vin-checkbox")) render(); });
+    if (prev) prev.addEventListener("click", function () { page--; render(); });
+    if (next) next.addEventListener("click", function () { page++; render(); });
+    render();
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
@@ -1072,6 +1300,7 @@
     "data-vin-combobox": initCombobox, "data-vin-calendar": initCalendar, "data-vin-date-picker": initDatePicker,
     "data-vin-context-menu": initContextMenu, "data-vin-drawer": initDrawer, "data-vin-hover-card": initHoverCard, "data-vin-command": initCommand,
     "data-vin-resizable": initResizable,
+    "data-vin-copy": initCopy, "data-vin-carousel": initCarousel, "data-vin-chart": initChart, "data-vin-data-table": initDataTable,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

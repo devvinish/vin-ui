@@ -1,0 +1,9 @@
+<div class="vin-code-block vin-code-block--numbered" style="max-width: 520px">
+  <div class="vin-code-block__header">
+    <span class="vin-code-block__title">save-button.tsx</span>
+    <span class="vin-code-block__lang">tsx</span>
+    <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-btn--sm vin-code-block__copy" aria-label="Copy code" data-vin-copy><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></button>
+  </div>
+  <pre class="vin-code-block__pre" tabindex="0"><code><span class="vin-code-block__line"><span class="vin-code-block__keyword">import</span> { Button } <span class="vin-code-block__keyword">from</span> <span class="vin-code-block__string">"@/components/vin/button"</span>;</span><span class="vin-code-block__line"></span><span class="vin-code-block__line"><span class="vin-code-block__keyword">export function</span> SaveButton({ saving }: { saving: boolean }) {</span><span class="vin-code-block__line vin-code-block__line--highlight">  <span class="vin-code-block__comment">// Disabled while the request is in flight.</span></span><span class="vin-code-block__line vin-code-block__line--highlight">  <span class="vin-code-block__keyword">return</span> &lt;Button disabled={saving} onClick={() =&gt; save({ retries: <span class="vin-code-block__number">3</span>, timeout: <span class="vin-code-block__number">8000</span> })}&gt;Save&lt;/Button&gt;;</span><span class="vin-code-block__line">}</span></code></pre>
+  <span class="vin-code-block__status" role="status"></span>
+</div>

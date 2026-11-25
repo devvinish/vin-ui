@@ -1,0 +1,48 @@
+{
+  "$comment": "Single source of truth for the Code Block API. Every framework package is tested against this file.",
+  "name": "code-block",
+  "title": "Code Block",
+  "category": "Data display",
+  "description": "Code with a file name, a copy button and optional line numbers and highlighted lines.",
+  "baseClass": "vin-code-block",
+  "classes": [
+    "vin-code-block",
+    "vin-code-block--numbered",
+    "vin-code-block__header",
+    "vin-code-block__title",
+    "vin-code-block__lang",
+    "vin-code-block__copy",
+    "vin-code-block__pre",
+    "vin-code-block__line",
+    "vin-code-block__line--highlight",
+    "vin-code-block__status",
+    "vin-code-block__keyword",
+    "vin-code-block__string",
+    "vin-code-block__number",
+    "vin-code-block__comment"
+  ],
+  "thumb": "<div class=\"vin-code-block\" style=\"width:200px\"><div class=\"vin-code-block__header\" style=\"min-height:28px;padding:2px 4px 2px 10px\"><span class=\"vin-code-block__title\" style=\"font-size:10px\">app.js</span></div><pre class=\"vin-code-block__pre\" style=\"font-size:10px;padding-block:8px\"><code><span class=\"vin-code-block__line\" style=\"padding-inline:10px\"><span class=\"vin-code-block__keyword\">const</span> a = <span class=\"vin-code-block__number\">1</span>;</span><span class=\"vin-code-block__line vin-code-block__line--highlight\" style=\"padding-inline:10px\"><span class=\"vin-code-block__keyword\">let</span> b = <span class=\"vin-code-block__string\">\"hi\"</span>;</span></code></pre></div>",
+  "props": {
+    "code": { "type": "string", "description": "The code, as plain text. It is escaped for you.", "html": "the text inside pre.vin-code-block__pre > code" },
+    "html": { "type": "string", "description": "Code that is already highlighted (by Shiki, Prism or the token classes below). Used instead of code; trust only HTML you made. With lineNumbers or highlight, keep every token on one line.", "html": "your highlighted HTML inside the code element" },
+    "filename": { "type": "ReactNode", "description": "Shown in the header, with the copy button.", "html": ".vin-code-block__header > .vin-code-block__title" },
+    "language": { "type": "string", "description": "A short label in the header, such as \"tsx\" or \"bash\".", "html": ".vin-code-block__lang" },
+    "lineNumbers": { "type": "boolean", "default": false, "class": "vin-code-block--numbered", "description": "Number the lines. The numbers are drawn by CSS, so they are never copied or read out.", "html": ".vin-code-block--numbered, each line in span.vin-code-block__line" },
+    "highlight": { "type": "number[]", "description": "Line numbers to highlight, starting at 1.", "html": "span.vin-code-block__line.vin-code-block__line--highlight" },
+    "copyLabel": { "type": "string", "default": "Copy code", "description": "The copy button's name.", "html": "aria-label on button.vin-code-block__copy[data-vin-copy]" },
+    "token classes": { "type": "class", "description": "Optional colours for hand-written highlighting, drawn from the theme: keyword, string, number, comment.", "html": "span.vin-code-block__{keyword|string|number|comment}" }
+  },
+  "react": { "components": ["CodeBlock"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A file name, the language and a copy button. In HTML, add data-vin-copy to the button and include vinui.js." },
+    { "id": "lines", "title": "Line numbers and highlights", "description": "Numbered lines, two highlighted lines and pre-highlighted tokens. Long lines scroll sideways instead of wrapping." },
+    { "id": "plain", "title": "Without a header", "description": "A one-line command. The copy button sits in the corner." }
+  ],
+  "a11y": [
+    "The copy button has a name (\"Copy code\") and a polite live region (role=\"status\") says \"Copied\" when it works.",
+    "Line numbers are CSS counters with empty alternative text, so they are not copied with the code and screen readers skip them.",
+    "The code can be scrolled sideways with the keyboard: the pre has tabindex=\"0\" and a focus ring.",
+    "Highlighted lines are a visual aid only; say in the text around the block why they matter.",
+    "Token colours come from the theme and meet 4.5:1 contrast in every style, light and dark."
+  ]
+}
