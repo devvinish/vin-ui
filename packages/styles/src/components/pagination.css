@@ -1,0 +1,19 @@
+/* ==========================================================================
+   VinUI · Pagination
+   API (see spec/pagination.json):
+     nav.vin-pagination[aria-label=Pagination] > ul.vin-pagination__list > li
+       > a.vin-btn.vin-btn--ghost.vin-pagination__page                 a page
+       > a.vin-btn.vin-btn--outline.vin-pagination__page[aria-current=page]   this page
+       > a.vin-btn.vin-btn--ghost(.vin-btn--icon)  Previous / Next  (aria-disabled="true" at the ends)
+       > span.vin-pagination__ellipsis | span.vin-pagination__status ("Page 2 of 10")
+   ========================================================================== */
+
+.vin-pagination { font-family: var(--vin-font); }
+.vin-pagination__list { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.vin-pagination__list > li { display: flex; }
+.vin-pagination__page.vin-btn { min-width: var(--vin-h-md); padding: 0 8px; font-variant-numeric: tabular-nums; }
+.vin-pagination__ellipsis {
+  display: inline-grid; place-items: center; min-width: var(--vin-h-md); height: var(--vin-h-md);
+  font-size: var(--vin-text-md); color: var(--vin-muted); user-select: none;
+}
+.vin-pagination__status { padding: 0 10px; font-size: calc(var(--vin-text-md) - .5px); color: var(--vin-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }

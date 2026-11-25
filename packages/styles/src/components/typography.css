@@ -1,0 +1,50 @@
+/* ==========================================================================
+   VinUI · Typography
+   API (see spec/typography.json):
+     .vin-h1 .vin-h2 .vin-h3 .vin-h4     headings (any tag: pick the level that fits your outline)
+     .vin-p .vin-lead .vin-muted .vin-small
+     .vin-blockquote  .vin-list (ul or ol)  .vin-code (inline)  .vin-link
+     .vin-prose        a container that styles plain h1–h4, p, ul, ol, blockquote, code, a and hr
+                       inside it, for Markdown or CMS output
+   Single classes have no outer margin; .vin-prose spaces its children.
+   ========================================================================== */
+
+:is(.vin-h1, .vin-h2, .vin-h3, .vin-h4, .vin-p, .vin-lead, .vin-muted, .vin-small, .vin-blockquote, .vin-list, .vin-prose) {
+  font-family: var(--vin-font); color: var(--vin-fg); margin: 0;
+}
+:is(.vin-h1, .vin-h2, .vin-h3, .vin-h4, .vin-prose :is(h1, h2, h3, h4)) {
+  font-weight: var(--vin-title-weight); line-height: 1.2; letter-spacing: -.015em; text-wrap: balance;
+}
+:is(.vin-h1, .vin-prose h1) { font-size: 32px; letter-spacing: -.025em; line-height: 1.1; }
+:is(.vin-h2, .vin-prose h2) { font-size: 24px; letter-spacing: -.02em; }
+:is(.vin-h3, .vin-prose h3) { font-size: 19px; }
+:is(.vin-h4, .vin-prose h4) { font-size: 16px; letter-spacing: -.005em; }
+:is(.vin-p, .vin-prose p, .vin-prose li) { font-size: var(--vin-text-lg); line-height: 1.7; text-wrap: pretty; }
+.vin-lead { font-size: calc(var(--vin-text-lg) + 3px); line-height: 1.6; color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 22%); text-wrap: pretty; }
+.vin-muted { font-size: var(--vin-text-md); line-height: 1.55; color: var(--vin-muted); }
+.vin-small { font-size: calc(var(--vin-text-sm) - .5px); line-height: 1.4; font-weight: var(--vin-weight); }
+:is(.vin-blockquote, .vin-prose blockquote) {
+  margin: 0; padding: 2px 0 2px 16px; font-size: var(--vin-text-lg); line-height: 1.65; font-style: italic;
+  border-inline-start: 3px solid color-mix(in srgb, var(--vin-accent) 55%, var(--vin-border));
+}
+:is(.vin-list, .vin-prose :is(ul, ol)) { padding-inline-start: 1.3em; font-size: var(--vin-text-lg); line-height: 1.7; }
+:is(.vin-list, .vin-prose :is(ul, ol)) > li + li { margin-top: .3em; }
+:is(.vin-list, .vin-prose :is(ul, ol)) > li::marker { color: var(--vin-muted); }
+:is(.vin-code, .vin-prose code) {
+  padding: .12em .38em; font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace; font-size: .86em;
+  color: var(--vin-fg); background: color-mix(in srgb, var(--vin-fg) 7%, var(--vin-surface)); border-radius: min(var(--vin-radius), 5px);
+}
+:is(.vin-link, .vin-prose a) {
+  /* A little of the text colour keeps links at 4.5:1 on tinted pages (Clay, Tactile). */
+  --vin-link: color-mix(in srgb, var(--vin-accent-text) 78%, var(--vin-fg));
+  color: var(--vin-link); text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--vin-link) 40%, transparent); border-radius: 2px;
+}
+:is(.vin-link, .vin-prose a):hover { text-decoration-color: currentColor; }
+:is(.vin-link, .vin-prose a):focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-prose { font-size: var(--vin-text-lg); }
+.vin-prose > * + * { margin-top: 1em; }
+.vin-prose > :is(h1, h2, h3, h4) { margin-top: 1.6em; }
+.vin-prose > :is(h1, h2, h3, h4) + * { margin-top: .6em; }
+.vin-prose > :first-child { margin-top: 0; }
+.vin-prose hr { border: 0; border-top: 1px solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%); margin-block: 2em; }

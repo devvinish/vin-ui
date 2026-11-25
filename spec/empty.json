@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Empty API. Every framework package is tested against this file.",
+  "name": "empty",
+  "title": "Empty",
+  "category": "Data display",
+  "description": "What to show when there's nothing yet: an icon, a short explanation and the next step.",
+  "baseClass": "vin-empty",
+  "classes": ["vin-empty", "vin-empty--outline", "vin-empty__media", "vin-empty__title", "vin-empty__description", "vin-empty__actions"],
+  "thumb": "<div class=\"vin-empty vin-empty--outline\" style=\"width:170px;padding:14px\"><p class=\"vin-empty__title\" style=\"font-size:13px\">No projects yet</p><p class=\"vin-empty__description\" style=\"font-size:11px\">Create one to start.</p></div>",
+  "props": {
+    "variant": { "values": ["default", "outline"], "default": "default", "class": "vin-empty--outline" },
+    "icon": { "type": "ReactNode", "html": ".vin-empty__media > svg" },
+    "title": { "type": "ReactNode", "html": ".vin-empty__title" },
+    "description": { "type": "ReactNode", "html": ".vin-empty__description" },
+    "actions": { "type": "ReactNode", "html": ".vin-empty__actions" }
+  },
+  "react": { "components": ["Empty"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Say what would be here and offer the first step." },
+    { "id": "outline", "title": "Outline", "description": "A dashed frame, for an area that will fill up, like an upload zone." },
+    { "id": "no-results", "title": "No results", "description": "In a card, after a search finds nothing. Offer a way back." }
+  ],
+  "a11y": [
+    "The title is plain text (not a heading by default) so it doesn't break the page outline. Pass as=\"h2\" or h3 when it heads a section.",
+    "The icon is decorative and hidden from screen readers.",
+    "After a search, put the result count or this message in a live region so screen-reader users hear that nothing was found."
+  ]
+}

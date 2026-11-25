@@ -1,0 +1,14 @@
+/* ==========================================================================
+   VinUI · Aspect Ratio
+   API (see spec/aspect-ratio.json):
+     .vin-aspect style="--vin-ratio: 16 / 9" > img | video | iframe
+   The media fills the box and is cropped to fit (object-fit: cover).
+   ========================================================================== */
+
+.vin-aspect {
+  position: relative; box-sizing: border-box; width: 100%; aspect-ratio: var(--vin-ratio, 16 / 9); overflow: hidden;
+  background: color-mix(in srgb, var(--vin-fg) 6%, var(--vin-surface)); border-radius: var(--vin-radius-lg);
+}
+.vin-aspect > :is(img, video, iframe, svg, picture, canvas) {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; border: 0;
+}

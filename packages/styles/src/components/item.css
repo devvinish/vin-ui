@@ -1,0 +1,41 @@
+/* ==========================================================================
+   VinUI · Item
+   API (see spec/item.json):
+     .vin-item [.vin-item--outline | .vin-item--muted]     div, or a / button when the whole row is clickable
+       > .vin-item__media      icon or avatar
+       > .vin-item__content > .vin-item__title + .vin-item__description
+       > .vin-item__actions    buttons, badges, a chevron
+     .vin-item-group[role=list] > .vin-item[role=listitem] ...    a bordered list of items
+   ========================================================================== */
+
+.vin-item, .vin-item-group { --vin-item-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%); }
+.vin-item {
+  display: flex; align-items: center; gap: 12px; box-sizing: border-box; width: 100%; min-width: 0;
+  padding: 12px 14px; font-family: var(--vin-font); font-size: var(--vin-text-md); text-align: start;
+  color: var(--vin-fg); text-decoration: none;
+  background: transparent; border: max(var(--vin-bw), 1px) solid transparent; border-radius: var(--vin-radius-lg);
+  transition: background-color var(--vin-dur) var(--vin-ease);
+}
+.vin-item--outline { background: var(--vin-surface); border-color: var(--vin-item-line); }
+.vin-item--muted { background: color-mix(in srgb, var(--vin-fg) 4%, var(--vin-surface)); }
+:is(a, button).vin-item { cursor: pointer; }
+:is(a, button).vin-item:hover { background: color-mix(in srgb, var(--vin-fg) 5%, var(--vin-surface)); }
+:is(a, button).vin-item:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-item__media {
+  display: grid; place-items: center; flex: none; width: 36px; height: 36px;
+  color: var(--vin-fg); background: color-mix(in srgb, var(--vin-fg) 7%, var(--vin-surface)); border-radius: var(--vin-radius);
+}
+.vin-item__media > svg { width: 18px; height: 18px; }
+.vin-item__media:has(> .vin-avatar) { width: auto; height: auto; background: none; }
+.vin-item__content { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.vin-item__title { margin: 0; font-weight: var(--vin-title-weight); line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vin-item__description { margin: 0; font-size: calc(var(--vin-text-md) - 1px); line-height: 1.45; color: var(--vin-muted); }
+.vin-item__actions { display: flex; align-items: center; gap: 8px; flex: none; color: var(--vin-muted); }
+.vin-item__actions > svg { width: 16px; height: 16px; }
+
+.vin-item-group {
+  display: flex; flex-direction: column; box-sizing: border-box; width: 100%; margin: 0; padding: 0; list-style: none; overflow: hidden;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-item-line); border-radius: var(--vin-radius-lg);
+}
+.vin-item-group > .vin-item { border: 0; border-radius: 0; }
+.vin-item-group > .vin-item + .vin-item { border-top: 1px solid var(--vin-item-line); }

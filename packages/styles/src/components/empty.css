@@ -1,0 +1,22 @@
+/* ==========================================================================
+   VinUI · Empty
+   API (see spec/empty.json):
+     .vin-empty [.vin-empty--outline]
+       > .vin-empty__media        an icon
+       > .vin-empty__title + .vin-empty__description
+       > .vin-empty__actions      what to do next
+   ========================================================================== */
+
+.vin-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; box-sizing: border-box; width: 100%;
+  padding: 32px 24px; font-family: var(--vin-font); text-align: center; color: var(--vin-fg);
+}
+.vin-empty--outline { border: max(var(--vin-bw), 1px) dashed color-mix(in srgb, var(--vin-border), var(--vin-fg) 22%); border-radius: var(--vin-radius-lg); }
+.vin-empty__media {
+  display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 8px;
+  color: var(--vin-fg); background: color-mix(in srgb, var(--vin-fg) 7%, var(--vin-surface)); border-radius: var(--vin-radius-lg);
+}
+.vin-empty__media > svg { width: 20px; height: 20px; }
+.vin-empty__title { margin: 0; font-size: calc(var(--vin-text-md) + 2px); font-weight: var(--vin-title-weight); line-height: 1.3; }
+.vin-empty__description { margin: 0; max-width: 38ch; font-size: var(--vin-text-md); line-height: 1.55; color: var(--vin-muted); text-wrap: pretty; }
+.vin-empty__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }

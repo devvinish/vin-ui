@@ -1,0 +1,32 @@
+{
+  "$comment": "Single source of truth for the Pagination API. Every framework package is tested against this file.",
+  "name": "pagination",
+  "title": "Pagination",
+  "category": "Navigation",
+  "description": "Links to move between pages of results.",
+  "baseClass": "vin-pagination",
+  "classes": ["vin-pagination", "vin-pagination__list", "vin-pagination__page", "vin-pagination__ellipsis", "vin-pagination__status"],
+  "thumb": "<nav class=\"vin-pagination\"><ul class=\"vin-pagination__list\"><li><span class=\"vin-btn vin-btn--ghost vin-btn--sm vin-pagination__page\">1</span></li><li><span class=\"vin-btn vin-btn--outline vin-btn--sm vin-pagination__page\">2</span></li><li><span class=\"vin-btn vin-btn--ghost vin-btn--sm vin-pagination__page\">3</span></li></ul></nav>",
+  "props": {
+    "page": { "type": "number", "description": "This page (1-based).", "html": "aria-current=\"page\" and .vin-btn--outline on its link" },
+    "count": { "type": "number", "description": "How many pages there are." },
+    "href": { "type": "(page: number) => string", "description": "Link for a page. Without it, pages are buttons and onPageChange is called." },
+    "onPageChange": { "type": "(page: number) => void" },
+    "siblings": { "type": "number", "default": 1, "description": "Pages shown each side of this one before an ellipsis." },
+    "labels": { "type": "boolean", "default": false, "description": "Show \"Previous\" and \"Next\" as words, not only arrows." },
+    "simple": { "type": "boolean", "default": false, "description": "Previous, \"Page 2 of 10\", Next — no page numbers.", "html": ".vin-pagination__status" }
+  },
+  "react": { "components": ["Pagination"], "helpers": ["pageRange"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Arrows, the first and last page, and the pages around this one. Gaps show an ellipsis." },
+    { "id": "labels", "title": "With labels", "description": "\"Previous\" and \"Next\" as words. At the first page, Previous is disabled." },
+    { "id": "simple", "title": "Simple", "description": "Just Previous and Next with the page count, for phones and feeds." }
+  ],
+  "a11y": [
+    "A <nav> named \"Pagination\" with a list of links.",
+    "This page has aria-current=\"page\"; screen readers say \"current page\".",
+    "Arrow-only links have an aria-label (\"Previous page\", \"Next page\").",
+    "At the first or last page the link is disabled with aria-disabled=\"true\" and no href, so it can't be followed or focused.",
+    "Every page link is at least 36 by 36 pixels."
+  ]
+}

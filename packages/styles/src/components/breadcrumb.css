@@ -1,0 +1,19 @@
+/* ==========================================================================
+   VinUI · Breadcrumb
+   API (see spec/breadcrumb.json):
+     nav.vin-breadcrumb[aria-label=Breadcrumb] [.vin-breadcrumb--chevron]
+       > ol.vin-breadcrumb__list > li.vin-breadcrumb__item
+           > a.vin-breadcrumb__link | span.vin-breadcrumb__page[aria-current=page]
+   Separators are drawn by CSS and are not read out. Long names are cut with "…".
+   ========================================================================== */
+
+.vin-breadcrumb { --vin-breadcrumb-sep: "/"; font-family: var(--vin-font); font-size: calc(var(--vin-text-md) - .5px); }
+.vin-breadcrumb--chevron { --vin-breadcrumb-sep: "›"; }
+.vin-breadcrumb__list { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; padding: 0; list-style: none; }
+.vin-breadcrumb__item { display: inline-flex; align-items: center; gap: 8px; min-width: 0; color: var(--vin-muted); }
+.vin-breadcrumb__item + .vin-breadcrumb__item::before { content: var(--vin-breadcrumb-sep) / ""; color: color-mix(in srgb, var(--vin-muted) 70%, transparent); }
+.vin-breadcrumb__link, .vin-breadcrumb__page { max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vin-breadcrumb__link { color: var(--vin-muted); text-decoration: none; border-radius: 3px; transition: color var(--vin-dur) var(--vin-ease); }
+.vin-breadcrumb__link:hover { color: var(--vin-fg); text-decoration: underline; text-underline-offset: 3px; }
+.vin-breadcrumb__link:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-breadcrumb__page { color: var(--vin-fg); font-weight: var(--vin-weight); }

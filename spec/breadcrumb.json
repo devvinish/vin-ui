@@ -1,0 +1,25 @@
+{
+  "$comment": "Single source of truth for the Breadcrumb API. Every framework package is tested against this file.",
+  "name": "breadcrumb",
+  "title": "Breadcrumb",
+  "category": "Navigation",
+  "description": "The trail of pages above this one, so people can see where they are and go back up.",
+  "baseClass": "vin-breadcrumb",
+  "classes": ["vin-breadcrumb", "vin-breadcrumb--chevron", "vin-breadcrumb__list", "vin-breadcrumb__item", "vin-breadcrumb__link", "vin-breadcrumb__page"],
+  "thumb": "<nav class=\"vin-breadcrumb\"><ol class=\"vin-breadcrumb__list\"><li class=\"vin-breadcrumb__item\"><span class=\"vin-breadcrumb__link\">Home</span></li><li class=\"vin-breadcrumb__item\"><span class=\"vin-breadcrumb__link\">Docs</span></li><li class=\"vin-breadcrumb__item\"><span class=\"vin-breadcrumb__page\">Button</span></li></ol></nav>",
+  "props": {
+    "items": { "type": "{ label, href? }[]", "description": "The trail, top first. The last item is this page (no href).", "html": "li > a.vin-breadcrumb__link, last li > span.vin-breadcrumb__page[aria-current=page]" },
+    "separator": { "values": ["slash", "chevron"], "default": "slash", "class": "vin-breadcrumb--chevron" }
+  },
+  "react": { "components": ["Breadcrumb"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Links up the trail; the current page is plain text." },
+    { "id": "chevron", "title": "Chevron", "description": "A chevron between items instead of a slash." },
+    { "id": "long", "title": "Long names", "description": "Names longer than 22 characters are cut with an ellipsis; the full name is in the title attribute." }
+  ],
+  "a11y": [
+    "A <nav> named \"Breadcrumb\", with an ordered list inside, so screen readers announce a breadcrumb landmark and the number of levels.",
+    "The current page has aria-current=\"page\".",
+    "The separators are drawn by CSS with empty alternative text, so they aren't read out."
+  ]
+}

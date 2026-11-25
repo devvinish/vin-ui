@@ -1,0 +1,26 @@
+{
+  "$comment": "Single source of truth for the Table API. Every framework package is tested against this file.",
+  "name": "table",
+  "title": "Table",
+  "category": "Data display",
+  "description": "Rows and columns of data, with a header, an optional footer and a caption.",
+  "baseClass": "vin-table",
+  "classes": ["vin-table-wrap", "vin-table", "vin-table--striped", "vin-table__caption", "vin-table__num"],
+  "thumb": "<div class=\"vin-table-wrap\" style=\"width:190px\"><table class=\"vin-table\" style=\"font-size:11px\"><thead><tr><th style=\"padding:6px 8px;font-size:10px\">Invoice</th><th class=\"vin-table__num\" style=\"padding:6px 8px;font-size:10px\">Amount</th></tr></thead><tbody><tr><td style=\"padding:6px 8px\">INV-1</td><td class=\"vin-table__num\" style=\"padding:6px 8px\">₹250</td></tr><tr><td style=\"padding:6px 8px\">INV-2</td><td class=\"vin-table__num\" style=\"padding:6px 8px\">₹150</td></tr></tbody></table></div>",
+  "props": {
+    "striped": { "type": "boolean", "default": false, "class": "vin-table--striped" },
+    "caption": { "type": "ReactNode", "description": "Says what the table shows. Shown under the table.", "html": "<caption class=\"vin-table__caption\">" },
+    "numeric cells": { "type": "class", "description": "Right-align numbers so the digits line up.", "html": "th / td class=\"vin-table__num\"" }
+  },
+  "react": { "components": ["Table"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A header row, badges for status and right-aligned amounts. The caption names the table." },
+    { "id": "footer", "title": "With a footer", "description": "A footer row for totals." },
+    { "id": "striped", "title": "Striped", "description": "Shaded rows help the eye follow long rows." }
+  ],
+  "a11y": [
+    "A real <table> with <th scope=\"col\"> headers, so screen readers read the column name with each cell.",
+    "The caption names the table; screen readers read it first even though it's shown underneath.",
+    "On small screens the table scrolls sideways inside its frame instead of squashing the columns. The frame can be scrolled with the keyboard (tabindex=\"0\" with a label)."
+  ]
+}

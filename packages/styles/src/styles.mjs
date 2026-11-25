@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -91,6 +91,14 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: `
+& :is(.vin-h1, .vin-h2, .vin-prose :is(h1, h2)) { letter-spacing: -.03em; }`,
+      item: "",
+      table: "",
+      empty: "",
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: "",
     },
   },
 
@@ -153,6 +161,13 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: "",
+      item: "",
+      table: "",
+      empty: "",
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: "",
     },
   },
 
@@ -216,6 +231,13 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: "",
+      item: "",
+      table: "",
+      empty: "",
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: "",
     },
   },
 
@@ -276,6 +298,13 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: "",
+      item: "",
+      table: "",
+      empty: "",
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: "",
     },
   },
 
@@ -337,6 +366,21 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: `
+& :is(.vin-h1, .vin-h2, .vin-h3, .vin-prose :is(h1, h2, h3)) { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; letter-spacing: -.01em; }
+& :is(.vin-h1, .vin-prose h1) { font-size: 44px; line-height: 1; }
+& :is(.vin-h2, .vin-prose h2) { font-size: 32px; line-height: 1.05; }
+& :is(.vin-h3, .vin-prose h3) { font-size: 24px; }
+& :is(.vin-h4, .vin-prose h4) { text-transform: uppercase; font-size: 11.5px; letter-spacing: .14em; }
+& :is(.vin-blockquote, .vin-prose blockquote) { font-family: "Instrument Serif", Georgia, serif; font-size: 22px; line-height: 1.35; border-color: var(--vin-fg); border-inline-start-width: 1px; }`,
+      item: "",
+      table: `
+& .vin-table thead th { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }`,
+      empty: "",
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: `
+& .vin-pagination__page { text-decoration: none; }`,
     },
   },
 
@@ -398,6 +442,30 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: `
+& :is(.vin-h1, .vin-prose h1)::before { content: "# "; color: var(--vin-accent-text); }
+& :is(.vin-h2, .vin-prose h2)::before { content: "## "; color: var(--vin-accent-text); }
+& :is(.vin-h3, .vin-prose h3)::before { content: "### "; color: var(--vin-accent-text); }
+& :is(.vin-h1, .vin-h2, .vin-h3, .vin-h4, .vin-prose :is(h1, h2, h3, h4)) { letter-spacing: 0; }
+& :is(.vin-h1, .vin-prose h1) { font-size: 26px; }
+& :is(.vin-h2, .vin-prose h2) { font-size: 20px; }
+& :is(.vin-h3, .vin-prose h3) { font-size: 17px; }
+& :is(.vin-blockquote, .vin-prose blockquote) { font-style: normal; border-inline-start-style: dashed; }
+& :is(.vin-list, .vin-prose ul) { list-style: "- "; }`,
+      item: `
+& :is(.vin-item--outline, .vin-item-group) { border-style: dashed; }
+& .vin-item-group > .vin-item + .vin-item { border-top-style: dashed; }`,
+      table: `
+& .vin-table-wrap { border-style: dashed; }
+& .vin-table :is(tbody tr + tr > *, tfoot > tr > *, .vin-table__caption) { border-top-style: dashed; }
+& .vin-table thead th { border-bottom-style: dashed; }`,
+      empty: `
+& .vin-empty__media { border: 1px dashed var(--vin-border); background: transparent; }`,
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: `
+& .vin-pagination__page:not([aria-current])::before, & .vin-pagination__page:not([aria-current])::after { content: none; }
+& .vin-pagination__page[aria-current] { padding: 0 2px; }`,
     },
   },
 
@@ -463,6 +531,19 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: `
+& :is(.vin-h1, .vin-h2, .vin-h3, .vin-prose :is(h1, h2, h3)) { font-family: "Kalam", "Inter", cursive; font-weight: 700; letter-spacing: 0; }
+& :is(.vin-h1, .vin-prose h1) { font-size: 36px; }
+& :is(.vin-h2, .vin-prose h2) { font-size: 27px; }
+& :is(.vin-h3, .vin-prose h3) { font-size: 21px; }`,
+      item: "",
+      table: "",
+      empty: `
+& .vin-empty__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 5px); }
+& .vin-empty--outline { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: "",
     },
   },
 
@@ -517,6 +598,13 @@ export const STYLES = [
       spinner: "",
       progress: "",
       alert: "",
+      typography: "",
+      item: "",
+      table: "",
+      empty: "",
+      "aspect-ratio": "",
+      breadcrumb: "",
+      pagination: "",
     },
   },
 ];

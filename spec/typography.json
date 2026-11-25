@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Typography API. Every framework package is tested against this file.",
+  "name": "typography",
+  "title": "Typography",
+  "category": "Data display",
+  "description": "Headings, paragraphs, lists, quotes, inline code and links in the style's type.",
+  "baseClass": "vin-prose",
+  "classes": ["vin-h1", "vin-h2", "vin-h3", "vin-h4", "vin-p", "vin-lead", "vin-muted", "vin-small", "vin-blockquote", "vin-list", "vin-code", "vin-link", "vin-prose"],
+  "thumb": "<div style=\"display:grid;gap:4px;width:170px;text-align:left\"><p class=\"vin-h3\">The quick fox</p><p class=\"vin-muted\" style=\"font-size:12px\">Jumps over the lazy dog.</p></div>",
+  "props": {
+    "Heading level": { "values": ["1", "2", "3", "4"], "description": "The look. Pick the tag (h1–h6) for the page outline separately with `as`.", "class": "vin-h{value}" },
+    "Text variant": { "values": ["p", "lead", "muted", "small"], "default": "p", "class": "vin-{value}" },
+    "Blockquote / List / Code / Link": { "type": "children", "html": ".vin-blockquote, ul.vin-list or ol.vin-list, code.vin-code, a.vin-link" },
+    "Prose": { "type": "children", "description": "Styles plain HTML inside (Markdown, CMS content).", "html": ".vin-prose" }
+  },
+  "react": { "components": ["Heading", "Text", "Blockquote", "List", "Code", "Link", "Prose"], "helpers": [] },
+  "examples": [
+    { "id": "headings", "title": "Headings", "description": "Four sizes. Each style sets its own heading face: a serif in Editorial, hand lettering in Paper, Markdown marks in Terminal." },
+    { "id": "text", "title": "Text", "description": "A lead paragraph, body text with a link and inline code, muted text and small print." },
+    { "id": "prose", "title": "Prose", "description": "Wrap Markdown or CMS output in .vin-prose and the plain tags inside are styled and spaced." }
+  ],
+  "a11y": [
+    "The look and the level are separate: use the heading tag that fits the page outline (one h1, then h2, h3…), and the class for the size.",
+    "Links are underlined, not only coloured, and have a visible focus ring.",
+    "Body and muted text meet 4.5:1 contrast in every style and mode.",
+    "Lists use real ul/ol elements, so screen readers say how many items there are."
+  ]
+}

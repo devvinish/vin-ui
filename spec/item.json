@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Item API. Every framework package is tested against this file.",
+  "name": "item",
+  "title": "Item",
+  "category": "Data display",
+  "description": "A row with a picture or icon, a title, a description and actions. Use it for lists of people, files or settings.",
+  "baseClass": "vin-item",
+  "classes": ["vin-item", "vin-item--outline", "vin-item--muted", "vin-item__media", "vin-item__content", "vin-item__title", "vin-item__description", "vin-item__actions", "vin-item-group"],
+  "thumb": "<div class=\"vin-item vin-item--outline\" style=\"width:190px;padding:8px 10px;gap:8px\"><span class=\"vin-item__media\" style=\"width:28px;height:28px\"></span><span class=\"vin-item__content\"><span class=\"vin-item__title\" style=\"font-size:12px\">Ada Lovelace</span><span class=\"vin-item__description\" style=\"font-size:11px\">Owner</span></span></div>",
+  "props": {
+    "variant": { "values": ["default", "outline", "muted"], "default": "default", "class": "vin-item--{value}" },
+    "media": { "type": "ReactNode", "description": "An icon or an Avatar.", "html": ".vin-item__media" },
+    "title": { "type": "ReactNode", "html": ".vin-item__title (one line, cut with …)" },
+    "description": { "type": "ReactNode", "html": ".vin-item__description" },
+    "actions": { "type": "ReactNode", "description": "Buttons, a badge or a chevron at the end.", "html": ".vin-item__actions" },
+    "href": { "type": "string", "description": "Makes the whole row a link.", "html": "<a class=\"vin-item\" href>" },
+    "ItemGroup": { "type": "children", "description": "A bordered list of items with lines between them.", "html": ".vin-item-group[role=list] > .vin-item[role=listitem]" }
+  },
+  "react": { "components": ["Item", "ItemGroup"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "An outlined item with an avatar and a button, and a muted item with an icon." },
+    { "id": "group", "title": "Group", "description": "Items in a list with lines between them." },
+    { "id": "link", "title": "As links", "description": "When the whole row goes somewhere, make the item a link and end it with a chevron." }
+  ],
+  "a11y": [
+    "An item group is a list (role=\"list\" and \"listitem\"), so screen readers say how many items there are.",
+    "A clickable row is one <a> or <button>; don't put other buttons inside a link item.",
+    "Icons and chevrons are hidden from screen readers; the title says what the row is."
+  ]
+}

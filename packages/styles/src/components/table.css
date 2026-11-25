@@ -1,0 +1,31 @@
+/* ==========================================================================
+   VinUI · Table
+   API (see spec/table.json):
+     .vin-table-wrap > table.vin-table [.vin-table--striped]
+       caption.vin-table__caption       (shown under the table)
+       th / td.vin-table__num           numbers: right-aligned, same-width digits
+     The wrap scrolls sideways on small screens.
+   ========================================================================== */
+
+.vin-table-wrap {
+  --vin-table-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  box-sizing: border-box; width: 100%; overflow-x: auto;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-table-line); border-radius: var(--vin-radius-lg);
+}
+.vin-table {
+  width: 100%; border-collapse: collapse; font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.4;
+  color: var(--vin-fg); text-align: start;
+}
+.vin-table th, .vin-table td { padding: 11px 14px; text-align: start; vertical-align: middle; }
+.vin-table thead th {
+  font-size: var(--vin-text-sm); font-weight: var(--vin-weight); white-space: nowrap;
+  color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 22%);
+  background: color-mix(in srgb, var(--vin-fg) 3%, var(--vin-surface)); border-bottom: 1px solid var(--vin-table-line);
+}
+.vin-table tbody tr + tr > * { border-top: 1px solid var(--vin-table-line); }
+.vin-table tbody tr:hover > * { background: color-mix(in srgb, var(--vin-fg) 3%, var(--vin-surface)); }
+.vin-table tfoot > tr > * { font-weight: var(--vin-title-weight); border-top: 1px solid var(--vin-table-line); }
+.vin-table--striped tbody tr:nth-child(even) > * { background: color-mix(in srgb, var(--vin-fg) 3.5%, var(--vin-surface)); }
+.vin-table .vin-table__num { text-align: end; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.vin-table__caption { caption-side: bottom; padding: 10px 14px; font-size: var(--vin-text-sm); text-align: start; color: var(--vin-muted); border-top: 1px solid var(--vin-table-line); }
+.vin-table-wrap:focus-visible { outline: none; box-shadow: var(--vin-focus); }
