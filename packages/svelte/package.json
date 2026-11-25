@@ -1,0 +1,39 @@
+{
+  "name": "@vinui/svelte",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VinUI components for Svelte 5.",
+  "license": "MIT",
+  "type": "module",
+  "svelte": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "svelte": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./*.svelte": {
+      "svelte": "./src/*.svelte",
+      "default": "./src/*.svelte"
+    },
+    "./examples/*": "./examples/*"
+  },
+  "peerDependencies": {
+    "svelte": ">=5.29.0"
+  },
+  "scripts": {
+    "test": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings && vitest run",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.2",
+    "@testing-library/svelte": "^5.4.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^26.6.10",
+    "jsdom": "^31.0.1",
+    "svelte": "^5.59.1",
+    "svelte-check": "^4.7.8",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.12"
+  }
+}
