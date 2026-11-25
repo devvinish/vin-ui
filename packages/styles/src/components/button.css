@@ -11,7 +11,7 @@
   display: inline-flex; align-items: center; justify-content: center; gap: .5em;
   box-sizing: border-box;
   height: var(--vin-h-md); padding: 0 var(--vin-px-md);
-  font: inherit; font-size: var(--vin-text-md); font-weight: var(--vin-weight);
+  font: inherit; font-family: var(--vin-font); font-size: var(--vin-text-md); font-weight: var(--vin-weight);
   line-height: 1; white-space: nowrap; text-decoration: none;
   color: var(--vin-primary-fg); background: var(--vin-primary-bg);
   border: var(--vin-bw) solid var(--vin-btn-border); border-radius: var(--vin-radius);

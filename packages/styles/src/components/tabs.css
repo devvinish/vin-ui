@@ -1,0 +1,37 @@
+/* ==========================================================================
+   VinUI · Tabs
+   API (see spec/tabs.json):
+     .vin-tabs > .vin-tabs__list[role=tablist] > button.vin-tabs__tab[role=tab]
+               + .vin-tabs__panel[role=tabpanel]
+     .vin-tabs--line                    underline tabs instead of a segmented control
+     .vin-tabs__tab[aria-selected="true"]   the open tab
+   ========================================================================== */
+
+.vin-tabs { display: grid; gap: 14px; min-width: 0; }
+.vin-tabs__list {
+  display: inline-flex; align-items: center; justify-self: start; gap: 2px; max-width: 100%; overflow-x: auto;
+  padding: 3px; border-radius: calc(var(--vin-radius) + 2px);
+  background: var(--vin-secondary);
+}
+.vin-tabs__tab {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: none;
+  height: calc(var(--vin-h-md) - 6px); padding: 0 calc(var(--vin-px-md) - 4px);
+  font: inherit; font-family: var(--vin-font); font-size: var(--vin-text-md); font-weight: var(--vin-weight); white-space: nowrap;
+  color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 22%); background: transparent; border: 0;
+  border-radius: max(calc(var(--vin-radius) - 1px), 0px);
+  cursor: pointer;
+  transition: color var(--vin-dur), background var(--vin-dur), box-shadow var(--vin-dur);
+}
+.vin-tabs__tab:hover { color: var(--vin-fg); }
+.vin-tabs__tab[aria-selected="true"] { color: var(--vin-fg); background: var(--vin-surface); box-shadow: var(--vin-shadow-soft), 0 0 0 max(calc(var(--vin-bw) - 1px), 0px) var(--vin-border); }
+.vin-tabs__tab:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-tabs__tab:disabled { opacity: .5; cursor: not-allowed; }
+
+.vin-tabs--line .vin-tabs__list { justify-self: stretch; gap: 2px; padding: 0; border-radius: 0; background: none; box-shadow: inset 0 -1px 0 var(--vin-border); }
+.vin-tabs--line .vin-tabs__tab { height: var(--vin-h-md); padding: 0 8px; border-radius: 0; }
+.vin-tabs--line .vin-tabs__tab[aria-selected="true"] { background: none; box-shadow: inset 0 -2px 0 var(--vin-accent); }
+.vin-tabs--line .vin-tabs__tab:focus-visible { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--vin-accent) 45%, transparent); }
+
+.vin-tabs__panel { min-width: 0; color: var(--vin-fg); font-size: var(--vin-text-md); line-height: 1.55; }
+.vin-tabs__panel[hidden] { display: none; }
+.vin-tabs__panel:focus-visible { outline: none; box-shadow: var(--vin-focus); border-radius: var(--vin-radius); }

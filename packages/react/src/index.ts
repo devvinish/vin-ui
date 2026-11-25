@@ -6,3 +6,13 @@ export { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter } fr
 export type { CardTitleProps } from "./card";
 export { Field, Input, Textarea, Label, inputClasses } from "./input";
 export type { FieldProps, InputProps, InputSize, TextareaProps } from "./input";
+export { Checkbox } from "./checkbox";
+export type { CheckboxProps } from "./checkbox";
+export { Switch } from "./switch";
+export type { SwitchProps } from "./switch";
+export { NativeSelect } from "./native-select";
+export type { NativeSelectProps } from "./native-select";
+export { Select } from "./select";
+export type { SelectProps, SelectOption } from "./select";
+export { Tabs, TabList, Tab, TabPanel } from "./tabs";
+export type { TabsProps, TabListProps, TabProps, TabPanelProps } from "./tabs";

@@ -13,7 +13,7 @@
 .vin-input {
   box-sizing: border-box; width: 100%; min-width: 0;
   height: var(--vin-h-md); padding: 0 calc(var(--vin-px-md) - 4px);
-  font: inherit; font-size: var(--vin-text-md); color: var(--vin-fg);
+  font: inherit; font-family: var(--vin-font); font-size: var(--vin-text-md); color: var(--vin-fg);
   background: var(--vin-input-bg);
   border: var(--vin-bw) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 12%);
   border-radius: var(--vin-radius);

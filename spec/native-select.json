@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Native Select API. Every framework package is tested against this file.",
+  "name": "native-select",
+  "title": "Native Select",
+  "category": "Forms",
+  "description": "The browser's own select, styled to match your inputs. No JavaScript needed.",
+  "baseClass": "vin-native-select",
+  "classes": ["vin-native-select"],
+  "thumb": "<div class=\"vin-field\" style=\"width:190px\"><span class=\"vin-label\">Country</span><span class=\"vin-input vin-native-select\" style=\"display:flex;align-items:center\">India</span></div>",
+  "props": {
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-input--{value}" },
+    "label": { "type": "ReactNode", "description": "Visible label. Without it, pass an aria-label.", "html": "<label class=\"vin-label\" for=\"…\">" },
+    "hint": { "type": "ReactNode", "description": "Help text under the select.", "html": "<p class=\"vin-hint\" id=\"…\"> + aria-describedby" },
+    "error": { "type": "ReactNode", "description": "An error message. Also marks the select invalid.", "html": "<p class=\"vin-error\"> + aria-invalid=\"true\"" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["NativeSelect"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A <select> with the Input classes plus vin-native-select. The menu is the browser's own, so it works with every keyboard, screen reader and phone." },
+    { "id": "sizes", "title": "Sizes", "description": "The same three heights as Input and Button." },
+    { "id": "states", "title": "Error and disabled", "description": "Errors and hints work exactly like they do on Input." }
+  ],
+  "a11y": [
+    "A native <select>: full keyboard, screen reader and touch support from the browser.",
+    "Every select has a label: a <label for> or an aria-label.",
+    "Errors set aria-invalid=\"true\" and are linked with aria-describedby.",
+    "Use Native Select when you don't need custom option content; it is the most robust choice."
+  ]
+}

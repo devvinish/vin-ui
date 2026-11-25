@@ -8,6 +8,7 @@ import "@vinui/styles/vinui.css";
 import { STYLES, DEFAULT_STYLE } from "@vinui/styles";
 import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
 import { fontsHref } from "../../lib/site";
+import ReactExample from "../../components/ReactExample";
 import { SPECS, getExamples, type Spec } from "../../data/registry";
 
 export function getStaticPaths() {
@@ -44,7 +45,10 @@ const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
   <body>
     <main id="fixture">
       {examples.map((ex) => <section class="vin-stage" data-fixture={`html-${ex.id}`}><h2>HTML · {ex.id}</h2><div class="row" set:html={ex.html} /></section>)}
-      {examples.map((ex) => <section class="vin-stage" data-fixture={`react-${ex.id}`}><h2>React · {ex.id}</h2><ex.Component /></section>)}
+      {examples.map((ex) => <section class="vin-stage" data-fixture={`react-${ex.id}`}><h2>React · {ex.id}</h2><ReactExample client:load name={spec.name} id={ex.id} /></section>)}
     </main>
+    <script>
+      import "@vinui/html/vinui.js";
+    </script>
   </body>
 </html>

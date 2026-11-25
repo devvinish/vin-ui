@@ -1,0 +1,41 @@
+/* ==========================================================================
+   VinUI · Checkbox (plus the shared choice layout used by Switch and Radio)
+   API (see spec/checkbox.json):
+     .vin-choice > input.vin-checkbox + .vin-choice__body > label.vin-choice__label + .vin-choice__desc
+     .vin-choice--end                   control after the text, full width (settings rows)
+     :checked, :indeterminate, [aria-invalid="true"], [disabled]
+   ========================================================================== */
+
+.vin-choice { display: flex; align-items: flex-start; gap: 10px; min-width: 0; text-align: left; }
+.vin-choice--end { flex-direction: row-reverse; justify-content: space-between; gap: 16px; width: 100%; }
+.vin-choice__body { display: grid; gap: 2px; min-width: 0; }
+.vin-choice__label { font-size: var(--vin-text-md); font-weight: var(--vin-weight); line-height: 20px; color: var(--vin-fg); cursor: pointer; }
+.vin-choice__desc { margin: 0; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.4; color: var(--vin-muted); }
+.vin-choice:has(:disabled) .vin-choice__label { cursor: not-allowed; opacity: .55; }
+
+.vin-checkbox {
+  appearance: none; flex: none; box-sizing: border-box;
+  width: 18px; height: 18px; margin: 1px 0 0;
+  display: inline-grid; place-content: center;
+  color: var(--vin-primary-fg);
+  background: var(--vin-input-bg);
+  border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 32%);
+  border-radius: min(var(--vin-radius), 5px);
+  box-shadow: var(--vin-input-shadow);
+  cursor: pointer;
+  transition: background var(--vin-dur) var(--vin-ease), border-color var(--vin-dur), box-shadow var(--vin-dur);
+}
+.vin-checkbox::before {
+  content: ""; width: 12px; height: 12px; background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2 5 8.6l4.5-5' fill='none' stroke='%23000' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: scale(0); transition: transform var(--vin-dur) var(--vin-ease);
+}
+.vin-checkbox:checked, .vin-checkbox:indeterminate { background: var(--vin-primary-bg); border-color: transparent; background-origin: border-box; box-shadow: none; }
+.vin-checkbox:checked::before { transform: scale(1); }
+.vin-checkbox:indeterminate::before {
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 6h6' stroke='%23000' stroke-width='1.9' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: scale(1);
+}
+.vin-checkbox:focus-visible { outline: none; box-shadow: var(--vin-input-shadow), var(--vin-focus); }
+.vin-checkbox[aria-invalid="true"] { border-color: var(--vin-danger); box-shadow: 0 0 0 1px var(--vin-danger); }
+.vin-checkbox:disabled { opacity: .55; cursor: not-allowed; }

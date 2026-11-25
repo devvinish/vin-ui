@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Switch API. Every framework package is tested against this file.",
+  "name": "switch",
+  "title": "Switch",
+  "category": "Forms",
+  "description": "Turn a setting on or off straight away.",
+  "baseClass": "vin-switch",
+  "classes": ["vin-switch", "vin-switch--sm"],
+  "thumb": "<div style=\"display:grid;gap:12px\"><span class=\"vin-choice\"><input class=\"vin-switch\" type=\"checkbox\" role=\"switch\" checked aria-label=\"Wi-Fi\"><span class=\"vin-choice__body\"><span class=\"vin-choice__label\">Wi-Fi</span></span></span><span class=\"vin-choice\"><input class=\"vin-switch\" type=\"checkbox\" role=\"switch\" aria-label=\"Bluetooth\"><span class=\"vin-choice__body\"><span class=\"vin-choice__label\">Bluetooth</span></span></span></div>",
+  "props": {
+    "label": { "type": "ReactNode", "description": "Visible label, linked to the switch. Without it, pass an aria-label.", "html": "<label class=\"vin-choice__label\" for=\"…\">" },
+    "description": { "type": "ReactNode", "description": "Smaller text under the label, read out with the switch.", "html": "<p class=\"vin-choice__desc\" id=\"…\"> + aria-describedby" },
+    "size": { "values": ["sm", "md"], "default": "md", "class": "vin-switch--{value}" },
+    "controlPosition": { "values": ["start", "end"], "default": "start", "description": "Put the switch after the text, full width (settings rows).", "class": "vin-choice--end" },
+    "checked / defaultChecked": { "type": "boolean", "html": "checked attribute" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["Switch"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A checkbox with role=\"switch\": it works without JavaScript and submits with forms. Uses the same label layout as Checkbox." },
+    { "id": "settings", "title": "Settings list", "description": "Put the switch at the end of the row and add a description for each setting." },
+    { "id": "sizes", "title": "Small and disabled", "description": "A smaller switch for dense layouts. Disabled switches keep their state visible." }
+  ],
+  "a11y": [
+    "A native checkbox with role=\"switch\": screen readers say \"on\" or \"off\", and Space toggles it.",
+    "Every switch has a label: a <label for> or an aria-label.",
+    "Use a switch for settings that take effect at once; use a Checkbox inside forms that are submitted.",
+    "Visible focus ring in every style and mode; the on state is not shown by colour alone (the knob moves)."
+  ]
+}

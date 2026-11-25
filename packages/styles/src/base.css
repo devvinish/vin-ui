@@ -32,6 +32,11 @@
   color: var(--vin-fg);
 }
 
+/* Components draw in their style's font even when the page sets its own font on body. */
+.vin-stage, .vin-card, .vin-field, .vin-choice, .vin-tabs, .vin-select, .vin-hint, .vin-error {
+  font-family: var(--vin-font);
+}
+
 .vin-stage {
   background-color: var(--vin-stage);
   background-image: var(--vin-stage-img);

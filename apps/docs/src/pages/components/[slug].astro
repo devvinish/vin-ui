@@ -2,6 +2,7 @@
 import Docs from "../../layouts/Docs.astro";
 import Example from "../../components/Example.astro";
 import CodeBlock from "../../components/CodeBlock.astro";
+import ReactExample from "../../components/ReactExample";
 import { href, SITE } from "../../lib/site";
 import { SPECS, getExamples, type Spec } from "../../data/registry";
 
@@ -33,7 +34,7 @@ const reactImport = `import { ${[...spec.react.components, ...(spec.react.helper
       <>
         <h2 id={ex.id}>{ex.title}</h2>
         <p>{ex.description}</p>
-        <Example id={`${spec.name}-${ex.id}`} html={ex.html} react={ex.react}><ex.Component slot="react" /></Example>
+        <Example id={`${spec.name}-${ex.id}`} html={ex.html} react={ex.react}><ReactExample slot="react" client:load name={spec.name} id={ex.id} /></Example>
       </>
     ))}
 

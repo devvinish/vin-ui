@@ -1,0 +1,34 @@
+/* ==========================================================================
+   VinUI · Switch
+   API (see spec/switch.json):
+     input[type=checkbox][role=switch].vin-switch    inside .vin-choice (see Checkbox)
+     .vin-switch--sm                                  smaller
+     :checked, [disabled]
+   A real checkbox: works without JavaScript and submits with forms.
+   ========================================================================== */
+
+.vin-switch {
+  --vin-sw-w: 38px; --vin-sw-h: 22px; --vin-sw-gap: 3px;
+  appearance: none; flex: none; position: relative; box-sizing: border-box;
+  width: var(--vin-sw-w); height: var(--vin-sw-h); margin: -1px 0 0;
+  border-radius: var(--vin-pill);
+  background: color-mix(in srgb, var(--vin-track), var(--vin-fg) 20%);
+  border: 0;
+  cursor: pointer;
+  transition: background var(--vin-dur) var(--vin-ease), box-shadow var(--vin-dur);
+}
+.vin-switch::before {
+  content: ""; position: absolute; top: var(--vin-sw-gap); left: var(--vin-sw-gap);
+  width: calc(var(--vin-sw-h) - 2 * var(--vin-sw-gap)); aspect-ratio: 1;
+  border-radius: var(--vin-pill);
+  background: var(--vin-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / .28);
+  transition: transform var(--vin-dur) var(--vin-ease), background var(--vin-dur);
+}
+.vin-switch:checked { background: var(--vin-primary-bg); }
+.vin-switch:checked::before { background: var(--vin-primary-fg); transform: translateX(calc(var(--vin-sw-w) - var(--vin-sw-h))); }
+[dir="rtl"] .vin-switch:checked::before { transform: translateX(calc(var(--vin-sw-h) - var(--vin-sw-w))); }
+[dir="rtl"] .vin-switch::before { left: auto; right: var(--vin-sw-gap); }
+.vin-switch:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-switch:disabled { opacity: .55; cursor: not-allowed; }
+.vin-switch--sm { --vin-sw-w: 30px; --vin-sw-h: 18px; --vin-sw-gap: 2px; margin-top: 1px; }

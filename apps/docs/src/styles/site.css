@@ -316,6 +316,7 @@ a.comp-card:hover { border-color: var(--border-strong); transform: translateY(-2
   .hdr-trigger { padding: 0 8px; gap: 6px; }
   .hdr-panel { position: fixed; left: 12px; right: 12px; top: calc(var(--header-h) + 6px); width: auto; }
   .page-title { font-size: 28px; }
+  .example .preview { padding: 36px 16px; }
 }
 
 /* Mode toggle shows the icon of the mode you would switch to. */

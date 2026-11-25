@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -71,6 +71,11 @@ export const STYLES = [
       card: `
 & .vin-card__title { letter-spacing: -.015em; }`,
       input: "",
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -113,6 +118,11 @@ export const STYLES = [
 & .vin-badge--primary { box-shadow: inset 0 1px 0 rgb(255 255 255 / .3); }`,
       card: "",
       input: "",
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -156,6 +166,11 @@ export const STYLES = [
 & .vin-badge:not(.vin-badge--outline) { border-color: transparent; }`,
       card: "",
       input: "",
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -196,6 +211,11 @@ export const STYLES = [
 & .vin-input { border-radius: 12px 12px 4px 4px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--vin-accent) 55%, transparent); }
 & .vin-input:focus { box-shadow: inset 0 -3px 0 var(--vin-accent); }
 & .vin-input[aria-invalid="true"] { box-shadow: inset 0 -2px 0 var(--vin-danger); }`,
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -234,9 +254,14 @@ export const STYLES = [
 & .vin-card__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 10px); line-height: 1.1; }`,
       input: `
 & .vin-label { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--vin-muted); }
-& .vin-input { border-width: 0 0 1px; border-radius: 0; padding-left: 0; background: transparent; }
+& .vin-input { border-width: 0 0 1px; border-radius: 0; padding-left: 0; background-color: transparent; }
 & .vin-input:focus { box-shadow: inset 0 -1px 0 var(--vin-fg); }
 & textarea.vin-input { border-width: 1px; padding-left: 10px; }`,
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -277,6 +302,11 @@ export const STYLES = [
       input: `
 & .vin-input { border-style: dashed; }
 & .vin-label::before { content: "$ "; color: var(--vin-accent-text); }`,
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -322,6 +352,11 @@ export const STYLES = [
       input: `
 & .vin-input { border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
 & textarea.vin-input { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 
@@ -356,6 +391,11 @@ export const STYLES = [
       badge: "",
       card: "",
       input: "",
+      checkbox: "",
+      switch: "",
+      "native-select": "",
+      select: "",
+      tabs: "",
     },
   },
 ];

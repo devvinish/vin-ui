@@ -10,7 +10,7 @@
 .vin-badge {
   display: inline-flex; align-items: center; gap: 6px;
   box-sizing: border-box; height: 22px; padding: 0 8px;
-  font: inherit; font-size: calc(var(--vin-text-sm) - 1px); font-weight: var(--vin-weight);
+  font: inherit; font-family: var(--vin-font); font-size: calc(var(--vin-text-sm) - 1px); font-weight: var(--vin-weight);
   line-height: 1; white-space: nowrap; vertical-align: middle;
   color: var(--vin-secondary-fg); background: var(--vin-secondary);
   border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-pill);

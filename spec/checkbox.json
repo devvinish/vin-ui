@@ -1,0 +1,31 @@
+{
+  "$comment": "Single source of truth for the Checkbox API (and the shared .vin-choice layout). Every framework package is tested against this file.",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "category": "Forms",
+  "description": "Turn an option on or off, alone or in a group.",
+  "baseClass": "vin-checkbox",
+  "classes": ["vin-choice", "vin-choice--end", "vin-choice__body", "vin-choice__label", "vin-choice__desc", "vin-checkbox"],
+  "thumb": "<div style=\"display:grid;gap:10px\"><span class=\"vin-choice\"><input class=\"vin-checkbox\" type=\"checkbox\" checked aria-label=\"Email\"><span class=\"vin-choice__body\"><span class=\"vin-choice__label\">Email updates</span></span></span><span class=\"vin-choice\"><input class=\"vin-checkbox\" type=\"checkbox\" aria-label=\"SMS\"><span class=\"vin-choice__body\"><span class=\"vin-choice__label\">SMS alerts</span></span></span></div>",
+  "props": {
+    "label": { "type": "ReactNode", "description": "Visible label, linked to the checkbox. Without it, pass an aria-label.", "html": "<label class=\"vin-choice__label\" for=\"…\">" },
+    "description": { "type": "ReactNode", "description": "Smaller text under the label, read out with the checkbox.", "html": "<p class=\"vin-choice__desc\" id=\"…\"> + aria-describedby" },
+    "controlPosition": { "values": ["start", "end"], "default": "start", "description": "Put the checkbox after the text, full width.", "class": "vin-choice--end" },
+    "indeterminate": { "type": "boolean", "default": false, "description": "The \"some selected\" dash. In HTML, set input.indeterminate = true with a line of JavaScript.", "html": "el.indeterminate = true" },
+    "checked / defaultChecked": { "type": "boolean", "html": "checked attribute" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["Checkbox"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A real checkbox input with its label. Clicking the label toggles it." },
+    { "id": "description", "title": "With a description", "description": "Extra text under the label is linked with aria-describedby, so it is read out with the checkbox." },
+    { "id": "group", "title": "Group", "description": "Wrap related checkboxes in a fieldset with a legend, so the group has a name." }
+  ],
+  "a11y": [
+    "A native <input type=\"checkbox\">: Space toggles it, and forms submit it with no extra code.",
+    "Every checkbox has a label: a <label for> or an aria-label.",
+    "Descriptions are linked with aria-describedby.",
+    "Related checkboxes sit in a <fieldset> with a <legend>.",
+    "Visible focus ring in every style and mode; the tick is drawn, not a font icon."
+  ]
+}

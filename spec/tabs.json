@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Tabs API. Every framework package is tested against this file.",
+  "name": "tabs",
+  "title": "Tabs",
+  "category": "Navigation",
+  "description": "Switch between related views without leaving the page.",
+  "baseClass": "vin-tabs",
+  "classes": ["vin-tabs", "vin-tabs--line", "vin-tabs__list", "vin-tabs__tab", "vin-tabs__panel"],
+  "thumb": "<div class=\"vin-tabs\"><div class=\"vin-tabs__list\"><span class=\"vin-tabs__tab\" aria-selected=\"true\">Account</span><span class=\"vin-tabs__tab\">Password</span></div></div>",
+  "props": {
+    "variant": { "values": ["segmented", "line"], "default": "segmented", "class": "vin-tabs--line" },
+    "value / defaultValue": { "type": "string", "description": "The open tab (controlled or not). Use onValueChange to hear about changes.", "html": "aria-selected=\"true\" on the tab" },
+    "TabList aria-label": { "type": "string", "description": "Names the group of tabs for screen readers.", "html": "aria-label on [role=tablist]" },
+    "Tab / TabPanel value": { "type": "string", "description": "Links each tab to its panel.", "html": "aria-controls / aria-labelledby" },
+    "disabled (Tab)": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["Tabs", "TabList", "Tab", "TabPanel"] },
+  "examples": [
+    { "id": "segmented", "title": "Segmented", "description": "The default look. Arrow keys move between tabs. In HTML, add data-vin-tabs and include vinui.js once." },
+    { "id": "line", "title": "Line", "description": "Underlined tabs for page sections and settings screens." }
+  ],
+  "a11y": [
+    "Follows the WAI-ARIA tabs pattern: role=\"tablist\", \"tab\" and \"tabpanel\", linked with aria-controls and aria-labelledby.",
+    "Only the open tab is in the Tab order; ← → move between tabs and Home/End jump to the first or last. Right-to-left layouts flip the arrows.",
+    "Panels can take focus, so keyboard users reach their content straight after the tabs.",
+    "The open tab is shown by more than colour: a raised surface or an underline."
+  ]
+}

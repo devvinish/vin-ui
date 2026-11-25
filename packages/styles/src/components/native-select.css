@@ -1,0 +1,21 @@
+/* ==========================================================================
+   VinUI · Native Select
+   API (see spec/native-select.json):
+     select.vin-input.vin-native-select     the browser's own select, drawn like an Input
+     .vin-input--{sm|lg}, [aria-invalid], [disabled]   from Input
+   No JavaScript; the browser's own menu and keyboard support.
+   ========================================================================== */
+
+.vin-input.vin-native-select {
+  appearance: none; cursor: pointer;
+  padding-inline-end: calc(var(--vin-px-md) + 14px);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--vin-muted) 50%),
+    linear-gradient(135deg, var(--vin-muted) 50%, transparent 50%);
+  background-size: 5px 5px, 5px 5px;
+  background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+  background-repeat: no-repeat;
+}
+[dir="rtl"] .vin-input.vin-native-select { background-position: 12px 50%, 17px 50%; }
+.vin-native-select:disabled { cursor: not-allowed; }
+.vin-native-select option { color: initial; background: initial; }

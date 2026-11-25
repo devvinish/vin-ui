@@ -1,7 +1,9 @@
 import { chromium } from "@playwright/test";
+import { readdirSync } from "node:fs";
 const OUT = process.argv[2];
 const STYLES = ["precision","tactile","clay","tonal","editorial","terminal","paper","bento"];
-const PAGES = ["button","badge","card","input"];
+const ONLY = process.argv[3]?.split(",");
+const PAGES = readdirSync(new URL("../../spec/", import.meta.url)).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).filter((n) => !ONLY || ONLY.includes(n));
 const b = await chromium.launch();
 const problems = [];
 for (const width of [1440, 375]) {
@@ -25,7 +27,7 @@ for (const width of [1440, 375]) {
             const r = e.getBoundingClientRect();
             if (r.right > pr.right + 1 || r.left < pr.left - 1) { out.push(`${ex}: ${e.className || e.tagName} spills out of the preview`); break; }
           }
-          for (const e of prev.querySelectorAll(".vin-btn, .vin-badge, .vin-label, .vin-card__title")) {
+          for (const e of prev.querySelectorAll(".vin-btn, .vin-badge, .vin-label, .vin-card__title, .vin-tabs__tab, .vin-select__value, .vin-choice__label, .vin-native-select")) {
             if (e.scrollWidth > e.clientWidth + 1 && getComputedStyle(e).overflow !== "visible") out.push(`${ex}: text clipped in ${e.className}`);
           }
           // top-level items of the example
@@ -44,9 +46,9 @@ for (const width of [1440, 375]) {
         return out;
       });
       for (const f of found) problems.push(`${width}px ${name} ${style} ${mode}: ${f}`);
-      if (width === 1440 && mode === "light") {
+      if (width === 1440) {
         const previews = await page.locator("[data-panel='html'] .preview").all();
-        for (let i = 0; i < previews.length; i++) await previews[i].screenshot({ path: `${OUT}/${name}-${i}-${style}.png` });
+        for (let i = 0; i < previews.length; i++) await previews[i].screenshot({ path: `${OUT}/${name}-${i}-${style}-${mode}.png` });
       }
     }
   }

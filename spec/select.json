@@ -1,0 +1,32 @@
+{
+  "$comment": "Single source of truth for the Select API. Every framework package is tested against this file.",
+  "name": "select",
+  "title": "Select",
+  "category": "Forms",
+  "description": "Pick one value from a list that matches your style, with full keyboard support.",
+  "baseClass": "vin-select",
+  "classes": ["vin-select", "vin-select__trigger", "vin-select__value", "vin-select__content", "vin-select__item"],
+  "thumb": "<div class=\"vin-field\" style=\"width:190px\"><span class=\"vin-label\">Framework</span><span class=\"vin-input vin-select__trigger\"><span class=\"vin-select__value\">Astro</span></span></div>",
+  "props": {
+    "options": { "type": "(string | { value, label, disabled? })[]", "description": "The choices.", "html": "<div class=\"vin-select__item\" role=\"option\" data-value=\"…\">" },
+    "value / defaultValue": { "type": "string", "description": "The chosen value (controlled or not). Use onValueChange to hear about changes.", "html": "aria-selected=\"true\" on the option" },
+    "label": { "type": "ReactNode", "description": "Visible label. Without it, pass an aria-label.", "html": "<span class=\"vin-label\" id=\"…\"> + aria-labelledby" },
+    "placeholder": { "type": "string", "default": "Select…", "html": "<span class=\"vin-select__value\" data-placeholder>" },
+    "hint / error": { "type": "ReactNode", "description": "Help text, or an error that also marks the select invalid.", "html": "aria-describedby, aria-invalid=\"true\"" },
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-input--{value}" },
+    "name": { "type": "string", "description": "Adds a hidden input so the value is submitted with forms.", "html": "<input type=\"hidden\" name=\"…\">" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled on the button" }
+  },
+  "react": { "components": ["Select"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Click or press ↓ to open, type a letter to jump, Enter to choose. In HTML, add data-vin-select and include vinui.js once." },
+    { "id": "states", "title": "Placeholder, error, disabled", "description": "Show a placeholder until something is chosen, an error that is read out with the field, or a disabled select." }
+  ],
+  "a11y": [
+    "Follows the WAI-ARIA select-only combobox pattern: role=\"combobox\" on the button, role=\"listbox\" and role=\"option\" for the list.",
+    "Focus stays on the button; aria-activedescendant tells screen readers which option is highlighted.",
+    "Keys: ↑ ↓ Home End PageUp PageDown to move, Enter or Space to choose, Esc to close, Tab chooses and moves on, letters jump to matching options.",
+    "The list opens in the top layer and flips above the button when there's no room below.",
+    "Need it to work without JavaScript? Use Native Select."
+  ]
+}

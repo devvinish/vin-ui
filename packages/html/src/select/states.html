@@ -1,0 +1,29 @@
+<div style="display: grid; gap: 16px; width: 100%; max-width: 320px">
+  <div class="vin-field">
+    <span class="vin-label" id="tz-label">Time zone</span>
+    <div class="vin-select" data-vin-select>
+      <button type="button" id="tz" class="vin-input vin-select__trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="tz-list" aria-labelledby="tz-label" aria-invalid="true" aria-describedby="tz-error">
+        <span class="vin-select__value" data-placeholder>Choose a time zone</span>
+      </button>
+      <div class="vin-select__content" id="tz-list" role="listbox" popover="manual" tabindex="-1" aria-labelledby="tz-label">
+        <div class="vin-select__item" id="tz-opt-0" role="option" aria-selected="false" data-value="ist">India (IST)</div>
+        <div class="vin-select__item" id="tz-opt-1" role="option" aria-selected="false" data-value="gmt">London (GMT)</div>
+        <div class="vin-select__item" id="tz-opt-2" role="option" aria-selected="false" aria-disabled="true" data-value="pst">Los Angeles (PST)</div>
+        <div class="vin-select__item" id="tz-opt-3" role="option" aria-selected="false" data-value="jst">Tokyo (JST)</div>
+      </div>
+    </div>
+    <p class="vin-error" id="tz-error">Choose a time zone.</p>
+  </div>
+  <div class="vin-field">
+    <span class="vin-label" id="cur-label">Currency</span>
+    <div class="vin-select" data-vin-select>
+      <button type="button" id="cur" class="vin-input vin-select__trigger" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="cur-list" aria-labelledby="cur-label" disabled>
+        <span class="vin-select__value">INR</span>
+      </button>
+      <div class="vin-select__content" id="cur-list" role="listbox" popover="manual" tabindex="-1" aria-labelledby="cur-label">
+        <div class="vin-select__item" id="cur-opt-0" role="option" aria-selected="true" data-value="INR">INR</div>
+        <div class="vin-select__item" id="cur-opt-1" role="option" aria-selected="false" data-value="USD">USD</div>
+      </div>
+    </div>
+  </div>
+</div>
