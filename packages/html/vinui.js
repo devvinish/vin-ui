@@ -5,7 +5,8 @@
  * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
- * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel), data-vin-chart (Chart tooltips).
+ * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel), data-vin-chart (Chart tooltips),
+ * data-vin-data-table (Data Table: sorting, filtering, selection and paging).
  */
 (function () {
   "use strict";
@@ -682,11 +683,99 @@
     });
   }
 
+  /* ---------- Data Table: sort (aria-sort), filter, select rows and page a real <table> ---------- */
+  function initDataTable(root) {
+    var table = root.querySelector("table"), tbody = table && table.tBodies[0];
+    if (!tbody) return;
+    var rows = Array.prototype.filter.call(tbody.rows, function (r) { return !r.classList.contains("vin-data-table__empty"); });
+    var size = parseInt(root.getAttribute("data-page-size"), 10) || 0;
+    var search = root.querySelector('.vin-data-table__search input, input[type="search"]');
+    var all = table.tHead && table.tHead.querySelector(".vin-checkbox");
+    var status = root.querySelector(".vin-data-table__status");
+    var nav = root.querySelector(".vin-data-table__footer .vin-pagination");
+    var navButtons = nav ? nav.querySelectorAll("button") : [];
+    var prev = navButtons[0], next = navButtons[navButtons.length - 1], pageText = nav && nav.querySelector(".vin-pagination__status");
+    var page = 1, query = "", empty = null;
+    var collator = window.Intl ? new Intl.Collator(undefined, { numeric: true, sensitivity: "base" }) : null;
+    var boxOf = function (row) { return row.querySelector(".vin-data-table__select .vin-checkbox"); };
+    var cols = table.tHead ? table.tHead.rows[0].cells.length : 1;
+
+    function value(row, i) {
+      var cell = row.cells[i];
+      if (!cell) return "";
+      var v = cell.getAttribute("data-value");
+      if (v === null) v = cell.textContent.trim();
+      // "₹12,400", "1,290", "-3.5%" sort as numbers; anything else as text.
+      if (/^-?[^\w\s-]{0,3}\s?-?[\d,]*\.?\d+\s?[^\d\s]{0,3}$/.test(v)) return parseFloat(v.replace(/[^\d.-]/g, ""));
+      return v;
+    }
+    function shown() {
+      return rows.filter(function (r) { return !query || r.textContent.toLowerCase().indexOf(query) >= 0; });
+    }
+    function render() {
+      var list = shown(), pages = size ? Math.max(1, Math.ceil(list.length / size)) : 1;
+      page = Math.min(page, pages);
+      rows.forEach(function (r) { r.hidden = true; });
+      list.forEach(function (r, i) { r.hidden = !!size && (i < (page - 1) * size || i >= page * size); });
+      if (!list.length && !empty) {
+        empty = document.createElement("tr"); empty.className = "vin-data-table__empty";
+        var td = document.createElement("td"); td.colSpan = cols; td.textContent = root.getAttribute("data-empty-text") || "No results.";
+        empty.appendChild(td); tbody.appendChild(empty);
+      } else if (list.length && empty) { empty.remove(); empty = null; }
+      if (prev) prev.disabled = page <= 1;
+      if (next) next.disabled = page >= pages;
+      if (pageText) pageText.textContent = "Page " + page + " of " + pages;
+      // Selection: the header box covers the rows that match the filter.
+      var picked = rows.filter(function (r) { var b = boxOf(r); return b && b.checked; });
+      rows.forEach(function (r) { var b = boxOf(r); if (b && b.checked) r.setAttribute("data-selected", ""); else r.removeAttribute("data-selected"); });
+      if (all) {
+        var on = list.filter(function (r) { var b = boxOf(r); return b && b.checked; }).length;
+        all.checked = list.length > 0 && on === list.length;
+        all.indeterminate = on > 0 && on < list.length;
+      }
+      if (status) {
+        var from = list.length ? (page - 1) * size + 1 : 0, to = size ? Math.min(page * size, list.length) : list.length;
+        status.textContent = all ? picked.length + " of " + rows.length + " selected"
+          : size && to - from + 1 < rows.length ? "Showing " + from + "–" + to + " of " + rows.length
+          : rows.length + (rows.length === 1 ? " row" : " rows");
+      }
+    }
+
+    if (table.tHead) table.tHead.addEventListener("click", function (e) {
+      var btn = e.target.closest(".vin-data-table__sort");
+      if (!btn) return;
+      var th = btn.closest("th"), i = th.cellIndex;
+      var dir = th.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
+      Array.prototype.forEach.call(table.tHead.querySelectorAll("th[aria-sort]"), function (h) { h.removeAttribute("aria-sort"); });
+      th.setAttribute("aria-sort", dir);
+      var order = rows.map(function (r, k) { return { r: r, k: k, v: value(r, i) }; });
+      order.sort(function (a, b) {
+        var c = typeof a.v === "number" && typeof b.v === "number" ? a.v - b.v
+          : collator ? collator.compare(String(a.v), String(b.v)) : String(a.v) < String(b.v) ? -1 : String(a.v) > String(b.v) ? 1 : 0;
+        return (dir === "ascending" ? c : -c) || a.k - b.k;
+      });
+      rows = order.map(function (o) { return o.r; });
+      rows.forEach(function (r) { tbody.appendChild(r); });
+      if (empty) tbody.appendChild(empty);
+      render();
+    });
+    if (search) search.addEventListener("input", function () { query = search.value.trim().toLowerCase(); page = 1; render(); });
+    if (all) all.addEventListener("change", function () {
+      var on = all.checked;
+      shown().forEach(function (r) { var b = boxOf(r); if (b) b.checked = on; });
+      render();
+    });
+    tbody.addEventListener("change", function (e) { if (e.target.classList.contains("vin-checkbox")) render(); });
+    if (prev) prev.addEventListener("click", function () { page--; render(); });
+    if (next) next.addEventListener("click", function () { page++; render(); });
+    render();
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
     "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
-    "data-vin-copy": initCopy, "data-vin-carousel": initCarousel, "data-vin-chart": initChart,
+    "data-vin-copy": initCopy, "data-vin-carousel": initCarousel, "data-vin-chart": initChart, "data-vin-data-table": initDataTable,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

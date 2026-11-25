@@ -85,3 +85,5 @@ export { Carousel } from "./carousel";
 export type { CarouselProps } from "./carousel";
 export { Chart, niceTicks } from "./chart";
 export type { ChartProps, ChartType, ChartSeries, ChartRow } from "./chart";
+export { DataTable, dataTableStatus } from "./data-table";
+export type { DataTableProps, DataTableColumn, SortDirection } from "./data-table";

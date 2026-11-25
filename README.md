@@ -10,7 +10,7 @@ npx @vinish/ui add button
 
 > Status: **Phase 1 done: 40 components**, ready in all 8 styles, HTML and React: Button, Button Group, Toggle, Badge, Card, Input, Textarea, Checkbox, Radio Group, Switch, Native Select, Select, Tabs, Toggle Group, Input Group, Input OTP, Slider, Avatar, Kbd, Separator, Skeleton, Spinner, Progress, Alert, Typography, Item, Table, Empty, Aspect Ratio, Breadcrumb, Pagination, Accordion, Collapsible, Tooltip, Popover, Toast, Dialog, Alert Dialog, Sheet, Dropdown Menu. Select, Tabs, Toggle, Toggle Group, Input OTP, Slider, Tooltip, Popover, Toast, Dropdown Menu, the Alert close button and the Textarea count need `vinui.js` (one small script) in plain HTML. Dialog, Alert Dialog and Sheet are the browser's `<dialog>` and work without it; `vinui.js` only fills in `commandfor` and `closedby` for browsers that lack them. Roadmap: 63 components (40 in Phase 1, 23 in Phase 2 including AI chat), listed in `apps/docs/src/data/components.ts`.
 >
-> Phase 2, data display: Code Block, Carousel, Chart. The Code Block copy button, the Carousel buttons and the Chart tooltips use `vinui.js` in plain HTML (the Carousel still swipes and the Chart still draws without it).
+> Phase 2, data display: Code Block, Carousel, Chart, Data Table. The Code Block copy button, the Carousel buttons, the Chart tooltips and Data Table sorting, filtering, selection and paging use `vinui.js` in plain HTML (the Carousel still swipes, the Chart still draws and the Data Table still shows its first page without it).
 
 ## How it works
 

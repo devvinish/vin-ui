@@ -551,5 +551,82 @@ for (const side of ["html", "react"] as const) {
       await page.mouse.move(5, 5);
       await expect(tip).toHaveCount(0);
     });
+
+    test("data table: sorts with aria-sort, filters, pages and selects rows", async ({ page }) => {
+      await ready(page, "data-table");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const visible = root.locator("tbody tr:not([hidden])");
+      const firstCells = () => visible.locator("td:nth-child(2)").allTextContents();
+      const status = root.locator(".vin-data-table__status");
+      const pageText = root.locator(".vin-pagination__status");
+      const prev = root.getByRole("button", { name: "Previous" });
+      const next = root.getByRole("button", { name: "Next" });
+
+      // Paging: five rows at a time.
+      await expect(visible).toHaveCount(5);
+      await expect(pageText).toHaveText("Page 1 of 3");
+      await expect(prev).toBeDisabled();
+      await next.click();
+      await expect(pageText).toHaveText("Page 2 of 3");
+      expect(await firstCells()).toEqual(["INV-1037", "INV-1036", "INV-1035", "INV-1034", "INV-1033"]);
+      await next.click();
+      await expect(visible).toHaveCount(2);
+      await expect(next).toBeDisabled();
+
+      // Sorting: numbers sort as numbers; a second click reverses; only one column has aria-sort.
+      const amount = root.getByRole("columnheader", { name: "Amount" });
+      await amount.getByRole("button").click();
+      await expect(amount).toHaveAttribute("aria-sort", "ascending");
+      await prev.click(); await prev.click();
+      await expect(visible.first().locator("td").last()).toHaveText("₹2,350");
+      await amount.getByRole("button").click();
+      await expect(amount).toHaveAttribute("aria-sort", "descending");
+      await expect(visible.first().locator("td").last()).toHaveText("₹18,200");
+      await root.getByRole("columnheader", { name: "Customer" }).getByRole("button").click();
+      await expect(amount).not.toHaveAttribute("aria-sort");
+      expect(await firstCells()).toEqual(["INV-1042", "INV-1041", "INV-1040", "INV-1039", "INV-1038"]);
+
+      // Filtering: back to page 1, and an empty state when nothing matches.
+      const filter = root.getByRole("searchbox", { name: "Filter invoices" });
+      await filter.fill("overdue");
+      await expect(visible).toHaveCount(2);
+      await expect(pageText).toHaveText("Page 1 of 1");
+      await filter.fill("zzz");
+      await expect(root.locator(".vin-data-table__empty")).toHaveText("No results.");
+      await filter.fill("pending");
+      await expect(visible).toHaveCount(3);
+
+      // Selection: the header box selects what matches the filter and shows "mixed" for some.
+      const all = root.getByRole("checkbox", { name: "Select all rows" });
+      await all.check();
+      await expect(status).toHaveText("3 of 12 selected");
+      await filter.fill("");
+      await expect(all).toHaveJSProperty("indeterminate", true);
+      await root.getByRole("checkbox", { name: "Select INV-1041" }).uncheck();
+      await expect(status).toHaveText("2 of 12 selected");
+      await expect(root.locator("tbody tr[data-selected]")).toHaveCount(2);
+      await all.click();
+      await expect(status).toHaveText("12 of 12 selected");
+      await expect(all).toBeChecked();
+      await all.click();
+      await expect(status).toHaveText("0 of 12 selected");
+    });
+
+    test("data table: starts sorted and mixed where the markup says so", async ({ page }) => {
+      await ready(page, "data-table");
+      const sorting = page.locator(`[data-fixture="${side}-sorting"]`);
+      const commits = sorting.getByRole("columnheader", { name: "Commits" });
+      await expect(commits).toHaveAttribute("aria-sort", "descending");
+      await commits.getByRole("button").click();
+      await expect(commits).toHaveAttribute("aria-sort", "ascending");
+      await expect(sorting.locator("tbody tr").first().locator("td").first()).toHaveText("Ravi Menon");
+      const joined = sorting.getByRole("columnheader", { name: "Joined" });
+      await joined.getByRole("button").click();
+      await expect(sorting.locator("tbody tr").first().locator("td").first()).toHaveText("Tom Okafor");
+
+      const selection = page.locator(`[data-fixture="${side}-selection"]`);
+      await expect(selection.getByRole("checkbox", { name: "Select all rows" })).toHaveJSProperty("indeterminate", true);
+      await expect(selection.locator(".vin-data-table__status")).toHaveText("2 of 4 selected");
+    });
   });
 }

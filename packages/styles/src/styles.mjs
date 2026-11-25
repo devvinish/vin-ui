@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "code-block", "carousel", "chart"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "code-block", "carousel", "chart", "data-table"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -111,6 +111,7 @@ export const STYLES = [
       "code-block": "",
       carousel: "",
       chart: "",
+      "data-table": "",
     },
   },
 
@@ -197,6 +198,7 @@ export const STYLES = [
       chart: `
 & .vin-chart__bar { filter: drop-shadow(0 1px 1px rgb(0 0 0 / .18)); }
 & .vin-chart__tooltip { border-color: transparent; }`,
+      "data-table": "",
     },
   },
 
@@ -290,6 +292,8 @@ export const STYLES = [
 & .vin-chart__swatch { border-radius: 4px; }
 & .vin-chart__tooltip { border-color: transparent; border-radius: 16px; }
 & .vin-chart__line { stroke-width: 3; }`,
+      "data-table": `
+& .vin-data-table__sort { border-radius: 10px; }`,
     },
   },
 
@@ -376,6 +380,9 @@ export const STYLES = [
 & .vin-chart__bar { rx: 12px; }
 & .vin-chart__swatch { border-radius: var(--vin-pill); }
 & .vin-chart__tooltip { border-color: transparent; border-radius: 16px; }`,
+      "data-table": `
+& .vin-data-table__sort { border-radius: var(--vin-pill); }
+& .vin-data-table tbody tr[data-selected] > * { background: color-mix(in srgb, var(--vin-accent) 14%, transparent); }`,
     },
   },
 
@@ -481,6 +488,9 @@ export const STYLES = [
 & .vin-chart__grid { stroke-dasharray: 1 4; stroke: color-mix(in srgb, var(--vin-fg) 30%, transparent); }
 & .vin-chart__axis { stroke: var(--vin-fg); }
 & .vin-chart__tooltip { border-top: 2px solid var(--vin-fg); }`,
+      "data-table": `
+& .vin-data-table__sort svg { width: 11px; height: 11px; }
+& .vin-data-table__status { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }`,
     },
   },
 
@@ -609,6 +619,9 @@ export const STYLES = [
 & .vin-chart__line { stroke-linejoin: miter; stroke-linecap: square; stroke-width: 2; }
 & .vin-chart__tooltip { border-style: dashed; border-radius: var(--vin-radius); }
 & .vin-chart__tooltip-title::before { content: "$ "; color: var(--vin-accent-text); }`,
+      "data-table": `
+& .vin-data-table__status::before { content: "> "; color: var(--vin-accent-text); }
+& .vin-data-table tbody tr[data-selected] > :first-child { box-shadow: inset 2px 0 0 var(--vin-accent); }`,
     },
   },
 
@@ -714,6 +727,8 @@ export const STYLES = [
 & :is(.vin-chart__legend, .vin-chart__tooltip-title) { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-sm) + 2px); }
 & .vin-chart__tooltip { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
 & .vin-chart__line { stroke-width: 2.5; }`,
+      "data-table": `
+& .vin-data-table__status { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 1px); }`,
     },
   },
 
@@ -791,6 +806,7 @@ export const STYLES = [
 & .vin-chart__bar { rx: 6px; }
 & .vin-chart__swatch { border-radius: var(--vin-pill); }
 & .vin-chart__tooltip { border-color: transparent; border-radius: 14px; }`,
+      "data-table": "",
     },
   },
 ];
