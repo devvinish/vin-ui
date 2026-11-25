@@ -3,6 +3,11 @@
   "private": true,
   "description": "VinUI: free, open-source components in 8 styles for HTML, React, Vue and Svelte.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devvinish/vin-ui.git"
+  },
+  "homepage": "https://vinish.dev/ui",
   "type": "module",
   "workspaces": [
     "packages/styles",

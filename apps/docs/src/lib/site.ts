@@ -7,7 +7,7 @@ export function href(path = "/"): string {
 export const SITE = {
   name: "VinUI",
   tagline: "One set of components. 8 styles. Any accent colour.",
-  github: "https://github.com/vinish-dev/vin-ui",
+  github: "https://github.com/devvinish/vin-ui",
   npm: "@vinish/ui",
 };
 
