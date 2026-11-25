@@ -1,0 +1,65 @@
+/* ==========================================================================
+   VinUI · Carousel
+   API (see spec/carousel.json):
+     section.vin-carousel[aria-roledescription=carousel][aria-label][data-vin-carousel]
+         style="--vin-carousel-per-view: 3; --vin-carousel-gap: 12px"   (both optional)
+       > div.vin-carousel__track#id[tabindex=0][aria-live=polite]          a scroll-snap scroller
+           > div.vin-carousel__slide[role=group][aria-roledescription=slide][aria-label="1 of 4"]
+       > div.vin-carousel__controls
+           > button.vin-btn.vin-btn--outline.vin-btn--icon.vin-carousel__prev[aria-controls=id][aria-label]
+           > div.vin-carousel__dots[role=group][aria-label] > button.vin-carousel__dot[aria-label][aria-current=true]
+           > button…vin-carousel__next
+     vinui.js / React: buttons, dots and arrow keys; inert on slides that are out of view.
+   ========================================================================== */
+
+.vin-carousel {
+  --vin-carousel-gap: 12px;
+  --vin-carousel-bleed: 10px;
+  container-type: inline-size;
+  position: relative; box-sizing: border-box; width: 100%; min-width: 0; margin: 0;
+  font-family: var(--vin-font); color: var(--vin-fg);
+}
+.vin-carousel__track {
+  --vin-carousel-n: var(--vin-carousel-per-view, 1);
+  display: flex; gap: var(--vin-carousel-gap);
+  /* Room for the slides' shadows, which the scroller would clip. */
+  padding-block: var(--vin-carousel-bleed); margin-block: calc(var(--vin-carousel-bleed) * -1);
+  overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scrollbar-width: none;
+  border-radius: var(--vin-radius-lg); outline: none;
+}
+.vin-carousel__track::-webkit-scrollbar { display: none; }
+.vin-carousel__track:focus-visible { box-shadow: var(--vin-focus); }
+@media (prefers-reduced-motion: no-preference) {
+  [data-vin-style]:not([data-vin-motion="off"]):not([data-vin-motion="reduced"]) .vin-carousel__track { scroll-behavior: smooth; }
+}
+.vin-carousel__slide {
+  flex: 0 0 calc((100% - (var(--vin-carousel-n) - 1) * var(--vin-carousel-gap)) / var(--vin-carousel-n));
+  box-sizing: border-box; min-width: 0; scroll-snap-align: start;
+}
+.vin-carousel__slide > * { height: 100%; box-sizing: border-box; }
+/* A scroller clips big drop shadows, so cards in a carousel use the style's soft shadow. */
+.vin-carousel__slide > .vin-card { box-shadow: var(--vin-shadow-soft); }
+/* Narrow screens: at most 2 per view, then one with a peek of the next. */
+@container (max-width: 640px) { .vin-carousel__track { --vin-carousel-n: min(var(--vin-carousel-per-view, 1), 2); } }
+@container (max-width: 440px) { .vin-carousel__track { --vin-carousel-n: min(var(--vin-carousel-per-view, 1), 1.2); } }
+
+.vin-carousel__controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; }
+.vin-carousel__controls:not(:has(.vin-carousel__dots)) { justify-content: flex-end; }
+.vin-carousel__controls .vin-carousel__prev { order: 0; }
+.vin-carousel__controls .vin-carousel__next { order: 2; }
+.vin-carousel__controls:not(:has(.vin-carousel__dots)) .vin-carousel__next { order: 0; }
+.vin-carousel__dots { order: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; min-width: 0; }
+.vin-carousel__dot {
+  display: inline-grid; place-items: center; box-sizing: border-box; width: 24px; height: 24px; margin: 0; padding: 0;
+  background: none; border: 0; border-radius: var(--vin-pill); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.vin-carousel__dot::before {
+  content: ""; width: 7px; height: 7px; border-radius: var(--vin-pill);
+  background: color-mix(in srgb, var(--vin-muted) 80%, transparent);
+  transition: width var(--vin-dur) var(--vin-ease), background-color var(--vin-dur);
+}
+.vin-carousel__dot:hover::before { background: var(--vin-fg); }
+.vin-carousel__dot[aria-current="true"]::before { width: 20px; background: var(--vin-accent); }
+.vin-carousel__dot:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+[dir="rtl"] .vin-carousel__prev svg, [dir="rtl"] .vin-carousel__next svg { transform: scaleX(-1); }

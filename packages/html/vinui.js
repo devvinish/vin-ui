@@ -5,7 +5,7 @@
  * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
- * Data display: data-vin-copy (Code Block copy button).
+ * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel).
  */
 (function () {
   "use strict";
@@ -578,11 +578,64 @@
     });
   }
 
+  /* ---------- Carousel: buttons, dots and arrow keys scroll the snap track; out-of-view slides are inert ---------- */
+  function reducedMotion(el) {
+    if (el.closest('[data-vin-motion="off"], [data-vin-motion="reduced"]')) return true;
+    return !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) && !el.closest('[data-vin-motion="full"]');
+  }
+  function initCarousel(root) {
+    var track = root.querySelector(".vin-carousel__track");
+    if (!track) return;
+    var slides = Array.prototype.filter.call(track.children, function (s) { return s.classList.contains("vin-carousel__slide"); });
+    var prev = root.querySelector(".vin-carousel__prev"), next = root.querySelector(".vin-carousel__next");
+    var dots = Array.prototype.slice.call(root.querySelectorAll(".vin-carousel__dot"));
+    var current = 0, atStart = true, atEnd = false, frame = 0;
+    var setDisabled = function (btn, off) { if (!btn) return; if (off) btn.setAttribute("aria-disabled", "true"); else btn.removeAttribute("aria-disabled"); };
+
+    function measure() {
+      var box = track.getBoundingClientRect(), first = -1;
+      slides.forEach(function (s, i) {
+        var r = s.getBoundingClientRect();
+        var shown = Math.min(r.right, box.right) - Math.max(r.left, box.left) >= r.width * 0.5 - 1;
+        s.inert = !shown;
+        if (shown && first < 0) first = i;
+      });
+      current = Math.max(first, 0);
+      var max = track.scrollWidth - track.clientWidth, pos = Math.abs(track.scrollLeft);
+      atStart = pos <= 1; atEnd = pos >= max - 1;
+      setDisabled(prev, atStart); setDisabled(next, atEnd);
+      dots.forEach(function (d, i) { if (i === current) d.setAttribute("aria-current", "true"); else d.removeAttribute("aria-current"); });
+    }
+    function schedule() { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); }
+    function goTo(i) {
+      var slide = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      if (!slide) return;
+      var box = track.getBoundingClientRect(), r = slide.getBoundingClientRect();
+      var rtl = getComputedStyle(track).direction === "rtl";
+      track.scrollBy({ left: rtl ? r.right - box.right : r.left - box.left, behavior: reducedMotion(track) ? "instant" : "smooth" });
+    }
+    function step(by) { if ((by < 0 && atStart) || (by > 0 && atEnd)) return; goTo(current + by); }
+
+    track.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    if (prev) prev.addEventListener("click", function () { step(-1); });
+    if (next) next.addEventListener("click", function () { step(1); });
+    dots.forEach(function (d, i) { d.addEventListener("click", function () { goTo(i); }); });
+    root.addEventListener("keydown", function (e) {
+      if (e.defaultPrevented || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+      if (e.target !== track && !e.target.closest(".vin-carousel__controls")) return;
+      e.preventDefault();
+      var rtl = getComputedStyle(root).direction === "rtl";
+      step((e.key === "ArrowRight") !== rtl ? 1 : -1);
+    });
+    measure();
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
     "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
-    "data-vin-copy": initCopy,
+    "data-vin-copy": initCopy, "data-vin-carousel": initCarousel,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "code-block"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "code-block", "carousel"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -109,6 +109,7 @@ export const STYLES = [
       sheet: "",
       "dropdown-menu": "",
       "code-block": "",
+      carousel: "",
     },
   },
 
@@ -190,6 +191,8 @@ export const STYLES = [
       "code-block": `
 & .vin-code-block { box-shadow: var(--vin-shadow-soft); }
 & .vin-code-block__pre { box-shadow: inset 0 1px 3px rgb(0 0 0 / .08); }`,
+      carousel: `
+& .vin-carousel__dot[aria-current="true"]::before { background: var(--vin-primary-bg); box-shadow: inset 0 1px 0 rgb(255 255 255 / .35), 0 1px 1px rgb(0 0 0 / .15); }`,
     },
   },
 
@@ -274,6 +277,10 @@ export const STYLES = [
 & .vin-code-block__header { border-bottom: 0; padding-bottom: 0; }
 & .vin-code-block__pre { margin: 8px; border-radius: calc(var(--vin-radius-lg) - 10px); background: var(--vin-input-bg); box-shadow: var(--vin-input-shadow); }
 & .vin-code-block > .vin-code-block__copy { top: 18px; inset-inline-end: 16px; }`,
+      carousel: `
+& .vin-carousel { --vin-carousel-gap: 16px; }
+& .vin-carousel__dot::before { width: 9px; height: 9px; }
+& .vin-carousel__dot[aria-current="true"]::before { width: 22px; box-shadow: inset 1px 1px 2px rgb(255 255 255 / .45), inset -1px -2px 3px rgb(0 0 0 / .18); }`,
     },
   },
 
@@ -353,6 +360,9 @@ export const STYLES = [
       "code-block": `
 & .vin-code-block__header { border-bottom-color: transparent; }
 & .vin-code-block__pre { background: color-mix(in srgb, var(--vin-accent) 7%, transparent); }`,
+      carousel: `
+& .vin-carousel__dot::before { background: color-mix(in srgb, var(--vin-accent) 40%, var(--vin-muted)); }
+& .vin-carousel__dot[aria-current="true"]::before { width: 22px; height: 8px; background: var(--vin-accent); }`,
     },
   },
 
@@ -447,6 +457,10 @@ export const STYLES = [
 & .vin-code-block { border-radius: 0; border-width: 2px 0 1px; border-top-color: var(--vin-fg); background: transparent; }
 & :is(.vin-code-block__title, .vin-code-block__lang) { font-family: var(--vin-font); text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }
 & .vin-code-block__pre { background: transparent; }`,
+      carousel: `
+& .vin-carousel__dot { width: 30px; border-radius: 0; }
+& .vin-carousel__dot::before { width: 16px; height: 2px; border-radius: 0; }
+& .vin-carousel__dot[aria-current="true"]::before { width: 26px; background: var(--vin-fg); }`,
     },
   },
 
@@ -563,6 +577,11 @@ export const STYLES = [
 & .vin-code-block__title::before { content: "~/"; color: var(--vin-accent-text); }
 & .vin-code-block__lang::before { content: "["; }
 & .vin-code-block__lang::after { content: "]"; }`,
+      carousel: `
+& .vin-carousel__track { border-radius: 0; }
+& .vin-carousel__dot { border-radius: 0; }
+& .vin-carousel__dot::before { box-sizing: border-box; width: 9px; height: 9px; border-radius: 0; background: transparent; border: 1px solid var(--vin-muted); }
+& .vin-carousel__dot[aria-current="true"]::before { width: 9px; background: var(--vin-accent); border-color: var(--vin-accent); }`,
     },
   },
 
@@ -660,6 +679,9 @@ export const STYLES = [
       "code-block": `
 & .vin-code-block { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
 & .vin-code-block__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 2px); }`,
+      carousel: `
+& .vin-carousel__dot::before { width: 9px; height: 8px; border-radius: 60% 40% 55% 45% / 45% 60% 40% 55%; }
+& .vin-carousel__dot[aria-current="true"]::before { width: 20px; height: 9px; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
     },
   },
 
@@ -732,6 +754,7 @@ export const STYLES = [
       "dropdown-menu": "",
       "code-block": `
 & .vin-code-block, & .vin-code-block__header { border-color: transparent; }`,
+      carousel: "",
     },
   },
 ];

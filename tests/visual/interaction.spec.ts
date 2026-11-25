@@ -485,5 +485,44 @@ for (const side of ["html", "react"] as const) {
       expect(text).not.toMatch(/^\d/m); // line numbers are not copied
       await expect(root.getByRole("status")).toHaveText("", { timeout: 4000 });
     });
+
+    test("carousel: next, previous, dots and arrow keys move one slide; the ends are aria-disabled", async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await ready(page, "carousel");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const carousel = root.getByRole("region", { name: "Getting started" });
+      const prev = root.getByRole("button", { name: "Previous slide" });
+      const next = root.getByRole("button", { name: "Next slide" });
+      const dot = (n: number) => root.getByRole("button", { name: `Slide ${n}`, exact: true });
+      const slide = (n: number) => root.locator(`.vin-carousel__slide[aria-label="${n} of 4"]`);
+      await expect(carousel).toHaveAttribute("aria-roledescription", "carousel");
+      await expect(dot(1)).toHaveAttribute("aria-current", "true");
+      await expect(prev).toHaveAttribute("aria-disabled", "true");
+      await expect(slide(2)).toHaveJSProperty("inert", true);
+
+      await next.click();
+      await expect(dot(2)).toHaveAttribute("aria-current", "true");
+      await expect(slide(2)).toHaveJSProperty("inert", false);
+      await expect(slide(1)).toHaveJSProperty("inert", true);
+      await expect(prev).not.toHaveAttribute("aria-disabled");
+
+      await next.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(dot(3)).toHaveAttribute("aria-current", "true");
+      await page.keyboard.press("ArrowRight");
+      await expect(dot(4)).toHaveAttribute("aria-current", "true");
+      await expect(next).toHaveAttribute("aria-disabled", "true");
+      await expect(next).toBeFocused(); // focus isn't lost at the end
+      await page.keyboard.press("ArrowLeft");
+      await expect(dot(3)).toHaveAttribute("aria-current", "true");
+
+      await dot(1).click();
+      await expect(dot(1)).toHaveAttribute("aria-current", "true");
+      await expect(prev).toHaveAttribute("aria-disabled", "true");
+
+      // The track itself is a scroller: scrolling it (a swipe) updates the dots too.
+      await root.locator(".vin-carousel__track").evaluate((t) => t.scrollTo({ left: t.scrollWidth, behavior: "instant" }));
+      await expect(dot(4)).toHaveAttribute("aria-current", "true");
+    });
   });
 }

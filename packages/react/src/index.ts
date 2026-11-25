@@ -81,3 +81,5 @@ export {
 export type { DropdownMenuProps, DropdownMenuItemProps, DropdownMenuCheckboxItemProps, DropdownMenuRadioGroupProps } from "./dropdown-menu";
 export { CodeBlock, copyText } from "./code-block";
 export type { CodeBlockProps } from "./code-block";
+export { Carousel } from "./carousel";
+export type { CarouselProps } from "./carousel";

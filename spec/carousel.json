@@ -1,0 +1,42 @@
+{
+  "$comment": "Single source of truth for the Carousel API. Every framework package is tested against this file.",
+  "name": "carousel",
+  "title": "Carousel",
+  "category": "Data display",
+  "description": "Slides you can swipe through, with previous and next buttons, dots and arrow keys.",
+  "baseClass": "vin-carousel",
+  "classes": [
+    "vin-carousel",
+    "vin-carousel__track",
+    "vin-carousel__slide",
+    "vin-carousel__controls",
+    "vin-carousel__prev",
+    "vin-carousel__next",
+    "vin-carousel__dots",
+    "vin-carousel__dot"
+  ],
+  "thumb": "<div class=\"vin-carousel\" style=\"width:190px\"><div class=\"vin-carousel__track\" style=\"--vin-carousel-per-view:1.25;padding-block:0;margin-block:0\"><div class=\"vin-carousel__slide\"><div style=\"height:64px;border-radius:8px;background:color-mix(in srgb,var(--vin-accent) 22%,transparent)\"></div></div><div class=\"vin-carousel__slide\"><div style=\"height:64px;border-radius:8px;background:color-mix(in srgb,var(--vin-accent) 12%,transparent)\"></div></div></div><div class=\"vin-carousel__controls\" style=\"justify-content:center;margin-top:6px\"><div class=\"vin-carousel__dots\"><span class=\"vin-carousel__dot\" aria-current=\"true\"></span><span class=\"vin-carousel__dot\"></span><span class=\"vin-carousel__dot\"></span></div></div></div>",
+  "props": {
+    "label": { "type": "string", "description": "Names the carousel, e.g. \"Featured stays\". Required.", "html": "aria-label on section.vin-carousel[aria-roledescription=carousel]" },
+    "children": { "type": "ReactNode[]", "description": "One child per slide. Each is wrapped in a slide labelled \"1 of 4\".", "html": "div.vin-carousel__slide[role=group][aria-roledescription=slide][aria-label=\"1 of 4\"] inside .vin-carousel__track" },
+    "perView": { "type": "number", "default": 1, "description": "How many slides show at once. Fractions show a peek of the next one. On narrow screens it drops to at most 2, then about 1.2.", "html": "style=\"--vin-carousel-per-view: 3\" on .vin-carousel" },
+    "dots": { "type": "boolean", "default": true, "description": "A dot for each slide. Turn off for many slides or several per view.", "html": "div.vin-carousel__dots > button.vin-carousel__dot" },
+    "controls": { "type": "boolean", "default": true, "description": "Previous and next buttons. Swiping, scrolling and arrow keys work either way.", "html": "button.vin-btn.vin-btn--outline.vin-btn--icon.vin-carousel__prev / __next" },
+    "gap": { "type": "string", "default": "12px", "description": "Space between slides.", "html": "style=\"--vin-carousel-gap: 16px\"" },
+    "onSlideChange": { "type": "(index: number) => void", "description": "Called with the first fully shown slide (0-based)." }
+  },
+  "react": { "components": ["Carousel"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "One slide at a time. Swipe, scroll with a trackpad, use the buttons or dots, or focus it and press the arrow keys. In HTML, add data-vin-carousel and include vinui.js." },
+    { "id": "multiple", "title": "Several per view", "description": "Three cards at a time (fewer on small screens), no dots." }
+  ],
+  "a11y": [
+    "Follows the WAI-ARIA carousel pattern: a section with aria-roledescription=\"carousel\" and a label, and slides with role=\"group\", aria-roledescription=\"slide\" and a label like \"1 of 4\".",
+    "No autoplay, so nothing moves unless the person moves it. The slides are a polite live region, so a screen reader reads the new slide.",
+    "Slides that are out of view are inert: Tab skips their links and screen readers skip their text.",
+    "Previous and Next are buttons with names; at the ends they get aria-disabled=\"true\" (not disabled), so focus never gets lost.",
+    "The dots are buttons named \"Slide 1\", \"Slide 2\"…, and the current one has aria-current=\"true\". Each dot's hit area is 24 by 24 pixels.",
+    "The slide track is a native scroll-snap scroller, so touch swipe and trackpads work without JavaScript. It can be focused, and the arrow keys move one slide.",
+    "With reduced motion on, slides jump instead of gliding."
+  ]
+}
