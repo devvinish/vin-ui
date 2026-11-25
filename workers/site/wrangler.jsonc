@@ -1,0 +1,19 @@
+// VinUI website + remote MCP server, served on vinish.dev/ui* (the rest of vinish.dev stays on WordPress).
+// Deploy: npm run build (at the repo root), then `npx wrangler deploy` in this folder.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "vinui",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-01",
+  "routes": [{ "pattern": "vinish.dev/ui*", "zone_name": "vinish.dev" }],
+  "assets": {
+    // The built site. It lives in dist/ui, so /ui/... maps straight to files.
+    "directory": "../../apps/docs/dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Only the MCP endpoint runs code; every other request is a static file.
+    "run_worker_first": ["/ui/mcp", "/ui/mcp/*"]
+  },
+  "observability": { "enabled": true }
+}

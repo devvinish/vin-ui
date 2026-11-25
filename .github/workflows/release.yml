@@ -1,0 +1,81 @@
+name: Release
+
+# Publishes the CLI (@vinish/ui) to npm and deploys vinish.dev/ui.
+# Start it by pushing a tag like v0.2.0 (it must match packages/cli/package.json), or by hand.
+#
+# Repository secrets needed:
+#   NPM_TOKEN              an npm automation token that can publish @vinish/ui
+#   CLOUDFLARE_API_TOKEN   a token with "Workers Scripts: Edit" and "Workers Routes: Edit" for vinish.dev
+#   CLOUDFLARE_ACCOUNT_ID
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      npm:
+        description: Publish the CLI to npm
+        type: boolean
+        default: true
+      deploy:
+        description: Deploy vinish.dev/ui
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  id-token: write # npm provenance
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  npm:
+    needs: test
+    if: github.event_name == 'push' || inputs.npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - name: Tag matches the CLI version
+        if: github.event_name == 'push'
+        run: |
+          v=$(node -p "require('./packages/cli/package.json').version")
+          test "v$v" = "$GITHUB_REF_NAME" || { echo "Tag $GITHUB_REF_NAME but packages/cli is $v"; exit 1; }
+      - name: Publish @vinish/ui
+        working-directory: packages/cli
+        run: |
+          v=$(node -p "require('./package.json').version")
+          if npm view "@vinish/ui@$v" version >/dev/null 2>&1; then echo "@vinish/ui@$v is already on npm"; exit 0; fi
+          npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  deploy:
+    needs: test
+    if: github.event_name == 'push' || inputs.deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy the Worker (site + /ui/mcp)
+        working-directory: workers/site
+        run: npx -y wrangler@4 deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

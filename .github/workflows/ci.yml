@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_call:
 
 jobs:
   test:
@@ -16,10 +17,15 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - name: Unit tests (styles, theme, HTML, React)
+      - name: Unit tests (styles, theme, HTML, React, Vue, Svelte, CLI)
         run: npm test
       - name: Build docs site
         run: npm run build
+      - name: Worker + remote MCP tests (read the built site)
+        run: npm test --prefix workers/site
+      - name: Worker bundles
+        run: npx -y wrangler@4 deploy --dry-run --outdir /tmp/worker
+        working-directory: workers/site
       - run: npx playwright install --with-deps chromium
       # Screenshots render differently on Linux, so CI keeps its own baselines in
       # tests/visual/__screenshots__/linux. Missing ones are written (not failed) and

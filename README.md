@@ -48,19 +48,25 @@ npm run test:visual:update   # accept intentional visual changes
 
 ## Deploying
 
-Cloudflare Pages, connected to this repository:
+vinish.dev stays on WordPress; only `vinish.dev/ui*` goes to a Cloudflare Worker (`workers/site`). The Worker serves the built site as static files and answers the remote MCP server at `/ui/mcp`.
 
-- Build command: `npm run build`
-- Build output directory: `apps/docs/dist`
-- Environment variable: `NODE_VERSION=24`
+```bash
+npm run build                 # builds apps/docs/dist (the site lives in dist/ui)
+cd workers/site
+npx wrangler deploy           # route vinish.dev/ui* on the vinish.dev zone
+```
 
-The site is built under `/ui`, so a vinish.dev route (Worker or redirect rule) can send `vinish.dev/ui/*` to the Pages project without rewriting paths.
+The site is built under `/ui`, so no paths are rewritten. `npm test --prefix workers/site` checks the MCP endpoint against the built site.
+
+### Releases
+
+`.github/workflows/release.yml` runs on a `v*` tag (matching `packages/cli/package.json`) or by hand. It runs CI, publishes `@vinish/ui` to npm with provenance, and deploys the Worker. Repository secrets: `NPM_TOKEN`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
 ### Ads
 
 The docs pages have a right-sidebar Mediavine unit, using the same markup as the vinish.dev game pages: an `<aside class="mv-siderail-slot">` with an empty `300x600` slot inside. Mediavine fills it.
 
-These pages come from Cloudflare Pages, not WordPress, so the Mediavine plugin does not add its script. Put the site's Mediavine script URL in `apps/docs/src/config/ads.ts` (`scriptSrc`) before launch. In `npm run dev` the slot shows a dashed 300 × 600 preview.
+The Worker serves these pages, not WordPress, so the Mediavine plugin does not add its script. `apps/docs/src/config/ads.ts` loads the same site script the plugin uses on vinish.dev (`scriptSrc`). In `npm run dev` the slot shows a dashed 300 × 600 preview.
 
 ## Contributing
 
