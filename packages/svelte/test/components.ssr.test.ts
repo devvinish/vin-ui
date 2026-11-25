@@ -13,6 +13,9 @@ import { pageRange } from "../src/pagination.svelte";
 import { initials } from "../src/avatar.svelte";
 import * as index from "../src/index";
 import ToggleGroupHarness from "./fixtures/toggle-group-harness.svelte";
+import Calendar, { monthDays } from "../src/calendar.svelte";
+import DatePicker from "../src/date-picker.svelte";
+import Combobox from "../src/combobox.svelte";
 
 /** Server HTML without Svelte's hydration markers. */
 const html = (component: Component<any>, props: Record<string, unknown> = {}) =>
@@ -106,8 +109,37 @@ describe("index.ts", () => {
   it("exports every component named in the specs", () => {
     const specs = import.meta.glob<{ react?: { components: string[] } }>("../../../spec/*.json", { eager: true, import: "default" });
     const names = Object.values(specs).flatMap((s) => s.react?.components ?? []);
-    // Svelte passes DialogClose / SheetClose as a close function to the footer snippet instead.
-    const missing = names.filter((n) => !(n in index) && !["DialogClose", "SheetClose"].includes(n));
+    // Svelte passes DialogClose / SheetClose / DrawerClose as a close function to the body and footer snippets instead.
+    const missing = names.filter((n) => !(n in index) && !["DialogClose", "SheetClose", "DrawerClose"].includes(n));
     expect(missing).toEqual([]);
+  });
+});
+
+describe("Pickers on the server", () => {
+  it("Calendar: the HTML never depends on today's date", () => {
+    const n = new Date();
+    const month = `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, "0")}`;
+    const out = html(Calendar, { month });
+    expect(out).not.toContain("aria-current");
+    expect(out.match(/tabindex="0"/g)).toHaveLength(1);
+    expect(out).toContain(`data-date="${month}-01" aria-label=`);
+  });
+
+  it("monthDays gives six full weeks from the right weekday, in UTC", () => {
+    const mon = monthDays("2026-11");
+    expect(mon).toHaveLength(42);
+    expect(mon[0]).toBe("2026-10-26");
+    expect(monthDays("2026-11", 0)[0]).toBe("2026-11-01");
+    expect(monthDays("2024-03")[41]).toBe("2024-04-07"); // across a DST change
+  });
+
+  it("DatePicker and Combobox render their value", () => {
+    const dp = html(DatePicker, { mode: "range", "aria-label": "Trip", value: { from: "2026-11-09", to: "2026-11-15" }, name: "trip" });
+    expect(dp).toContain("Nov 9 – Nov 15, 2026");
+    expect(dp).toContain('value="2026-11-09/2026-11-15"');
+    expect(dp).toContain('data-range="start"');
+    const cb = html(Combobox, { label: "Zone", options: [{ value: "Europe/London", label: "London" }], value: "Europe/London", name: "tz" });
+    expect(cb).toContain('value="London"');
+    expect(cb).toContain('aria-selected="true"');
   });
 });
