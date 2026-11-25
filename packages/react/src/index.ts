@@ -79,3 +79,5 @@ export {
   DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator,
 } from "./dropdown-menu";
 export type { DropdownMenuProps, DropdownMenuItemProps, DropdownMenuCheckboxItemProps, DropdownMenuRadioGroupProps } from "./dropdown-menu";
+export { CodeBlock, copyText } from "./code-block";
+export type { CodeBlockProps } from "./code-block";

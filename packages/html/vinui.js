@@ -5,6 +5,7 @@
  * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
+ * Data display: data-vin-copy (Code Block copy button).
  */
 (function () {
   "use strict";
@@ -543,10 +544,45 @@
     });
   }
 
+  /* ---------- Code Block: [data-vin-copy] copies the block's code (or data-vin-copy="#id"'s text) ---------- */
+  function copyText(text, done) {
+    var fallback = function () {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      ta.remove(); done(ok);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    else fallback();
+  }
+  function initCopy(btn) {
+    var timer;
+    btn.addEventListener("click", function () {
+      var block = btn.closest(".vin-code-block");
+      var sel = btn.getAttribute("data-vin-copy");
+      var src = sel ? document.querySelector(sel) : block && block.querySelector(".vin-code-block__pre code, .vin-code-block__pre");
+      if (!src) return;
+      var lines = src.querySelectorAll(".vin-code-block__line");
+      var text = "value" in src && src.tagName !== "BUTTON" ? src.value : lines.length
+        ? Array.prototype.map.call(lines, function (l) { return l.textContent; }).join("\n")
+        : src.textContent;
+      copyText(text, function (ok) {
+        var status = block && block.querySelector(".vin-code-block__status");
+        clearTimeout(timer);
+        if (ok) btn.setAttribute("data-copied", ""); else btn.removeAttribute("data-copied");
+        if (status) status.textContent = ok ? "Copied" : "Couldn't copy";
+        timer = setTimeout(function () { btn.removeAttribute("data-copied"); if (status) status.textContent = ""; }, 2000);
+      });
+    });
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
     "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
+    "data-vin-copy": initCopy,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

@@ -466,3 +466,24 @@ for (const side of ["html", "react"] as const) {
     });
   });
 }
+
+/* Data display: Code Block, Carousel, Chart, Data Table. */
+for (const side of ["html", "react"] as const) {
+  test.describe(`${side} · data display`, () => {
+    test("code block: copy puts the code on the clipboard and says Copied", async ({ page, context }) => {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+      await ready(page, "code-block");
+      const root = page.locator(`[data-fixture="${side}-lines"]`);
+      const btn = root.getByRole("button", { name: "Copy code" });
+      await btn.click();
+      await expect(root.getByRole("status")).toHaveText("Copied");
+      await expect(btn).toHaveAttribute("data-copied", "");
+      const text = await page.evaluate(() => navigator.clipboard.readText());
+      expect(text.split("\n")).toHaveLength(6);
+      expect(text).toContain('import { Button } from "@/components/vin/button";');
+      expect(text).toContain("return <Button disabled={saving}");
+      expect(text).not.toMatch(/^\d/m); // line numbers are not copied
+      await expect(root.getByRole("status")).toHaveText("", { timeout: 4000 });
+    });
+  });
+}
