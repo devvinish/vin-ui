@@ -15,6 +15,7 @@
     "packages/html",
     "packages/react",
     "packages/vue",
+    "packages/svelte",
     "packages/cli",
     "apps/docs"
   ],
