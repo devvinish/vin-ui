@@ -1,0 +1,52 @@
+/* ==========================================================================
+   VinUI · Resizable
+   API (see spec/resizable.json):
+     .vin-resizable [.vin-resizable--vertical]                       the group (side by side, or stacked)
+       .vin-resizable__panel style="--vin-size: 30" data-min="20"     a panel; --vin-size is its share, in percent
+       .vin-resizable__handle[role=separator] [.vin-resizable__handle--grip]   between two panels
+   Panels share the space by flex-grow, so the sizes add up to 100 whatever the handles take.
+   Dragging and keys come from vinui.js (data-vin-resizable) or React.
+   ========================================================================== */
+
+.vin-resizable {
+  --vin-resizable-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  display: flex; box-sizing: border-box; min-width: 0; min-height: 0; overflow: hidden;
+  font-size: var(--vin-text-md); line-height: 1.5; color: var(--vin-fg); background: var(--vin-surface);
+  border: max(1px, var(--vin-bw)) solid var(--vin-resizable-line); border-radius: var(--vin-radius-lg);
+}
+.vin-resizable--vertical { flex-direction: column; }
+/* A group inside a panel fills it, without a second frame. */
+.vin-resizable__panel > .vin-resizable { height: 100%; border: 0; border-radius: 0; background: none; }
+
+.vin-resizable__panel {
+  flex: var(--vin-size, 1) 1 0px; box-sizing: border-box; min-width: 0; min-height: 0; overflow: auto;
+}
+
+.vin-resizable__handle {
+  position: relative; z-index: 1; flex: none; align-self: stretch; width: 1px;
+  background: var(--vin-resizable-line); cursor: col-resize; touch-action: none;
+  transition: background-color var(--vin-dur), box-shadow var(--vin-dur);
+}
+.vin-resizable--vertical > .vin-resizable__handle { width: auto; height: 1px; cursor: row-resize; }
+/* A wider grab area than the line. */
+.vin-resizable__handle::before { content: ""; position: absolute; inset: 0 -6px; }
+.vin-resizable--vertical > .vin-resizable__handle::before { inset: -6px 0; }
+.vin-resizable__handle:focus { outline: none; }
+.vin-resizable__handle:hover, .vin-resizable__handle[data-dragging], .vin-resizable__handle:focus-visible {
+  background: var(--vin-accent); box-shadow: 0 0 0 1px var(--vin-accent);
+}
+
+/* Grip: a small pill in the middle of the line. */
+.vin-resizable__handle--grip::after {
+  content: ""; position: absolute; top: 50%; left: 50%; box-sizing: border-box; width: 12px; height: 24px;
+  transform: translate(-50%, -50%); border: 1px solid var(--vin-resizable-line); border-radius: min(var(--vin-pill), 6px);
+  background: linear-gradient(var(--vin-muted), var(--vin-muted)) center / 2px 10px no-repeat, var(--vin-surface);
+  transition: border-color var(--vin-dur), box-shadow var(--vin-dur);
+}
+.vin-resizable--vertical > .vin-resizable__handle--grip::after { width: 24px; height: 12px; background-size: 10px 2px, auto; }
+.vin-resizable__handle--grip:hover::after, .vin-resizable__handle--grip[data-dragging]::after { border-color: var(--vin-accent); }
+.vin-resizable__handle--grip:focus-visible::after { border-color: var(--vin-accent); box-shadow: var(--vin-focus); }
+
+/* While dragging: keep the resize cursor everywhere and don't select text. */
+.vin-resizable[data-dragging] { cursor: col-resize; user-select: none; -webkit-user-select: none; }
+.vin-resizable--vertical[data-dragging] { cursor: row-resize; }

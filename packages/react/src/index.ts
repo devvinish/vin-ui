@@ -93,3 +93,7 @@ export { ContextMenu } from "./context-menu";
 export type { ContextMenuProps } from "./context-menu";
 export { Command, CommandDialog } from "./command";
 export type { CommandProps, CommandDialogProps, CommandItem, CommandGroup } from "./command";
+export { ScrollArea } from "./scroll-area";
+export type { ScrollAreaProps } from "./scroll-area";
+export { ResizableGroup, ResizablePanel, ResizableHandle } from "./resizable";
+export type { ResizableGroupProps, ResizablePanelProps, ResizableHandleProps } from "./resizable";

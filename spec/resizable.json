@@ -1,0 +1,32 @@
+{
+  "$comment": "Single source of truth for the Resizable API. Every framework package is tested against this file.",
+  "name": "resizable",
+  "title": "Resizable",
+  "category": "Layout",
+  "description": "Panels side by side (or stacked) with handles you drag to share the space between them. The handles work from the keyboard too.",
+  "baseClass": "vin-resizable",
+  "classes": ["vin-resizable", "vin-resizable--vertical", "vin-resizable__panel", "vin-resizable__handle", "vin-resizable__handle--grip"],
+  "dependencies": [],
+  "thumb": "<div class=\"vin-resizable\" style=\"width:170px;height:96px\"><div class=\"vin-resizable__panel\" style=\"--vin-size:35\"></div><div class=\"vin-resizable__handle vin-resizable__handle--grip\" aria-hidden=\"true\"></div><div class=\"vin-resizable__panel\" style=\"--vin-size:65\"></div></div>",
+  "props": {
+    "orientation": { "values": ["horizontal", "vertical"], "default": "horizontal", "description": "Group: panels side by side, or stacked.", "class": "vin-resizable--vertical" },
+    "onLayout": { "type": "(sizes: number[]) => void", "description": "Group: called with every panel's size (percent) after a change.", "html": "a vin-resize event on .vin-resizable, with detail.sizes" },
+    "defaultSize": { "type": "number", "description": "Panel: its starting size, in percent of the group. Panels without one share what is left.", "html": "style=\"--vin-size: 30\" on .vin-resizable__panel" },
+    "minSize": { "type": "number", "default": 10, "description": "Panel: the smallest it can get, in percent. Enter on a handle collapses the panel before it to this size.", "html": "data-min=\"20\" on .vin-resizable__panel" },
+    "label": { "type": "string", "default": "\"Resize\"", "description": "Handle: what it resizes, for screen readers.", "html": "aria-label on .vin-resizable__handle" },
+    "withGrip": { "type": "boolean", "default": false, "description": "Handle: draw a small grip in the middle of the line.", "class": "vin-resizable__handle--grip" }
+  },
+  "react": { "components": ["ResizableGroup", "ResizablePanel", "ResizableHandle"], "helpers": [] },
+  "examples": [
+    { "id": "horizontal", "title": "Horizontal", "description": "A sidebar and a main area. Drag the handle, or Tab to it and use the arrow keys. In HTML, add data-vin-resizable and include vinui.js." },
+    { "id": "vertical", "title": "Vertical", "description": "An editor above a terminal. Up and Down move the handle; Enter folds the editor away and brings it back." },
+    { "id": "nested", "title": "Nested", "description": "A group inside a panel: three areas, each with a minimum size so none disappears." }
+  ],
+  "a11y": [
+    "Each handle follows the WAI-ARIA window splitter pattern: role=\"separator\" with tabindex=\"0\", aria-valuenow (the size of the panel before it, in percent), aria-valuemin, aria-valuemax and aria-controls pointing at that panel.",
+    "A handle between side-by-side panels has aria-orientation=\"vertical\" and moves with Left and Right; between stacked panels it is horizontal and moves with Up and Down.",
+    "Home and End move to the smallest and largest size; Enter collapses the panel before it to its minimum, and Enter again puts it back.",
+    "Each handle has a name (aria-label) that says what it resizes, and a visible focus style in every style and mode.",
+    "The grab area is wider than the 1px line, so it is easy to hit with a mouse or a finger."
+  ]
+}

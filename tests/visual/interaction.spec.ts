@@ -682,5 +682,113 @@ for (const side of ["html", "react"] as const) {
       await page.keyboard.press("Space");
       await expect(cb).toBeChecked();
     });
+
+    test("scroll area: a named region in the Tab order that scrolls with the keyboard", async ({ page }) => {
+      await ready(page, "scroll-area");
+      const v = page.locator(`[data-fixture="${side}-vertical"]`).getByRole("region", { name: "Releases" });
+      await expect(v).toHaveAttribute("tabindex", "0");
+      await v.focus();
+      await expect(v).toBeFocused();
+      expect(await v.evaluate((e) => e.scrollHeight > e.clientHeight)).toBe(true);
+      await page.keyboard.press("End");
+      await expect.poll(() => v.evaluate((e) => Math.ceil(e.scrollTop + e.clientHeight) >= e.scrollHeight)).toBe(true);
+      await page.keyboard.press("Home");
+      await expect.poll(() => v.evaluate((e) => e.scrollTop)).toBe(0);
+      const h = page.locator(`[data-fixture="${side}-horizontal"]`).getByRole("region", { name: "Playlists" });
+      await h.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect.poll(() => h.evaluate((e) => e.scrollLeft)).toBeGreaterThan(0);
+      expect(await h.evaluate((e) => e.scrollTop)).toBe(0);
+    });
+
+    test("resizable: arrows, Home/End and Enter move the handle; panels follow; mins hold", async ({ page }) => {
+      await ready(page, "resizable");
+      const root = page.locator(`[data-fixture="${side}-horizontal"]`);
+      const handle = root.getByRole("separator", { name: "Resize mailboxes" });
+      const panel = page.locator(`#${await handle.getAttribute("aria-controls")}`);
+      await expect(panel).toHaveClass(/vin-resizable__panel/);
+      await expect(panel).toContainText("Mailboxes");
+      await expect(handle).toHaveAttribute("aria-orientation", "vertical");
+      await expect(handle).toHaveAttribute("aria-valuenow", "30");
+      await expect(handle).toHaveAttribute("aria-valuemin", "20");
+      await expect(handle).toHaveAttribute("aria-valuemax", "70");
+      const group = root.locator(".vin-resizable");
+      const share = async () => { const g = (await group.boundingBox())!; const p = (await panel.boundingBox())!; return Math.round((p.width / (g.width - 3)) * 100); };
+      expect(await share()).toBe(30);
+
+      await handle.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(handle).toHaveAttribute("aria-valuenow", "35");
+      expect(await share()).toBe(35);
+      await page.keyboard.press("ArrowUp"); // not this handle's direction
+      await expect(handle).toHaveAttribute("aria-valuenow", "35");
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("ArrowLeft");
+      await expect(handle).toHaveAttribute("aria-valuenow", "25");
+      await page.keyboard.press("End");
+      await expect(handle).toHaveAttribute("aria-valuenow", "70"); // the other panel keeps its 30% minimum
+      await page.keyboard.press("ArrowRight");
+      await expect(handle).toHaveAttribute("aria-valuenow", "70");
+      await page.keyboard.press("Home");
+      await expect(handle).toHaveAttribute("aria-valuenow", "20");
+      expect(await share()).toBe(20);
+      // Enter collapses to the minimum and restores.
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("ArrowRight");
+      await expect(handle).toHaveAttribute("aria-valuenow", "30");
+      await page.keyboard.press("Enter");
+      await expect(handle).toHaveAttribute("aria-valuenow", "20");
+      await page.keyboard.press("Enter");
+      await expect(handle).toHaveAttribute("aria-valuenow", "30");
+
+      // Pointer: drag the handle 100px to the right, then far past the end.
+      const box = (await handle.boundingBox())!;
+      const g = (await group.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2 + 100, box.y + box.height / 2, { steps: 5 });
+      const expected = 30 + Math.round((100 / (g.width - 3)) * 100);
+      await expect.poll(async () => Number(await handle.getAttribute("aria-valuenow"))).toBeGreaterThanOrEqual(expected - 1);
+      expect(Number(await handle.getAttribute("aria-valuenow"))).toBeLessThanOrEqual(expected + 1);
+      await page.mouse.move(box.x + 1000, box.y + box.height / 2, { steps: 5 });
+      await expect(handle).toHaveAttribute("aria-valuenow", "70");
+      await page.mouse.up();
+      await expect(handle).toBeFocused();
+    });
+
+    test("resizable: stacked panels move with Up/Down; nested groups are independent", async ({ page }) => {
+      await ready(page, "resizable");
+      const vert = page.locator(`[data-fixture="${side}-vertical"]`).getByRole("separator", { name: "Resize editor" });
+      await expect(vert).toHaveAttribute("aria-orientation", "horizontal");
+      await vert.focus();
+      await page.keyboard.press("ArrowDown");
+      await expect(vert).toHaveAttribute("aria-valuenow", "65");
+      await page.keyboard.press("ArrowRight"); // not this handle's direction
+      await expect(vert).toHaveAttribute("aria-valuenow", "65");
+      await page.keyboard.press("ArrowUp");
+      await page.keyboard.press("ArrowUp");
+      await expect(vert).toHaveAttribute("aria-valuenow", "55");
+      // Drag up 40px: the editor shrinks.
+      const b = (await vert.boundingBox())!;
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2 - 40, { steps: 4 });
+      await page.mouse.up();
+      await expect.poll(async () => Number(await vert.getAttribute("aria-valuenow"))).toBeLessThan(45);
+
+      const nested = page.locator(`[data-fixture="${side}-nested"]`);
+      const outer = nested.getByRole("separator", { name: "Resize files" });
+      const inner = nested.getByRole("separator", { name: "Resize preview" });
+      await inner.focus();
+      await page.keyboard.press("ArrowDown");
+      await expect(inner).toHaveAttribute("aria-valuenow", "70");
+      await expect(outer).toHaveAttribute("aria-valuenow", "25");
+      await page.keyboard.press("End");
+      await expect(inner).toHaveAttribute("aria-valuenow", "80");
+      await outer.focus();
+      await page.keyboard.press("Home");
+      await expect(outer).toHaveAttribute("aria-valuenow", "15");
+      await expect(inner).toHaveAttribute("aria-valuenow", "80");
+    });
   });
 }

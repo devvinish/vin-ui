@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command", "scroll-area", "resizable"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -116,6 +116,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -201,6 +203,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -287,6 +291,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -370,6 +376,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -469,6 +477,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -586,6 +596,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -688,6 +700,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 
@@ -765,6 +779,8 @@ export const STYLES = [
       "hover-card": "",
       "context-menu": "",
       command: "",
+      "scroll-area": "",
+      resizable: "",
     },
   },
 ];
