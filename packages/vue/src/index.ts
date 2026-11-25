@@ -49,3 +49,13 @@ export { default as Sheet, SheetClose } from "./sheet.vue";
 export {
   default as DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator,
 } from "./dropdown-menu.vue";
+export { default as Calendar, monthDays } from "./calendar.vue";
+export type { DateRange } from "./calendar.vue";
+export { default as DatePicker, formatDate } from "./date-picker.vue";
+export { default as Combobox } from "./combobox.vue";
+export type { ComboboxOption, ComboboxItem } from "./combobox.vue";
+export { default as Drawer, DrawerClose } from "./drawer.vue";
+export { default as HoverCard } from "./hover-card.vue";
+export { default as ContextMenu } from "./context-menu.vue";
+export { default as Command, CommandDialog } from "./command.vue";
+export type { CommandItem, CommandGroup } from "./command.vue";
