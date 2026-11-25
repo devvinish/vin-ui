@@ -9,15 +9,21 @@ if (!("showPopover" in HTMLElement.prototype)) {
     Object.assign(e, { newState, oldState: newState === "open" ? "closed" : "open" });
     el.dispatchEvent(e);
   };
+  // jsdom hides every [popover]; show the open ones, so they can be focused and found by role.
+  const style = document.createElement("style");
+  style.textContent = "[popover][data-test-open] { display: block; }";
+  document.head.append(style);
   Object.assign(HTMLElement.prototype, {
     showPopover(this: HTMLElement) {
       if (open.has(this)) return;
       open.add(this);
+      this.setAttribute("data-test-open", "");
       fire(this, "open");
     },
     hidePopover(this: HTMLElement) {
       if (!open.has(this)) return;
       open.delete(this);
+      this.removeAttribute("data-test-open");
       fire(this, "closed");
     },
     togglePopover(this: HTMLElement) {
