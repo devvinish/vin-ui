@@ -1,0 +1,58 @@
+/* ==========================================================================
+   VinUI · Navigation Menu
+   API (see spec/navigation-menu.json):
+     nav.vin-nav-menu[aria-label][data-vin-nav-menu] > ul.vin-nav-menu__list
+       > li.vin-nav-menu__item
+           > button.vin-nav-menu__trigger#t[aria-expanded][aria-controls="p"][popovertarget="p"] > text + svg (chevron)
+           > .vin-nav-menu__panel#p[popover]
+               > ul.vin-nav-menu__grid (.vin-nav-menu__grid--list) > li
+                   > a.vin-nav-menu__card > .vin-nav-menu__card-title + .vin-nav-menu__card-text?
+       > li.vin-nav-menu__item > a.vin-nav-menu__link[aria-current=page]?
+   vinui.js opens panels on hover, click and the keyboard, and places them under their button.
+   ========================================================================== */
+
+.vin-nav-menu { font-family: var(--vin-font); font-size: var(--vin-text-md); color: var(--vin-fg); }
+.vin-nav-menu__list { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.vin-nav-menu__item { display: flex; margin: 0; }
+
+.vin-nav-menu__trigger, .vin-nav-menu__link {
+  display: inline-flex; align-items: center; gap: 4px; box-sizing: border-box; height: var(--vin-h-md); margin: 0; padding: 0 12px;
+  font: inherit; font-weight: var(--vin-weight); line-height: 1; white-space: nowrap; color: var(--vin-fg); text-decoration: none;
+  background: transparent; border: 0; border-radius: var(--vin-radius); cursor: pointer; outline: none;
+  transition: background var(--vin-dur) var(--vin-ease), color var(--vin-dur) var(--vin-ease);
+}
+.vin-nav-menu__trigger:hover, .vin-nav-menu__link:hover, .vin-nav-menu__trigger[aria-expanded="true"] { background: color-mix(in srgb, var(--vin-fg) 7%, transparent); }
+.vin-nav-menu__trigger:focus-visible, .vin-nav-menu__link:focus-visible { box-shadow: var(--vin-focus); }
+.vin-nav-menu__link[aria-current="page"] { background: var(--vin-secondary); color: var(--vin-secondary-fg); }
+.vin-nav-menu__trigger > svg { flex: none; width: 14px; height: 14px; margin-inline-end: -2px; color: var(--vin-muted); transition: transform var(--vin-dur) var(--vin-ease); }
+.vin-nav-menu__trigger[aria-expanded="true"] > svg { transform: rotate(180deg); }
+
+.vin-nav-menu__panel {
+  position: fixed; inset: auto; margin: 0; box-sizing: border-box;
+  width: max-content; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); overflow: auto; padding: 6px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.4; color: var(--vin-fg); text-align: start;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-lg);
+  opacity: 0; transform: translateY(-4px);
+  transition: opacity var(--vin-dur) var(--vin-ease), transform var(--vin-dur) var(--vin-ease), display var(--vin-dur) allow-discrete, overlay var(--vin-dur) allow-discrete;
+}
+.vin-nav-menu__panel:popover-open { opacity: 1; transform: none; }
+@starting-style { .vin-nav-menu__panel:popover-open { opacity: 0; transform: translateY(-4px); } }
+.vin-nav-menu__panel:not([popover]) { position: static; opacity: 1; transform: none; }
+.vin-nav-menu__panel[popover]:not(:popover-open) { pointer-events: none; }
+
+.vin-nav-menu__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 15rem)); gap: 2px; margin: 0; padding: 0; list-style: none; }
+.vin-nav-menu__grid--list { grid-template-columns: minmax(0, 13rem); }
+.vin-nav-menu__grid > li { display: flex; margin: 0; }
+@media (max-width: 559px) { .vin-nav-menu__grid { grid-template-columns: minmax(0, 1fr); } }
+
+.vin-nav-menu__card {
+  display: grid; gap: 3px; align-content: start; box-sizing: border-box; width: 100%; padding: 9px 12px;
+  color: var(--vin-fg); text-decoration: none; border-radius: max(calc(var(--vin-radius-lg) - 4px), 0px); outline: none;
+  transition: background var(--vin-dur) var(--vin-ease);
+}
+.vin-nav-menu__card:hover, .vin-nav-menu__card:focus-visible { background: color-mix(in srgb, var(--vin-fg) 7%, transparent); }
+.vin-nav-menu__card:focus-visible { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--vin-accent) 55%, transparent); }
+.vin-nav-menu__card[aria-current="page"] .vin-nav-menu__card-title { color: var(--vin-accent-text); }
+.vin-nav-menu__card-title { font-weight: var(--vin-title-weight); line-height: 1.3; }
+.vin-nav-menu__card-text { font-size: calc(var(--vin-text-md) - 1px); line-height: 1.45; color: var(--vin-muted); }

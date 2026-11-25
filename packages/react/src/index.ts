@@ -93,3 +93,11 @@ export { ContextMenu } from "./context-menu";
 export type { ContextMenuProps } from "./context-menu";
 export { Command, CommandDialog } from "./command";
 export type { CommandProps, CommandDialogProps, CommandItem, CommandGroup } from "./command";
+export { Menubar, MenubarMenu } from "./menubar";
+export type { MenubarProps, MenubarMenuProps } from "./menubar";
+export { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuGrid, NavigationMenuCard } from "./navigation-menu";
+export type { NavigationMenuProps, NavigationMenuItemProps, NavigationMenuLinkProps, NavigationMenuGridProps, NavigationMenuCardProps } from "./navigation-menu";
+export {
+  SidebarLayout, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarGroup, SidebarMenu, SidebarItem, SidebarSub, SidebarTrigger, SidebarInset,
+} from "./sidebar";
+export type { SidebarLayoutProps, SidebarProps, SidebarGroupProps, SidebarItemProps, SidebarSubProps, SidebarTriggerProps } from "./sidebar";

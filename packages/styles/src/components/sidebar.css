@@ -1,0 +1,102 @@
+/* ==========================================================================
+   VinUI · Sidebar
+   API (see spec/sidebar.json):
+     .vin-sidebar-layout[data-vin-sidebar][data-state="collapsed"]?     the sidebar and the page beside it
+       > nav.vin-sidebar#s[popover][aria-label]
+           > .vin-sidebar__header | .vin-sidebar__content | .vin-sidebar__footer
+               > .vin-sidebar__group > .vin-sidebar__label#l + ul.vin-sidebar__menu[aria-labelledby="l"] > li
+                   > a.vin-sidebar__item[aria-current=page]? > svg + span.vin-sidebar__text + span.vin-sidebar__badge?
+                   > details.vin-sidebar__sub > summary.vin-sidebar__item + ul.vin-sidebar__submenu > li > a.vin-sidebar__item
+       > .vin-sidebar-inset > button.vin-btn.vin-btn--ghost.vin-btn--icon.vin-sidebar__trigger[aria-controls="s"][aria-expanded]
+   768px and wider: the sidebar sits beside the page; data-state="collapsed" folds it to icons.
+   Narrower: it's hidden, and the trigger opens it as a popover that slides in from the start edge.
+   Sizes: --vin-sidebar-width (16rem), --vin-sidebar-min-height (100dvh).
+   ========================================================================== */
+
+.vin-sidebar-layout {
+  --vin-sidebar-icon-width: 48px;
+  display: flex; align-items: stretch; box-sizing: border-box; width: 100%; min-height: var(--vin-sidebar-min-height, 100dvh);
+  font-family: var(--vin-font); font-size: var(--vin-text-md); color: var(--vin-fg); background: var(--vin-surface);
+}
+
+.vin-sidebar {
+  display: flex; flex-direction: column; flex: none; position: sticky; top: 0; inset-inline: auto; bottom: auto;
+  box-sizing: border-box; width: var(--vin-sidebar-width, 16rem); height: auto; max-height: 100dvh; margin: 0; padding: 8px; overflow: hidden;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.4; color: var(--vin-fg); text-align: start;
+  background: var(--vin-stage); border: 0; border-inline-end: max(var(--vin-bw), 1px) solid var(--vin-border);
+  transition: width var(--vin-dur) var(--vin-ease);
+}
+.vin-sidebar__header, .vin-sidebar__footer { flex: none; display: grid; gap: 2px; }
+.vin-sidebar__header { padding-bottom: 6px; }
+.vin-sidebar__footer { margin-top: auto; padding-top: 6px; border-top: 1px solid color-mix(in srgb, var(--vin-border), transparent 20%); }
+.vin-sidebar__content { flex: 1 1 auto; display: grid; align-content: start; gap: 12px; min-height: 0; overflow-x: hidden; overflow-y: auto; padding-bottom: 8px; }
+.vin-sidebar__group { display: grid; gap: 2px; min-width: 0; }
+.vin-sidebar__label {
+  margin: 0; padding: 6px 8px 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-size: 12px; font-weight: var(--vin-title-weight); color: var(--vin-muted);
+}
+.vin-sidebar__menu, .vin-sidebar__submenu { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.vin-sidebar__menu > li, .vin-sidebar__submenu > li { min-width: 0; margin: 0; }
+
+.vin-sidebar__item {
+  position: relative; display: flex; align-items: center; gap: 10px; box-sizing: border-box; width: 100%; min-height: 32px; margin: 0; padding: 6px 8px;
+  font: inherit; font-weight: 400; color: var(--vin-fg); text-align: start; text-decoration: none; white-space: nowrap;
+  background: transparent; border: 0; border-radius: max(calc(var(--vin-radius) - 2px), 0px); cursor: pointer; outline: none;
+  transition: background var(--vin-dur) var(--vin-ease);
+}
+.vin-sidebar__item:hover { background: color-mix(in srgb, var(--vin-fg) 7%, transparent); }
+.vin-sidebar__item:focus-visible { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--vin-accent) 60%, transparent); }
+.vin-sidebar__item[aria-current="page"] { font-weight: var(--vin-weight); background: color-mix(in srgb, var(--vin-fg) 9%, transparent); }
+.vin-sidebar__item > svg { flex: none; width: 16px; height: 16px; color: var(--vin-muted); }
+.vin-sidebar__item[aria-current="page"] > svg { color: var(--vin-accent-text); }
+.vin-sidebar__text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.vin-sidebar__badge {
+  flex: none; margin-inline-start: auto; min-width: 20px; padding: 0 6px; box-sizing: border-box;
+  font-size: 12px; font-weight: var(--vin-weight); line-height: 20px; text-align: center; font-variant-numeric: tabular-nums;
+  color: var(--vin-fg); background: color-mix(in srgb, var(--vin-fg) 8%, transparent); border-radius: var(--vin-pill);
+}
+
+/* A nested list: the summary is an item with a chevron at the end. */
+.vin-sidebar__sub > summary { list-style: none; }
+.vin-sidebar__sub > summary::-webkit-details-marker { display: none; }
+.vin-sidebar__sub > summary::after {
+  content: ""; flex: none; width: 14px; height: 14px; margin-inline-start: auto; background: var(--vin-muted);
+  -webkit-mask: var(--vin-sidebar-chevron) center / contain no-repeat; mask: var(--vin-sidebar-chevron) center / contain no-repeat;
+  transition: transform var(--vin-dur) var(--vin-ease);
+  --vin-sidebar-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+}
+.vin-sidebar__sub > summary:dir(rtl)::after { transform: scaleX(-1); }
+.vin-sidebar__sub[open] > summary::after { transform: rotate(90deg); }
+.vin-sidebar__submenu { margin-inline-start: 16px; padding: 2px 0 2px 9px; padding-inline: 9px 0; border-inline-start: 1px solid var(--vin-border); }
+.vin-sidebar__submenu .vin-sidebar__item { min-height: 28px; padding-block: 4px; }
+
+.vin-sidebar-inset { flex: 1 1 auto; min-width: 0; box-sizing: border-box; background: var(--vin-surface); }
+.vin-sidebar__trigger.vin-btn > svg { width: 16px; height: 16px; }
+
+/* Folded to icons (wide screens only). The text stays for screen readers. */
+@media (min-width: 768px) {
+  .vin-sidebar-layout[data-state="collapsed"] .vin-sidebar { width: var(--vin-sidebar-icon-width); }
+  .vin-sidebar-layout[data-state="collapsed"] :is(.vin-sidebar__text, .vin-sidebar__label) {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .vin-sidebar-layout[data-state="collapsed"] :is(.vin-sidebar__badge, .vin-sidebar__submenu, .vin-sidebar__sub > summary::after) { display: none; }
+  .vin-sidebar-layout[data-state="collapsed"] .vin-sidebar__item { width: 32px; padding-inline: 8px; }
+  .vin-sidebar-layout[data-state="collapsed"] .vin-sidebar__content { gap: 2px; }
+  .vin-sidebar-layout[data-state="collapsed"] .vin-sidebar__group + .vin-sidebar__group { padding-top: 6px; border-top: 1px solid color-mix(in srgb, var(--vin-border), transparent 20%); }
+}
+
+/* Phones: hidden until the trigger opens it above the page. */
+@media (max-width: 767px) {
+  .vin-sidebar { display: none; }
+  .vin-sidebar:popover-open {
+    display: flex; position: fixed; inset-block: 0; inset-inline: 0 auto;
+    width: min(var(--vin-sidebar-width, 16rem), calc(100vw - 40px)); height: 100dvh; max-height: none;
+    box-shadow: var(--vin-shadow-lg); transform: none;
+    transition: transform calc(var(--vin-dur) * 2) var(--vin-ease), display calc(var(--vin-dur) * 2) allow-discrete, overlay calc(var(--vin-dur) * 2) allow-discrete;
+  }
+  @starting-style { .vin-sidebar:popover-open { transform: translateX(-100%); } .vin-sidebar:popover-open:dir(rtl) { transform: translateX(100%); } }
+  .vin-sidebar::backdrop { background: rgb(0 0 0 / .4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vin-sidebar, .vin-sidebar:popover-open { transition: none; }
+}

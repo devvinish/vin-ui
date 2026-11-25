@@ -1,0 +1,18 @@
+<div class="vin-menubar" role="menubar" aria-label="Browser" data-vin-menubar>
+  <button type="button" class="vin-menubar__trigger" id="mb-show" role="menuitem" aria-haspopup="menu" aria-expanded="false" popovertarget="mb-show-menu" tabindex="0">Show</button>
+  <div class="vin-menu" id="mb-show-menu" popover role="menu" aria-labelledby="mb-show">
+    <button type="button" class="vin-menu__item" role="menuitemcheckbox" aria-checked="true" tabindex="-1">Bookmarks bar</button>
+    <button type="button" class="vin-menu__item" role="menuitemcheckbox" aria-checked="false" tabindex="-1">Full URLs</button>
+  </div>
+  <button type="button" class="vin-menubar__trigger" id="mb-profiles" role="menuitem" aria-haspopup="menu" aria-expanded="false" popovertarget="mb-profiles-menu" tabindex="-1">Profiles</button>
+  <div class="vin-menu" id="mb-profiles-menu" popover role="menu" aria-labelledby="mb-profiles">
+    <p class="vin-menu__label" role="presentation">Signed in as</p>
+    <div role="group" aria-label="Profile">
+      <button type="button" class="vin-menu__item" role="menuitemradio" aria-checked="true" tabindex="-1">Ada</button>
+      <button type="button" class="vin-menu__item" role="menuitemradio" aria-checked="false" tabindex="-1">Grace</button>
+      <button type="button" class="vin-menu__item" role="menuitemradio" aria-checked="false" tabindex="-1">Linus</button>
+    </div>
+    <div class="vin-menu__separator" role="separator"></div>
+    <button type="button" class="vin-menu__item" role="menuitem" tabindex="-1">Add profile…</button>
+  </div>
+</div>

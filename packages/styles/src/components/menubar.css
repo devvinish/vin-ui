@@ -1,0 +1,24 @@
+/* ==========================================================================
+   VinUI · Menubar
+   API (see spec/menubar.json):
+     .vin-menubar[role=menubar][aria-label][data-vin-menubar]
+       > button.vin-menubar__trigger#t[role=menuitem][aria-haspopup=menu][popovertarget="m"][tabindex=0 | -1]
+       > .vin-menu#m[popover][role=menu][aria-labelledby="t"]     the Dropdown Menu's parts
+   vinui.js adds the keyboard (arrows across the bar and between menus) and places each menu.
+   ========================================================================== */
+
+.vin-menubar {
+  display: inline-flex; align-items: center; gap: 2px; box-sizing: border-box; max-width: 100%; height: var(--vin-h-md); padding: 3px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md);
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-border);
+  border-radius: var(--vin-radius); box-shadow: var(--vin-shadow-soft);
+}
+.vin-menubar__trigger {
+  display: inline-flex; align-items: center; flex: none; box-sizing: border-box; height: 100%; margin: 0; padding: 0 10px;
+  font: inherit; font-weight: var(--vin-weight); line-height: 1; white-space: nowrap; color: var(--vin-fg);
+  background: transparent; border: 0; border-radius: max(calc(var(--vin-radius) - 3px), 0px);
+  cursor: default; outline: none; transition: background var(--vin-dur) var(--vin-ease);
+}
+.vin-menubar__trigger:hover, .vin-menubar__trigger[aria-expanded="true"] { background: color-mix(in srgb, var(--vin-fg) 8%, transparent); }
+.vin-menubar__trigger:focus-visible { background: color-mix(in srgb, var(--vin-fg) 8%, transparent); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--vin-accent) 55%, transparent); }
+.vin-menubar__trigger:disabled { opacity: .5; pointer-events: none; }

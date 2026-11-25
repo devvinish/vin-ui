@@ -1,0 +1,27 @@
+{
+  "$comment": "Single source of truth for the Menubar API. Every framework package is tested against this file.",
+  "name": "menubar",
+  "title": "Menubar",
+  "category": "Navigation",
+  "description": "A row of menus like a desktop app's File, Edit and View, using the Dropdown Menu's items.",
+  "baseClass": "vin-menubar",
+  "classes": ["vin-menubar", "vin-menubar__trigger"],
+  "dependencies": ["dropdown-menu"],
+  "thumb": "<div style=\"position:relative;width:200px;height:110px\"><div class=\"vin-menubar\" style=\"height:28px;font-size:11px\"><span class=\"vin-menubar__trigger\" aria-expanded=\"true\" style=\"font-size:11px;padding:0 8px\">File</span><span class=\"vin-menubar__trigger\" style=\"font-size:11px;padding:0 8px\">Edit</span><span class=\"vin-menubar__trigger\" style=\"font-size:11px;padding:0 8px\">View</span></div><div class=\"vin-menu\" style=\"position:absolute;left:0;top:34px;min-width:0;width:120px;opacity:1;transform:none;font-size:11px;padding:3px\"><div class=\"vin-menu__item\" style=\"min-height:22px;padding:3px 8px\">New tab</div><div class=\"vin-menu__item\" style=\"min-height:22px;padding:3px 8px\">Open…</div></div></div>",
+  "props": {
+    "label": { "type": "string", "description": "Name for the menubar, read by screen readers.", "html": "aria-label on .vin-menubar[role=menubar]" },
+    "MenubarMenu": { "type": "{ label: string, children }", "description": "One button in the bar and its menu. The items are Dropdown Menu's: DropdownMenuItem, CheckboxItem, RadioGroup, Label and Separator.", "html": "button.vin-menubar__trigger[role=menuitem][aria-haspopup=menu][popovertarget] + .vin-menu[popover][role=menu]" }
+  },
+  "react": { "components": ["Menubar", "MenubarMenu"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "File, Edit and View menus with shortcuts. In HTML, add data-vin-menubar and include vinui.js once." },
+    { "id": "options", "title": "Options", "description": "Menus with items that turn on and off and a choice of one." }
+  ],
+  "a11y": [
+    "role=\"menubar\" with a menuitem button for each menu. Only one of them is in the tab order; Left and Right Arrow move between them, Home and End jump.",
+    "Enter, Space or Down Arrow opens a menu on its first item; Up Arrow opens it on the last.",
+    "Inside a menu, the Dropdown Menu keys work, and Left and Right Arrow open the next menu along.",
+    "Once a menu is open, pointing at another button in the bar opens that one instead.",
+    "Escape closes the menu and puts focus back on its button."
+  ]
+}
