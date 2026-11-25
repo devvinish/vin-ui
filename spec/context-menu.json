@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Context Menu API. Every framework package is tested against this file.",
+  "name": "context-menu",
+  "title": "Context Menu",
+  "category": "Overlays",
+  "description": "A menu that opens where you right-click or long-press, with the same items as Dropdown Menu.",
+  "baseClass": "vin-context-menu",
+  "classes": ["vin-context-menu"],
+  "dependencies": ["dropdown-menu"],
+  "thumb": "<div style=\"position:relative;width:200px;height:110px\"><div class=\"vin-context-menu\" style=\"height:100%;min-height:0;font-size:11px\">Right-click</div><div class=\"vin-menu\" style=\"position:absolute;left:70px;top:36px;min-width:0;width:110px;opacity:1;transform:none;font-size:11px;padding:3px\"><div class=\"vin-menu__item\" style=\"min-height:22px;padding:3px 8px\">Copy</div><div class=\"vin-menu__item\" style=\"min-height:22px;padding:3px 8px\">Paste</div></div></div>",
+  "props": {
+    "children": { "type": "ReactNode", "description": "The area that opens the menu.", "html": ".vin-context-menu[data-vin-context-menu=\"menu-id\"][tabindex=0]" },
+    "content": { "type": "ReactNode", "description": "The menu's items: DropdownMenuItem, CheckboxItem, RadioGroup, Label and Separator.", "html": ".vin-menu#menu-id[popover][role=menu]" },
+    "label": { "type": "string", "description": "Name for the menu, read by screen readers.", "html": "aria-label on the menu" },
+    "onOpenChange": { "type": "(open: boolean) => void" }
+  },
+  "react": { "components": ["ContextMenu"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Right-click the area, long-press it on a touch screen, or focus it and press Shift+F10 or the Menu key. In HTML, add data-vin-context-menu and include vinui.js once." },
+    { "id": "options", "title": "Options and shortcuts", "description": "Labels, keyboard shortcuts, and items that turn on and off." }
+  ],
+  "a11y": [
+    "The menu is the Dropdown Menu: role=\"menu\", arrow keys, Home and End, type to jump, Esc or Tab to close.",
+    "The area is focusable, and Shift+F10 or the Menu key opens the menu at its corner, so it works without a mouse.",
+    "Focus goes into the menu when it opens and back to the area when it closes.",
+    "Shift+right-click still shows the browser's own menu.",
+    "Don't hide actions only in a context menu: offer them somewhere visible too."
+  ]
+}

@@ -85,3 +85,11 @@ export {
   DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator,
 } from "./dropdown-menu";
 export type { DropdownMenuProps, DropdownMenuItemProps, DropdownMenuCheckboxItemProps, DropdownMenuRadioGroupProps } from "./dropdown-menu";
+export { Drawer, DrawerClose } from "./drawer";
+export type { DrawerProps } from "./drawer";
+export { HoverCard } from "./hover-card";
+export type { HoverCardProps } from "./hover-card";
+export { ContextMenu } from "./context-menu";
+export type { ContextMenuProps } from "./context-menu";
+export { Command, CommandDialog } from "./command";
+export type { CommandProps, CommandDialogProps, CommandItem, CommandGroup } from "./command";

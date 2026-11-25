@@ -40,7 +40,7 @@ for (const name of components) {
  */
 const OPEN: Record<string, string | [role: "button" | "combobox", name: string]> = {
   dialog: "Edit profile", "alert-dialog": "Delete project", sheet: "Filters", "dropdown-menu": "My account", popover: "Dimensions",
-  combobox: ["combobox", "Framework"], "date-picker": "Due date",
+  combobox: ["combobox", "Framework"], "date-picker": "Due date", drawer: "Set daily goal", command: "Search docs",
 };
 for (const [name, opener] of Object.entries(OPEN)) {
   const [role, trigger] = typeof opener === "string" ? (["button", opener] as const) : opener;

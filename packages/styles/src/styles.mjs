@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker", "drawer", "hover-card", "context-menu", "command"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -112,6 +112,10 @@ export const STYLES = [
       calendar: `
 & .vin-calendar__title { letter-spacing: -.01em; }`,
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -193,6 +197,10 @@ export const STYLES = [
       combobox: "",
       calendar: "",
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -275,6 +283,10 @@ export const STYLES = [
       combobox: "",
       calendar: "",
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -354,6 +366,10 @@ export const STYLES = [
       combobox: "",
       calendar: "",
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -449,6 +465,10 @@ export const STYLES = [
 & .vin-calendar__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 6px); }
 & .vin-calendar__grid th { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; }`,
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -562,6 +582,10 @@ export const STYLES = [
       combobox: "",
       calendar: "",
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -660,6 +684,10 @@ export const STYLES = [
       calendar: `
 & .vin-calendar__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 4px); }`,
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 
@@ -733,6 +761,10 @@ export const STYLES = [
       combobox: "",
       calendar: "",
       "date-picker": "",
+      drawer: "",
+      "hover-card": "",
+      "context-menu": "",
+      command: "",
     },
   },
 ];

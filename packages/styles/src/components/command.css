@@ -1,0 +1,55 @@
+/* ==========================================================================
+   VinUI · Command
+   API (see spec/command.json):
+     .vin-command[data-vin-command]
+       > .vin-command__search > svg.vin-command__icon + input.vin-command__input[role=combobox][aria-controls]
+       > .vin-command__list[role=listbox]
+           > .vin-command__group[role=group] > .vin-command__label + .vin-command__item[role=option]
+               > svg? + text + .vin-command__shortcut?
+           > .vin-command__separator
+       > p.vin-command__empty[role=status]
+       > .vin-command__footer                     optional key hints
+     dialog.vin-dialog.vin-command-dialog[data-vin-shortcut="k"] > .vin-command     the ⌘K palette
+   ========================================================================== */
+
+.vin-command {
+  display: flex; flex-direction: column; box-sizing: border-box; width: 100%; min-width: 0; overflow: hidden;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.4; color: var(--vin-fg);
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-border);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-soft);
+}
+.vin-command__search {
+  display: flex; align-items: center; gap: 10px; height: calc(var(--vin-h-md) + 10px); padding: 0 14px; flex: none;
+  border-bottom: max(var(--vin-bw), 1px) solid var(--vin-border);
+}
+.vin-command__icon { flex: none; width: 17px; height: 17px; color: var(--vin-muted); }
+.vin-command__input {
+  flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0; border: 0; outline: none; background: transparent;
+  font: inherit; color: inherit;
+}
+.vin-command__input::placeholder { color: var(--vin-muted); opacity: 1; }
+.vin-command__list { flex: 1 1 auto; max-height: 320px; overflow-y: auto; overscroll-behavior: contain; padding: 6px; scroll-padding: 6px; }
+.vin-command__group[hidden], .vin-command__item[hidden], .vin-command__separator[hidden], .vin-command__empty[hidden] { display: none; }
+.vin-command__group + .vin-command__group { margin-top: 4px; }
+.vin-command__label { padding: 8px 10px 4px; font-size: 12px; font-weight: var(--vin-title-weight); color: var(--vin-muted); user-select: none; }
+.vin-command__item {
+  display: flex; align-items: center; gap: 10px; min-height: 36px; padding: 6px 10px;
+  border-radius: max(calc(var(--vin-radius-lg) - 6px), 0px); cursor: pointer; user-select: none;
+}
+.vin-command__item > svg { flex: none; width: 16px; height: 16px; color: var(--vin-muted); }
+.vin-command__item[data-active] { background: color-mix(in srgb, var(--vin-accent) 12%, transparent); }
+.vin-command__item[data-active] > svg { color: var(--vin-fg); }
+.vin-command__item[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+.vin-command__shortcut { margin-inline-start: auto; padding-inline-start: 16px; font-size: 12px; letter-spacing: .04em; color: color-mix(in srgb, var(--vin-muted) 75%, var(--vin-fg)); }
+.vin-command__separator { height: 1px; margin: 6px -6px; background: var(--vin-border); }
+.vin-command__empty { margin: 0; padding: 28px 16px; font-size: calc(var(--vin-text-md) - 1px); color: var(--vin-muted); text-align: center; }
+.vin-command__footer {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding: 8px 14px; flex: none;
+  font-size: 12px; color: var(--vin-muted); border-top: max(var(--vin-bw), 1px) solid var(--vin-border);
+}
+.vin-command__footer > span { display: inline-flex; align-items: center; gap: 5px; }
+
+/* The ⌘K palette: a Dialog without its padding, near the top of the screen. */
+.vin-dialog.vin-command-dialog { width: min(600px, calc(100vw - 24px)); padding: 0; margin-top: min(15dvh, 120px); overflow: hidden; }
+.vin-command-dialog > .vin-command { border: 0; border-radius: inherit; box-shadow: none; background: transparent; }
+.vin-command-dialog .vin-command__list { max-height: min(360px, 55dvh); }

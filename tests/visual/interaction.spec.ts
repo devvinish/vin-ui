@@ -578,6 +578,95 @@ for (const side of ["html", "react"] as const) {
       await expect(trip.locator('input[type="hidden"]')).toHaveValue("2026-11-02/2026-11-05");
     });
 
+    test("drawer: opens from the bottom, Escape closes and returns focus", async ({ page }) => {
+      await ready(page, "drawer");
+      const btn = page.locator(`[data-fixture="${side}-basic"]`).getByRole("button", { name: "Set daily goal" });
+      const drawer = page.locator("dialog[open]");
+      await btn.click();
+      await expect(drawer).toBeVisible();
+      await expect(drawer).toHaveAccessibleName("Daily goal");
+      const vp = page.viewportSize()!;
+      await expect.poll(async () => { const r = (await drawer.boundingBox())!; return Math.round(r.y + r.height) - vp.height; }).toBe(0);
+      await page.keyboard.press("Escape");
+      await expect(drawer).toHaveCount(0);
+      await expect(btn).toBeFocused();
+    });
+
+    test("hover card: hover and focus show it, leaving hides it", async ({ page }) => {
+      await ready(page, "hover-card");
+      const link = page.locator(`[data-fixture="${side}-basic"]`).getByRole("link", { name: "@ada" });
+      const card = page.locator(".vin-hover-card:popover-open");
+      await link.hover();
+      await expect(card).toBeVisible();
+      await expect(card).toContainText("Ada Lovelace");
+      await page.mouse.move(2, 2);
+      await expect(card).toHaveCount(0);
+      await link.focus();
+      await expect(card).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(card).toHaveCount(0);
+    });
+
+    test("context menu: right-click and Shift+F10 open it; arrows move; Escape closes", async ({ page }) => {
+      await ready(page, "context-menu");
+      const area = page.locator(`[data-fixture="${side}-basic"] .vin-context-menu`);
+      const menu = page.getByRole("menu", { name: "File actions" }).filter({ visible: true });
+      await area.click({ button: "right", position: { x: 40, y: 20 } });
+      await expect(menu).toBeVisible();
+      await expect(menu.getByRole("menuitem", { name: "Rename" })).toBeFocused();
+      await page.keyboard.press("ArrowDown");
+      await expect(menu.getByRole("menuitem", { name: "Duplicate" })).toBeFocused();
+      await page.keyboard.press("End");
+      await expect(menu.getByRole("menuitem", { name: "Delete" })).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(menu).toHaveCount(0);
+      await expect(area).toBeFocused();
+      await page.keyboard.press("Shift+F10");
+      await expect(menu).toBeVisible();
+      await page.keyboard.press("Enter");
+      await expect(menu).toHaveCount(0);
+    });
+
+    test("command: typing filters by label and keywords, arrows skip disabled, Enter chooses", async ({ page }) => {
+      await ready(page, "command");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const input = root.getByRole("combobox", { name: "Search commands" });
+      const active = async () => page.locator(`#${await input.getAttribute("aria-activedescendant")}`);
+      await input.focus();
+      await expect(await active()).toHaveText("Calendar");
+      await page.keyboard.press("ArrowDown");
+      await expect(await active()).toHaveText("Search emoji");
+      await page.keyboard.press("ArrowDown");
+      await expect(await active()).toHaveText(/^Profile/);
+      await input.fill("invoice");
+      await expect(root.getByRole("option").filter({ visible: true })).toHaveText([/^Billing/]);
+      await input.fill("zzz");
+      await expect(root.getByRole("option").filter({ visible: true })).toHaveCount(0);
+      await expect(root.locator(".vin-command__empty")).toBeVisible();
+      await input.fill("set");
+      await expect(await active()).toHaveText(/^Settings/);
+      await page.keyboard.press("Enter");
+      await expect(root.getByRole("option", { name: /Settings/ })).toHaveAttribute("aria-selected", "true");
+    });
+
+    test("command dialog: ⌘K opens it on the search, Escape closes", async ({ page }) => {
+      await ready(page, "command");
+      const dialog = page.getByRole("dialog", { name: "Search docs" });
+      await page.keyboard.press("Meta+k");
+      await expect(dialog).toBeVisible();
+      await expect(dialog.getByRole("combobox", { name: "Search commands" })).toBeFocused();
+      await page.keyboard.type("dark");
+      await expect(dialog.getByRole("option").filter({ visible: true })).toHaveText(["Dark mode"]);
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      const btn = page.locator(`[data-fixture="${side}-dialog"]`).getByRole("button", { name: /Search docs/ });
+      await btn.click();
+      await expect(dialog).toBeVisible();
+      await expect(dialog.getByRole("option").filter({ visible: true })).toHaveCount(5);
+      await page.keyboard.press("Escape");
+      await expect(btn).toBeFocused();
+    });
+
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {
       await ready(page, "switch");
       const root = page.locator(`[data-fixture="${side}-basic"]`);

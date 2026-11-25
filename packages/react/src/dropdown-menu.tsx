@@ -28,7 +28,8 @@ function place(el: HTMLElement, anchor: HTMLElement, side: Side, align: Align, g
   el.setAttribute("data-placed", side);
 }
 
-const MenuContext = React.createContext<{ close: () => void }>({ close: () => {} });
+/** Lets menu items close the menu they are in (shared with Context Menu). */
+export const MenuContext = React.createContext<{ close: () => void }>({ close: () => {} });
 
 export type DropdownMenuProps = React.HTMLAttributes<HTMLDivElement> & {
   /** The button that opens it. */

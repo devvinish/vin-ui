@@ -1,0 +1,27 @@
+{
+  "$comment": "Single source of truth for the Drawer API. Every framework package is tested against this file.",
+  "name": "drawer",
+  "title": "Drawer",
+  "category": "Overlays",
+  "description": "A panel that rises from the bottom of the screen. Drag it down, press Esc or tap outside to close it.",
+  "baseClass": "vin-drawer",
+  "classes": ["vin-drawer"],
+  "dependencies": ["sheet", "dialog"],
+  "thumb": "<div style=\"position:relative;width:200px;height:110px;overflow:hidden;border-radius:6px;background:color-mix(in srgb,var(--vin-fg) 8%,transparent)\"><div class=\"vin-dialog vin-sheet vin-drawer\" data-side=\"bottom\" style=\"position:absolute;opacity:1;transform:none;inset:auto 10px 0 10px;width:auto;height:64px;padding:20px 12px 10px\"><p class=\"vin-dialog__title\" style=\"font-size:12px\">Daily goal</p></div></div>",
+  "props": {
+    "trigger / title / description / footer": { "description": "The same as Dialog.", "html": "the Dialog parts inside dialog.vin-dialog.vin-sheet.vin-drawer[data-side=bottom]" },
+    "open / defaultOpen": { "type": "boolean", "description": "Use onOpenChange to hear about changes." },
+    "dismissible": { "type": "boolean", "default": true, "description": "Close on a tap outside and on a drag down.", "html": "closedby=\"any\"" }
+  },
+  "react": { "components": ["Drawer", "DrawerClose"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A short form. Drag the handle or the title down to close it; on wide screens it stays a comfortable width. In HTML, add data-vin-drawer for dragging (vinui.js)." },
+    { "id": "actions", "title": "Actions", "description": "A list of actions, like a phone's share sheet." }
+  ],
+  "a11y": [
+    "It is the browser's modal <dialog>: focus is trapped inside, Esc closes it and focus returns to the button that opened it.",
+    "Dragging is a shortcut, never the only way: Esc, a tap outside and the close button all work too.",
+    "The handle is drawn with CSS, so screen readers don't announce an unlabelled control.",
+    "With reduced motion, it fades instead of sliding."
+  ]
+}

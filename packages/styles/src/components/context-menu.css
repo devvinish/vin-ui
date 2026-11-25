@@ -1,0 +1,14 @@
+/* ==========================================================================
+   VinUI · Context Menu
+   API (see spec/context-menu.json):
+     .vin-context-menu[data-vin-context-menu="menu-id"][tabindex=0]     the area you right-click
+     .vin-menu#menu-id[popover][role=menu]                              a Dropdown Menu's panel and items
+   ========================================================================== */
+
+.vin-context-menu {
+  display: grid; place-items: center; box-sizing: border-box; min-height: 150px; padding: 16px;
+  font-family: var(--vin-font); font-size: calc(var(--vin-text-md) - 1px); line-height: 1.5; color: var(--vin-muted); text-align: center;
+  border: max(var(--vin-bw), 1px) dashed color-mix(in srgb, var(--vin-border), var(--vin-fg) 18%);
+  border-radius: var(--vin-radius-lg); user-select: none; -webkit-touch-callout: none;
+}
+.vin-context-menu:focus-visible { outline: none; box-shadow: var(--vin-focus); }

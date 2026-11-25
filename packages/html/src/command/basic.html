@@ -1,0 +1,24 @@
+<div style="width: 100%; max-width: 440px">
+  <div class="vin-command" data-vin-command>
+    <div class="vin-command__search">
+      <svg class="vin-command__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input class="vin-command__input" type="text" role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-autocomplete="list" aria-label="Search commands" placeholder="Type a command or search…" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="vin-command__list" id="cmd-list" role="listbox" aria-label="Commands">
+      <div class="vin-command__group" role="group" aria-labelledby="cmd-g0">
+        <div class="vin-command__label" id="cmd-g0" role="presentation">Suggestions</div>
+        <div class="vin-command__item" role="option" id="cmd-0" aria-selected="false" data-value="calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>Calendar</div>
+        <div class="vin-command__item" role="option" id="cmd-1" aria-selected="false" data-value="emoji" data-keywords="smiley face"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>Search emoji</div>
+        <div class="vin-command__item" role="option" id="cmd-2" aria-selected="false" data-value="calculator" aria-disabled="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 6.5h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 18.5h8"/></svg>Calculator</div>
+      </div>
+      <div class="vin-command__separator" role="presentation"></div>
+      <div class="vin-command__group" role="group" aria-labelledby="cmd-g1">
+        <div class="vin-command__label" id="cmd-g1" role="presentation">Settings</div>
+        <div class="vin-command__item" role="option" id="cmd-3" aria-selected="false" data-value="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile<span class="vin-command__shortcut" aria-hidden="true">⌘P</span></div>
+        <div class="vin-command__item" role="option" id="cmd-4" aria-selected="false" data-value="billing" data-keywords="payment invoice plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/></svg>Billing<span class="vin-command__shortcut" aria-hidden="true">⌘B</span></div>
+        <div class="vin-command__item" role="option" id="cmd-5" aria-selected="false" data-value="settings" data-keywords="preferences"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>Settings<span class="vin-command__shortcut" aria-hidden="true">⌘S</span></div>
+      </div>
+    </div>
+    <p class="vin-command__empty" role="status" hidden>No results found.</p>
+  </div>
+</div>

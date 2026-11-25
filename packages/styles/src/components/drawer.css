@@ -1,0 +1,25 @@
+/* ==========================================================================
+   VinUI · Drawer
+   API (see spec/drawer.json): a bottom Sheet with a drag handle.
+     dialog.vin-dialog.vin-sheet.vin-drawer[data-side="bottom"][data-vin-drawer]
+       > the Dialog parts: __header, __body, __footer, __close
+   The handle is drawn by ::before. vinui.js (or the React component) lets you drag the
+   handle strip or the header down to close it.
+   ========================================================================== */
+
+.vin-dialog.vin-sheet.vin-drawer {
+  width: min(100vw, var(--vin-drawer-width, 560px)); max-height: 90dvh; margin: 0 auto; padding-top: 32px;
+  border-inline-width: max(var(--vin-bw), 1px);
+  border-radius: calc(var(--vin-radius-lg) + 6px) calc(var(--vin-radius-lg) + 6px) 0 0;
+  overscroll-behavior: contain;
+}
+.vin-drawer::before {
+  content: ""; position: absolute; top: 12px; left: 50%; width: 40px; height: 5px; margin-left: -20px;
+  border-radius: 999px; background: color-mix(in srgb, var(--vin-fg) 22%, transparent); cursor: grab;
+}
+.vin-drawer > .vin-dialog__header { touch-action: none; }
+.vin-drawer > .vin-dialog__close { top: 14px; }
+@media (max-width: 560px) { .vin-dialog.vin-sheet.vin-drawer { border-inline-width: 0; } }
+/* A list of actions: full-width ghost buttons, close together. */
+.vin-drawer > .vin-dialog__body:has(> .vin-btn:first-child) { gap: 2px; margin-top: 14px; }
+.vin-drawer > .vin-dialog__body > .vin-btn { justify-content: flex-start; }

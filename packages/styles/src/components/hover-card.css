@@ -1,0 +1,17 @@
+/* ==========================================================================
+   VinUI · Hover Card
+   API (see spec/hover-card.json):
+     a[data-vin-hover-card="card-id"]                              the link it previews
+     .vin-popover.vin-hover-card#card-id[popover=manual][data-side]?
+       > .vin-hover-card__header > .vin-avatar + div > .vin-popover__title + .vin-hover-card__meta
+       > .vin-popover__description, .vin-hover-card__meta
+   It is a Popover that opens on hover and focus (vinui.js).
+   ========================================================================== */
+
+.vin-popover.vin-hover-card { width: 300px; }
+.vin-hover-card__header { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.vin-hover-card__header > div { min-width: 0; }
+.vin-hover-card__header + .vin-popover__description { margin-top: 12px; }
+.vin-hover-card__meta { margin: 2px 0 0; font-size: calc(var(--vin-text-md) - 2px); line-height: 1.4; color: var(--vin-muted); }
+.vin-popover__description + .vin-hover-card__meta { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+.vin-hover-card__meta > svg { flex: none; width: 14px; height: 14px; }

@@ -1,0 +1,18 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="drawer-goal" command="show-modal">Set daily goal</button>
+<dialog class="vin-dialog vin-sheet vin-drawer" id="drawer-goal" data-side="bottom" aria-labelledby="drawer-goal-title" aria-describedby="drawer-goal-desc" closedby="any" data-vin-drawer>
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="drawer-goal-title">Daily goal</h2>
+    <p class="vin-dialog__description" id="drawer-goal-desc">How many minutes do you want to practise each day?</p>
+  </div>
+  <div class="vin-dialog__body">
+    <div class="vin-field">
+      <label class="vin-label" for="drawer-goal-min">Minutes a day</label>
+      <input id="drawer-goal-min" class="vin-input" type="number" inputmode="numeric" min="5" max="240" step="5" value="30">
+    </div>
+  </div>
+  <div class="vin-dialog__footer">
+    <button type="button" class="vin-btn vin-btn--outline" commandfor="drawer-goal" command="close">Cancel</button>
+    <button type="button" class="vin-btn" commandfor="drawer-goal" command="close">Save goal</button>
+  </div>
+  <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-dialog__close" commandfor="drawer-goal" command="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+</dialog>

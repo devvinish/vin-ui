@@ -1,0 +1,32 @@
+{
+  "$comment": "Single source of truth for the Command API. Every framework package is tested against this file.",
+  "name": "command",
+  "title": "Command",
+  "category": "Overlays",
+  "description": "A search box that filters a list of commands and pages: inline, or as a ⌘K palette.",
+  "baseClass": "vin-command",
+  "classes": ["vin-command", "vin-command__search", "vin-command__icon", "vin-command__input", "vin-command__list", "vin-command__group", "vin-command__label", "vin-command__item", "vin-command__shortcut", "vin-command__separator", "vin-command__empty", "vin-command__footer", "vin-command-dialog"],
+  "dependencies": ["dialog", "kbd"],
+  "thumb": "<div class=\"vin-command\" style=\"width:200px;font-size:11px\"><div class=\"vin-command__search\" style=\"height:30px;padding:0 8px\"><span style=\"color:var(--vin-muted)\">Search…</span></div><div class=\"vin-command__list\" style=\"padding:3px\"><div class=\"vin-command__item\" data-active style=\"min-height:22px;padding:3px 8px\">Calendar</div><div class=\"vin-command__item\" style=\"min-height:22px;padding:3px 8px\">Settings</div></div></div>",
+  "props": {
+    "groups": { "type": "{ heading?, items: { value, label, icon?, shortcut?, keywords?, href?, disabled? }[] }[]", "description": "The commands, in groups.", "html": ".vin-command__group[role=group] > .vin-command__label + .vin-command__item[role=option][data-value]" },
+    "onSelect": { "type": "(value: string) => void", "description": "Called when a command is chosen (Enter or click).", "html": "a vin-command event with detail.value; data-href goes to a page" },
+    "placeholder": { "type": "string", "default": "Type a command or search…", "html": "placeholder on the input" },
+    "emptyText": { "type": "ReactNode", "default": "No results found.", "html": "<p class=\"vin-command__empty\" role=\"status\">" },
+    "label": { "type": "string", "default": "Commands", "description": "Name for the search box and the list." },
+    "footer": { "type": "boolean", "default": false, "description": "Show key hints under the list.", "html": ".vin-command__footer" },
+    "CommandDialog: trigger / open / onOpenChange / shortcut": { "type": "ReactElement / boolean / (open) => void / string", "default": "shortcut \"k\"", "description": "The palette in a modal dialog, opened by the trigger or ⌘K / Ctrl+K.", "html": "dialog.vin-dialog.vin-command-dialog[data-vin-shortcut=\"k\"]" }
+  },
+  "react": { "components": ["Command", "CommandDialog"] },
+  "examples": [
+    { "id": "basic", "title": "Inline", "description": "Type to filter; ↓ ↑ to move and Enter to run. Words in data-keywords match too. In HTML, add data-vin-command and include vinui.js once." },
+    { "id": "dialog", "title": "⌘K palette", "description": "The button or ⌘K (Ctrl+K on Windows and Linux) opens it; Esc closes it." }
+  ],
+  "a11y": [
+    "The search box is a combobox that controls a listbox; focus stays in it and aria-activedescendant points at the highlighted command.",
+    "Commands are role=\"option\", grouped under labelled role=\"group\" headings; groups with no matches disappear.",
+    "Keys: ↓ ↑ to move (they wrap), Ctrl+Home and Ctrl+End for the first and last, Enter to run, Esc to close the palette.",
+    "\"No results found\" is a status message, so screen readers announce it.",
+    "Shortcuts are shown for sighted users and hidden from screen readers, which read the command's name."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Hover Card API. Every framework package is tested against this file.",
+  "name": "hover-card",
+  "title": "Hover Card",
+  "category": "Overlays",
+  "description": "A preview card that opens when you rest the pointer on a link, or focus it with the keyboard.",
+  "baseClass": "vin-hover-card",
+  "classes": ["vin-hover-card", "vin-hover-card__header", "vin-hover-card__meta"],
+  "dependencies": ["popover", "avatar"],
+  "thumb": "<div class=\"vin-popover vin-hover-card\" style=\"position:static;opacity:1;transform:none;width:180px;padding:12px\"><div class=\"vin-hover-card__header\"><span class=\"vin-avatar vin-avatar--sm\"><span class=\"vin-avatar__fallback\">AL</span></span><div><p class=\"vin-popover__title\" style=\"font-size:12px\">Ada Lovelace</p><p class=\"vin-hover-card__meta\" style=\"font-size:10px\">@ada</p></div></div></div>",
+  "props": {
+    "trigger": { "type": "ReactElement", "description": "The link (or button) it previews.", "html": "a[data-vin-hover-card=\"card-id\"]" },
+    "children": { "type": "ReactNode", "description": "The card's content. Use the Popover title and description classes, an Avatar, and .vin-hover-card__meta for small details.", "html": ".vin-popover.vin-hover-card#card-id[popover=manual]" },
+    "side": { "values": ["bottom", "top", "left", "right"], "default": "bottom", "html": "data-side on the card" },
+    "openDelay / closeDelay": { "type": "number", "default": "500 / 300", "description": "Milliseconds before it opens on hover and before it closes after the pointer leaves." }
+  },
+  "react": { "components": ["HoverCard"] },
+  "examples": [
+    { "id": "basic", "title": "Profile preview", "description": "Rest the pointer on the name, or Tab to it. In HTML, add data-vin-hover-card and include vinui.js once." },
+    { "id": "link", "title": "Link preview", "description": "Preview a page before opening it." }
+  ],
+  "a11y": [
+    "Opens on hover after a short pause, and straight away on keyboard focus; Esc closes it.",
+    "The pointer can move onto the card (to select text or follow a link in it) without it closing.",
+    "It shows extra detail only: anything people need must also be on the page, because touch screens can't hover.",
+    "Placed in the top layer, flipping to the other side when there's no room."
+  ]
+}
