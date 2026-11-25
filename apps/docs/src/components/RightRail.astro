@@ -1,0 +1,13 @@
+---
+import AdSlot from "./AdSlot.astro";
+const { toc = [] } = Astro.props as { toc?: { id: string; text: string }[] };
+---
+<aside class="right-rail" aria-label="On this page">
+  {toc.length > 0 && (
+    <nav class="toc" aria-labelledby="toc-title">
+      <h5 id="toc-title">On this page</h5>
+      {toc.map((t) => <a href={`#${t.id}`} data-toc-link>{t.text}</a>)}
+    </nav>
+  )}
+  <AdSlot />
+</aside>

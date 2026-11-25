@@ -1,0 +1,21 @@
+---
+import { COMPONENTS } from "../data/components";
+import { STYLES } from "@vinui/styles";
+import { href } from "../lib/site";
+
+const index = [
+  { title: "Introduction", section: "Docs", url: href("/") },
+  { title: "Components", section: "Docs", url: href("/components/") },
+  { title: "Styles", section: "Docs", url: href("/styles/") },
+  ...COMPONENTS.filter((c) => c.ready).map((c) => ({ title: c.name, section: "Component", url: href(`/components/${c.slug}/`) })),
+  ...COMPONENTS.filter((c) => !c.ready).map((c) => ({ title: c.name, section: "Coming soon", url: href("/components/") })),
+  ...STYLES.map((s) => ({ title: `${s.name} style`, section: "Style", url: href(`/styles/#${s.id}`) })),
+];
+---
+<div class="palette-backdrop" hidden data-palette>
+  <div class="palette" role="dialog" aria-modal="true" aria-label="Search">
+    <input type="search" placeholder="Search components, styles…" aria-label="Search" data-palette-input autocomplete="off" />
+    <ul role="listbox" data-palette-list></ul>
+  </div>
+</div>
+<script type="application/json" id="search-index" set:html={JSON.stringify(index)} />

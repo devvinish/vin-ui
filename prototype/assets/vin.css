@@ -1,0 +1,483 @@
+/* ==========================================================================
+   VinUI — component layer
+   THE CONTRACT: every style uses the SAME class names, the SAME HTML anatomy,
+   the SAME size scale and the SAME accessibility. A style is only a set of
+   token values (plus a few documented overrides). Switch styles with
+   <html data-vin-style="minimal | glass | brutalist">.
+   ========================================================================== */
+
+/* ---------- 1. Style tokens ---------------------------------------------- */
+
+[data-vin-style="minimal"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #fafafa;
+  --vin-stage-img: none;
+  --vin-surface: #ffffff;
+  --vin-fg: #09090b;
+  --vin-muted: #71717a;
+  --vin-border: #e4e4e7;
+  --vin-primary: #18181b;
+  --vin-primary-bg: #18181b;
+  --vin-primary-fg: #fafafa;
+  --vin-secondary: #f4f4f5;
+  --vin-secondary-fg: #18181b;
+  --vin-accent: #2563eb;
+  --vin-danger: #dc2626;
+  --vin-success: #16a34a;
+  --vin-warning: #d97706;
+  --vin-input-bg: #ffffff;
+  --vin-track: #e4e4e7;
+  --vin-radius: 8px;
+  --vin-pill: 999px;
+  --vin-bw: 1px;
+  --vin-btn-border: transparent;
+  --vin-shadow: 0 1px 2px rgb(0 0 0 / .05);
+  --vin-shadow-lg: 0 1px 3px rgb(0 0 0 / .06), 0 8px 24px -12px rgb(0 0 0 / .12);
+  --vin-input-shadow: 0 1px 2px rgb(0 0 0 / .04);
+  --vin-blur: 0px;
+  --vin-weight: 500;
+  --vin-title-weight: 600;
+  --vin-focus: 0 0 0 3px rgb(37 99 235 / .35);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="minimal"] {
+  --vin-stage: #0a0a0a;
+  --vin-surface: #111113;
+  --vin-fg: #fafafa;
+  --vin-muted: #a1a1aa;
+  --vin-border: #27272a;
+  --vin-primary: #fafafa;
+  --vin-primary-bg: #fafafa;
+  --vin-primary-fg: #09090b;
+  --vin-secondary: #1f1f23;
+  --vin-secondary-fg: #fafafa;
+  --vin-input-bg: #0c0c0e;
+  --vin-track: #3f3f46;
+  --vin-shadow: none;
+  --vin-shadow-lg: 0 8px 24px -12px rgb(0 0 0 / .6);
+}
+
+[data-vin-style="glass"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #eef0ff;
+  --vin-stage-img:
+    radial-gradient(40% 50% at 15% 20%, #f9a8d4 0%, transparent 70%),
+    radial-gradient(45% 55% at 85% 25%, #93c5fd 0%, transparent 70%),
+    radial-gradient(50% 60% at 55% 95%, #c4b5fd 0%, transparent 70%);
+  --vin-surface: rgb(255 255 255 / .55);
+  --vin-fg: #1e1b4b;
+  --vin-muted: #4c4a73;
+  --vin-border: rgb(255 255 255 / .75);
+  --vin-primary: #7c3aed;
+  --vin-primary-bg: linear-gradient(135deg, #8b5cf6, #ec4899);
+  --vin-primary-fg: #ffffff;
+  --vin-secondary: rgb(255 255 255 / .5);
+  --vin-secondary-fg: #1e1b4b;
+  --vin-accent: #7c3aed;
+  --vin-danger: #e11d48;
+  --vin-success: #059669;
+  --vin-warning: #d97706;
+  --vin-input-bg: rgb(255 255 255 / .55);
+  --vin-track: rgb(30 27 75 / .15);
+  --vin-radius: 14px;
+  --vin-pill: 999px;
+  --vin-bw: 1px;
+  --vin-btn-border: rgb(255 255 255 / .35);
+  --vin-shadow: 0 4px 14px -4px rgb(124 58 237 / .35);
+  --vin-shadow-lg: 0 20px 40px -18px rgb(30 27 75 / .35), inset 0 1px 0 rgb(255 255 255 / .7);
+  --vin-input-shadow: inset 0 1px 2px rgb(30 27 75 / .06);
+  --vin-blur: 18px;
+  --vin-weight: 500;
+  --vin-title-weight: 600;
+  --vin-focus: 0 0 0 3px rgb(139 92 246 / .45);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="glass"] {
+  --vin-stage: #0b0a1a;
+  --vin-stage-img:
+    radial-gradient(40% 50% at 15% 20%, rgb(236 72 153 / .45) 0%, transparent 70%),
+    radial-gradient(45% 55% at 85% 25%, rgb(59 130 246 / .45) 0%, transparent 70%),
+    radial-gradient(50% 60% at 55% 95%, rgb(139 92 246 / .5) 0%, transparent 70%);
+  --vin-surface: rgb(255 255 255 / .07);
+  --vin-fg: #f5f3ff;
+  --vin-muted: #c4c1e0;
+  --vin-border: rgb(255 255 255 / .14);
+  --vin-secondary: rgb(255 255 255 / .1);
+  --vin-secondary-fg: #f5f3ff;
+  --vin-input-bg: rgb(255 255 255 / .06);
+  --vin-track: rgb(255 255 255 / .18);
+  --vin-shadow-lg: 0 20px 40px -18px rgb(0 0 0 / .7), inset 0 1px 0 rgb(255 255 255 / .1);
+}
+
+[data-vin-style="brutalist"] {
+  --vin-font: "Space Grotesk", system-ui, sans-serif;
+  --vin-stage: #fff8dc;
+  --vin-stage-img: none;
+  --vin-surface: #ffffff;
+  --vin-fg: #000000;
+  --vin-muted: #3f3f3f;
+  --vin-border: #000000;
+  --vin-primary: #000000;
+  --vin-primary-bg: #ffd60a;
+  --vin-primary-fg: #000000;
+  --vin-secondary: #ffffff;
+  --vin-secondary-fg: #000000;
+  --vin-accent: #ff4d00;
+  --vin-danger: #ff3b30;
+  --vin-success: #00c853;
+  --vin-warning: #ff9500;
+  --vin-input-bg: #ffffff;
+  --vin-track: #ffffff;
+  --vin-radius: 0px;
+  --vin-pill: 0px;
+  --vin-bw: 2px;
+  --vin-btn-border: #000000;
+  --vin-shadow: 3px 3px 0 #000000;
+  --vin-shadow-lg: 6px 6px 0 #000000;
+  --vin-input-shadow: 3px 3px 0 #000000;
+  --vin-blur: 0px;
+  --vin-weight: 700;
+  --vin-title-weight: 700;
+  --vin-focus: 0 0 0 3px #ff4d00;
+  --vin-ease: steps(2);
+}
+:root[data-theme="dark"] [data-vin-style="brutalist"] {
+  --vin-stage: #141414;
+  --vin-surface: #1f1f1f;
+  --vin-fg: #ffffff;
+  --vin-muted: #cfcfcf;
+  --vin-border: #ffffff;
+  --vin-primary: #ffd60a;
+  --vin-secondary: #1f1f1f;
+  --vin-secondary-fg: #ffffff;
+  --vin-input-bg: #141414;
+  --vin-track: #141414;
+  --vin-btn-border: #ffffff;
+  --vin-shadow: 3px 3px 0 #ffffff;
+  --vin-shadow-lg: 6px 6px 0 #ffffff;
+  --vin-input-shadow: 3px 3px 0 #ffffff;
+}
+
+/* Candidate styles (shown on the style chooser only) */
+[data-vin-style="soft"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #e7eaf0;
+  --vin-stage-img: none;
+  --vin-surface: #e7eaf0;
+  --vin-fg: #2d3142;
+  --vin-muted: #6b7084;
+  --vin-border: transparent;
+  --vin-primary: #6366f1;
+  --vin-primary-bg: #6366f1;
+  --vin-primary-fg: #ffffff;
+  --vin-secondary: #e7eaf0;
+  --vin-secondary-fg: #2d3142;
+  --vin-accent: #6366f1;
+  --vin-danger: #e5484d;
+  --vin-success: #30a46c;
+  --vin-warning: #f76b15;
+  --vin-input-bg: #e7eaf0;
+  --vin-track: #d3d7e0;
+  --vin-radius: 14px;
+  --vin-pill: 999px;
+  --vin-bw: 0px;
+  --vin-btn-border: transparent;
+  --vin-shadow: 5px 5px 10px #c5c9d3, -5px -5px 10px #ffffff;
+  --vin-shadow-lg: 10px 10px 20px #c5c9d3, -10px -10px 20px #ffffff;
+  --vin-input-shadow: inset 3px 3px 6px #c5c9d3, inset -3px -3px 6px #ffffff;
+  --vin-blur: 0px;
+  --vin-weight: 600;
+  --vin-title-weight: 700;
+  --vin-focus: 0 0 0 3px rgb(99 102 241 / .4);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="soft"] {
+  --vin-stage: #252830;
+  --vin-surface: #252830;
+  --vin-fg: #e6e8ee;
+  --vin-muted: #9ba1b3;
+  --vin-secondary: #252830;
+  --vin-secondary-fg: #e6e8ee;
+  --vin-input-bg: #252830;
+  --vin-track: #1b1d23;
+  --vin-shadow: 5px 5px 10px #1a1c22, -5px -5px 10px #30343e;
+  --vin-shadow-lg: 10px 10px 20px #1a1c22, -10px -10px 20px #30343e;
+  --vin-input-shadow: inset 3px 3px 6px #1a1c22, inset -3px -3px 6px #30343e;
+}
+
+[data-vin-style="retro"] {
+  --vin-font: "JetBrains Mono", ui-monospace, monospace;
+  --vin-stage: #0f766e;
+  --vin-stage-img: none;
+  --vin-surface: #d4d0c8;
+  --vin-fg: #000000;
+  --vin-muted: #404040;
+  --vin-border: #808080;
+  --vin-primary: #000080;
+  --vin-primary-bg: #000080;
+  --vin-primary-fg: #ffffff;
+  --vin-secondary: #d4d0c8;
+  --vin-secondary-fg: #000000;
+  --vin-accent: #000080;
+  --vin-danger: #b00000;
+  --vin-success: #007000;
+  --vin-warning: #a05a00;
+  --vin-input-bg: #ffffff;
+  --vin-track: #ffffff;
+  --vin-radius: 0px;
+  --vin-pill: 0px;
+  --vin-bw: 0px;
+  --vin-btn-border: transparent;
+  --vin-shadow: inset -2px -2px 0 #404040, inset 2px 2px 0 #ffffff, inset -3px -3px 0 #808080;
+  --vin-shadow-lg: inset -2px -2px 0 #404040, inset 2px 2px 0 #ffffff;
+  --vin-input-shadow: inset 2px 2px 0 #808080, inset -2px -2px 0 #ffffff;
+  --vin-blur: 0px;
+  --vin-weight: 500;
+  --vin-title-weight: 700;
+  --vin-focus: 0 0 0 2px #000000;
+  --vin-ease: steps(1);
+}
+:root[data-theme="dark"] [data-vin-style="retro"] {
+  --vin-stage: #10162b;
+  --vin-surface: #2d2d38;
+  --vin-fg: #e8e8f0;
+  --vin-muted: #a8a8b8;
+  --vin-primary: #4f6bff;
+  --vin-primary-bg: #2f45c9;
+  --vin-secondary: #2d2d38;
+  --vin-secondary-fg: #e8e8f0;
+  --vin-input-bg: #16161d;
+  --vin-track: #16161d;
+  --vin-shadow: inset -2px -2px 0 #0d0d12, inset 2px 2px 0 #5a5a6a, inset -3px -3px 0 #1d1d25;
+  --vin-shadow-lg: inset -2px -2px 0 #0d0d12, inset 2px 2px 0 #5a5a6a;
+  --vin-input-shadow: inset 2px 2px 0 #0d0d12, inset -2px -2px 0 #5a5a6a;
+  --vin-focus: 0 0 0 2px #e8e8f0;
+}
+
+/* ---------- 2. Base --------------------------------------------------------- */
+
+[data-vin-style] {
+  font-family: var(--vin-font);
+  color: var(--vin-fg);
+}
+.vin-stage {
+  background-color: var(--vin-stage);
+  background-image: var(--vin-stage-img);
+  transition: background-color .3s;
+}
+
+/* ---------- 3. Components ---------------------------------------------------- */
+
+/* Button */
+.vin-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  height: 36px; padding: 0 16px;
+  font: inherit; font-size: 14px; font-weight: var(--vin-weight); line-height: 1; white-space: nowrap;
+  color: var(--vin-primary-fg); background: var(--vin-primary-bg);
+  border: var(--vin-bw) solid var(--vin-btn-border); border-radius: var(--vin-radius);
+  box-shadow: var(--vin-shadow);
+  cursor: pointer; text-decoration: none;
+  transition: transform .15s var(--vin-ease), box-shadow .15s var(--vin-ease), filter .15s, background-color .15s;
+}
+.vin-btn:hover { filter: brightness(1.08); }
+.vin-btn:active { transform: translateY(1px); }
+.vin-btn:focus-visible { outline: none; box-shadow: var(--vin-shadow), var(--vin-focus); }
+.vin-btn:disabled, .vin-btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; pointer-events: none; }
+.vin-btn svg { width: 16px; height: 16px; }
+.vin-btn--secondary { background: var(--vin-secondary); color: var(--vin-secondary-fg); border-color: var(--vin-border); }
+.vin-btn--outline { background: transparent; color: var(--vin-fg); border-color: var(--vin-border); box-shadow: none; }
+.vin-btn--ghost { background: transparent; color: var(--vin-fg); border-color: transparent; box-shadow: none; }
+.vin-btn--ghost:hover, .vin-btn--outline:hover { background: var(--vin-secondary); filter: none; }
+.vin-btn--danger { background: var(--vin-danger); color: #fff; }
+.vin-btn--sm { height: 30px; padding: 0 12px; font-size: 13px; }
+.vin-btn--lg { height: 44px; padding: 0 22px; font-size: 15px; }
+.vin-btn--icon { width: 36px; padding: 0; }
+
+/* Style overrides — documented, small, never change anatomy */
+[data-vin-style="brutalist"] .vin-btn { text-transform: uppercase; letter-spacing: .04em; }
+[data-vin-style="brutalist"] .vin-btn:hover { filter: none; transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--vin-border); }
+[data-vin-style="brutalist"] .vin-btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--vin-border); }
+[data-vin-style="brutalist"] .vin-btn--ghost:hover { box-shadow: none; transform: none; }
+[data-vin-style="glass"] .vin-btn--secondary,
+[data-vin-style="glass"] .vin-btn--outline { backdrop-filter: blur(var(--vin-blur)); }
+[data-vin-style="soft"] .vin-btn--outline { box-shadow: var(--vin-shadow); }
+[data-vin-style="soft"] .vin-btn:active { box-shadow: var(--vin-input-shadow); transform: none; }
+[data-vin-style="retro"] .vin-btn--outline, [data-vin-style="retro"] .vin-btn--secondary { box-shadow: var(--vin-shadow); }
+[data-vin-style="retro"] .vin-btn:active { box-shadow: var(--vin-input-shadow); transform: none; }
+
+/* Card */
+.vin-card {
+  background: var(--vin-surface);
+  border: var(--vin-bw) solid var(--vin-border);
+  border-radius: calc(var(--vin-radius) * 1.5);
+  box-shadow: var(--vin-shadow-lg);
+  -webkit-backdrop-filter: blur(var(--vin-blur)); backdrop-filter: blur(var(--vin-blur));
+  padding: 20px;
+}
+.vin-card__title { margin: 0; font-size: 16px; font-weight: var(--vin-title-weight); letter-spacing: -.01em; }
+.vin-card__desc { margin: 4px 0 0; font-size: 13px; color: var(--vin-muted); line-height: 1.5; }
+[data-vin-style="retro"] .vin-card { padding: 3px; }
+[data-vin-style="retro"] .vin-card__bar { display: flex; }
+
+.vin-card__bar { display: none; align-items: center; justify-content: space-between; margin: -3px -3px 10px; padding: 3px 6px;
+  background: var(--vin-primary-bg); color: var(--vin-primary-fg); font-size: 12px; font-weight: 700; }
+[data-vin-style="retro"] .vin-card__body { padding: 8px 12px 12px; }
+
+/* Field / Label / Input / Select */
+.vin-field { display: grid; gap: 6px; }
+.vin-label { font-size: 13px; font-weight: var(--vin-weight); }
+.vin-hint { font-size: 12px; color: var(--vin-muted); }
+.vin-input, .vin-select {
+  width: 100%; height: 36px; padding: 0 12px;
+  font: inherit; font-size: 14px; color: var(--vin-fg);
+  background: var(--vin-input-bg);
+  border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-radius);
+  box-shadow: var(--vin-input-shadow);
+  transition: box-shadow .15s;
+}
+.vin-input::placeholder { color: var(--vin-muted); opacity: .8; }
+.vin-input:focus, .vin-select:focus { outline: none; box-shadow: var(--vin-input-shadow), var(--vin-focus); }
+.vin-select { appearance: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; text-align: left;
+  background-image: linear-gradient(45deg, transparent 50%, var(--vin-muted) 50%), linear-gradient(135deg, var(--vin-muted) 50%, transparent 50%);
+  background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
+[data-vin-style="brutalist"] .vin-input:focus { box-shadow: var(--vin-input-shadow), var(--vin-focus); }
+
+/* Badge */
+.vin-badge {
+  display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px;
+  font-size: 12px; font-weight: var(--vin-weight); line-height: 1;
+  color: var(--vin-secondary-fg); background: var(--vin-secondary);
+  border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-pill);
+}
+.vin-badge--primary { background: var(--vin-primary-bg); color: var(--vin-primary-fg); border-color: var(--vin-btn-border); }
+.vin-badge--success { color: var(--vin-success); background: color-mix(in srgb, var(--vin-success) 12%, transparent); border-color: color-mix(in srgb, var(--vin-success) 30%, transparent); }
+.vin-badge--warning { color: var(--vin-warning); background: color-mix(in srgb, var(--vin-warning) 12%, transparent); border-color: color-mix(in srgb, var(--vin-warning) 30%, transparent); }
+.vin-badge--danger  { color: var(--vin-danger);  background: color-mix(in srgb, var(--vin-danger) 12%, transparent);  border-color: color-mix(in srgb, var(--vin-danger) 30%, transparent); }
+[data-vin-style="brutalist"] .vin-badge { border-color: var(--vin-border); text-transform: uppercase; font-size: 11px; }
+[data-vin-style="brutalist"] .vin-badge--success { background: var(--vin-success); color: #000; }
+[data-vin-style="brutalist"] .vin-badge--warning { background: var(--vin-warning); color: #000; }
+[data-vin-style="brutalist"] .vin-badge--danger { background: var(--vin-danger); color: #000; }
+[data-vin-style="soft"] .vin-badge { box-shadow: var(--vin-shadow); border: 0; }
+
+/* Alert */
+.vin-alert {
+  display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px;
+  font-size: 13px; line-height: 1.45;
+  background: var(--vin-surface); color: var(--vin-fg);
+  border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-radius);
+  -webkit-backdrop-filter: blur(var(--vin-blur)); backdrop-filter: blur(var(--vin-blur));
+}
+.vin-alert__icon { flex: none; width: 16px; height: 16px; margin-top: 1px; }
+.vin-alert__title { font-weight: var(--vin-title-weight); margin: 0 0 2px; }
+.vin-alert__desc { margin: 0; color: var(--vin-muted); }
+.vin-alert--danger { color: var(--vin-danger); border-color: color-mix(in srgb, var(--vin-danger) 40%, transparent); background: color-mix(in srgb, var(--vin-danger) 7%, var(--vin-surface)); }
+.vin-alert--success { color: var(--vin-success); border-color: color-mix(in srgb, var(--vin-success) 40%, transparent); background: color-mix(in srgb, var(--vin-success) 7%, var(--vin-surface)); }
+[data-vin-style="brutalist"] .vin-alert { box-shadow: var(--vin-shadow); border-color: var(--vin-border); }
+[data-vin-style="soft"] .vin-alert, [data-vin-style="retro"] .vin-alert { box-shadow: var(--vin-input-shadow); }
+
+/* Switch */
+.vin-switch {
+  position: relative; flex: none; width: 40px; height: 22px; padding: 0;
+  background: var(--vin-track); border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-pill);
+  box-shadow: var(--vin-input-shadow); cursor: pointer; transition: background .2s;
+}
+.vin-switch__thumb {
+  position: absolute; top: 50%; left: 2px; width: 16px; height: 16px; transform: translateY(-50%);
+  background: #fff; border-radius: var(--vin-pill); box-shadow: 0 1px 3px rgb(0 0 0 / .25);
+  transition: left .2s var(--vin-ease);
+}
+.vin-switch[aria-checked="true"] { background: var(--vin-primary-bg); }
+.vin-switch[aria-checked="true"] .vin-switch__thumb { left: calc(100% - 18px); }
+.vin-switch:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+[data-vin-style="minimal"] .vin-switch[aria-checked="true"] .vin-switch__thumb { background: var(--vin-primary-fg); }
+[data-vin-style="brutalist"] .vin-switch__thumb { background: var(--vin-border); box-shadow: none; }
+[data-vin-style="brutalist"] .vin-switch[aria-checked="true"] .vin-switch__thumb { background: #000; }
+[data-vin-style="retro"] .vin-switch__thumb { background: var(--vin-surface); box-shadow: var(--vin-shadow); }
+[data-vin-style="soft"] .vin-switch__thumb { background: var(--vin-surface); box-shadow: var(--vin-shadow); }
+
+/* Checkbox */
+.vin-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.vin-checkbox {
+  appearance: none; flex: none; margin: 0; width: 18px; height: 18px; display: grid; place-content: center;
+  background: var(--vin-input-bg); border: max(var(--vin-bw), 1px) solid var(--vin-border);
+  border-radius: calc(var(--vin-radius) / 2); box-shadow: var(--vin-input-shadow); cursor: pointer;
+}
+[data-vin-style="soft"] .vin-checkbox, [data-vin-style="retro"] .vin-checkbox { border: 0; }
+.vin-checkbox::after { content: ""; width: 5px; height: 9px; border: solid var(--vin-primary-fg); border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px) scale(0); transition: transform .12s; }
+.vin-checkbox:checked { background: var(--vin-primary-bg); border-color: transparent; }
+[data-vin-style="brutalist"] .vin-checkbox:checked { border-color: var(--vin-border); }
+.vin-checkbox:checked::after { transform: rotate(45deg) translate(-1px, -1px) scale(1); }
+.vin-checkbox:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+
+/* Tabs */
+.vin-tabs__list {
+  display: inline-flex; gap: 2px; padding: 3px;
+  background: var(--vin-secondary); border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-radius);
+  box-shadow: var(--vin-input-shadow);
+}
+.vin-tabs__tab {
+  height: 28px; padding: 0 12px; font: inherit; font-size: 13px; font-weight: var(--vin-weight);
+  color: var(--vin-muted); background: transparent; border: 0; border-radius: calc(var(--vin-radius) - 3px); cursor: pointer;
+}
+.vin-tabs__tab[aria-selected="true"] { color: var(--vin-fg); background: var(--vin-surface); box-shadow: var(--vin-shadow); }
+[data-vin-style="minimal"] .vin-tabs__tab[aria-selected="true"] { box-shadow: 0 1px 3px rgb(0 0 0 / .1); }
+:root[data-theme="dark"] [data-vin-style="minimal"] .vin-tabs__tab[aria-selected="true"] { background: #27272a; }
+[data-vin-style="glass"] .vin-tabs__tab[aria-selected="true"] { background: rgb(255 255 255 / .7); color: #1e1b4b; }
+:root[data-theme="dark"] [data-vin-style="glass"] .vin-tabs__tab[aria-selected="true"] { background: rgb(255 255 255 / .16); color: #fff; }
+[data-vin-style="brutalist"] .vin-tabs__list { box-shadow: none; }
+[data-vin-style="brutalist"] .vin-tabs__tab[aria-selected="true"] { background: var(--vin-primary-bg); color: #000; box-shadow: none; outline: 2px solid var(--vin-border); }
+.vin-tabs__tab:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+
+/* Avatar */
+.vin-avatar {
+  display: inline-grid; place-items: center; width: 32px; height: 32px; flex: none;
+  font-size: 12px; font-weight: 600; color: var(--vin-secondary-fg);
+  background: var(--vin-secondary); border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-pill);
+  box-shadow: var(--vin-shadow);
+}
+.vin-avatar-group { display: inline-flex; }
+.vin-avatar-group .vin-avatar + .vin-avatar { margin-left: -8px; }
+.vin-avatar--a { background: #fde68a; color: #78350f; }
+.vin-avatar--b { background: #bfdbfe; color: #1e3a8a; }
+.vin-avatar--c { background: #fbcfe8; color: #831843; }
+
+/* Progress */
+.vin-progress {
+  height: 8px; width: 100%; overflow: hidden;
+  background: var(--vin-track); border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-pill);
+  box-shadow: var(--vin-input-shadow);
+}
+.vin-progress__bar { height: 100%; width: var(--value, 60%); background: var(--vin-primary-bg); border-radius: inherit; }
+[data-vin-style="brutalist"] .vin-progress { height: 14px; }
+[data-vin-style="retro"] .vin-progress { height: 16px; padding: 2px; }
+[data-vin-style="retro"] .vin-progress__bar { background: repeating-linear-gradient(90deg, var(--vin-primary-bg) 0 8px, transparent 8px 10px); }
+
+/* Separator, Breadcrumb */
+.vin-separator { height: var(--vin-bw, 1px); min-height: 1px; background: var(--vin-border); border: 0; margin: 14px 0; }
+[data-vin-style="soft"] .vin-separator { background: #c5c9d3; }
+.vin-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--vin-muted); list-style: none; margin: 0; padding: 0; }
+.vin-breadcrumb li + li::before { content: "/"; margin-right: 6px; opacity: .6; }
+.vin-breadcrumb [aria-current] { color: var(--vin-fg); font-weight: var(--vin-weight); }
+
+/* Tooltip */
+.vin-tooltip {
+  display: inline-block; padding: 5px 9px; font-size: 12px; font-weight: var(--vin-weight);
+  color: var(--vin-primary-fg); background: var(--vin-primary-bg);
+  border: var(--vin-bw) solid var(--vin-btn-border); border-radius: calc(var(--vin-radius) * .75); box-shadow: var(--vin-shadow);
+}
+
+/* Menu (dropdown) */
+.vin-menu {
+  min-width: 170px; padding: 4px; font-size: 13px;
+  background: var(--vin-surface); border: var(--vin-bw) solid var(--vin-border); border-radius: var(--vin-radius);
+  box-shadow: var(--vin-shadow-lg); -webkit-backdrop-filter: blur(var(--vin-blur)); backdrop-filter: blur(var(--vin-blur));
+}
+.vin-menu__item { display: flex; justify-content: space-between; padding: 6px 8px; border-radius: calc(var(--vin-radius) - 3px); cursor: default; }
+.vin-menu__item:hover, .vin-menu__item[data-active] { background: var(--vin-secondary); }
+[data-vin-style="brutalist"] .vin-menu__item[data-active] { background: var(--vin-primary-bg); color: #000; }
+[data-vin-style="retro"] .vin-menu__item[data-active] { background: var(--vin-primary-bg); color: var(--vin-primary-fg); }
+.vin-menu__item kbd { font-family: inherit; font-size: 11px; color: var(--vin-muted); }
+
+/* Toast */
+.vin-toast { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.vin-toast .vin-card__title { font-size: 14px; }

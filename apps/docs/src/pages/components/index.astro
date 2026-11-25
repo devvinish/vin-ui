@@ -1,0 +1,33 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import { COMPONENTS, CATEGORIES } from "../../data/components";
+import { href } from "../../lib/site";
+const toc = CATEGORIES.map((c) => ({ id: c.toLowerCase().replace(/\s+/g, "-"), text: c }));
+---
+<Docs title="Components" description="Every VinUI component, in 8 styles, for HTML and React." current="components" toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>Components</span></div>
+  <h1 class="page-title">Components</h1>
+  <p class="page-lead">Every component works in all 8 styles. A component is only published once it passes the visual and accessibility checks in every style.</p>
+  {CATEGORIES.map((cat) => (
+    <section class="prose">
+      <h2 id={cat.toLowerCase().replace(/\s+/g, "-")}>{cat}</h2>
+      <div class="grid-cards">
+        {COMPONENTS.filter((c) => c.category === cat).map((c) =>
+          c.ready ? (
+            <a class="comp-card" href={href(`/components/${c.slug}/`)}>
+              <div class="thumb vin-stage">
+                <span class="vin-btn">Button</span><span class="vin-btn vin-btn--outline">Outline</span>
+              </div>
+              <div class="info"><h3>{c.name} <span class="status ready">Ready</span></h3><p>{c.description}</p></div>
+            </a>
+          ) : (
+            <div class="comp-card">
+              <div class="thumb empty">Coming soon</div>
+              <div class="info"><h3>{c.name} <span class="status">Planned</span></h3><p>{c.description}</p></div>
+            </div>
+          )
+        )}
+      </div>
+    </section>
+  ))}
+</Docs>

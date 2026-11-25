@@ -1,0 +1,17 @@
+---
+/**
+ * Right-sidebar ad unit (Mediavine), same as the 3D models site.
+ * Settings live in src/config/ads.ts.
+ */
+import { ads } from "../config/ads";
+---
+{ads.enabled ? (
+  <div class="ad-slot">
+    <div id={ads.sidebarId} class={ads.sidebarClass || undefined}></div>
+  </div>
+) : ads.showPlaceholder ? (
+  <div class="ad-slot" aria-hidden="true">
+    <span class="ad-label">Advertisement</span>
+    <div class="ad-placeholder"><span>Mediavine sidebar<br />300 × 600</span></div>
+  </div>
+) : null}

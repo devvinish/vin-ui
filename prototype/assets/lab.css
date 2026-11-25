@@ -1,0 +1,288 @@
+/* ==========================================================================
+   VinUI — Style Lab candidate styles
+   Every style uses the same component layer (vin.css). Every style reads
+   ONE user accent: --vin-accent (+ --vin-accent-fg for text on it).
+   ========================================================================== */
+
+:root { --vin-accent: #5b5bd6; --vin-accent-fg: #ffffff; }
+
+/* ---------- 1. PRECISION — crisp hairlines, quiet depth --------------------- */
+[data-vin-style="precision"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #fbfbfc; --vin-stage-img: none;
+  --vin-surface: #ffffff; --vin-fg: #111113; --vin-muted: #6b6b76; --vin-border: #e7e7ec;
+  --vin-primary: var(--vin-accent);
+  --vin-primary-bg: linear-gradient(180deg, color-mix(in srgb, var(--vin-accent) 86%, #fff), var(--vin-accent));
+  --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: #f4f4f6; --vin-secondary-fg: #111113;
+  --vin-danger: #e5484d; --vin-success: #30a46c; --vin-warning: #f76b15;
+  --vin-input-bg: #ffffff; --vin-track: #e4e4e9;
+  --vin-radius: 8px; --vin-pill: 999px; --vin-bw: 1px;
+  --vin-btn-border: color-mix(in srgb, var(--vin-accent) 72%, #000);
+  --vin-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 1px 2px rgb(16 16 20 / .12);
+  --vin-shadow-lg: 0 1px 2px rgb(16 16 20 / .04), 0 12px 32px -16px rgb(16 16 20 / .16);
+  --vin-input-shadow: 0 1px 2px rgb(16 16 20 / .04);
+  --vin-blur: 0px; --vin-weight: 500; --vin-title-weight: 600;
+  --vin-focus: 0 0 0 3px color-mix(in srgb, var(--vin-accent) 30%, transparent);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="precision"] {
+  --vin-stage: #08090a; --vin-surface: #101113; --vin-fg: #f7f8f8; --vin-muted: #8a8f98; --vin-border: #23252a;
+  --vin-secondary: #1a1b1e; --vin-secondary-fg: #f7f8f8; --vin-input-bg: #0c0d0e; --vin-track: #2a2c31;
+  --vin-shadow-lg: inset 0 1px 0 rgb(255 255 255 / .04), 0 16px 32px -16px rgb(0 0 0 / .7);
+  --vin-input-shadow: none;
+}
+[data-vin-style="precision"] .vin-card__title { letter-spacing: -.015em; }
+[data-vin-style="precision"] .vin-btn--secondary { box-shadow: 0 1px 2px rgb(16 16 20 / .06); }
+
+/* ---------- 2. TACTILE — physical, pressable, soft light -------------------- */
+[data-vin-style="tactile"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #e9ebef; --vin-stage-img: none;
+  --vin-surface: linear-gradient(180deg, #ffffff, #f7f8fa);
+  --vin-fg: #1d1f24; --vin-muted: #646a76; --vin-border: rgb(15 20 30 / .11);
+  --vin-primary: var(--vin-accent);
+  --vin-primary-bg: linear-gradient(180deg, color-mix(in srgb, var(--vin-accent) 76%, #fff) 0%, var(--vin-accent) 55%, color-mix(in srgb, var(--vin-accent) 86%, #000) 100%);
+  --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: linear-gradient(180deg, #ffffff, #eef0f3); --vin-secondary-fg: #1d1f24;
+  --vin-danger: #dc3c3c; --vin-success: #2f9e5b; --vin-warning: #e07b12;
+  --vin-input-bg: #f6f7f9; --vin-track: #dde0e6;
+  --vin-radius: 10px; --vin-pill: 999px; --vin-bw: 1px;
+  --vin-btn-border: color-mix(in srgb, var(--vin-accent) 62%, #000);
+  --vin-shadow: inset 0 1px 0 rgb(255 255 255 / .38), inset 0 -1px 0 rgb(0 0 0 / .12), 0 1px 1px rgb(0 0 0 / .12), 0 3px 6px -2px rgb(0 0 0 / .18);
+  --vin-shadow-lg: inset 0 1px 0 #fff, 0 1px 2px rgb(15 20 30 / .08), 0 10px 24px -10px rgb(15 20 30 / .22);
+  --vin-input-shadow: inset 0 1px 2px rgb(15 20 30 / .10), 0 1px 0 rgb(255 255 255 / .9);
+  --vin-blur: 0px; --vin-weight: 600; --vin-title-weight: 650;
+  --vin-focus: 0 0 0 3px color-mix(in srgb, var(--vin-accent) 35%, transparent);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="tactile"] {
+  --vin-stage: #141518; --vin-surface: linear-gradient(180deg, #25272c, #1d1f23);
+  --vin-fg: #eceef2; --vin-muted: #9aa0ab; --vin-border: rgb(255 255 255 / .08);
+  --vin-secondary: linear-gradient(180deg, #2e3137, #25272c); --vin-secondary-fg: #eceef2;
+  --vin-input-bg: #16171a; --vin-track: #0f1012;
+  --vin-shadow-lg: inset 0 1px 0 rgb(255 255 255 / .06), 0 1px 2px rgb(0 0 0 / .4), 0 12px 28px -12px rgb(0 0 0 / .8);
+  --vin-input-shadow: inset 0 1px 3px rgb(0 0 0 / .55), 0 1px 0 rgb(255 255 255 / .05);
+}
+[data-vin-style="tactile"] .vin-btn--secondary { box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 1px 2px rgb(0 0 0 / .1); }
+:root[data-theme="dark"] [data-vin-style="tactile"] .vin-btn--secondary { box-shadow: inset 0 1px 0 rgb(255 255 255 / .07), 0 1px 2px rgb(0 0 0 / .5); }
+[data-vin-style="tactile"] .vin-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgb(0 0 0 / .28); filter: none; }
+[data-vin-style="tactile"] .vin-tabs__list { background: var(--vin-input-bg); }
+[data-vin-style="tactile"] .vin-switch__thumb { background: linear-gradient(180deg, #ffffff, #e6e8ec); box-shadow: 0 1px 2px rgb(0 0 0 / .3), inset 0 1px 0 #fff; }
+[data-vin-style="tactile"] .vin-progress__bar { box-shadow: inset 0 1px 0 rgb(255 255 255 / .35); }
+
+/* ---------- 3. CLAY — puffy, friendly, inflated ------------------------------ */
+[data-vin-style="clay"] {
+  --vin-font: "Nunito", system-ui, sans-serif;
+  --vin-stage: color-mix(in srgb, var(--vin-accent) 9%, #fbf7f4); --vin-stage-img: none;
+  --vin-surface: #fffdfb; --vin-fg: #2a2433; --vin-muted: #7a7184; --vin-border: transparent;
+  --vin-primary: var(--vin-accent); --vin-primary-bg: var(--vin-accent); --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: color-mix(in srgb, var(--vin-accent) 11%, #fff); --vin-secondary-fg: color-mix(in srgb, var(--vin-accent) 55%, #2a2433);
+  --vin-danger: #f0506e; --vin-success: #22b07d; --vin-warning: #f59f0b;
+  --vin-input-bg: color-mix(in srgb, var(--vin-accent) 5%, #f5f1ed); --vin-track: color-mix(in srgb, var(--vin-accent) 14%, #ebe5df);
+  --vin-radius: 16px; --vin-pill: 999px; --vin-bw: 0px; --vin-btn-border: transparent;
+  --vin-shadow: inset 2px 2px 4px rgb(255 255 255 / .45), inset -3px -4px 6px rgb(0 0 0 / .18), 0 8px 16px -6px color-mix(in srgb, var(--vin-accent) 55%, transparent);
+  --vin-shadow-lg: inset 6px 6px 12px rgb(255 255 255 / .9), inset -8px -8px 16px rgb(60 40 80 / .07), 0 26px 40px -22px color-mix(in srgb, var(--vin-accent) 45%, rgb(0 0 0 / .4));
+  --vin-input-shadow: inset 3px 3px 6px rgb(60 40 80 / .10), inset -3px -3px 6px rgb(255 255 255 / .85);
+  --vin-blur: 0px; --vin-weight: 700; --vin-title-weight: 800;
+  --vin-focus: 0 0 0 4px color-mix(in srgb, var(--vin-accent) 30%, transparent);
+  --vin-ease: cubic-bezier(.34, 1.56, .64, 1);
+}
+:root[data-theme="dark"] [data-vin-style="clay"] {
+  --vin-stage: color-mix(in srgb, var(--vin-accent) 10%, #16141b); --vin-surface: #27242f; --vin-fg: #f3eff8; --vin-muted: #aba3b7;
+  --vin-secondary: color-mix(in srgb, var(--vin-accent) 22%, #27242f); --vin-secondary-fg: #f3eff8;
+  --vin-input-bg: #1f1c26; --vin-track: #3a3545;
+  --vin-shadow-lg: inset 4px 4px 10px rgb(255 255 255 / .05), inset -6px -6px 12px rgb(0 0 0 / .35), 0 26px 40px -22px rgb(0 0 0 / .8);
+  --vin-input-shadow: inset 3px 3px 6px rgb(0 0 0 / .35), inset -2px -2px 5px rgb(255 255 255 / .04);
+}
+[data-vin-style="clay"] .vin-card { border-radius: 28px; }
+[data-vin-style="clay"] .vin-btn--outline, [data-vin-style="clay"] .vin-btn--secondary { box-shadow: inset 2px 2px 4px rgb(255 255 255 / .7), inset -3px -3px 6px rgb(60 40 80 / .1); background: var(--vin-secondary); }
+:root[data-theme="dark"] [data-vin-style="clay"] .vin-btn--outline, :root[data-theme="dark"] [data-vin-style="clay"] .vin-btn--secondary { box-shadow: inset 2px 2px 4px rgb(255 255 255 / .06), inset -3px -3px 6px rgb(0 0 0 / .3); }
+[data-vin-style="clay"] .vin-btn:hover { filter: none; transform: translateY(-2px); }
+[data-vin-style="clay"] .vin-btn:active { transform: scale(.96); }
+[data-vin-style="clay"] .vin-checkbox { border-radius: 7px; }
+[data-vin-style="clay"] .vin-badge { border: 0; }
+[data-vin-style="clay"] .vin-avatar { border: 3px solid var(--vin-surface); box-shadow: 0 4px 10px -4px rgb(0 0 0 / .25); }
+
+/* ---------- 4. TONAL — colour-led surfaces, pill shapes, springy ------------- */
+[data-vin-style="tonal"] {
+  --vin-font: "Outfit", system-ui, sans-serif;
+  --vin-stage: color-mix(in srgb, var(--vin-accent) 5%, #fdfcff); --vin-stage-img: none;
+  --vin-surface: color-mix(in srgb, var(--vin-accent) 8%, #fffbff); --vin-fg: #1b1b21; --vin-muted: #5e5c6b; --vin-border: transparent;
+  --vin-primary: var(--vin-accent); --vin-primary-bg: var(--vin-accent); --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: color-mix(in srgb, var(--vin-accent) 20%, #fff); --vin-secondary-fg: color-mix(in srgb, var(--vin-accent) 72%, #000);
+  --vin-danger: #ba1a1a; --vin-success: #006d3b; --vin-warning: #8c5000;
+  --vin-input-bg: color-mix(in srgb, var(--vin-accent) 13%, #fff); --vin-track: color-mix(in srgb, var(--vin-accent) 22%, #e6e1ea);
+  --vin-radius: 14px; --vin-pill: 999px; --vin-bw: 0px; --vin-btn-border: transparent;
+  --vin-shadow: none; --vin-shadow-lg: none; --vin-input-shadow: none;
+  --vin-blur: 0px; --vin-weight: 500; --vin-title-weight: 600;
+  --vin-focus: 0 0 0 3px color-mix(in srgb, var(--vin-accent) 45%, transparent);
+  --vin-ease: cubic-bezier(.34, 1.56, .64, 1);
+}
+:root[data-theme="dark"] [data-vin-style="tonal"] {
+  --vin-stage: color-mix(in srgb, var(--vin-accent) 4%, #121216); --vin-surface: color-mix(in srgb, var(--vin-accent) 12%, #1b1b20);
+  --vin-fg: #e6e1e9; --vin-muted: #aaa6b4;
+  --vin-secondary: color-mix(in srgb, var(--vin-accent) 30%, #1b1b20); --vin-secondary-fg: color-mix(in srgb, var(--vin-accent) 25%, #fff);
+  --vin-input-bg: color-mix(in srgb, var(--vin-accent) 16%, #1b1b20); --vin-track: color-mix(in srgb, var(--vin-accent) 20%, #2a2a30);
+  --vin-danger: #ffb4ab; --vin-success: #6fdba0; --vin-warning: #ffb870;
+}
+[data-vin-style="tonal"] .vin-card { border-radius: 28px; padding: 22px; }
+[data-vin-style="tonal"] .vin-btn { border-radius: 999px; transition: border-radius .35s var(--vin-ease), transform .2s, filter .15s; }
+[data-vin-style="tonal"] .vin-btn:active { border-radius: 10px; transform: none; }
+[data-vin-style="tonal"] .vin-btn--outline { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vin-fg) 28%, transparent); }
+[data-vin-style="tonal"] .vin-input { border-radius: 12px 12px 4px 4px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--vin-accent) 55%, transparent); }
+[data-vin-style="tonal"] .vin-input:focus { box-shadow: inset 0 -3px 0 var(--vin-accent); }
+[data-vin-style="tonal"] .vin-tabs__list { border-radius: 999px; padding: 4px; }
+[data-vin-style="tonal"] .vin-tabs__tab { border-radius: 999px; }
+[data-vin-style="tonal"] .vin-tabs__tab[aria-selected="true"] { background: var(--vin-accent); color: var(--vin-accent-fg); }
+[data-vin-style="tonal"] .vin-checkbox { border: 2px solid var(--vin-muted); border-radius: 5px; }
+[data-vin-style="tonal"] .vin-switch { height: 26px; width: 46px; }
+[data-vin-style="tonal"] .vin-switch__thumb { width: 18px; height: 18px; left: 4px; }
+[data-vin-style="tonal"] .vin-switch[aria-checked="true"] .vin-switch__thumb { left: calc(100% - 22px); width: 20px; height: 20px; background: var(--vin-accent-fg); }
+[data-vin-style="tonal"] .vin-alert { border-radius: 18px; }
+
+/* ---------- 5. EDITORIAL — typographic, airy, magazine ----------------------- */
+[data-vin-style="editorial"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #f7f5f0; --vin-stage-img: none;
+  --vin-surface: #fffefa; --vin-fg: #1a1916; --vin-muted: #6f6b62; --vin-border: #dcd8ce;
+  --vin-primary: var(--vin-accent); --vin-primary-bg: var(--vin-accent); --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: transparent; --vin-secondary-fg: #1a1916;
+  --vin-danger: #b42318; --vin-success: #1f7a4d; --vin-warning: #a15c07;
+  --vin-input-bg: transparent; --vin-track: #dcd8ce;
+  --vin-radius: 2px; --vin-pill: 2px; --vin-bw: 1px; --vin-btn-border: transparent;
+  --vin-shadow: none; --vin-shadow-lg: none; --vin-input-shadow: none;
+  --vin-blur: 0px; --vin-weight: 500; --vin-title-weight: 400;
+  --vin-focus: 0 0 0 2px color-mix(in srgb, var(--vin-accent) 55%, transparent);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="editorial"] {
+  --vin-stage: #11110f; --vin-surface: #161613; --vin-fg: #ecebe6; --vin-muted: #9d998e; --vin-border: #302e29;
+  --vin-secondary-fg: #ecebe6; --vin-track: #302e29;
+}
+[data-vin-style="editorial"] .vin-card { border-top: 2px solid var(--vin-fg); padding: 22px 24px; }
+[data-vin-style="editorial"] .vin-card__title { font-family: "Instrument Serif", Georgia, serif; font-size: 26px; line-height: 1.1; letter-spacing: -.01em; }
+[data-vin-style="editorial"] .vin-btn { text-transform: uppercase; font-size: 11.5px; letter-spacing: .1em; }
+[data-vin-style="editorial"] .vin-btn--secondary { border-color: var(--vin-fg); }
+[data-vin-style="editorial"] .vin-btn--ghost { text-decoration: underline; text-underline-offset: 4px; }
+[data-vin-style="editorial"] .vin-label { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--vin-muted); }
+[data-vin-style="editorial"] .vin-input { border-width: 0 0 1px; border-radius: 0; padding-left: 0; }
+[data-vin-style="editorial"] .vin-input:focus { box-shadow: inset 0 -1px 0 var(--vin-fg); }
+[data-vin-style="editorial"] .vin-tabs__list { background: none; border-width: 0 0 1px; border-radius: 0; padding: 0; gap: 18px; }
+[data-vin-style="editorial"] .vin-tabs__tab { padding: 0; border-radius: 0; height: 32px; }
+[data-vin-style="editorial"] .vin-tabs__tab[aria-selected="true"] { background: none; box-shadow: inset 0 -2px 0 var(--vin-accent); }
+[data-vin-style="editorial"] .vin-badge { background: transparent; text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }
+[data-vin-style="editorial"] .vin-badge--primary { background: var(--vin-accent); }
+[data-vin-style="editorial"] .vin-progress { height: 4px; border: 0; }
+
+/* ---------- 6. TERMINAL — developer-native, monospace ------------------------ */
+[data-vin-style="terminal"] {
+  --vin-font: "JetBrains Mono", ui-monospace, monospace;
+  --vin-stage: #f4f4ef; --vin-stage-img: none;
+  --vin-surface: #fbfbf7; --vin-fg: #1c1f1c; --vin-muted: #6b726b; --vin-border: #9aa39a;
+  --vin-primary: var(--vin-accent); --vin-primary-bg: var(--vin-accent); --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: transparent; --vin-secondary-fg: #1c1f1c;
+  --vin-danger: #c62828; --vin-success: #2e7d32; --vin-warning: #b26a00;
+  --vin-input-bg: transparent; --vin-track: transparent;
+  --vin-radius: 3px; --vin-pill: 3px; --vin-bw: 1px; --vin-btn-border: transparent;
+  --vin-shadow: none; --vin-shadow-lg: none; --vin-input-shadow: none;
+  --vin-blur: 0px; --vin-weight: 500; --vin-title-weight: 700;
+  --vin-focus: 0 0 0 2px var(--vin-accent);
+  --vin-ease: linear;
+}
+:root[data-theme="dark"] [data-vin-style="terminal"] {
+  --vin-stage: #0a0d0b; --vin-surface: #0e1210; --vin-fg: #d7e0d8; --vin-muted: #7d8a80; --vin-border: #3d4a40;
+  --vin-secondary-fg: #d7e0d8;
+}
+[data-vin-style="terminal"] .vin-card, [data-vin-style="terminal"] .vin-input, [data-vin-style="terminal"] .vin-select,
+[data-vin-style="terminal"] .vin-alert, [data-vin-style="terminal"] .vin-menu, [data-vin-style="terminal"] .vin-tabs__list,
+[data-vin-style="terminal"] .vin-progress, [data-vin-style="terminal"] .vin-badge, [data-vin-style="terminal"] .vin-switch { border-style: dashed; }
+[data-vin-style="terminal"] .vin-btn { font-size: 13px; }
+[data-vin-style="terminal"] .vin-btn--outline::before, [data-vin-style="terminal"] .vin-btn--secondary::before, [data-vin-style="terminal"] .vin-btn--ghost::before { content: "["; color: var(--vin-accent); }
+[data-vin-style="terminal"] .vin-btn--outline::after, [data-vin-style="terminal"] .vin-btn--secondary::after, [data-vin-style="terminal"] .vin-btn--ghost::after { content: "]"; color: var(--vin-accent); }
+[data-vin-style="terminal"] .vin-btn--outline, [data-vin-style="terminal"] .vin-btn--secondary, [data-vin-style="terminal"] .vin-btn--ghost { gap: .4em; border-style: dashed; }
+[data-vin-style="terminal"] .vin-label::before { content: "$ "; color: var(--vin-accent); }
+[data-vin-style="terminal"] .vin-card__title::before { content: "# "; color: var(--vin-accent); }
+[data-vin-style="terminal"] .vin-tabs__tab[aria-selected="true"] { background: var(--vin-accent); color: var(--vin-accent-fg); }
+[data-vin-style="terminal"] .vin-switch__thumb { border-radius: 2px; background: var(--vin-fg); box-shadow: none; }
+[data-vin-style="terminal"] .vin-switch[aria-checked="true"] .vin-switch__thumb { background: var(--vin-accent-fg); }
+[data-vin-style="terminal"] .vin-progress { height: 14px; padding: 2px; }
+[data-vin-style="terminal"] .vin-progress__bar { border-radius: 0; background: repeating-linear-gradient(90deg, var(--vin-accent) 0 6px, transparent 6px 8px); }
+[data-vin-style="terminal"] .vin-badge { text-transform: lowercase; }
+[data-vin-style="terminal"] .vin-avatar { border-style: dashed; }
+
+/* ---------- 7. PAPER — warm, hand-made, human --------------------------------- */
+[data-vin-style="paper"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #f3ecdf; --vin-stage-img: radial-gradient(rgb(120 90 50 / .09) 1px, transparent 1.2px);
+  --vin-surface: #fffaf0; --vin-fg: #2b2520; --vin-muted: #7a6e60; --vin-border: rgb(43 37 32 / .55);
+  --vin-primary: var(--vin-accent); --vin-primary-bg: var(--vin-accent); --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: #f6eedf; --vin-secondary-fg: #2b2520;
+  --vin-danger: #c0392b; --vin-success: #3c8d4f; --vin-warning: #c27c0e;
+  --vin-input-bg: #fffdf7; --vin-track: #e8dcc8;
+  --vin-radius: 10px; --vin-pill: 999px; --vin-bw: 1.5px; --vin-btn-border: rgb(43 37 32 / .55);
+  --vin-shadow: 0 2px 5px -1px rgb(80 50 20 / .22);
+  --vin-shadow-lg: 0 1px 2px rgb(80 50 20 / .08), 0 16px 30px -16px rgb(80 50 20 / .35);
+  --vin-input-shadow: inset 0 1px 2px rgb(80 50 20 / .08);
+  --vin-blur: 0px; --vin-weight: 600; --vin-title-weight: 700;
+  --vin-focus: 0 0 0 3px color-mix(in srgb, var(--vin-accent) 35%, transparent);
+  --vin-ease: cubic-bezier(.2, .8, .2, 1);
+}
+:root[data-theme="dark"] [data-vin-style="paper"] {
+  --vin-stage: #1c1814; --vin-stage-img: radial-gradient(rgb(255 230 200 / .05) 1px, transparent 1.2px);
+  --vin-surface: #26211b; --vin-fg: #efe6d8; --vin-muted: #b0a291; --vin-border: rgb(239 230 216 / .4);
+  --vin-secondary: #2e2821; --vin-secondary-fg: #efe6d8; --vin-input-bg: #201c17; --vin-track: #3a3229;
+  --vin-btn-border: rgb(239 230 216 / .4);
+  --vin-shadow: 0 2px 6px -1px rgb(0 0 0 / .5); --vin-shadow-lg: 0 18px 30px -16px rgb(0 0 0 / .8);
+}
+.vin-stage[data-vin-style="paper"] { background-size: 14px 14px; }
+[data-vin-style="paper"] .vin-btn, [data-vin-style="paper"] .vin-badge, [data-vin-style="paper"] .vin-tabs__tab {
+  font-family: "Kalam", "Inter", cursive; font-size: 16px; font-weight: 700; }
+[data-vin-style="paper"] .vin-badge { font-size: 13px; }
+[data-vin-style="paper"] .vin-btn, [data-vin-style="paper"] .vin-input, [data-vin-style="paper"] .vin-badge, [data-vin-style="paper"] .vin-tabs__list {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+[data-vin-style="paper"] .vin-card, [data-vin-style="paper"] .vin-alert, [data-vin-style="paper"] .vin-menu { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
+[data-vin-style="paper"] .vin-card__title { font-family: "Kalam", "Inter", cursive; font-size: 21px; }
+[data-vin-style="paper"] .vin-btn:hover { filter: none; transform: rotate(-1deg); }
+[data-vin-style="paper"] .vin-checkbox { border-radius: 3px 6px 4px 7px; border-width: 1.5px; }
+
+/* ---------- 8. BENTO — calm, layered, borderless ------------------------------ */
+[data-vin-style="bento"] {
+  --vin-font: "Inter", system-ui, sans-serif;
+  --vin-stage: #f2f2f5; --vin-stage-img: none;
+  --vin-surface: #ffffff; --vin-fg: #1d1d1f; --vin-muted: #6e6e73; --vin-border: transparent;
+  --vin-primary: var(--vin-accent); --vin-primary-bg: var(--vin-accent); --vin-primary-fg: var(--vin-accent-fg);
+  --vin-secondary: #f2f2f5; --vin-secondary-fg: #1d1d1f;
+  --vin-danger: #ff3b30; --vin-success: #28a745; --vin-warning: #ff9500;
+  --vin-input-bg: #f2f2f5; --vin-track: #e3e3e8;
+  --vin-radius: 12px; --vin-pill: 999px; --vin-bw: 0px; --vin-btn-border: transparent;
+  --vin-shadow: none; --vin-shadow-lg: 0 1px 2px rgb(0 0 0 / .04), 0 8px 24px -8px rgb(0 0 0 / .08); --vin-input-shadow: none;
+  --vin-blur: 0px; --vin-weight: 600; --vin-title-weight: 650;
+  --vin-focus: 0 0 0 4px color-mix(in srgb, var(--vin-accent) 30%, transparent);
+  --vin-ease: cubic-bezier(.25, .1, .25, 1);
+}
+:root[data-theme="dark"] [data-vin-style="bento"] {
+  --vin-stage: #000000; --vin-surface: #1c1c1e; --vin-fg: #f5f5f7; --vin-muted: #98989d;
+  --vin-secondary: #2c2c2e; --vin-secondary-fg: #f5f5f7; --vin-input-bg: #2c2c2e; --vin-track: #3a3a3c;
+  --vin-shadow-lg: none;
+}
+[data-vin-style="bento"] .vin-card { border-radius: 24px; padding: 22px; }
+[data-vin-style="bento"] .vin-btn--outline { box-shadow: inset 0 0 0 1px #d2d2d7; }
+:root[data-theme="dark"] [data-vin-style="bento"] .vin-btn--outline { box-shadow: inset 0 0 0 1px #48484a; }
+[data-vin-style="bento"] .vin-tabs__list { border-radius: 10px; }
+[data-vin-style="bento"] .vin-tabs__tab[aria-selected="true"] { background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / .12); }
+:root[data-theme="dark"] [data-vin-style="bento"] .vin-tabs__tab[aria-selected="true"] { background: #636366; }
+[data-vin-style="bento"] .vin-checkbox { border: 1.5px solid #c7c7cc; border-radius: 50%; }
+[data-vin-style="bento"] .vin-switch { width: 44px; height: 26px; }
+[data-vin-style="bento"] .vin-switch__thumb { width: 22px; height: 22px; }
+[data-vin-style="bento"] .vin-switch[aria-checked="true"] .vin-switch__thumb { left: calc(100% - 24px); }
+[data-vin-style="bento"] .vin-alert { border-radius: 16px; background: var(--vin-secondary); }
+
+/* ---------- Shared: secondary/outline text uses accent where it helps ---------- */
+[data-vin-style] .vin-check { color: var(--vin-fg); }
+.vin-stat { font-size: 30px; font-weight: var(--vin-title-weight); letter-spacing: -.02em; line-height: 1.1; margin: 10px 0 6px; }
+[data-vin-style="editorial"] .vin-stat { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 40px; }
+[data-vin-style="paper"] .vin-stat { font-family: "Kalam", cursive; }
+.vin-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+.vin-row + .vin-row { margin-top: 12px; }
+.vin-link { color: var(--vin-accent); font-weight: var(--vin-weight); font-size: 13px; text-decoration: none; }

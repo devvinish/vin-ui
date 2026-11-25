@@ -1,0 +1,64 @@
+---
+import Icon from "./Icon.astro";
+const groups = [
+  { key: "mode", label: "Mode", values: [["system", "System"], ["light", "Light"], ["dark", "Dark"]] },
+  { key: "radius", label: "Corner radius", hint: "Default keeps the style's own", values: [["default", "Default"], ["none", "None"], ["sm", "S"], ["md", "M"], ["lg", "L"], ["full", "Full"]] },
+  { key: "gray", label: "Grey tone", values: [["neutral", "Neutral"], ["slate", "Slate"], ["stone", "Stone"]] },
+  { key: "font", label: "Font", hint: "Default keeps the style's own", values: [["default", "Default"], ["inter", "Inter"], ["geist", "Geist"], ["system", "System"], ["mono", "Mono"], ["custom", "Custom"]] },
+  { key: "density", label: "Density", values: [["compact", "Compact"], ["default", "Default"], ["comfortable", "Comfortable"]] },
+  { key: "motion", label: "Motion", values: [["full", "Full"], ["reduced", "Reduced"], ["off", "Off"]] },
+];
+---
+<div class="drawer-backdrop" hidden data-drawer-backdrop></div>
+<aside class="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="customize-title" data-drawer>
+  <div class="drawer-head">
+    <h2 id="customize-title">Customize</h2>
+    <button class="icon-btn" type="button" aria-label="Close" data-close-customize><Icon name="close" /></button>
+  </div>
+  <div class="drawer-body">
+    <p class="muted" style="font-size:13px;margin:10px 0 0">Saved in this browser. Style and accent are in the header.</p>
+    {groups.map((g) => (
+      <div class="opt-group">
+        <div class="lbl" id={`opt-${g.key}`}>{g.label} {g.hint && <span class="hint">{g.hint}</span>}</div>
+        <div class="seg" role="group" aria-labelledby={`opt-${g.key}`}>
+          {g.values.map(([v, l]) => <button type="button" aria-pressed="false" data-opt={g.key} data-val={v}>{l}</button>)}
+        </div>
+        {g.key === "font" && (
+          <input class="text-input" type="text" placeholder="Font family, e.g. Poppins (must be loaded by your page)" data-font-family hidden aria-label="Custom font family" />
+        )}
+      </div>
+    ))}
+
+    <div class="opt-group">
+      <div class="lbl">Use this theme</div>
+      <div class="btn-row">
+        <button class="btn" type="button" data-copy-theme="html"><Icon name="copy" />Copy HTML</button>
+        <button class="btn" type="button" data-copy-theme="css"><Icon name="copy" />Copy CSS</button>
+        <button class="btn" type="button" data-copy-theme="cli"><Icon name="copy" />Copy CLI</button>
+        <button class="btn" type="button" data-share-theme><Icon name="link" />Share link</button>
+      </div>
+    </div>
+
+    <div class="opt-group">
+      <div class="lbl">Backup <span class="hint">vin-theme.json</span></div>
+      <div class="btn-row">
+        <button class="btn" type="button" data-export-theme><Icon name="download" />Export</button>
+        <button class="btn" type="button" data-import-theme><Icon name="upload" />Import</button>
+      </div>
+      <input type="file" accept="application/json,.json" hidden data-import-file />
+    </div>
+
+    <div class="opt-group">
+      <div class="lbl">My themes</div>
+      <form class="btn-row" data-save-form style="grid-template-columns:1fr auto">
+        <input class="text-input" style="margin:0" type="text" maxlength="60" placeholder="Name this theme" aria-label="Theme name" data-save-name required />
+        <button class="btn" type="submit"><Icon name="save" />Save</button>
+      </form>
+      <ul class="saved-list" data-saved-list></ul>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn" type="button" data-reset-theme><Icon name="reset" />Reset all</button>
+    <button class="btn btn-primary" type="button" data-close-customize>Done</button>
+  </div>
+</aside>

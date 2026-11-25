@@ -1,0 +1,56 @@
+/* ==========================================================================
+   VinUI · Button
+   API (see spec/button.json):
+     .vin-btn                          primary, md
+     .vin-btn--{secondary|outline|ghost|danger}
+     .vin-btn--{sm|lg|icon}
+   Reads tokens only. Per-style differences live in styles.mjs → tweaks.button.
+   ========================================================================== */
+
+.vin-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  box-sizing: border-box;
+  height: var(--vin-h-md); padding: 0 var(--vin-px-md);
+  font: inherit; font-size: var(--vin-text-md); font-weight: var(--vin-weight);
+  line-height: 1; white-space: nowrap; text-decoration: none;
+  color: var(--vin-primary-fg); background: var(--vin-primary-bg);
+  border: var(--vin-bw) solid var(--vin-btn-border); border-radius: var(--vin-radius);
+  box-shadow: var(--vin-shadow);
+  cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--vin-dur) var(--vin-ease),
+    box-shadow var(--vin-dur) var(--vin-ease),
+    filter var(--vin-dur),
+    background-color var(--vin-dur);
+}
+.vin-btn:hover { filter: brightness(1.07); }
+.vin-btn:active { transform: translateY(1px); }
+.vin-btn:focus-visible { outline: none; box-shadow: var(--vin-shadow), var(--vin-focus); }
+.vin-btn:disabled,
+.vin-btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; pointer-events: none; }
+.vin-btn svg { width: 1.15em; height: 1.15em; flex: none; }
+
+/* Variants */
+.vin-btn--secondary {
+  color: var(--vin-secondary-fg); background: var(--vin-secondary);
+  border-color: var(--vin-border); box-shadow: var(--vin-shadow-soft);
+}
+.vin-btn--outline {
+  color: var(--vin-fg); background: transparent;
+  border-color: var(--vin-border); box-shadow: var(--vin-outline-shadow);
+}
+.vin-btn--ghost {
+  color: var(--vin-fg); background: transparent;
+  border-color: transparent; box-shadow: none;
+}
+.vin-btn--ghost:hover,
+.vin-btn--outline:hover { filter: none; background-color: color-mix(in srgb, var(--vin-fg) 7%, transparent); }
+.vin-btn--danger { color: var(--vin-danger-fg, #fff); background: var(--vin-danger); border-color: transparent; }
+.vin-btn--secondary:focus-visible { box-shadow: var(--vin-shadow-soft), var(--vin-focus); }
+.vin-btn--outline:focus-visible { box-shadow: var(--vin-outline-shadow), var(--vin-focus); }
+.vin-btn--ghost:focus-visible { box-shadow: var(--vin-focus); }
+
+/* Sizes */
+.vin-btn--sm { height: var(--vin-h-sm); padding: 0 var(--vin-px-sm); font-size: var(--vin-text-sm); }
+.vin-btn--lg { height: var(--vin-h-lg); padding: 0 var(--vin-px-lg); font-size: var(--vin-text-lg); }
+.vin-btn--icon { width: var(--vin-h-md); padding: 0; }

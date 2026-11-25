@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Unit tests (styles, theme, HTML, React)
+        run: npm test
+      - name: Build docs site
+        run: npm run build
+      - run: npx playwright install --with-deps chromium
+      # Screenshots render differently on Linux, so CI keeps its own baselines in
+      # tests/visual/__screenshots__/linux. Missing ones are written (not failed) and
+      # uploaded below: download them once and commit them to turn on comparisons.
+      # Accessibility (axe) and HTML/React parity always run in full.
+      - name: Visual + accessibility tests
+        run: npx playwright test --update-snapshots=missing
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright
+          path: |
+            playwright-report/
+            tests/visual/__screenshots__/linux/
+          retention-days: 14

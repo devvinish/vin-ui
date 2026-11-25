@@ -1,0 +1,73 @@
+/* ==========================================================================
+   VinUI base layer
+   Shared defaults for every style, plus the Customize options.
+
+   THE THEME ROOT
+   Put the style and every option on ONE element, usually <html>:
+     <html data-vin-style="tactile" data-vin-mode="dark" data-vin-radius="lg"
+           style="--vin-accent: #0d9488">
+   ========================================================================== */
+
+/* Accent: set by the user. The theme engine also computes the three helpers
+   below; these fallbacks keep plain-CSS users working without JavaScript. */
+:root {
+  --vin-accent: #5b5bd6;
+  --vin-accent-fg: #ffffff;
+  --vin-accent-ink-light: var(--vin-accent);
+  --vin-accent-ink-dark: var(--vin-accent);
+}
+
+[data-vin-style] {
+  /* Size scale (the style contract keeps these identical across styles) */
+  --vin-h-sm: 30px;  --vin-h-md: 36px;  --vin-h-lg: 44px;
+  --vin-px-sm: 12px; --vin-px-md: 16px; --vin-px-lg: 22px;
+  --vin-text-sm: 13px; --vin-text-md: 14px; --vin-text-lg: 15px;
+  --vin-dur: 150ms;
+  /* Accent shade that is readable as text on this mode's surfaces */
+  --vin-accent-text: var(--vin-accent-ink-light);
+
+  font-family: var(--vin-font);
+  color: var(--vin-fg);
+}
+
+.vin-stage {
+  background-color: var(--vin-stage);
+  background-image: var(--vin-stage-img);
+  background-size: 14px 14px;
+}
+
+/* ---------- Customize: corner radius ---------- */
+[data-vin-style][data-vin-radius="none"] { --vin-radius: 0px;  --vin-radius-lg: 0px;  --vin-pill: 0px; }
+[data-vin-style][data-vin-radius="sm"]   { --vin-radius: 4px;  --vin-radius-lg: 6px; }
+[data-vin-style][data-vin-radius="md"]   { --vin-radius: 8px;  --vin-radius-lg: 12px; }
+[data-vin-style][data-vin-radius="lg"]   { --vin-radius: 12px; --vin-radius-lg: 18px; }
+[data-vin-style][data-vin-radius="full"] { --vin-radius: 999px; --vin-radius-lg: 24px; --vin-pill: 999px; }
+
+/* ---------- Customize: density ---------- */
+[data-vin-style][data-vin-density="compact"] {
+  --vin-h-sm: 26px; --vin-h-md: 32px; --vin-h-lg: 38px;
+  --vin-px-sm: 10px; --vin-px-md: 14px; --vin-px-lg: 18px;
+  --vin-text-sm: 12.5px; --vin-text-md: 13.5px; --vin-text-lg: 14.5px;
+}
+[data-vin-style][data-vin-density="comfortable"] {
+  --vin-h-sm: 34px; --vin-h-md: 40px; --vin-h-lg: 48px;
+  --vin-px-sm: 14px; --vin-px-md: 18px; --vin-px-lg: 24px;
+  --vin-text-sm: 13.5px; --vin-text-md: 15px; --vin-text-lg: 16px;
+}
+
+/* ---------- Customize: font ---------- */
+[data-vin-style][data-vin-font="inter"]  { --vin-font: "Inter", system-ui, sans-serif; }
+[data-vin-style][data-vin-font="geist"]  { --vin-font: "Geist", "Inter", system-ui, sans-serif; }
+[data-vin-style][data-vin-font="system"] { --vin-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-vin-style][data-vin-font="mono"]   { --vin-font: "JetBrains Mono", ui-monospace, monospace; }
+/* data-vin-font="custom": the theme engine sets --vin-font inline. */
+
+/* ---------- Customize: motion ---------- */
+[data-vin-style][data-vin-motion="reduced"] { --vin-dur: 60ms; }
+[data-vin-style][data-vin-motion="off"] { --vin-dur: 0ms; }
+[data-vin-motion="off"] *, [data-vin-motion="off"] *::before, [data-vin-motion="off"] *::after { animation: none !important; transition: none !important; }
+:is([data-vin-motion="reduced"], [data-vin-motion="off"]) .vin-btn { transform: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  [data-vin-style]:not([data-vin-motion="full"]) { --vin-dur: 60ms; }
+  [data-vin-style]:not([data-vin-motion="full"]) .vin-btn { transform: none !important; }
+}

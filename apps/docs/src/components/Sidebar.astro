@@ -1,0 +1,28 @@
+---
+import { COMPONENTS, CATEGORIES } from "../data/components";
+import { href } from "../lib/site";
+const { current = "" } = Astro.props as { current?: string };
+const start = [
+  { key: "home", label: "Introduction", path: "/" },
+  { key: "components", label: "All components", path: "/components/" },
+  { key: "styles", label: "Styles", path: "/styles/" },
+];
+---
+<aside class="sidebar" aria-label="Docs navigation" id="sidebar">
+  <div class="side-group">
+    <h5>Getting started</h5>
+    {start.map((s) => <a href={href(s.path)} aria-current={current === s.key ? "page" : undefined}>{s.label}</a>)}
+  </div>
+  {CATEGORIES.map((cat) => (
+    <div class="side-group">
+      <h5>{cat}</h5>
+      {COMPONENTS.filter((c) => c.category === cat).map((c) =>
+        c.ready ? (
+          <a href={href(`/components/${c.slug}/`)} aria-current={current === c.slug ? "page" : undefined}>{c.name}</a>
+        ) : (
+          <span class="soon">{c.name} <span class="tag">soon</span></span>
+        )
+      )}
+    </div>
+  ))}
+</aside>

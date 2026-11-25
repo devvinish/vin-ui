@@ -1,0 +1,62 @@
+---
+import "@vinui/styles/vinui.css";
+import "../styles/site.css";
+import { STYLES, DEFAULT_STYLE } from "@vinui/styles";
+import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
+import Header from "../components/Header.astro";
+import Customize from "../components/Customize.astro";
+import Search from "../components/Search.astro";
+import { ads } from "../config/ads";
+import { href, fontsHref } from "../lib/site";
+
+export interface Props { title: string; description?: string; current?: string; hasSidebar?: boolean }
+const { title, description = "VinUI: free, MIT-licensed UI components for HTML and React. One set of components, 8 styles, any accent colour.", current, hasSidebar = false } = Astro.props;
+const fullTitle = title === "VinUI" ? "VinUI: components in 8 styles" : `${title} · VinUI`;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const { vars } = themeToAttributes(DEFAULT_THEME);
+const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
+---
+<!doctype html>
+<html lang="en" data-vin-style={DEFAULT_STYLE} style={rootStyle}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href={href("/favicon.svg")} type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontsHref([...STYLES.map((s) => s.fonts), ["Space+Grotesk:wght@500;600;700", "Geist:wght@400;500;600", "JetBrains+Mono:wght@400;500"]])} />
+    <!-- Apply the saved theme before first paint, so there is no flash of the default style. -->
+    <script is:inline>
+      (function () {
+        try {
+          var d = document.documentElement, b = JSON.parse(localStorage.getItem("vinui:boot") || "null");
+          if (!b) return;
+          for (var k in b.attrs) b.attrs[k] === null ? d.removeAttribute(k) : d.setAttribute(k, b.attrs[k]);
+          d.style.removeProperty("--vin-font");
+          for (var v in b.vars) d.style.setProperty(v, b.vars[v]);
+        } catch (e) {}
+      })();
+    </script>
+    {ads.enabled && ads.scriptSrc && (
+      <script is:inline async data-noptimize="1" data-cfasync="false" src={ads.scriptSrc}></script>
+    )}
+  </head>
+  <body>
+    <a class="sr-only" href="#main">Skip to content</a>
+    <Header current={current} hasSidebar={hasSidebar} />
+    <slot />
+    <Customize />
+    <Search />
+    <div class="toast" hidden role="status" aria-live="polite" data-toast></div>
+    <script>
+      import "../scripts/theme-ui.ts";
+    </script>
+  </body>
+</html>

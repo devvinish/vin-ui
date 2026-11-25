@@ -1,0 +1,17 @@
+{
+  "name": "@vinui/theme",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VinUI theme engine: apply, save, export, import and share themes.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "dependencies": {
+    "@vinui/styles": "*"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

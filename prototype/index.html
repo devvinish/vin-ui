@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VinUI — Free components in many styles · vinish.dev</title>
+<meta name="description" content="VinUI is a free, open-source component library. One component, many styles, any framework: HTML, React, Vue and Svelte.">
+<script>(function(){var t;try{t=localStorage.getItem('vin-theme')}catch(e){}document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/vin.css">
+</head>
+<body data-base="." data-page="home">
+<div id="site-header"></div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="pill"><span class="dot"></span>Free &amp; open source · MIT · v0.1 preview</span>
+        <h1>One component.<br><span class="grad">Many styles. Any framework.</span></h1>
+        <p class="lead">VinUI gives you accessible components you copy into your project and own. Pick a design style, pick your framework (HTML, React, Vue or Svelte) and ship.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="components/index.html">Browse components
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="styles/index.html">See the styles</a>
+        </div>
+        <div class="cmd"><span class="p">$</span><code>npx vin-ui@latest init --style glass</code>
+          <button class="copy-btn" data-copy="npx vin-ui@latest init --style glass" aria-label="Copy command"></button></div>
+      </div>
+
+      <div class="demo-frame">
+        <div class="demo-bar">
+          <span class="label">live preview · style: <b data-style-name>minimal</b></span>
+          <div class="seg" role="group" aria-label="Component style">
+            <button data-set-style="minimal"><i class="sw sw-minimal"></i>Minimal</button>
+            <button data-set-style="glass"><i class="sw sw-glass"></i>Glass</button>
+            <button data-set-style="brutalist"><i class="sw sw-brutalist"></i>Brutalist</button>
+          </div>
+        </div>
+        <div class="vin-stage demo-stage" data-vin-sync data-vin-style="minimal">
+          <div class="vin-card" style="width:100%;max-width:370px">
+            <div class="vin-card__bar">signup.exe <span>_ □ ×</span></div>
+            <div class="vin-card__body">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+                <div><p class="vin-card__title">Create your account</p><p class="vin-card__desc">Start building with VinUI in seconds.</p></div>
+                <span class="vin-badge vin-badge--success">Free</span>
+              </div>
+              <div class="vin-tabs__list" role="tablist" style="display:flex;margin:16px 0">
+                <button class="vin-tabs__tab" role="tab" aria-selected="true" style="flex:1">Personal</button>
+                <button class="vin-tabs__tab" role="tab" aria-selected="false" style="flex:1">Team</button>
+              </div>
+              <div style="display:grid;gap:12px">
+                <div class="vin-field"><label class="vin-label" for="h-name">Name</label><input id="h-name" class="vin-input" placeholder="Your name"></div>
+                <div class="vin-field"><label class="vin-label" for="h-mail">Email</label><input id="h-mail" class="vin-input" placeholder="you@vinish.dev"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> I agree to the terms</label>
+                  <button class="vin-switch" role="switch" aria-checked="true" aria-label="Email me updates"><span class="vin-switch__thumb"></span></button>
+                </div>
+                <button class="vin-btn" style="width:100%">Create account</button>
+                <button class="vin-btn vin-btn--outline" style="width:100%">Continue with GitHub</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2>Three choices, then it's your code.</h2>
+        <p>No runtime package to keep updated. The component files land in your project, so you can change anything.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="num">01</span><h3>Pick a style</h3><p>Minimal, Glass or Brutalist. Every component exists in every style.</p>
+          <div class="seg"><button data-set-style="minimal"><i class="sw sw-minimal"></i>Minimal</button><button data-set-style="glass"><i class="sw sw-glass"></i>Glass</button><button data-set-style="brutalist"><i class="sw sw-brutalist"></i>Brutal</button></div></div>
+        <div class="step"><span class="num">02</span><h3>Pick a framework</h3><p>Plain HTML + CSS, React, Vue or Svelte. Same API and names everywhere.</p>
+          <div class="fw-row"><span class="pill">HTML</span><span class="pill">React</span><span class="pill">Vue</span><span class="pill">Svelte</span></div></div>
+        <div class="step"><span class="num">03</span><h3>Copy or install</h3><p>Copy from the docs, or let the VinUI CLI add the files for you.</p>
+          <div class="cmd" style="height:38px;font-size:12px"><span class="p">$</span><code>npx vin-ui add button</code></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAME CODE -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">The idea</span>
+        <h2>Same markup. Different personality.</h2>
+        <p>Your code never changes between styles. A style is a set of design tokens, so switching is one attribute, not a rewrite.</p>
+      </div>
+      <div class="same-code">
+        <div class="mini-stage"><div class="cap"><span>minimal</span><span>data-vin-style="minimal"</span></div>
+          <div class="stage-in vin-stage" data-vin-style="minimal"><button class="vin-btn">Save changes</button><button class="vin-btn vin-btn--outline">Cancel</button><span class="vin-badge vin-badge--success">Live</span><button class="vin-switch" role="switch" aria-checked="true" aria-label="Demo"><span class="vin-switch__thumb"></span></button></div></div>
+        <div class="mini-stage"><div class="cap"><span>glass</span><span>data-vin-style="glass"</span></div>
+          <div class="stage-in vin-stage" data-vin-style="glass"><button class="vin-btn">Save changes</button><button class="vin-btn vin-btn--outline">Cancel</button><span class="vin-badge vin-badge--success">Live</span><button class="vin-switch" role="switch" aria-checked="true" aria-label="Demo"><span class="vin-switch__thumb"></span></button></div></div>
+        <div class="mini-stage"><div class="cap"><span>brutalist</span><span>data-vin-style="brutalist"</span></div>
+          <div class="stage-in vin-stage" data-vin-style="brutalist"><button class="vin-btn">Save changes</button><button class="vin-btn vin-btn--outline">Cancel</button><span class="vin-badge vin-badge--success">Live</span><button class="vin-switch" role="switch" aria-checked="true" aria-label="Demo"><span class="vin-switch__thumb"></span></button></div></div>
+      </div>
+      <div class="code">
+        <div class="code-head"><span>index.html — identical in all three</span><button class="copy-btn" data-copy aria-label="Copy code"></button></div>
+<pre><span class="t-c">&lt;!-- the only line that changes --&gt;</span>
+<span class="t-t">&lt;html</span> <span class="t-a">data-vin-style</span>=<span class="t-s">"glass"</span><span class="t-t">&gt;</span>
+
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn"</span><span class="t-t">&gt;</span>Save changes<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--outline"</span><span class="t-t">&gt;</span>Cancel<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;span</span> <span class="t-a">class</span>=<span class="t-s">"vin-badge vin-badge--success"</span><span class="t-t">&gt;</span>Live<span class="t-t">&lt;/span&gt;</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Why VinUI</span>
+        <h2>Built for developers who want choice.</h2>
+        <p>You own the code, you choose the look, and it works in the framework you already use.</p>
+      </div>
+      <div class="features">
+        <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></div><h3>You own the code</h3><p>Components are copied into your project. No lock-in, no breaking updates.</p></div>
+        <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="13.5" cy="6.5" r="2"/><circle cx="17.5" cy="12.5" r="2"/><circle cx="8.5" cy="7.5" r="2"/><circle cx="6.5" cy="13.5" r="2"/><path d="M12 22a10 10 0 1 1 10-10c0 2-1.5 3-3 3h-2a2 2 0 0 0-1.5 3.3A2 2 0 0 1 12 22z"/></svg></div><h3>Real styles, not just colours</h3><p>Shape, borders, shadows, type and motion all change per style.</p></div>
+        <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></div><h3>Any framework</h3><p>HTML + CSS, React, Vue and Svelte with the same names and props.</p></div>
+        <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg></div><h3>Accessible by default</h3><p>Keyboard support, focus rings, ARIA and WCAG AA contrast in every style.</p></div>
+        <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><h3>Accent colour, your way</h3><p>Pick any accent colour and every component, preview and code sample follows it.</p></div>
+        <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div><h3>AI-ready <span class="tag-soon">soon</span></h3><p>llms.txt and an MCP server so AI coding tools can find and add components.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRAMEWORKS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Frameworks</span><h2>Write it once, use it anywhere.</h2><p>HTML + CSS ships first with React. Vue and Svelte follow with the same API.</p></div>
+      <div class="fw-row">
+        <div class="fw"><i style="background:#e34f26">5</i>HTML + CSS</div>
+        <div class="fw"><i style="background:#149eca">R</i>React</div>
+        <div class="fw"><i style="background:#42b883">V</i>Vue <span class="tag-soon">phase 2</span></div>
+        <div class="fw"><i style="background:#ff3e00">S</i>Svelte <span class="tag-soon">phase 2</span></div>
+        <div class="fw"><i style="background:#dd0031">A</i>Angular <span class="tag-soon">later</span></div>
+        <div class="fw"><i style="background:#38bdf8">TW</i>Tailwind or plain CSS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head"><span class="eyebrow">Library</span><h2>Find what you need fast.</h2><p>Grouped by what the component does. Press <kbd class="k">⌘K</kbd> anywhere to search.</p></div>
+      <div class="cats">
+        <a class="cat" href="components/index.html"><h3>Actions <span>1</span></h3><p>Button and icon button</p></a>
+        <a class="cat" href="components/index.html"><h3>Forms <span>4</span></h3><p>Input, Checkbox, Switch, Select</p></a>
+        <a class="cat" href="components/index.html"><h3>Data display <span>3</span></h3><p>Card, Badge, Avatar</p></a>
+        <a class="cat" href="components/index.html"><h3>Navigation <span>2</span></h3><p>Tabs, Breadcrumb</p></a>
+        <a class="cat" href="components/index.html"><h3>Feedback <span>3</span></h3><p>Alert, Progress, Toast</p></a>
+        <a class="cat" href="components/index.html"><h3>Overlays <span>3</span></h3><p>Dialog, Tooltip, Dropdown Menu</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="border-top:0;padding-top:0">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Free. Forever. No sign-up.</h2>
+        <p>VinUI is MIT-licensed and part of vinish.dev. Use it in personal and commercial projects.</p>
+        <div class="hero-cta" style="justify-content:center;margin:0">
+          <a class="btn btn-primary" href="components/index.html">Get started</a>
+          <a class="btn btn-ghost" href="#">Star on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/site.js"></script>
+</body>
+</html>

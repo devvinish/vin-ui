@@ -1,0 +1,35 @@
+---
+/**
+ * One example: live preview + code, with HTML / React tabs.
+ * The HTML preview is the snippet itself; the React preview is the real React
+ * component rendered on the server (slot "react"), so both stay honest.
+ */
+import { Code } from "astro:components";
+import Icon from "./Icon.astro";
+
+const { id, html, react } = Astro.props as { id: string; html: string; react: string };
+const themes = { light: "github-light", dark: "github-dark" } as const;
+---
+<div class="example" data-tabs id={`ex-${id}`}>
+  <div class="example-bar">
+    <div class="seg" role="tablist" aria-label="Framework">
+      <button type="button" role="tab" aria-selected="true" aria-controls={`${id}-html`} id={`${id}-tab-html`} data-tab="html">HTML</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls={`${id}-react`} id={`${id}-tab-react`} data-tab="react">React</button>
+    </div>
+    <span class="now" data-style-now></span>
+  </div>
+  <div role="tabpanel" id={`${id}-html`} aria-labelledby={`${id}-tab-html`} data-panel="html">
+    <div class="preview vin-stage"><div set:html={html} /></div>
+    <div class="code">
+      <div class="code-head"><span>{id}.html</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+      <Code code={html.trim()} lang="html" themes={themes} defaultColor={false} />
+    </div>
+  </div>
+  <div role="tabpanel" id={`${id}-react`} aria-labelledby={`${id}-tab-react`} data-panel="react" hidden>
+    <div class="preview vin-stage"><div><slot name="react" /></div></div>
+    <div class="code">
+      <div class="code-head"><span>{id}.tsx</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+      <Code code={react.trim()} lang="tsx" themes={themes} defaultColor={false} />
+    </div>
+  </div>
+</div>

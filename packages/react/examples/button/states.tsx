@@ -1,0 +1,18 @@
+import { Button } from "@/components/vin/button";
+
+export function ButtonStates() {
+  return (
+    <>
+      <Button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" /></svg>
+        Download
+      </Button>
+      <Button variant="outline">
+        Next
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </Button>
+      <Button disabled>Disabled</Button>
+      <Button variant="secondary" href="#states">As a link</Button>
+    </>
+  );
+}

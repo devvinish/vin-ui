@@ -1,0 +1,112 @@
+---
+import Base from "../layouts/Base.astro";
+import { STYLES } from "@vinui/styles";
+import { href } from "../lib/site";
+import Icon from "../components/Icon.astro";
+import "../styles/preview.css";
+---
+<Base title="VinUI" current="home">
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="pill">Free · MIT licensed · HTML and React</span>
+          <h1>One set of components. <span class="dim">8 styles. Any accent colour.</span></h1>
+          <p class="lead">Pick a style in the header and every component on this site changes with it. Copy the HTML, or add the React component to your project with one command.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href={href("/components/button/")}>Browse components</a>
+            <a class="btn" href={href("/styles/")}>See all 8 styles</a>
+          </div>
+          <div class="cmd" style="max-width:460px">
+            <span class="p">$</span><code>npx @vinish/ui init</code>
+            <button class="copy-btn" type="button" data-copy aria-label="Copy command"><Icon name="copy" size={13} /></button>
+          </div>
+        </div>
+        <div class="demo">
+          <div class="demo-bar">
+            <div class="style-strip" role="group" aria-label="Try a style">
+              {STYLES.map((s) => <button type="button" aria-pressed="false" data-demo-style={s.id}>{s.name}</button>)}
+            </div>
+          </div>
+          <div class="vin-stage demo-stage">
+            <div class="pv-grid">
+              <div class="pv-card">
+                <div class="pv-row" style="align-items:flex-start">
+                  <div><p class="pv-title">Create your account</p><p class="pv-desc">Start building with VinUI in seconds.</p></div>
+                  <span class="pv-badge pv-badge--success">Free</span>
+                </div>
+                <div class="pv-stack">
+                  <div class="pv-tabs" role="tablist" aria-label="Account type" data-pv-tabs>
+                    <button type="button" class="pv-tab" role="tab" aria-selected="true">Personal</button>
+                    <button type="button" class="pv-tab" role="tab" aria-selected="false" tabindex="-1">Team</button>
+                  </div>
+                  <div class="pv-field"><label class="pv-label" for="pv-name">Name</label><input id="pv-name" class="pv-input" placeholder="Your name" autocomplete="off" /></div>
+                  <div class="pv-field"><label class="pv-label" for="pv-mail">Email</label><input id="pv-mail" type="email" class="pv-input" placeholder="you@example.com" autocomplete="off" /></div>
+                  <label class="pv-check"><input type="checkbox" class="pv-checkbox" checked /> I agree to the terms</label>
+                  <button type="button" class="vin-btn">Create account</button>
+                  <button type="button" class="vin-btn vin-btn--outline">Continue with GitHub</button>
+                </div>
+              </div>
+              <div class="pv-col">
+                <div class="pv-card">
+                  <div class="pv-row"><span class="pv-desc" style="margin:0">Monthly visitors</span><span class="pv-badge pv-badge--success">+12.5%</span></div>
+                  <p class="pv-stat">48,210</p>
+                  <div class="pv-row pv-small" style="margin-bottom:6px"><span>Goal</span><span>72%</span></div>
+                  <div class="pv-progress" role="progressbar" aria-label="Goal" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"><span style="--value:72%"></span></div>
+                </div>
+                <div class="pv-card">
+                  <div class="pv-row" style="margin-bottom:12px">
+                    <p class="pv-title">Notifications</p>
+                    <span class="pv-avatars" aria-hidden="true"><span class="pv-avatar">VK</span><span class="pv-avatar">AS</span><span class="pv-avatar">RM</span></span>
+                  </div>
+                  <div class="pv-row">Product updates<button type="button" class="pv-switch" role="switch" aria-checked="true" aria-label="Product updates"></button></div>
+                  <div class="pv-row">Weekly digest<button type="button" class="pv-switch" role="switch" aria-checked="false" aria-label="Weekly digest"></button></div>
+                  <div class="pv-row">Security alerts<button type="button" class="pv-switch" role="switch" aria-checked="true" aria-label="Security alerts"></button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-bar"><span data-style-now></span><span>Button is ready · the rest is a Phase 1 preview</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow">How it works</span>
+        <h2>Choose a look once. Every component follows.</h2>
+        <p>Each style is a set of design tokens, so components keep the same names, props and markup in every style. Switching style never means rewriting code.</p>
+        <div class="steps">
+          <div class="step"><span class="eyebrow">01</span><b>Pick a style and accent</b><p>Use the header, or open Customize for radius, grey tone, font, density and motion. It's saved in your browser.</p></div>
+          <div class="step"><span class="eyebrow">02</span><b>Copy or add</b><p>Copy the HTML, or run <code>npx @vinish/ui add button</code> to get the React file in your project. You own the code.</p></div>
+          <div class="step"><span class="eyebrow">03</span><b>Take your theme with you</b><p>Export <code>vin-theme.json</code>, share a link, or copy the CLI command that sets up the same theme.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <span>VinUI by <a href="https://vinish.dev">vinish.dev</a>. MIT licensed.</span>
+      <span>Phase 0 preview: Button is ready, more components are on the way.</span>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  // Make the preview feel real: switches toggle, tabs switch.
+  for (const sw of document.querySelectorAll<HTMLElement>(".pv-switch")) {
+    sw.addEventListener("click", () => sw.setAttribute("aria-checked", String(sw.getAttribute("aria-checked") !== "true")));
+  }
+  for (const list of document.querySelectorAll<HTMLElement>("[data-pv-tabs]")) {
+    const tabs = [...list.querySelectorAll<HTMLElement>("[role=tab]")];
+    const select = (t: HTMLElement) => tabs.forEach((x) => { x.setAttribute("aria-selected", String(x === t)); x.tabIndex = x === t ? 0 : -1; });
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+        select(next); next.focus();
+      });
+    });
+  }
+</script>

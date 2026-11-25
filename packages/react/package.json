@@ -1,0 +1,29 @@
+{
+  "name": "@vinui/react",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VinUI components for React.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./button": "./src/button.tsx",
+    "./examples/*": "./examples/*"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "scripts": {
+    "test": "tsc --noEmit -p . && vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.10",
+    "@types/react": "^19.3.2",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  }
+}

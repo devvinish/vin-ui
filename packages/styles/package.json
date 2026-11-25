@@ -1,0 +1,19 @@
+{
+  "name": "@vinui/styles",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VinUI styles: 8 styles as data, compiled to CSS.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/styles.mjs",
+    "./generate": "./src/generate.mjs",
+    "./vinui.css": "./dist/vinui.css",
+    "./styles/*": "./dist/styles/*",
+    "./styles.json": "./dist/styles.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

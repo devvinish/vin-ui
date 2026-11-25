@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Button · VinUI · vinish.dev</title>
+<meta name="description" content="VinUI Button: 5 variants, 3 sizes, in Minimal, Glass and Brutalist styles for HTML, React, Vue and Svelte.">
+<script>(function(){var t;try{t=localStorage.getItem('vin-theme')}catch(e){}document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/vin.css">
+</head>
+<body data-base=".." data-page="components">
+<div id="site-header"></div>
+
+<div class="docs has-toc">
+  <aside class="sidebar" id="sidebar" data-current="button" aria-label="Docs navigation"></aside>
+
+  <main class="main">
+    <div class="main-narrow">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">VinUI</a><span><a href="index.html">Components</a></span><span>Actions</span><span>Button</span></nav>
+    <h1 class="page-title">Button</h1>
+    <p class="page-lead">Triggers an action or event, such as submitting a form or opening a dialog. Five variants and three sizes, identical in every style and framework.</p>
+    <div class="meta-links">
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>Source</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Changelog</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg>Registry JSON</a>
+      <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M5 9l7 1 7-1M12 10v5l-3 6M12 15l3 6"/></svg>ARIA pattern</a>
+    </div>
+
+    <div class="toolbar">
+      <div><span class="lbl">style</span>
+        <div class="seg" role="group" aria-label="Component style">
+          <button data-set-style="minimal"><i class="sw sw-minimal"></i>Minimal</button>
+          <button data-set-style="glass"><i class="sw sw-glass"></i>Glass</button>
+          <button data-set-style="brutalist"><i class="sw sw-brutalist"></i>Brutalist</button>
+        </div></div>
+      <div><span class="lbl">framework</span>
+        <div class="seg" role="tablist" aria-label="Framework">
+          <button role="tab" data-fw="html">HTML</button><button role="tab" data-fw="react">React</button><button role="tab" data-fw="vue">Vue</button><button role="tab" data-fw="svelte">Svelte</button>
+        </div></div>
+    </div>
+
+    <!-- MAIN EXAMPLE -->
+    <div class="example">
+      <div class="example-tabs">
+        <div class="seg" role="tablist"><button role="tab" data-view="preview" aria-selected="true">Preview</button><button role="tab" data-view="code" aria-selected="false">Code</button></div>
+        <span class="muted" style="font:12px var(--mono)">style: <b data-style-name>minimal</b></span>
+      </div>
+      <div class="preview vin-stage" data-vin-sync data-vin-style="minimal">
+        <button class="vin-btn">Primary</button>
+        <button class="vin-btn vin-btn--secondary">Secondary</button>
+        <button class="vin-btn vin-btn--outline">Outline</button>
+        <button class="vin-btn vin-btn--ghost">Ghost</button>
+        <button class="vin-btn vin-btn--danger">Delete</button>
+      </div>
+      <div class="example-code" hidden>
+        <div class="code" data-fw-pane="html"><div class="code-head"><span>index.html</span><button class="copy-btn" data-copy></button></div>
+<pre><span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn"</span><span class="t-t">&gt;</span>Primary<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--secondary"</span><span class="t-t">&gt;</span>Secondary<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--outline"</span><span class="t-t">&gt;</span>Outline<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--ghost"</span><span class="t-t">&gt;</span>Ghost<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--danger"</span><span class="t-t">&gt;</span>Delete<span class="t-t">&lt;/button&gt;</span></pre></div>
+        <div class="code" data-fw-pane="react" hidden><div class="code-head"><span>Demo.tsx</span><button class="copy-btn" data-copy></button></div>
+<pre><span class="t-k">import</span> { Button } <span class="t-k">from</span> <span class="t-s">"@/components/vin/button"</span>
+
+<span class="t-k">export function</span> <span class="t-a">Demo</span>() {
+  <span class="t-k">return</span> (
+    &lt;&gt;
+      <span class="t-t">&lt;Button&gt;</span>Primary<span class="t-t">&lt;/Button&gt;</span>
+      <span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"secondary"</span><span class="t-t">&gt;</span>Secondary<span class="t-t">&lt;/Button&gt;</span>
+      <span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"outline"</span><span class="t-t">&gt;</span>Outline<span class="t-t">&lt;/Button&gt;</span>
+      <span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"ghost"</span><span class="t-t">&gt;</span>Ghost<span class="t-t">&lt;/Button&gt;</span>
+      <span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"danger"</span><span class="t-t">&gt;</span>Delete<span class="t-t">&lt;/Button&gt;</span>
+    &lt;/&gt;
+  )
+}</pre></div>
+        <div class="code" data-fw-pane="vue" hidden><div class="code-head"><span>Demo.vue</span><button class="copy-btn" data-copy></button></div>
+<pre><span class="t-t">&lt;script</span> <span class="t-a">setup</span> <span class="t-a">lang</span>=<span class="t-s">"ts"</span><span class="t-t">&gt;</span>
+<span class="t-k">import</span> { VinButton } <span class="t-k">from</span> <span class="t-s">"@/components/vin/button"</span>
+<span class="t-t">&lt;/script&gt;</span>
+
+<span class="t-t">&lt;template&gt;</span>
+  <span class="t-t">&lt;VinButton&gt;</span>Primary<span class="t-t">&lt;/VinButton&gt;</span>
+  <span class="t-t">&lt;VinButton</span> <span class="t-a">variant</span>=<span class="t-s">"secondary"</span><span class="t-t">&gt;</span>Secondary<span class="t-t">&lt;/VinButton&gt;</span>
+  <span class="t-t">&lt;VinButton</span> <span class="t-a">variant</span>=<span class="t-s">"outline"</span><span class="t-t">&gt;</span>Outline<span class="t-t">&lt;/VinButton&gt;</span>
+  <span class="t-t">&lt;VinButton</span> <span class="t-a">variant</span>=<span class="t-s">"ghost"</span><span class="t-t">&gt;</span>Ghost<span class="t-t">&lt;/VinButton&gt;</span>
+  <span class="t-t">&lt;VinButton</span> <span class="t-a">variant</span>=<span class="t-s">"danger"</span><span class="t-t">&gt;</span>Delete<span class="t-t">&lt;/VinButton&gt;</span>
+<span class="t-t">&lt;/template&gt;</span></pre></div>
+        <div class="code" data-fw-pane="svelte" hidden><div class="code-head"><span>Demo.svelte</span><button class="copy-btn" data-copy></button></div>
+<pre><span class="t-t">&lt;script</span> <span class="t-a">lang</span>=<span class="t-s">"ts"</span><span class="t-t">&gt;</span>
+  <span class="t-k">import</span> Button <span class="t-k">from</span> <span class="t-s">"$lib/components/vin/button.svelte"</span>
+<span class="t-t">&lt;/script&gt;</span>
+
+<span class="t-t">&lt;Button&gt;</span>Primary<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"secondary"</span><span class="t-t">&gt;</span>Secondary<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"outline"</span><span class="t-t">&gt;</span>Outline<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"ghost"</span><span class="t-t">&gt;</span>Ghost<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button</span> <span class="t-a">variant</span>=<span class="t-s">"danger"</span><span class="t-t">&gt;</span>Delete<span class="t-t">&lt;/Button&gt;</span></pre></div>
+      </div>
+    </div>
+
+    <h2 id="installation">Installation</h2>
+    <div class="cmd-list">
+      <div data-fw-pane="html"><div class="cmd"><span class="p">$</span><code>&lt;link rel="stylesheet" href="https://vinish.dev/ui/v0/glass.css"&gt;</code><button class="copy-btn" data-copy='&lt;link rel="stylesheet" href="https://vinish.dev/ui/v0/glass.css"&gt;'></button></div></div>
+      <div data-fw-pane="react" hidden><div class="cmd"><span class="p">$</span><code>npx vin-ui add button</code><button class="copy-btn" data-copy="npx vin-ui add button"></button></div></div>
+      <div data-fw-pane="vue" hidden><div class="cmd"><span class="p">$</span><code>npx vin-ui add button --framework vue</code><button class="copy-btn" data-copy="npx vin-ui add button --framework vue"></button></div></div>
+      <div data-fw-pane="svelte" hidden><div class="cmd"><span class="p">$</span><code>npx vin-ui add button --framework svelte</code><button class="copy-btn" data-copy="npx vin-ui add button --framework svelte"></button></div></div>
+    </div>
+
+    <h2 id="sizes">Sizes</h2>
+    <p>Three sizes. Heights are fixed in every style (30, 36 and 44 px), so swapping styles never breaks your layout.</p>
+    <div class="example">
+      <div class="preview vin-stage" data-vin-sync data-vin-style="minimal">
+        <button class="vin-btn vin-btn--sm">Small</button>
+        <button class="vin-btn">Medium</button>
+        <button class="vin-btn vin-btn--lg">Large</button>
+        <button class="vin-btn vin-btn--outline vin-btn--icon" aria-label="Add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      </div>
+      <div class="code"><div class="code-head"><span data-fw-pane="html">html</span><span data-fw-pane="react" hidden>tsx</span><span data-fw-pane="vue" hidden>vue</span><span data-fw-pane="svelte" hidden>svelte</span><button class="copy-btn" data-copy></button></div>
+<pre data-fw-pane="html"><span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--sm"</span><span class="t-t">&gt;</span>Small<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn"</span><span class="t-t">&gt;</span>Medium<span class="t-t">&lt;/button&gt;</span>
+<span class="t-t">&lt;button</span> <span class="t-a">class</span>=<span class="t-s">"vin-btn vin-btn--lg"</span><span class="t-t">&gt;</span>Large<span class="t-t">&lt;/button&gt;</span></pre>
+<pre data-fw-pane="react" hidden><span class="t-t">&lt;Button</span> <span class="t-a">size</span>=<span class="t-s">"sm"</span><span class="t-t">&gt;</span>Small<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button&gt;</span>Medium<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button</span> <span class="t-a">size</span>=<span class="t-s">"lg"</span><span class="t-t">&gt;</span>Large<span class="t-t">&lt;/Button&gt;</span></pre>
+<pre data-fw-pane="vue" hidden><span class="t-t">&lt;VinButton</span> <span class="t-a">size</span>=<span class="t-s">"sm"</span><span class="t-t">&gt;</span>Small<span class="t-t">&lt;/VinButton&gt;</span>
+<span class="t-t">&lt;VinButton&gt;</span>Medium<span class="t-t">&lt;/VinButton&gt;</span>
+<span class="t-t">&lt;VinButton</span> <span class="t-a">size</span>=<span class="t-s">"lg"</span><span class="t-t">&gt;</span>Large<span class="t-t">&lt;/VinButton&gt;</span></pre>
+<pre data-fw-pane="svelte" hidden><span class="t-t">&lt;Button</span> <span class="t-a">size</span>=<span class="t-s">"sm"</span><span class="t-t">&gt;</span>Small<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button&gt;</span>Medium<span class="t-t">&lt;/Button&gt;</span>
+<span class="t-t">&lt;Button</span> <span class="t-a">size</span>=<span class="t-s">"lg"</span><span class="t-t">&gt;</span>Large<span class="t-t">&lt;/Button&gt;</span></pre>
+      </div>
+    </div>
+
+    <h2 id="states">With icon &amp; states</h2>
+    <div class="example">
+      <div class="preview vin-stage" data-vin-sync data-vin-style="minimal">
+        <button class="vin-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download</button>
+        <button class="vin-btn vin-btn--outline">Next<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <button class="vin-btn" disabled>Disabled</button>
+        <a class="vin-btn vin-btn--secondary" href="#states">As a link</a>
+      </div>
+    </div>
+
+    <h2 id="api">API</h2>
+    <p>Same props in every framework. In plain HTML, each prop maps to a class.</p>
+    <div class="table-wrap"><table class="api">
+      <thead><tr><th>Prop</th><th>Values</th><th>Default</th><th>HTML class</th></tr></thead>
+      <tbody>
+        <tr><td><code>variant</code></td><td>primary · secondary · outline · ghost · danger</td><td><code>primary</code></td><td><code>vin-btn--{variant}</code></td></tr>
+        <tr><td><code>size</code></td><td>sm · md · lg · icon</td><td><code>md</code></td><td><code>vin-btn--{size}</code></td></tr>
+        <tr><td><code>disabled</code></td><td>boolean</td><td><code>false</code></td><td><code>disabled</code> attribute</td></tr>
+        <tr><td><code>asChild</code> / <code>href</code></td><td>render as a link or your router's Link</td><td>—</td><td>use <code>&lt;a class="vin-btn"&gt;</code></td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="styles">How each style draws it</h2>
+    <p>The API above never changes. Only these token values do.</p>
+    <div class="table-wrap"><table class="api">
+      <thead><tr><th>Token</th><th>Minimal</th><th>Glass</th><th>Brutalist</th></tr></thead>
+      <tbody>
+        <tr><td><code>--vin-radius</code></td><td>8px</td><td>14px</td><td>0</td></tr>
+        <tr><td><code>--vin-bw</code> (border)</td><td>1px</td><td>1px, translucent</td><td>2px, solid black</td></tr>
+        <tr><td><code>--vin-shadow</code></td><td>subtle</td><td>soft coloured glow</td><td>hard 3px offset</td></tr>
+        <tr><td><code>--vin-primary-bg</code></td><td>near-black</td><td>violet → pink gradient</td><td>yellow</td></tr>
+        <tr><td><code>--vin-font</code></td><td>Inter 500</td><td>Inter 500</td><td>Space Grotesk 700, uppercase</td></tr>
+        <tr><td>hover / press</td><td>brighten / 1px drop</td><td>brighten / 1px drop</td><td>lift / slam into shadow</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="checklist">
+      <li>Uses a native <code>&lt;button&gt;</code>, so Enter and Space work with no extra JavaScript.</li>
+      <li>Visible focus ring in every style, in light and dark mode.</li>
+      <li>Icon-only buttons need an <code>aria-label</code>. The docs linter warns you.</li>
+      <li>Text contrast meets WCAG AA (4.5:1) in every style and mode.</li>
+      <li><code>disabled</code> is a real attribute, not just a grey colour.</li>
+    </ul>
+    </div>
+  </main>
+
+  <aside class="toc" aria-label="On this page">
+    <h5>On this page</h5>
+    <a href="#installation">Installation</a>
+    <a href="#sizes">Sizes</a>
+    <a href="#states">With icon &amp; states</a>
+    <a href="#api">API</a>
+    <a href="#styles">How each style draws it</a>
+    <a href="#a11y">Accessibility</a>
+  </aside>
+</div>
+
+<div id="site-footer"></div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

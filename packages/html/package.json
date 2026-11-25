@@ -1,0 +1,14 @@
+{
+  "name": "@vinui/html",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VinUI components as plain HTML + CSS snippets.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

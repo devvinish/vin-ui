@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Style Lab · VinUI · vinish.dev</title>
+<meta name="description" content="Choose the look of VinUI: 8 candidate styles, any accent colour, light and dark.">
+<script>(function(){var t,a;try{t=localStorage.getItem('vin-theme');a=localStorage.getItem('vin-accent')}catch(e){}document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');if(a)document.documentElement.style.setProperty('--vin-accent',a)})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Nunito:wght@600;700;800&family=Outfit:wght@400;500;600&family=Instrument+Serif&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/vin.css">
+<link rel="stylesheet" href="../assets/lab.css">
+</head>
+<body data-base=".." data-page="lab">
+<div id="site-header"></div>
+
+<main class="container" style="max-width:1280px">
+  <section class="lab-hero">
+    <span class="eyebrow">Style Lab · step 1 of the build</span>
+    <h1>Choose the look of VinUI.</h1>
+    <p>Use <b>Style</b> and <b>Accent</b> in the sticky header. On the finished site, that choice applies everywhere: every component preview, every code sample and the CLI command. It stays the same as you move between pages.</p>
+    <div class="now-using">
+      <span class="pill">Style: <b data-cur-name></b></span>
+      <span class="pill"><span class="acc-dot"></span>Accent follows your pick</span>
+      <span class="pill">Light / dark: use the sun-moon button</span>
+    </div>
+  </section>
+
+  <!-- PLAYGROUND -->
+  <section id="playground" class="playground" aria-label="Live playground">
+    <div class="vin-stage" data-lab-sync data-vin-style="precision">
+      <div class="bento">
+        <!-- Sign in -->
+        <div class="vin-card row-2">
+          <p class="vin-card__title">Welcome back</p>
+          <p class="vin-card__desc">Sign in to your workspace.</p>
+          <div style="display:grid;gap:14px;margin-top:18px">
+            <div class="vin-field"><label class="vin-label" for="pg-mail">Email</label><input id="pg-mail" class="vin-input" placeholder="you@vinish.dev"></div>
+            <div class="vin-field"><label class="vin-label" for="pg-pw">Password</label><input id="pg-pw" type="password" class="vin-input" value="password"></div>
+            <div class="vin-row"><label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> Remember me</label><a class="vin-link" href="#">Forgot?</a></div>
+            <button class="vin-btn" style="width:100%">Sign in</button>
+            <button class="vin-btn vin-btn--outline" style="width:100%">Continue with GitHub</button>
+            <p class="vin-card__desc" style="text-align:center;margin:0">No account? <a class="vin-link" href="#">Create one</a></p>
+          </div>
+        </div>
+
+        <!-- Stat -->
+        <div class="vin-card">
+          <div class="vin-row"><span class="vin-card__desc" style="margin:0">Monthly visitors</span><span class="vin-badge vin-badge--success">+12.5%</span></div>
+          <p class="vin-stat">48,210</p>
+          <div style="display:grid;gap:6px;font-size:12px;color:var(--vin-muted)"><span>Goal · 72%</span><div class="vin-progress"><div class="vin-progress__bar" style="--value:72%"></div></div></div>
+        </div>
+
+        <!-- Settings -->
+        <div class="vin-card">
+          <p class="vin-card__title">Notifications</p>
+          <p class="vin-card__desc" style="margin-bottom:14px">Choose what you hear about.</p>
+          <div class="vin-row">Product updates<button class="vin-switch" role="switch" aria-checked="true" aria-label="Product updates"><span class="vin-switch__thumb"></span></button></div>
+          <div class="vin-row">Weekly digest<button class="vin-switch" role="switch" aria-checked="false" aria-label="Weekly digest"><span class="vin-switch__thumb"></span></button></div>
+          <div class="vin-row">Security alerts<button class="vin-switch" role="switch" aria-checked="true" aria-label="Security alerts"><span class="vin-switch__thumb"></span></button></div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="vin-card span-2">
+          <div class="vin-row" style="margin-bottom:14px"><p class="vin-card__title">Buttons &amp; badges</p>
+            <div class="vin-avatar-group"><span class="vin-avatar vin-avatar--a">VK</span><span class="vin-avatar vin-avatar--b">AS</span><span class="vin-avatar vin-avatar--c">RM</span></div></div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+            <button class="vin-btn">Primary</button>
+            <button class="vin-btn vin-btn--secondary">Secondary</button>
+            <button class="vin-btn vin-btn--outline">Outline</button>
+            <button class="vin-btn vin-btn--ghost">Ghost</button>
+            <button class="vin-btn vin-btn--danger">Delete</button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px">
+            <button class="vin-btn vin-btn--sm">Small</button>
+            <button class="vin-btn vin-btn--lg">Large</button>
+            <span class="vin-badge vin-badge--primary">New</span>
+            <span class="vin-badge vin-badge--success">Active</span>
+            <span class="vin-badge vin-badge--warning">Pending</span>
+            <span class="vin-badge vin-badge--danger">Failed</span>
+            <span class="vin-badge">Draft</span>
+          </div>
+        </div>
+
+        <!-- Tabs + menu -->
+        <div class="vin-card">
+          <div class="vin-tabs__list" role="tablist"><button class="vin-tabs__tab" role="tab" aria-selected="true">Overview</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Activity</button></div>
+          <div class="vin-menu" style="margin-top:14px;box-shadow:none">
+            <div class="vin-menu__item">Profile <kbd>⌘P</kbd></div>
+            <div class="vin-menu__item" data-active>Settings <kbd>⌘,</kbd></div>
+            <div class="vin-menu__item">Sign out</div>
+          </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="vin-card span-2" style="display:grid;gap:10px">
+          <div class="vin-alert"><div><p class="vin-alert__title">Deploy finished</p><p class="vin-alert__desc">vinish.dev/ui is live with 16 components.</p></div></div>
+          <div class="vin-alert vin-alert--danger"><div><p class="vin-alert__title">Payment failed</p><p class="vin-alert__desc">Update your card to keep your plan.</p></div></div>
+        </div>
+
+        <!-- Toast -->
+        <div class="vin-card vin-toast">
+          <div><p class="vin-card__title" style="font-size:15px">Changes saved</p><p class="vin-card__desc">Just now</p></div>
+          <button class="vin-btn vin-btn--sm vin-btn--outline">Undo</button>
+        </div>
+      </div>
+    </div>
+    <div class="pg-foot">
+      <div class="code"><div class="code-head"><span>terminal: follows your style + accent</span><button class="copy-btn" data-copy></button></div><pre id="code-cli"></pre></div>
+      <div class="code"><div class="code-head"><span>index.html: plain HTML</span><button class="copy-btn" data-copy></button></div><pre id="code-html"></pre></div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="lab-sec">
+    <h2>Compare all 8 styles</h2>
+    <p>The same settings card, drawn from the same HTML, using your accent colour. Star up to 3 for the shortlist. <b>Use this style</b> loads it into the playground above.</p>
+    <div class="gallery" id="gallery"></div>
+    <div class="shortlist-bar" role="status"><span><b id="short-count">0 / 3</b> shortlisted: <span id="short-list" class="muted"></span></span><span class="muted" style="font-size:12.5px">Saved in this browser</span></div>
+  </section>
+
+  <!-- HOW IT WILL WORK -->
+  <section class="lab-sec">
+    <h2>How the header switch will work on the real site</h2>
+    <p>One choice, remembered, used everywhere.</p>
+    <div class="how">
+      <div class="step"><span class="num">01</span><h3>Choose once</h3><p>Style and accent live in the sticky header on every page. Your choice is saved, so the next page and your next visit open the same way.</p></div>
+      <div class="step"><span class="num">02</span><h3>Everything follows</h3><p>Component previews, the hub grid, code tabs (HTML, React, Vue, Svelte), the CLI command and the copy buttons all output the chosen style and accent.</p></div>
+      <div class="step"><span class="num">03</span><h3>Shareable</h3><p>The URL carries your choice too (for example <code>?style=tactile&amp;accent=0d9488</code>), so you can send someone exactly what you see.</p></div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="../assets/site.js"></script>
+<script src="../assets/lab.js"></script>
+</body>
+</html>

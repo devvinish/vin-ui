@@ -1,0 +1,35 @@
+{
+  "$comment": "Single source of truth for the Button API. Every framework package is tested against this file.",
+  "name": "button",
+  "title": "Button",
+  "category": "Actions",
+  "description": "Triggers an action or event, such as submitting a form or opening a dialog.",
+  "baseClass": "vin-btn",
+  "props": {
+    "variant": {
+      "values": ["primary", "secondary", "outline", "ghost", "danger"],
+      "default": "primary",
+      "class": "vin-btn--{value}"
+    },
+    "size": {
+      "values": ["sm", "md", "lg", "icon"],
+      "default": "md",
+      "class": "vin-btn--{value}"
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "html": "disabled attribute on <button>, aria-disabled=\"true\" on <a>"
+    },
+    "href": {
+      "type": "string",
+      "html": "renders an <a class=\"vin-btn\"> instead of a <button>"
+    }
+  },
+  "a11y": [
+    "Native <button> element, so Enter and Space work without JavaScript.",
+    "type=\"button\" by default so it never submits a form by accident.",
+    "Icon-only buttons (size=\"icon\") need an aria-label.",
+    "Visible focus ring in every style and mode."
+  ]
+}

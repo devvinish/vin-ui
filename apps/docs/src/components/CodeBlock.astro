@@ -1,0 +1,11 @@
+---
+import { Code } from "astro:components";
+import Icon from "./Icon.astro";
+const { code, lang = "bash", title } = Astro.props as { code: string; lang?: any; title?: string };
+---
+<div class="example">
+  <div class="code" style="border-top:0">
+    <div class="code-head"><span>{title ?? lang}</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+    <Code code={code.trim()} lang={lang} themes={{ light: "github-light", dark: "github-dark" }} defaultColor={false} />
+  </div>
+</div>

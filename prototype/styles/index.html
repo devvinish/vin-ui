@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Styles · VinUI · vinish.dev</title>
+<meta name="description" content="Choose the VinUI design styles. Every component exists in every style, under one shared contract.">
+<script>(function(){var t;try{t=localStorage.getItem('vin-theme')}catch(e){}document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/vin.css">
+</head>
+<body data-base=".." data-page="styles">
+<div id="site-header"></div>
+
+<div class="docs">
+  <aside class="sidebar" id="sidebar" data-current="styles" aria-label="Docs navigation"></aside>
+  <main class="main">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">VinUI</a><span>Styles</span></nav>
+    <h1 class="page-title">Styles</h1>
+    <p class="page-lead">Every style below is drawn from the exact same HTML. Pick the three we launch with. The last two are extra candidates so you can compare. Use the sun/moon button to check each one in dark mode.</p>
+
+    <div class="pick-status" role="status">
+      <span><b id="pick-count">3 / 3</b> picked: <span id="pick-list" class="muted"></span></span>
+      <span class="muted" style="font-size:12.5px">Picking a 4th drops the oldest pick. Saved in this browser.</span>
+    </div>
+
+    <div class="style-cards">
+      <article class="style-card" id="style-minimal">
+        <div class="stage-in vin-stage" data-vin-style="minimal">
+          <div class="vin-card">
+            <div class="vin-card__bar">settings.exe <span>_ □ ×</span></div>
+            <div class="vin-card__body">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div><p class="vin-card__title">Project settings</p><p class="vin-card__desc">Manage your workspace.</p></div>
+                <span class="vin-avatar vin-avatar--a">VK</span>
+              </div>
+              <div class="vin-tabs__list" role="tablist" style="margin:14px 0 12px"><button class="vin-tabs__tab" role="tab" aria-selected="true">General</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Team</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Billing</button></div>
+              <div style="display:grid;gap:12px">
+                <div class="vin-field"><label class="vin-label">Project name</label><input class="vin-input" value="vin-ui-docs" aria-label="Project name"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> Public</label>
+                  <span style="display:flex;gap:6px"><span class="vin-badge vin-badge--success">Live</span><span class="vin-badge">v0.1</span></span>
+                  <button class="vin-switch" role="switch" aria-checked="true" aria-label="Notifications"><span class="vin-switch__thumb"></span></button>
+                </div>
+                <div style="display:grid;gap:6px;font-size:12px"><span>Storage · 64%</span><div class="vin-progress"><div class="vin-progress__bar" style="--value:64%"></div></div></div>
+                <div style="display:flex;gap:8px;justify-content:flex-end"><button class="vin-btn vin-btn--ghost vin-btn--sm">Cancel</button><button class="vin-btn vin-btn--outline vin-btn--sm">Preview</button><button class="vin-btn vin-btn--sm">Save</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="meta-top"><h3><i class="sw sw-minimal" style="width:12px;height:12px;border-radius:3px;display:inline-block"></i>Minimal <span class="tag-soon" style="margin:0">Recommended</span></h3>
+            <button class="pick-btn" data-pick="minimal" aria-pressed="false">Pick this style</button></div>
+          <p>Clean, quiet and neutral. The safe default that fits any product.</p>
+          <div class="best"><span>SaaS dashboards</span><span>admin panels</span><span>docs</span></div>
+        </div>
+      </article>
+      <article class="style-card" id="style-glass">
+        <div class="stage-in vin-stage" data-vin-style="glass">
+          <div class="vin-card">
+            <div class="vin-card__bar">settings.exe <span>_ □ ×</span></div>
+            <div class="vin-card__body">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div><p class="vin-card__title">Project settings</p><p class="vin-card__desc">Manage your workspace.</p></div>
+                <span class="vin-avatar vin-avatar--a">VK</span>
+              </div>
+              <div class="vin-tabs__list" role="tablist" style="margin:14px 0 12px"><button class="vin-tabs__tab" role="tab" aria-selected="true">General</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Team</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Billing</button></div>
+              <div style="display:grid;gap:12px">
+                <div class="vin-field"><label class="vin-label">Project name</label><input class="vin-input" value="vin-ui-docs" aria-label="Project name"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> Public</label>
+                  <span style="display:flex;gap:6px"><span class="vin-badge vin-badge--success">Live</span><span class="vin-badge">v0.1</span></span>
+                  <button class="vin-switch" role="switch" aria-checked="true" aria-label="Notifications"><span class="vin-switch__thumb"></span></button>
+                </div>
+                <div style="display:grid;gap:6px;font-size:12px"><span>Storage · 64%</span><div class="vin-progress"><div class="vin-progress__bar" style="--value:64%"></div></div></div>
+                <div style="display:flex;gap:8px;justify-content:flex-end"><button class="vin-btn vin-btn--ghost vin-btn--sm">Cancel</button><button class="vin-btn vin-btn--outline vin-btn--sm">Preview</button><button class="vin-btn vin-btn--sm">Save</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="meta-top"><h3><i class="sw sw-glass" style="width:12px;height:12px;border-radius:3px;display:inline-block"></i>Glass <span class="tag-soon" style="margin:0">Recommended</span></h3>
+            <button class="pick-btn" data-pick="glass" aria-pressed="false">Pick this style</button></div>
+          <p>Frosted translucent surfaces over colour. Modern and eye-catching.</p>
+          <div class="best"><span>landing pages</span><span>portfolios</span><span>consumer apps</span></div>
+        </div>
+      </article>
+      <article class="style-card" id="style-brutalist">
+        <div class="stage-in vin-stage" data-vin-style="brutalist">
+          <div class="vin-card">
+            <div class="vin-card__bar">settings.exe <span>_ □ ×</span></div>
+            <div class="vin-card__body">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div><p class="vin-card__title">Project settings</p><p class="vin-card__desc">Manage your workspace.</p></div>
+                <span class="vin-avatar vin-avatar--a">VK</span>
+              </div>
+              <div class="vin-tabs__list" role="tablist" style="margin:14px 0 12px"><button class="vin-tabs__tab" role="tab" aria-selected="true">General</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Team</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Billing</button></div>
+              <div style="display:grid;gap:12px">
+                <div class="vin-field"><label class="vin-label">Project name</label><input class="vin-input" value="vin-ui-docs" aria-label="Project name"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> Public</label>
+                  <span style="display:flex;gap:6px"><span class="vin-badge vin-badge--success">Live</span><span class="vin-badge">v0.1</span></span>
+                  <button class="vin-switch" role="switch" aria-checked="true" aria-label="Notifications"><span class="vin-switch__thumb"></span></button>
+                </div>
+                <div style="display:grid;gap:6px;font-size:12px"><span>Storage · 64%</span><div class="vin-progress"><div class="vin-progress__bar" style="--value:64%"></div></div></div>
+                <div style="display:flex;gap:8px;justify-content:flex-end"><button class="vin-btn vin-btn--ghost vin-btn--sm">Cancel</button><button class="vin-btn vin-btn--outline vin-btn--sm">Preview</button><button class="vin-btn vin-btn--sm">Save</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="meta-top"><h3><i class="sw sw-brutalist" style="width:12px;height:12px;border-radius:3px;display:inline-block"></i>Brutalist <span class="tag-soon" style="margin:0">Recommended</span></h3>
+            <button class="pick-btn" data-pick="brutalist" aria-pressed="false">Pick this style</button></div>
+          <p>Thick borders, hard shadows, loud colour. Bold and memorable.</p>
+          <div class="best"><span>indie products</span><span>creative sites</span><span>events</span></div>
+        </div>
+      </article>
+      <article class="style-card" id="style-soft">
+        <div class="stage-in vin-stage" data-vin-style="soft">
+          <div class="vin-card">
+            <div class="vin-card__bar">settings.exe <span>_ □ ×</span></div>
+            <div class="vin-card__body">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div><p class="vin-card__title">Project settings</p><p class="vin-card__desc">Manage your workspace.</p></div>
+                <span class="vin-avatar vin-avatar--a">VK</span>
+              </div>
+              <div class="vin-tabs__list" role="tablist" style="margin:14px 0 12px"><button class="vin-tabs__tab" role="tab" aria-selected="true">General</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Team</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Billing</button></div>
+              <div style="display:grid;gap:12px">
+                <div class="vin-field"><label class="vin-label">Project name</label><input class="vin-input" value="vin-ui-docs" aria-label="Project name"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> Public</label>
+                  <span style="display:flex;gap:6px"><span class="vin-badge vin-badge--success">Live</span><span class="vin-badge">v0.1</span></span>
+                  <button class="vin-switch" role="switch" aria-checked="true" aria-label="Notifications"><span class="vin-switch__thumb"></span></button>
+                </div>
+                <div style="display:grid;gap:6px;font-size:12px"><span>Storage · 64%</span><div class="vin-progress"><div class="vin-progress__bar" style="--value:64%"></div></div></div>
+                <div style="display:flex;gap:8px;justify-content:flex-end"><button class="vin-btn vin-btn--ghost vin-btn--sm">Cancel</button><button class="vin-btn vin-btn--outline vin-btn--sm">Preview</button><button class="vin-btn vin-btn--sm">Save</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="meta-top"><h3><i class="sw sw-soft" style="width:12px;height:12px;border-radius:3px;display:inline-block"></i>Soft <span class="tag-soon" style="margin:0">Candidate</span></h3>
+            <button class="pick-btn" data-pick="soft" aria-pressed="false">Pick this style</button></div>
+          <p>Neumorphic: shapes pressed out of the surface with light and shadow.</p>
+          <div class="best"><span>wellness apps</span><span>smart home</span><span>widgets</span></div>
+        </div>
+      </article>
+      <article class="style-card" id="style-retro">
+        <div class="stage-in vin-stage" data-vin-style="retro">
+          <div class="vin-card">
+            <div class="vin-card__bar">settings.exe <span>_ □ ×</span></div>
+            <div class="vin-card__body">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div><p class="vin-card__title">Project settings</p><p class="vin-card__desc">Manage your workspace.</p></div>
+                <span class="vin-avatar vin-avatar--a">VK</span>
+              </div>
+              <div class="vin-tabs__list" role="tablist" style="margin:14px 0 12px"><button class="vin-tabs__tab" role="tab" aria-selected="true">General</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Team</button><button class="vin-tabs__tab" role="tab" aria-selected="false">Billing</button></div>
+              <div style="display:grid;gap:12px">
+                <div class="vin-field"><label class="vin-label">Project name</label><input class="vin-input" value="vin-ui-docs" aria-label="Project name"></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                  <label class="vin-check"><input type="checkbox" class="vin-checkbox" checked> Public</label>
+                  <span style="display:flex;gap:6px"><span class="vin-badge vin-badge--success">Live</span><span class="vin-badge">v0.1</span></span>
+                  <button class="vin-switch" role="switch" aria-checked="true" aria-label="Notifications"><span class="vin-switch__thumb"></span></button>
+                </div>
+                <div style="display:grid;gap:6px;font-size:12px"><span>Storage · 64%</span><div class="vin-progress"><div class="vin-progress__bar" style="--value:64%"></div></div></div>
+                <div style="display:flex;gap:8px;justify-content:flex-end"><button class="vin-btn vin-btn--ghost vin-btn--sm">Cancel</button><button class="vin-btn vin-btn--outline vin-btn--sm">Preview</button><button class="vin-btn vin-btn--sm">Save</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="meta-top"><h3><i class="sw sw-retro" style="width:12px;height:12px;border-radius:3px;display:inline-block"></i>Retro <span class="tag-soon" style="margin:0">Candidate</span></h3>
+            <button class="pick-btn" data-pick="retro" aria-pressed="false">Pick this style</button></div>
+          <p>Bevelled classic-desktop look with monospace type. Pure nostalgia.</p>
+          <div class="best"><span>dev tools</span><span>games</span><span>side projects</span></div>
+        </div>
+      </article>
+    </div>
+
+    <h2 id="contract">The style contract</h2>
+    <p>This is how VinUI stays consistent across styles. Every component follows these rules in every style. A style can only change the right-hand column.</p>
+    <div class="contract">
+      <div class="contract-col">
+        <h3>🔒 Never changes between styles</h3>
+        <p>Your code and layout are safe when you switch.</p>
+        <ul class="checklist">
+          <li>Component names, props and HTML class names</li>
+          <li>HTML structure (anatomy) of each component</li>
+          <li>Variant list: primary, secondary, outline, ghost, danger</li>
+          <li>Size scale: 30 / 36 / 44 px heights, 4 px spacing grid</li>
+          <li>Keyboard behaviour, ARIA roles and focus handling</li>
+          <li>Token names (<code>--vin-radius</code>, <code>--vin-primary</code>, …)</li>
+          <li>Light and dark mode support</li>
+        </ul>
+      </div>
+      <div class="contract-col">
+        <h3>🎨 Each style decides</h3>
+        <p>Set through token values plus a few documented overrides.</p>
+        <ul class="checklist">
+          <li>Colour palette and gradients</li>
+          <li>Corner radius (0 to 16 px)</li>
+          <li>Border width and colour</li>
+          <li>Shadow type: subtle, glow, hard offset, neumorphic, bevel</li>
+          <li>Font family, weight and letter case</li>
+          <li>Surface treatment: solid, blur, texture</li>
+          <li>Motion: easing and hover/press feel</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>One component, three token files</h3>
+    <div class="code">
+      <div class="code-head"><span>styles/glass.css (excerpt)</span><button class="copy-btn" data-copy></button></div>
+<pre><span class="t-t">[data-vin-style="glass"]</span> {
+  <span class="t-a">--vin-radius</span>: <span class="t-s">14px</span>;
+  <span class="t-a">--vin-bw</span>: <span class="t-s">1px</span>;
+  <span class="t-a">--vin-surface</span>: <span class="t-s">rgb(255 255 255 / .55)</span>;
+  <span class="t-a">--vin-primary-bg</span>: <span class="t-s">linear-gradient(135deg, #8b5cf6, #ec4899)</span>;
+  <span class="t-a">--vin-shadow</span>: <span class="t-s">0 4px 14px -4px rgb(124 58 237 / .35)</span>;
+  <span class="t-a">--vin-blur</span>: <span class="t-s">18px</span>;
+}
+<span class="t-c">/* button.css reads the tokens and is shared by every style */</span>
+<span class="t-t">.vin-btn</span> { <span class="t-a">border-radius</span>: <span class="t-k">var</span>(--vin-radius); <span class="t-a">background</span>: <span class="t-k">var</span>(--vin-primary-bg); }</pre>
+    </div>
+
+    <h3>Quality checks every component must pass, in every style</h3>
+    <ul class="checklist">
+      <li>Visual snapshot test in each style × light/dark (3 × 2 = 6 screenshots per component)</li>
+      <li>Automated accessibility check (axe) and contrast check per style</li>
+      <li>Same props test across HTML, React, Vue and Svelte</li>
+      <li>No style may add or remove a prop, slot or HTML element</li>
+    </ul>
+  </main>
+</div>
+
+<div id="site-footer"></div>
+<script src="../assets/site.js"></script>
+</body>
+</html>

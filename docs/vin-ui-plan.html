@@ -1,0 +1,634 @@
+<title>VinUI Project Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Nunito:wght@700;800&family=Outfit:wght@500;600&family=Instrument+Serif&family=Kalam:wght@700&display=swap">
+<style>
+/* Layout: sticky contents rail on the left, one reading column (~68ch) on the right; stacks on phones. */
+:root {
+  --bg: #fbfbfd;
+  --panel: #ffffff;
+  --soft: #f3f3f8;
+  --fg: #16161d;
+  --fg-2: #3c3c4a;
+  --muted: #6c6c7d;
+  --line: #e4e4ee;
+  --accent: #5b5bd6;
+  --accent-soft: #ececfc;
+  --ok: #1f8a55;
+  --ok-soft: #e6f5ec;
+  --warn: #b5650d;
+  --warn-soft: #fdf1e1;
+  --code-bg: #f6f6fa;
+  --f-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0c11; --panel: #13131a; --soft: #191922; --fg: #f1f1f6; --fg-2: #cfcfdb; --muted: #9393a6;
+    --line: #262633; --accent: #8f8ff0; --accent-soft: #1d1d3a; --ok: #5fd39a; --ok-soft: #10281c;
+    --warn: #f0a85a; --warn-soft: #2d1f0e; --code-bg: #101017; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0c11; --panel: #13131a; --soft: #191922; --fg: #f1f1f6; --fg-2: #cfcfdb; --muted: #9393a6;
+  --line: #262633; --accent: #8f8ff0; --accent-soft: #1d1d3a; --ok: #5fd39a; --ok-soft: #10281c;
+  --warn: #f0a85a; --warn-soft: #2d1f0e; --code-bg: #101017; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15.5px/1.65 var(--f-body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-underline-offset: 3px; }
+code, pre, kbd { font-family: var(--f-mono); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.shell {
+  display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 56px;
+  max-width: 1180px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 48px 96px;
+}
+
+/* Contents rail */
+.rail { position: sticky; top: calc(24px + env(safe-area-inset-top, 0px)); align-self: start; max-height: calc(100vh - 48px); overflow-y: auto; font-size: 13.5px; }
+.rail .brand { display: flex; align-items: center; gap: 10px; font: 600 15px var(--f-display); margin-bottom: 22px; color: var(--fg); }
+.mark { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; background: var(--fg); color: var(--bg); font: 700 13px var(--f-mono); }
+.rail h2 { font: 500 11px var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; counter-reset: toc; }
+.rail li a { display: flex; gap: 10px; padding: 5px 8px; border-radius: 6px; color: var(--fg-2); text-decoration: none; }
+.rail li a::before { counter-increment: toc; content: counter(toc, decimal-leading-zero); font: 11px var(--f-mono); color: var(--muted); padding-top: 3px; }
+.rail li a:hover { background: var(--soft); color: var(--fg); }
+
+/* Reading column */
+main { max-width: 760px; min-width: 0; }
+.kicker { font: 500 12px var(--f-mono); text-transform: uppercase; letter-spacing: .09em; color: var(--accent); }
+h1 { font: 700 clamp(34px, 5vw, 50px)/1.05 var(--f-display); letter-spacing: -.03em; margin: 12px 0 16px; text-wrap: balance; }
+.lede { font-size: 18px; color: var(--fg-2); margin: 0 0 22px; max-width: 62ch; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; font-size: 12.5px; color: var(--fg-2); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; }
+.chip b { color: var(--fg); font-weight: 600; }
+
+section { padding-top: 56px; scroll-margin-top: 24px; }
+section > h2 { font: 650 26px/1.2 var(--f-display); letter-spacing: -.02em; margin: 0 0 6px; text-wrap: balance; display: flex; align-items: baseline; gap: 12px; }
+section > h2 .n { font: 500 13px var(--f-mono); color: var(--muted); letter-spacing: 0; }
+section > .sub { color: var(--muted); margin: 0 0 20px; }
+h3 { font: 600 16.5px var(--f-display); margin: 28px 0 8px; letter-spacing: -.01em; }
+p { margin: 0 0 14px; max-width: 68ch; }
+ul.list { margin: 0 0 14px; padding-left: 20px; display: grid; gap: 6px; }
+ul.list li::marker { color: var(--muted); }
+
+/* Tables */
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); margin: 6px 0 18px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { font: 500 12px var(--f-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--soft); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td code, p code, li code { font-size: 12.8px; padding: 1px 5px; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; }
+
+/* Code */
+pre.code { margin: 6px 0 18px; padding: 14px 16px; background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; font-size: 12.8px; line-height: 1.7; color: var(--fg); }
+.cl { display: block; font: 500 11.5px var(--f-mono); color: var(--muted); margin: 16px 0 -2px; }
+
+/* Decision list */
+.decisions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+.dec { padding: 14px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; min-width: 0; }
+.dec .k { font: 500 11.5px var(--f-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.dec .v { font-weight: 600; margin-top: 2px; }
+.dec .w { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+
+/* Style samples: each tile is a fixed sample of that style, so it carries its own colours */
+.styles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 8px; }
+.st { display: grid; grid-template-columns: 112px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
+.st .smp { display: grid; place-items: center; padding: 18px 10px; }
+.st .txt { padding: 12px 14px; min-width: 0; }
+.st .txt b { font-family: var(--f-display); font-size: 15px; }
+.st .txt p { font-size: 13.5px; color: var(--muted); margin: 2px 0 0; }
+.sb { font-size: 13px; padding: 8px 14px; white-space: nowrap; }
+.s-precision { background: #fbfbfc; } .s-precision .sb { font: 500 13px var(--f-body); color: #fff; background: linear-gradient(#7474e0, #5b5bd6); border: 1px solid #4545a8; border-radius: 8px; box-shadow: inset 0 1px 0 rgb(255 255 255 / .2), 0 1px 2px rgb(0 0 0 / .15); }
+.s-tactile { background: #e9ebef; } .s-tactile .sb { font: 600 13px var(--f-body); color: #fff; background: linear-gradient(#8a8ae6, #5b5bd6 55%, #4b4bb6); border: 1px solid #40409a; border-radius: 10px; box-shadow: inset 0 1px 0 rgb(255 255 255 / .38), inset 0 -1px 0 rgb(0 0 0 / .14), 0 3px 6px -2px rgb(0 0 0 / .3); }
+.s-clay { background: #f3eff6; } .s-clay .sb { font: 800 13px "Nunito", var(--f-body); color: #fff; background: #5b5bd6; border-radius: 16px; box-shadow: inset 2px 2px 4px rgb(255 255 255 / .45), inset -3px -4px 6px rgb(0 0 0 / .2), 0 8px 14px -6px rgb(91 91 214 / .6); }
+.s-tonal { background: #f1f0fb; } .s-tonal .sb { font: 600 13px "Outfit", var(--f-body); color: #fff; background: #5b5bd6; border-radius: 999px; }
+.s-editorial { background: #f7f5f0; } .s-editorial .sb { font: 500 11px var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: #fff; background: #5b5bd6; border-radius: 2px; }
+.s-terminal { background: #f4f4ef; } .s-terminal .sb { font: 500 12.5px var(--f-mono); color: #1c1f1c; border: 1px dashed #8a948a; border-radius: 3px; } .s-terminal .sb::before { content: "[ "; color: #5b5bd6; } .s-terminal .sb::after { content: " ]"; color: #5b5bd6; }
+.s-paper { background: #f3ecdf; } .s-paper .sb { font: 700 15px "Kalam", cursive; color: #fff; background: #5b5bd6; border: 1.5px solid rgb(43 37 32 / .55); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; box-shadow: 0 2px 5px -1px rgb(80 50 20 / .25); }
+.s-bento { background: #f2f2f5; } .s-bento .sb { font: 600 13px var(--f-body); color: #fff; background: #5b5bd6; border-radius: 12px; }
+
+/* Two-column compare */
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 8px 0 18px; }
+.box { padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); min-width: 0; }
+.box h4 { margin: 0 0 8px; font: 600 14.5px var(--f-display); }
+.box ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; color: var(--fg-2); }
+.box.lock { border-top: 3px solid var(--fg); }
+.box.free { border-top: 3px solid var(--accent); }
+
+/* Flow */
+.flow { display: grid; gap: 0; margin: 10px 0 20px; counter-reset: fl; }
+.fl { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; position: relative; padding-bottom: 16px; }
+.fl:not(:last-child)::after { content: ""; position: absolute; left: 16px; top: 34px; bottom: 0; width: 2px; background: var(--line); }
+.fl .dot { counter-increment: fl; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 600 13px var(--f-mono); }
+.fl .dot::before { content: counter(fl); }
+.fl b { display: block; font-weight: 600; padding-top: 5px; }
+.fl span { font-size: 14px; color: var(--muted); }
+
+/* Outputs diagram */
+.outputs { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 18px; margin: 8px 0 18px; display: grid; gap: 12px; }
+.src { justify-self: start; padding: 10px 14px; border-radius: 10px; background: var(--fg); color: var(--bg); font: 500 13.5px var(--f-mono); }
+.outs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.out { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); min-width: 0; }
+.out b { display: block; font-size: 13.5px; }
+.out code { font-size: 11.5px; word-break: break-all; background: none; border: 0; padding: 0; color: var(--accent); }
+.out span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+/* Phases */
+.phases { display: grid; gap: 12px; margin-top: 8px; }
+.ph { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
+.ph-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--soft); }
+.ph-head b { font: 600 16px var(--f-display); }
+.ph-head span { font: 12px var(--f-mono); color: var(--muted); }
+.ph-body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 18px; padding: 14px 18px 16px; font-size: 14px; }
+.ph-body h5 { margin: 0 0 6px; font: 500 11px var(--f-mono); text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.ph-body ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; color: var(--fg-2); }
+
+/* Callouts and checklists */
+.note { padding: 14px 16px; border-radius: 10px; background: var(--accent-soft); color: var(--fg); font-size: 14.5px; margin: 6px 0 18px; }
+.note.warn { background: var(--warn-soft); }
+.todo { list-style: none; padding: 0; margin: 6px 0 18px; display: grid; gap: 8px; }
+.todo li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); font-size: 14.5px; }
+.todo li::before { content: ""; width: 16px; height: 16px; margin-top: 3px; border: 1.5px solid var(--muted); border-radius: 4px; }
+.todo small { display: block; color: var(--muted); font-size: 13px; }
+.sev { display: inline-block; font: 500 11px var(--f-mono); padding: 2px 7px; border-radius: 5px; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+.sev.hi { background: var(--warn-soft); color: var(--warn); }
+.sev.md { background: var(--accent-soft); color: var(--accent); }
+.sev.lo { background: var(--ok-soft); color: var(--ok); }
+
+footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 28px 72px; }
+  .rail { position: static; max-height: none; border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel); }
+  .rail ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .outs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .decisions, .styles, .pair, .ph-body { grid-template-columns: minmax(0, 1fr); }
+  .rail ol { grid-template-columns: minmax(0, 1fr); }
+  .st { grid-template-columns: 96px minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<div class="shell">
+  <nav class="rail" aria-label="Contents">
+    <div class="brand"><span class="mark">V</span>VinUI plan</div>
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#decisions">Decisions made</a></li>
+      <li><a href="#styles">The 8 styles</a></li>
+      <li><a href="#contract">Style contract</a></li>
+      <li><a href="#theming">Theming &amp; customize</a></li>
+      <li><a href="#site">Site &amp; navigation</a></li>
+      <li><a href="#components">Components</a></li>
+      <li><a href="#architecture">Code &amp; repository</a></li>
+      <li><a href="#cli">CLI (npx)</a></li>
+      <li><a href="#mcp">MCP &amp; AI tools</a></li>
+      <li><a href="#hosting">Hosting &amp; releases</a></li>
+      <li><a href="#quality">Quality rules</a></li>
+      <li><a href="#phases">Phases</a></li>
+      <li><a href="#todo">Your to-do list</a></li>
+      <li><a href="#risks">Risks &amp; open questions</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <span class="kicker">vinish.dev/ui · project plan · v1 · 25 Nov 2026</span>
+    <h1>VinUI: one component library, eight styles, any framework</h1>
+    <p class="lede">A free, open-source component library on vinish.dev. Developers pick a style and an accent colour, then copy or install accessible components for HTML, React, Vue or Svelte. The code lands in their own project, and they own it.</p>
+    <div class="meta">
+      <span class="chip">Licence <b>MIT</b></span>
+      <span class="chip">Repo <b>public</b></span>
+      <span class="chip">URL <b>vinish.dev/ui</b></span>
+      <span class="chip">npm <b>@vinish/ui</b></span>
+      <span class="chip">Price <b>free</b></span>
+    </div>
+
+    <!-- 1 -->
+    <section id="summary">
+      <h2><span class="n">01</span>Summary</h2>
+      <p>Most component libraries offer one visual style. You either like that look or you spend days restyling it. VinUI's answer is <b>one set of components drawn in eight complete styles</b>. Every style is finished down to shape, borders, shadows, type and motion, not only colour.</p>
+      <p>A developer chooses a style and accent in the sticky header. From that moment, everything on the site follows that choice: the previews, the code samples, the CLI command and what the AI tools return. The choice is saved in their browser and can be exported as a small theme file.</p>
+      <p>Everything is built from a single public GitHub repository. Each release produces the website, the downloadable code, the CLI on npm, the MCP server for AI tools and an <code>llms.txt</code> file. Hosting is static on Cloudflare Pages, so the running cost stays close to zero.</p>
+    </section>
+
+    <!-- 2 -->
+    <section id="decisions">
+      <h2><span class="n">02</span>Decisions made</h2>
+      <p class="sub">Agreed in our discussion so far.</p>
+      <div class="decisions">
+        <div class="dec"><div class="k">Name</div><div class="v">VinUI</div><div class="w">Short, tied to vinish.dev, and not confused with Microsoft's "WinUI".</div></div>
+        <div class="dec"><div class="k">Address</div><div class="v">vinish.dev/ui</div><div class="w">A sub-folder keeps all SEO value on the main domain.</div></div>
+        <div class="dec"><div class="k">Repository</div><div class="v">Public on GitHub, MIT licence</div><div class="w">Builds trust, earns stars and backlinks, and invites contributions.</div></div>
+        <div class="dec"><div class="k">Styles</div><div class="v">All 8 styles at launch</div><div class="w">Rule: a component only ships when it works in all 8.</div></div>
+        <div class="dec"><div class="k">Header controls</div><div class="v">Style · Accent · Light/Dark · Customize</div><div class="w">Saved per browser and used on every page.</div></div>
+        <div class="dec"><div class="k">Install method</div><div class="v">Our own CLI: <code>npx @vinish/ui</code></div><div class="w">No dependency on other libraries' tools or registries.</div></div>
+        <div class="dec"><div class="k">AI support</div><div class="v">MCP server + llms.txt</div><div class="w">The MCP server ships in the same npm package as the CLI.</div></div>
+        <div class="dec"><div class="k">Hosting</div><div class="v">GitHub + Cloudflare Pages</div><div class="w">The same setup you already use for the 3D models.</div></div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section id="styles">
+      <h2><span class="n">03</span>The 8 styles</h2>
+      <p class="sub">The same button, drawn in each style with the default indigo accent. All eight have a light and a dark version.</p>
+      <div class="styles">
+        <div class="st"><div class="smp s-precision"><span class="sb">Save</span></div><div class="txt"><b>Precision</b><p>Crisp 1px borders and quiet depth. Calm and professional. For SaaS, dashboards and dev tools.</p></div></div>
+        <div class="st"><div class="smp s-tactile"><span class="sb">Save</span></div><div class="txt"><b>Tactile</b><p>Soft light and pressable buttons; modern skeuomorphism. For productivity apps and tools.</p></div></div>
+        <div class="st"><div class="smp s-clay"><span class="sb">Save</span></div><div class="txt"><b>Clay</b><p>Puffy, inflated and friendly, with rounded type. For onboarding, education and consumer apps.</p></div></div>
+        <div class="st"><div class="smp s-tonal"><span class="sb">Save</span></div><div class="txt"><b>Tonal</b><p>Surfaces tinted from the accent, pill buttons that change shape when pressed, springy motion.</p></div></div>
+        <div class="st"><div class="smp s-editorial"><span class="sb">Save</span></div><div class="txt"><b>Editorial</b><p>Serif headlines, thin rules and underlined inputs. For blogs, portfolios and content sites.</p></div></div>
+        <div class="st"><div class="smp s-terminal"><span class="sb">Save</span></div><div class="txt"><b>Terminal</b><p>Monospace, dashed outlines, bracketed buttons. Made for developers; a vinish.dev signature.</p></div></div>
+        <div class="st"><div class="smp s-paper"><span class="sb">Save</span></div><div class="txt"><b>Paper</b><p>Warm paper, hand-drawn edges, handwritten labels. For personal sites and creative tools.</p></div></div>
+        <div class="st"><div class="smp s-bento"><span class="sb">Save</span></div><div class="txt"><b>Bento</b><p>Borderless grey layers, 24px radii, iOS-like controls. For product sites, settings and mobile.</p></div></div>
+      </div>
+      <p style="margin-top:14px">The default style for first-time visitors is <b>Precision</b>, because it suits the widest range of projects. The working prototype of all eight is in the Style Lab (<code>prototype/style-lab/</code>).</p>
+    </section>
+
+    <!-- 4 -->
+    <section id="contract">
+      <h2><span class="n">04</span>The style contract</h2>
+      <p class="sub">How eight styles stay as consistent as a single-style library.</p>
+      <div class="pair">
+        <div class="box lock"><h4>Never changes between styles</h4><ul>
+          <li>Component names, props and class names</li>
+          <li>HTML structure (anatomy) of every component</li>
+          <li>Variants: primary, secondary, outline, ghost, danger</li>
+          <li>Size scale: 30 / 36 / 44 px controls, 4 px spacing grid</li>
+          <li>Keyboard behaviour, ARIA roles and focus handling</li>
+          <li>Token names, e.g. <code>--vin-radius</code>, <code>--vin-accent</code></li>
+          <li>Light and dark support</li>
+        </ul></div>
+        <div class="box free"><h4>Each style decides</h4><ul>
+          <li>Colour palette and surfaces</li>
+          <li>Corner radius</li>
+          <li>Border width and line type</li>
+          <li>Shadow type: hairline, soft light, inflated, none</li>
+          <li>Font family, weight and letter case</li>
+          <li>Texture (Paper's dots, Terminal's dashes)</li>
+          <li>Motion: easing and press feel</li>
+        </ul></div>
+      </div>
+      <p>Technically, each style is one CSS file of token values plus a short list of documented per-component tweaks. Components read only the tokens, so switching styles means changing one attribute:</p>
+      <pre class="code">&lt;html data-vin-style="tactile" style="--vin-accent: #0d9488"&gt;</pre>
+      <p>Because a developer's markup never changes, they can switch styles later without rewriting anything.</p>
+    </section>
+
+    <!-- 5 -->
+    <section id="theming">
+      <h2><span class="n">05</span>Theming and the Customize panel</h2>
+      <h3>In the sticky header (every page)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Control</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><b>Style</b></td><td>Pick one of the 8 styles. Every preview, code tab and command updates.</td></tr>
+          <tr><td><b>Accent</b></td><td>10 preset colours plus a custom picker. Text on the accent switches automatically between black and white so it stays readable.</td></tr>
+          <tr><td><b>Light / Dark</b></td><td>Follows the system setting until the user picks one.</td></tr>
+          <tr><td><b>Customize</b></td><td>Opens a side panel with the options below.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>In the Customize panel</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Option</th><th>Choices</th><th>Why developers need it</th></tr></thead>
+        <tbody>
+          <tr><td>Corner radius</td><td>None · S · M · L · Full</td><td>The most common brand tweak</td></tr>
+          <tr><td>Grey tone</td><td>Neutral · Slate (cool) · Stone (warm)</td><td>Match greys to the brand</td></tr>
+          <tr><td>Font</td><td>Style default · Inter · Geist · System · custom name</td><td>Brand typography</td></tr>
+          <tr><td>Density</td><td>Compact · Default · Comfortable</td><td>Dashboards want compact; marketing sites want space</td></tr>
+          <tr><td>Motion</td><td>Full · Reduced · Off</td><td>Accessibility and taste</td></tr>
+        </tbody>
+      </table></div>
+      <p>Shadow type and border style stay locked to each style. Changing them would break the style's identity (Clay would stop looking like Clay).</p>
+
+      <h3>Saving, backup and sharing</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Feature</th><th>How it works</th></tr></thead>
+        <tbody>
+          <tr><td>Auto-save</td><td>Every change is kept in the browser and restored on the next visit.</td></tr>
+          <tr><td>My themes</td><td>Save several named themes in the browser and switch between them.</td></tr>
+          <tr><td>Export / Import</td><td>Download a <code>vin-theme.json</code> file as a backup; load it on any browser or computer.</td></tr>
+          <tr><td>Copy CSS</td><td>The theme as CSS variables, ready to paste into a project.</td></tr>
+          <tr><td>Copy CLI command</td><td>e.g. <code>npx @vinish/ui init --theme ./vin-theme.json</code></td></tr>
+          <tr><td>Share link</td><td>A URL holding the settings, e.g. <code>vinish.dev/ui?style=tactile&amp;accent=0d9488</code></td></tr>
+        </tbody>
+      </table></div>
+      <span class="cl">vin-theme.json</span>
+<pre class="code">{
+  "vinTheme": 1,
+  "name": "My dashboard",
+  "style": "tactile",
+  "accent": "#0d9488",
+  "radius": "lg",
+  "gray": "slate",
+  "font": "Inter",
+  "density": "compact",
+  "motion": "reduced"
+}</pre>
+      <div class="note">No accounts or logins at launch. Browser storage is lost if someone clears their browsing data, which is why Export exists. Cloud sync can come later if people ask for it.</div>
+    </section>
+
+    <!-- 6 -->
+    <section id="site">
+      <h2><span class="n">06</span>Site structure and navigation</h2>
+      <p class="sub">Static pages, generated at build time.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>URL</th><th>Page</th></tr></thead>
+        <tbody>
+          <tr><td><code>/ui/</code></td><td>Landing page: live demo, how it works, styles, frameworks</td></tr>
+          <tr><td><code>/ui/components/</code></td><td>Hub: every component as a live card, with search and category filters</td></tr>
+          <tr><td><code>/ui/components/button/</code></td><td>One page per component (see the anatomy below)</td></tr>
+          <tr><td><code>/ui/styles/</code></td><td>The 8 styles side by side, plus the style contract</td></tr>
+          <tr><td><code>/ui/docs/…</code></td><td>Installation, theming, CLI, MCP and AI, contributing</td></tr>
+          <tr><td><code>/ui/r/{framework}/{name}.json</code></td><td>Registry files read by the CLI and MCP (not for people)</td></tr>
+          <tr><td><code>/ui/v1/{style}.css</code></td><td>Versioned CSS for plain HTML users</td></tr>
+          <tr><td><code>/ui/llms.txt</code></td><td>Plain-text index for AI tools</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>How people find things</h3>
+      <ul class="list">
+        <li><b>Sticky header</b>: Components, Styles, Docs, the theme controls and search.</li>
+        <li><b>⌘K / "/" search</b> from any page, across components and docs.</li>
+        <li><b>Left sidebar</b> on docs pages, grouped by category: Actions, Forms, Data display, Navigation, Feedback, Overlays.</li>
+        <li><b>Hub filters</b>: a text filter plus category chips.</li>
+        <li><b>Breadcrumbs</b> and an "On this page" menu on long pages.</li>
+      </ul>
+
+      <h3>Component page anatomy (the same on every component)</h3>
+      <div class="flow">
+        <div class="fl"><span class="dot"></span><div><b>Title, one-line purpose, links</b><span>Source on GitHub, changelog, ARIA pattern</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Framework tabs</b><span>HTML · React · Vue · Svelte, remembered site-wide</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Live preview + code</b><span>In the user's style and accent, with copy buttons</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Install</b><span>CLI command, or the CSS link for HTML users</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Examples</b><span>Variants, sizes, states</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>API table</b><span>Props, with the matching HTML class for each</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Accessibility notes</b><span>Keyboard, ARIA, contrast</span></div></div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section id="components">
+      <h2><span class="n">07</span>Components</h2>
+      <h3>Launch set: 16 components</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Category</th><th>Components</th></tr></thead>
+        <tbody>
+          <tr><td>Actions</td><td>Button (incl. icon button)</td></tr>
+          <tr><td>Forms</td><td>Input, Checkbox, Switch, Select</td></tr>
+          <tr><td>Data display</td><td>Card, Badge, Avatar</td></tr>
+          <tr><td>Navigation</td><td>Tabs, Breadcrumb</td></tr>
+          <tr><td>Feedback</td><td>Alert, Progress, Toast</td></tr>
+          <tr><td>Overlays</td><td>Dialog, Tooltip, Dropdown Menu</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Next</h3>
+      <p>Textarea, Radio group, Slider, Accordion, Popover, Sheet/Drawer, Table, Pagination, Skeleton, Command palette, Date picker, then <b>Blocks</b> (hero, pricing, login, dashboard sections) and full <b>Templates</b>.</p>
+
+      <h3>Frameworks</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Framework</th><th>When</th><th>Interactive behaviour built on</th></tr></thead>
+        <tbody>
+          <tr><td>HTML + CSS (+ small vanilla JS)</td><td>Launch</td><td>Our own lightweight scripts; native <code>&lt;dialog&gt;</code> and popover where possible</td></tr>
+          <tr><td>React</td><td>Launch</td><td>A proven headless library for keyboard and focus handling (e.g. Base UI or Radix)</td></tr>
+          <tr><td>Vue</td><td>Phase 2</td><td>Reka UI</td></tr>
+          <tr><td>Svelte</td><td>Phase 2</td><td>Bits UI</td></tr>
+          <tr><td>Angular</td><td>Later, on demand</td><td>Angular CDK</td></tr>
+        </tbody>
+      </table></div>
+      <p>Using headless libraries for behaviour means we don't rewrite tricky accessibility logic (focus traps, keyboard menus) ourselves. We style them, and the styles are ours.</p>
+    </section>
+
+    <!-- 8 -->
+    <section id="architecture">
+      <h2><span class="n">08</span>Code and repository</h2>
+      <p class="sub">One public monorepo: <code>github.com/&lt;you&gt;/vin-ui</code>, using npm workspaces.</p>
+<pre class="code">vin-ui/
+  apps/docs/            website (Astro, static) → Cloudflare Pages
+  packages/styles/      the 8 styles: tokens + per-component tweaks (the core)
+  packages/html/        HTML + CSS components
+  packages/react/       React components
+  packages/vue/         Vue components        (phase 2)
+  packages/svelte/      Svelte components     (phase 2)
+  packages/cli/         CLI + MCP server → npm as @vinish/ui
+  scripts/              builds registry JSON, llms.txt, versioned CSS
+  tests/                screenshot, accessibility and API tests
+  CONTRIBUTING.md       includes the style contract rule</pre>
+
+      <h3>One source, every output</h3>
+      <div class="outputs">
+        <div class="src">GitHub repo · component source</div>
+        <div class="outs">
+          <div class="out"><b>Website</b><code>vinish.dev/ui</code><span>for people</span></div>
+          <div class="out"><b>Registry</b><code>/ui/r/…json</code><span>read by CLI + MCP</span></div>
+          <div class="out"><b>llms.txt</b><code>/ui/llms.txt</code><span>for any AI</span></div>
+          <div class="out"><b>npm package</b><code>@vinish/ui</code><span>CLI + MCP server</span></div>
+        </div>
+      </div>
+      <p>A fix to Button reaches the website, the CLI, the MCP and llms.txt in the same release. Nothing is kept in sync by hand.</p>
+    </section>
+
+    <!-- 9 -->
+    <section id="cli">
+      <h2><span class="n">09</span>CLI: how <code>npx @vinish/ui</code> works</h2>
+      <p><code>npx</code> comes with Node.js. It downloads our small CLI from npm, runs it once and leaves nothing installed. The CLI downloads a component's registry file from vinish.dev and writes that code into the developer's project.</p>
+      <div class="flow">
+        <div class="fl"><span class="dot"></span><div><b>Developer runs <code>npx @vinish/ui init</code></b><span>It detects the framework and asks for style, accent and folder (or reads <code>--theme vin-theme.json</code>), then writes <code>vin.json</code> and <code>vin.css</code>.</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Developer runs <code>npx @vinish/ui add button dialog</code></b><span>The CLI reads <code>vin.json</code> and fetches <code>vinish.dev/ui/r/react/button.json</code>.</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Files are written into their project</b><span><code>src/components/vin/button.tsx</code>, plus any small dependency installed automatically.</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>They own the code</b><span>No runtime dependency on our servers. They can edit anything.</span></div></div>
+      </div>
+      <span class="cl">vin.json (created by init)</span>
+<pre class="code">{ "framework": "react", "style": "tactile", "accent": "#0d9488", "path": "src/components/vin" }</pre>
+      <span class="cl">Commands</span>
+      <div class="tbl"><table>
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>init</code></td><td>Set up a project: framework, style, accent, folder</td></tr>
+          <tr><td><code>add &lt;names…&gt;</code></td><td>Add components</td></tr>
+          <tr><td><code>style &lt;name&gt;</code></td><td>Switch the project's style (rewrites <code>vin.css</code> only)</td></tr>
+          <tr><td><code>diff &lt;name&gt;</code></td><td>Show what changed upstream since you added a component</td></tr>
+          <tr><td><code>list</code></td><td>List the available components</td></tr>
+          <tr><td><code>mcp</code></td><td>Start the MCP server for AI tools</td></tr>
+        </tbody>
+      </table></div>
+      <p>Plain HTML users don't need the CLI. One line is enough: <code>&lt;link rel="stylesheet" href="https://vinish.dev/ui/v1/tactile.css"&gt;</code>, then copy the HTML from the docs.</p>
+    </section>
+
+    <!-- 10 -->
+    <section id="mcp">
+      <h2><span class="n">10</span>MCP and AI tools</h2>
+      <p>MCP (Model Context Protocol) lets AI coding tools such as Claude Code, Cursor, VS Code Copilot and Windsurf call outside tools. Our MCP server gives the AI the real, current VinUI code in the developer's own style and framework, so it doesn't have to guess.</p>
+      <span class="cl">What the developer adds to their AI tool's settings</span>
+<pre class="code">{
+  "mcpServers": {
+    "vin-ui": { "command": "npx", "args": ["-y", "@vinish/ui", "mcp"] }
+  }
+}</pre>
+      <div class="tbl"><table>
+        <thead><tr><th>MCP tool</th><th>What the AI can do</th></tr></thead>
+        <tbody>
+          <tr><td><code>list_components</code></td><td>See every component and category</td></tr>
+          <tr><td><code>search_components</code></td><td>Find the right one ("modal" leads to Dialog)</td></tr>
+          <tr><td><code>get_component</code></td><td>Get the code for their framework and style, with props and examples</td></tr>
+          <tr><td><code>list_styles</code></td><td>See the 8 styles and what each looks like</td></tr>
+          <tr><td><code>get_theme</code></td><td>Read the project's <code>vin.json</code> settings</td></tr>
+          <tr><td><code>add_component</code></td><td>Write the files, the same as the CLI (the AI tool asks the user first)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Option</th><th>How</th><th>Cost</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><td><b>Local</b></td><td>Runs on the developer's computer via npx</td><td>Free, nothing for us to host</td><td>Launch</td></tr>
+          <tr><td><b>Remote</b></td><td>Cloudflare Worker at <code>vinish.dev/ui/mcp</code>; developers paste a URL</td><td>Covered by Cloudflare's free plan for normal traffic</td><td>Later, if requested</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>llms.txt</b> sits alongside it: one plain-text file listing every component with a short description and a docs link. Any AI that reads web pages can use it, even without MCP. It is generated on every build.</p>
+    </section>
+
+    <!-- 11 -->
+    <section id="hosting">
+      <h2><span class="n">11</span>Hosting and releases</h2>
+      <h3>Every change</h3>
+      <div class="flow">
+        <div class="fl"><span class="dot"></span><div><b>Work on a branch, open a pull request</b><span>Your own changes or a community contribution</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>GitHub Actions run the checks</b><span>Lint, types, accessibility (axe), screenshots of every component in 8 styles × light/dark</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Cloudflare Pages builds a preview link</b><span>See the change live before it is merged</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Merge to main</b><span>The website deploys automatically</span></div></div>
+      </div>
+      <h3>Every release</h3>
+      <div class="flow">
+        <div class="fl"><span class="dot"></span><div><b>Tag a version, e.g. v1.2.0</b><span>Changelog generated with Changesets</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>GitHub Action publishes to npm</b><span>With provenance, so people can verify the package came from our repo</span></div></div>
+        <div class="fl"><span class="dot"></span><div><b>Versioned CSS goes live</b><span><code>/ui/v1/…</code> stays stable, so HTML users don't get surprise changes</span></div></div>
+      </div>
+      <h3>Serving at vinish.dev/ui</h3>
+      <p>The library site is its own Cloudflare Pages project. A small Cloudflare Worker route sends <code>vinish.dev/ui/*</code> to it, so the main site and the library deploy independently but share one domain. If the main vinish.dev site is also on Cloudflare Pages, this is a few lines of config.</p>
+      <div class="note">Secrets (the npm publish token, Cloudflare API token, any analytics keys) live only in GitHub and Cloudflare secret settings, never in the repository. <code>main</code> is protected: only you can merge, and every pull request must pass the checks.</div>
+    </section>
+
+    <!-- 12 -->
+    <section id="quality">
+      <h2><span class="n">12</span>Quality rules</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Rule</th><th>How it's enforced</th></tr></thead>
+        <tbody>
+          <tr><td>A component ships only when it works in all 8 styles</td><td>Screenshot tests: 16 per component (8 styles × light/dark)</td></tr>
+          <tr><td>WCAG AA contrast in every style and mode</td><td>Automated contrast check, including text on the user's accent</td></tr>
+          <tr><td>Full keyboard support and visible focus</td><td>axe checks + a manual keyboard pass per component</td></tr>
+          <tr><td>Same props in every framework</td><td>A shared API spec file checked against each package</td></tr>
+          <tr><td>No style adds or removes elements or props</td><td>Code review rule in CONTRIBUTING.md</td></tr>
+          <tr><td>Respect reduced motion</td><td>Motion setting + <code>prefers-reduced-motion</code></td></tr>
+          <tr><td>Supported browsers</td><td>Latest two versions of Chrome, Edge, Firefox and Safari (iOS included)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note warn"><b>Accent contrast:</b> a very light accent (e.g. yellow) can be hard to read on a light background. The theme engine automatically adjusts the accent shade used for text and outlines, while keeping the exact colour for fills.</div>
+    </section>
+
+    <!-- 13 -->
+    <section id="phases">
+      <h2><span class="n">13</span>Phases</h2>
+      <p class="sub">Durations are rough estimates for one developer working with Claude, not commitments.</p>
+      <div class="phases">
+        <div class="ph">
+          <div class="ph-head"><b>Phase 0 · Foundation</b><span>about 2–3 weeks</span></div>
+          <div class="ph-body">
+            <div><h5>Build</h5><ul>
+              <li>Monorepo, CI and Cloudflare Pages project</li>
+              <li>The 8 style token files, final values</li>
+              <li>Theme engine: style, accent, customize, export/import</li>
+              <li>Docs site shell: header, sidebar, search, page template</li>
+              <li>Screenshot test harness (8 styles × 2 modes)</li>
+            </ul></div>
+            <div><h5>Done when</h5><ul><li>Button works end to end in all 8 styles, in HTML and React, on a preview URL</li></ul></div>
+          </div>
+        </div>
+        <div class="ph">
+          <div class="ph-head"><b>Phase 1 · Public launch</b><span>about 6–8 weeks</span></div>
+          <div class="ph-body">
+            <div><h5>Build</h5><ul>
+              <li>All 16 launch components, HTML + React</li>
+              <li>Landing, hub, styles and docs pages</li>
+              <li>CLI: <code>init</code>, <code>add</code>, <code>list</code>, <code>style</code></li>
+              <li>Registry JSON, versioned CSS, llms.txt</li>
+              <li>Local MCP server</li>
+              <li>npm release workflow</li>
+            </ul></div>
+            <div><h5>Done when</h5><ul><li>Live at vinish.dev/ui</li><li><code>npx @vinish/ui</code> works in a fresh Vite and Next.js project</li><li>All quality checks pass</li></ul></div>
+          </div>
+        </div>
+        <div class="ph">
+          <div class="ph-head"><b>Phase 2 · More frameworks</b><span>about 6–8 weeks</span></div>
+          <div class="ph-body">
+            <div><h5>Build</h5><ul>
+              <li>Vue and Svelte versions of all components</li>
+              <li>About 10 more components</li>
+              <li>CLI <code>diff</code>; saved "My themes"</li>
+              <li>Remote MCP (Cloudflare Worker)</li>
+            </ul></div>
+            <div><h5>Done when</h5><ul><li>Every component page has all four framework tabs</li></ul></div>
+          </div>
+        </div>
+        <div class="ph">
+          <div class="ph-head"><b>Phase 3 · Blocks and templates</b><span>ongoing</span></div>
+          <div class="ph-body">
+            <div><h5>Build</h5><ul>
+              <li>Blocks: hero, pricing, auth, dashboard sections</li>
+              <li>Full page templates</li>
+              <li>Motion set (animated components)</li>
+              <li>Community contributions and a showcase</li>
+            </ul></div>
+            <div><h5>Ongoing</h5><ul><li>Monthly release notes and posts on vinish.dev</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section id="todo">
+      <h2><span class="n">14</span>Your to-do list</h2>
+      <p class="sub">Things only you can do, because they involve your accounts.</p>
+      <ul class="todo">
+        <li><div>Create an npm account (or use an existing one) and turn on two-factor login<small>npmjs.com · free</small></div></li>
+        <li><div>Create the <code>@vinish</code> organisation on npm, or pick another free scope<small>Check availability first; the plan assumes <code>@vinish/ui</code></small></div></li>
+        <li><div>Create the public GitHub repository <code>vin-ui</code> with the MIT licence<small>Turn on branch protection for <code>main</code></small></div></li>
+        <li><div>Create the Cloudflare Pages project and connect it to the repo<small>The same way as your 3D models site</small></div></li>
+        <li><div>Tell me how the main vinish.dev site is hosted<small>Needed to set up the <code>/ui</code> route</small></div></li>
+        <li><div>Later: add the npm publish token and Cloudflare token as GitHub secrets<small>I'll give exact steps when we get there</small></div></li>
+      </ul>
+    </section>
+
+    <!-- 15 -->
+    <section id="risks">
+      <h2><span class="n">15</span>Risks and open questions</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Risk</th><th>Level</th><th>What we do about it</th></tr></thead>
+        <tbody>
+          <tr><td>Keeping 8 styles consistent as components grow</td><td><span class="sev hi">high</span></td><td>Token-only styles, the style contract, and automated screenshot tests. Budget about 20–30% extra time per component.</td></tr>
+          <tr><td>Complex components (Table, Date picker) in Terminal, Paper and Editorial</td><td><span class="sev md">medium</span></td><td>Design those three first for each complex component; they are the hardest.</td></tr>
+          <tr><td>npm name <code>@vinish</code> not available</td><td><span class="sev md">medium</span></td><td>Check now; fallbacks are <code>@vinishdev/ui</code> or <code>vin-ui-kit</code>.</td></tr>
+          <tr><td>Handwritten font in Paper hurts readability</td><td><span class="sev lo">low</span></td><td>Use it only on buttons, titles and badges; body text stays Inter.</td></tr>
+          <tr><td>Light accent colours fail contrast</td><td><span class="sev lo">low</span></td><td>Automatic shade adjustment for text and outlines.</td></tr>
+          <tr><td>Community pull requests break the contract</td><td><span class="sev lo">low</span></td><td>Required checks + CONTRIBUTING.md + your review before merge.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Still to decide</h3>
+      <ul class="list">
+        <li>The default style for first-time visitors (the plan says Precision).</li>
+        <li>Whether the React version uses Base UI or Radix for behaviour.</li>
+        <li>The final accent preset list.</li>
+      </ul>
+    </section>
+
+    <footer>VinUI · project plan v1 · prepared 25 November 2026 for vinish.dev. Prototype files: <code>vin-comp-lib/prototype/</code>.</footer>
+  </main>
+</div>

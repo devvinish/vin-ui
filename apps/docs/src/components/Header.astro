@@ -1,0 +1,76 @@
+---
+import { STYLES } from "@vinui/styles";
+import { ACCENTS } from "@vinui/theme";
+import Icon from "./Icon.astro";
+import { href, SITE } from "../lib/site";
+
+const { current = "", hasSidebar = false } = Astro.props as { current?: string; hasSidebar?: boolean };
+const nav = [
+  { label: "Docs", path: "/", key: "home" },
+  { label: "Components", path: "/components/", key: "components" },
+  { label: "Styles", path: "/styles/", key: "styles" },
+];
+---
+<header class="site-header">
+  <div class="inner">
+    {hasSidebar && (
+      <button class="icon-btn menu-btn" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-toggle>
+        <Icon name="menu" />
+      </button>
+    )}
+    <a class="brand" href={href("/")}>
+      <span class="brand-mark">V</span> VinUI <small>by vinish.dev</small>
+    </a>
+    <nav class="nav" aria-label="Main">
+      {nav.map((n) => <a href={href(n.path)} aria-current={current === n.key ? "page" : undefined}>{n.label}</a>)}
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-btn" type="button" data-open-search aria-label="Search">
+        <Icon name="search" /><span>Search docs…</span><kbd class="k">⌘K</kbd>
+      </button>
+
+      <div class="hdr-pop">
+        <button class="hdr-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-pop-trigger="style">
+          <span class="lbl">Style</span> <span data-style-name>Precision</span> <Icon name="chev" />
+        </button>
+        <div class="hdr-panel" hidden data-pop="style" role="menu" aria-label="Style">
+          <h6>Style · applies to every component</h6>
+          {STYLES.map((s) => (
+            <button class="style-opt" type="button" role="menuitemradio" aria-checked="false" data-set-style={s.id}>
+              <span class="swatch-stage vin-stage" data-vin-style={s.id}><span class="vin-btn" aria-hidden="true">.</span></span>
+              <span><b>{s.name}</b><small>{s.short}</small></span>
+              <span class="chk"><Icon name="check" size={14} /></span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="hdr-pop">
+        <button class="hdr-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-pop-trigger="accent" aria-label="Accent colour">
+          <span class="acc-dot"></span> <span class="lbl">Accent</span> <Icon name="chev" />
+        </button>
+        <div class="hdr-panel" hidden data-pop="accent" aria-label="Accent colour">
+          <h6>Accent</h6>
+          <div class="swatches" role="radiogroup" aria-label="Preset accents">
+            {ACCENTS.map((a) => (
+              <button class="swatch" type="button" role="radio" aria-checked="false" aria-label={a.name} title={a.name} data-set-accent={a.hex} style={`background:${a.hex}`}></button>
+            ))}
+          </div>
+          <label class="custom-acc">
+            <input type="color" value="#5b5bd6" data-accent-input aria-label="Custom accent colour" />
+            Custom colour <code data-accent-hex>#5b5bd6</code>
+          </label>
+        </div>
+      </div>
+
+      <button class="icon-btn" type="button" data-mode-toggle aria-label="Switch to dark mode">
+        <span class="mode-sun"><Icon name="sun" /></span><span class="mode-moon"><Icon name="moon" /></span>
+      </button>
+      <button class="icon-btn" type="button" data-open-customize aria-label="Customize theme" title="Customize">
+        <Icon name="sliders" />
+      </button>
+      <a class="icon-btn gh" href={SITE.github} aria-label="VinUI on GitHub" rel="noopener"><Icon name="github" /></a>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Components · VinUI · vinish.dev</title>
+<meta name="description" content="Browse all VinUI components. Every component in every style, for HTML, React, Vue and Svelte.">
+<script>(function(){var t;try{t=localStorage.getItem('vin-theme')}catch(e){}document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/vin.css">
+</head>
+<body data-base=".." data-page="components">
+<div id="site-header"></div>
+
+<div class="docs">
+  <aside class="sidebar" id="sidebar" data-current="all" aria-label="Docs navigation"></aside>
+
+  <main class="main">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">VinUI</a><span>Components</span></nav>
+    <h1 class="page-title">Components</h1>
+    <p class="page-lead">Every component is available in every style and every framework. Choose a style below and all previews update, so you can see the whole library in the look you want.</p>
+
+    <div class="hub-controls">
+      <label class="hub-search"><span class="sr-only">Filter components</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="hub-q" type="search" placeholder="Filter, e.g. form, toggle, modal…" autocomplete="off">
+      </label>
+      <div class="seg" role="group" aria-label="Preview style">
+        <button data-set-style="minimal"><i class="sw sw-minimal"></i>Minimal</button>
+        <button data-set-style="glass"><i class="sw sw-glass"></i>Glass</button>
+        <button data-set-style="brutalist"><i class="sw sw-brutalist"></i>Brutalist</button>
+      </div>
+    </div>
+    <div class="chips" id="hub-chips" role="group" aria-label="Category"></div>
+    <p class="muted" style="font-size:13px;margin:-10px 0 14px" id="hub-count"></p>
+
+    <div class="grid-cards" id="hub-grid"></div>
+    <div class="empty" id="hub-empty">No component matches. Try another word or press <kbd class="k">⌘K</kbd>.</div>
+
+    <h2 id="install">Installation</h2>
+    <p>Set up once, then add components one by one. Pick the route that suits you.</p>
+    <div class="cmd-list" style="max-width:720px">
+      <div class="cmd"><span class="p">$</span><code>npx vin-ui@latest init --style minimal --framework react</code><button class="copy-btn" data-copy="npx vin-ui@latest init --style minimal --framework react"></button></div>
+      <div class="cmd"><span class="p">$</span><code>npx vin-ui add button card dialog</code><button class="copy-btn" data-copy="npx vin-ui add button card dialog"></button></div>
+    </div>
+    <p class="muted" style="font-size:13.5px">No build tool? Every component page also has a plain HTML + CSS tab you can paste straight into a page.</p>
+  </main>
+</div>
+
+<div id="site-footer"></div>
+<script src="../assets/site.js"></script>
+</body>
+</html>
