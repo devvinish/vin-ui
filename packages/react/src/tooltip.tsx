@@ -52,24 +52,28 @@ export function Tooltip({ content, children, side = "top", label = false, delay 
   const id = "vin-tip-" + React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const tip = React.useRef<HTMLDivElement>(null);
   const trigger = React.useRef<HTMLElement | null>(null);
-  const timers = React.useRef<{ show?: number; hide?: number }>({});
+  const timers = React.useRef<{ show?: number; hide?: number; pending?: boolean }>({});
 
   const isOpen = () => !!tip.current?.matches(":popover-open");
   const onKey = React.useCallback((e: KeyboardEvent) => {
-    if (e.key === "Escape" && isOpen()) { e.stopPropagation(); hide(true); }
+    if (e.key === "Escape" && (isOpen() || timers.current.pending)) { e.stopPropagation(); hide(true); }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function show(now = false) {
     clearTimeout(timers.current.hide); clearTimeout(timers.current.show);
+    timers.current.pending = true;
+    // Listen for Escape from now on, so it also cancels a tooltip that is about to show.
+    document.addEventListener("keydown", onKey, true);
     timers.current.show = window.setTimeout(() => {
+      timers.current.pending = false;
       const el = tip.current, anchor = trigger.current;
       if (!el || !anchor) return;
       if (!isOpen()) el.showPopover?.();
       place(el, anchor, side, "center", 6);
-      document.addEventListener("keydown", onKey, true);
     }, now ? 0 : delay);
   }
   function hide(now = false) {
     clearTimeout(timers.current.show); clearTimeout(timers.current.hide);
+    timers.current.pending = false;
     timers.current.hide = window.setTimeout(() => {
       if (isOpen()) tip.current?.hidePopover?.();
       document.removeEventListener("keydown", onKey, true);

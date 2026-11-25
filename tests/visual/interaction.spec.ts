@@ -171,6 +171,9 @@ for (const side of ["html", "react"] as const) {
       await expect(slots.nth(3)).toHaveAttribute("data-active", "");
       await page.keyboard.press("Backspace");
       await expect(slots.nth(2)).toHaveText("");
+      // The caret moves to the end on the next frame; let that happen before fill selects all,
+      // or under load it lands between the select and the paste.
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
       await input.fill("987654321");
       await expect(input).toHaveValue("987654");
       await expect(slots.nth(5)).toHaveText("4");

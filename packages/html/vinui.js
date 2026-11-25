@@ -351,22 +351,27 @@
     if (!tip) return;
     var side = tip.getAttribute("data-side") || "top", showTimer, hideTimer;
     var isOpen = function () { return tip.matches(":popover-open") || tip.style.display === "block"; };
+    var pending = false;
     function show(now) {
       clearTimeout(hideTimer); clearTimeout(showTimer);
+      pending = true;
+      // Listen for Escape from now on, so it also cancels a tooltip that is about to show.
+      document.addEventListener("keydown", onKey, true);
       showTimer = setTimeout(function () {
+        pending = false;
         if (!isOpen()) tip.showPopover ? tip.showPopover() : (tip.style.display = "block");
         placeFloating(tip, trigger, side, "center", 6);
-        document.addEventListener("keydown", onKey, true);
       }, now ? 0 : 300);
     }
     function hide(now) {
       clearTimeout(showTimer); clearTimeout(hideTimer);
+      pending = false;
       hideTimer = setTimeout(function () {
         if (isOpen()) tip.hidePopover ? tip.hidePopover() : (tip.style.display = "");
         document.removeEventListener("keydown", onKey, true);
       }, now ? 0 : 100);
     }
-    function onKey(e) { if (e.key === "Escape" && isOpen()) { e.stopPropagation(); hide(true); } }
+    function onKey(e) { if (e.key === "Escape" && (isOpen() || pending)) { e.stopPropagation(); hide(true); } }
     trigger.addEventListener("pointerenter", function (e) { if (e.pointerType !== "touch") show(); });
     trigger.addEventListener("pointerleave", function () { hide(); });
     trigger.addEventListener("focus", function () { if (trigger.matches(":focus-visible")) show(true); });
