@@ -41,7 +41,8 @@ function firstNode(nodes: VNode[] | undefined): VNode | undefined {
 /** The element behind a template ref: a component's root element, or the element itself. */
 const elOf = (r: unknown) => ((r as { $el?: unknown } | null)?.$el ?? r) as HTMLElement | null;
 
-const MenuKey: InjectionKey<{ close: () => void }> = Symbol("VinMenu");
+/** Lets the items close the menu they are in (Context Menu provides it too). */
+export const MenuKey: InjectionKey<{ close: () => void }> = Symbol("VinMenu");
 const RadioKey: InjectionKey<{ value: ComputedRef<string | undefined>; set: (v: string) => void }> = Symbol("VinMenuRadio");
 
 export const DropdownMenuItem = defineComponent({
