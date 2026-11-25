@@ -524,5 +524,32 @@ for (const side of ["html", "react"] as const) {
       await root.locator(".vin-carousel__track").evaluate((t) => t.scrollTo({ left: t.scrollWidth, behavior: "instant" }));
       await expect(dot(4)).toHaveAttribute("aria-current", "true");
     });
+
+    test("chart: focus and arrow keys show a tooltip per category; hover follows the pointer; Escape hides it", async ({ page }) => {
+      await ready(page, "chart");
+      const root = page.locator(`[data-fixture="${side}-bar"]`);
+      const svg = root.getByRole("img", { name: "Visitors by month, January to June (bar chart)" });
+      const tip = root.locator(".vin-chart__tooltip");
+      await expect(root.getByRole("table", { name: "Visitors by month, January to June" })).toHaveCount(1);
+      await expect(tip).toHaveCount(0);
+
+      await svg.focus();
+      await expect(tip).toContainText("Jan");
+      await expect(tip.locator(".vin-chart__tooltip-row").first()).toContainText("Desktop186");
+      await expect(root.locator('.vin-chart__bar[data-i="0"][data-active]')).toHaveCount(2);
+      await page.keyboard.press("ArrowRight");
+      await expect(tip).toContainText("Feb");
+      await expect(tip.locator(".vin-chart__tooltip-row").nth(1)).toContainText("Mobile200");
+      await page.keyboard.press("End");
+      await expect(tip).toContainText("Jun");
+      await page.keyboard.press("Escape");
+      await expect(tip).toHaveCount(0);
+
+      await root.locator('.vin-chart__hit[data-i="3"]').hover();
+      await expect(tip).toContainText("Apr");
+      await expect(root.locator('.vin-chart__hit[data-i="3"]')).toHaveAttribute("data-active", "");
+      await page.mouse.move(5, 5);
+      await expect(tip).toHaveCount(0);
+    });
   });
 }

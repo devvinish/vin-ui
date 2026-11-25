@@ -5,7 +5,7 @@
  * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
- * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel).
+ * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel), data-vin-chart (Chart tooltips).
  */
 (function () {
   "use strict";
@@ -631,11 +631,62 @@
     measure();
   }
 
+  /* ---------- Chart: a tooltip for the category under the pointer or picked with the arrow keys ---------- */
+  function initChart(root) {
+    var svg = root.querySelector(".vin-chart__svg"), plot = root.querySelector(".vin-chart__plot");
+    var rows = root.querySelectorAll(".vin-chart__table tbody tr");
+    if (!svg || !plot || !rows.length) return;
+    var names = Array.prototype.slice.call(root.querySelectorAll(".vin-chart__table thead th"), 1).map(function (th) { return th.textContent; });
+    var colours = Array.prototype.map.call(svg.querySelectorAll(".vin-chart__series"), function (g) { return g.getAttribute("style") || ""; });
+    var n = rows.length, active = null, tip = null;
+    var el = function (tag, cls, text) { var e = document.createElement(tag); e.className = cls; if (text != null) e.textContent = text; return e; };
+
+    function show(i) {
+      if (i === null) {
+        active = null; svg.removeAttribute("data-active");
+        Array.prototype.forEach.call(svg.querySelectorAll("[data-active]"), function (e) { e.removeAttribute("data-active"); });
+        if (tip) { tip.remove(); tip = null; }
+        return;
+      }
+      i = Math.max(0, Math.min(n - 1, i));
+      if (i === active) return;
+      show(null); active = i;
+      svg.setAttribute("data-active", "");
+      Array.prototype.forEach.call(svg.querySelectorAll('[data-i="' + i + '"]'), function (e) { e.setAttribute("data-active", ""); });
+      var cells = rows[i].children;
+      tip = el("div", "vin-chart__tooltip"); tip.setAttribute("aria-hidden", "true");
+      tip.appendChild(el("p", "vin-chart__tooltip-title", cells[0].textContent));
+      names.forEach(function (name, s) {
+        var row = el("div", "vin-chart__tooltip-row"), sw = el("span", "vin-chart__swatch");
+        sw.setAttribute("style", colours[s] || "");
+        row.appendChild(sw); row.appendChild(document.createTextNode(name));
+        row.appendChild(el("span", "vin-chart__value", cells[s + 1] ? cells[s + 1].textContent : ""));
+        tip.appendChild(row);
+      });
+      if (i < n / 2) tip.style.left = "calc(" + ((i + 1) / n) * 100 + "% + 8px)";
+      else tip.style.right = "calc(" + (1 - i / n) * 100 + "% + 8px)";
+      plot.appendChild(tip);
+    }
+    svg.addEventListener("pointermove", function (e) {
+      var hit = e.target.closest && e.target.closest("[data-i]");
+      if (hit) show(Number(hit.getAttribute("data-i")));
+    });
+    svg.addEventListener("pointerleave", function () { show(null); });
+    svg.addEventListener("focus", function () { if (active === null) show(0); });
+    svg.addEventListener("blur", function () { show(null); });
+    svg.addEventListener("keydown", function (e) {
+      var rtl = getComputedStyle(svg).direction === "rtl", at = active === null ? -1 : active;
+      var to = { ArrowRight: rtl ? at - 1 : at + 1, ArrowLeft: rtl ? at + 1 : at - 1, ArrowDown: at + 1, ArrowUp: at - 1, Home: 0, End: n - 1 }[e.key];
+      if (e.key === "Escape") { e.preventDefault(); show(null); }
+      else if (to !== undefined) { e.preventDefault(); show(to); }
+    });
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
     "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
-    "data-vin-copy": initCopy, "data-vin-carousel": initCarousel,
+    "data-vin-copy": initCopy, "data-vin-carousel": initCarousel, "data-vin-chart": initChart,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

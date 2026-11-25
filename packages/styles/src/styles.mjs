@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "code-block", "carousel"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "code-block", "carousel", "chart"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -110,6 +110,7 @@ export const STYLES = [
       "dropdown-menu": "",
       "code-block": "",
       carousel: "",
+      chart: "",
     },
   },
 
@@ -193,6 +194,9 @@ export const STYLES = [
 & .vin-code-block__pre { box-shadow: inset 0 1px 3px rgb(0 0 0 / .08); }`,
       carousel: `
 & .vin-carousel__dot[aria-current="true"]::before { background: var(--vin-primary-bg); box-shadow: inset 0 1px 0 rgb(255 255 255 / .35), 0 1px 1px rgb(0 0 0 / .15); }`,
+      chart: `
+& .vin-chart__bar { filter: drop-shadow(0 1px 1px rgb(0 0 0 / .18)); }
+& .vin-chart__tooltip { border-color: transparent; }`,
     },
   },
 
@@ -281,6 +285,11 @@ export const STYLES = [
 & .vin-carousel { --vin-carousel-gap: 16px; }
 & .vin-carousel__dot::before { width: 9px; height: 9px; }
 & .vin-carousel__dot[aria-current="true"]::before { width: 22px; box-shadow: inset 1px 1px 2px rgb(255 255 255 / .45), inset -1px -2px 3px rgb(0 0 0 / .18); }`,
+      chart: `
+& .vin-chart__bar { rx: 9px; }
+& .vin-chart__swatch { border-radius: 4px; }
+& .vin-chart__tooltip { border-color: transparent; border-radius: 16px; }
+& .vin-chart__line { stroke-width: 3; }`,
     },
   },
 
@@ -363,6 +372,10 @@ export const STYLES = [
       carousel: `
 & .vin-carousel__dot::before { background: color-mix(in srgb, var(--vin-accent) 40%, var(--vin-muted)); }
 & .vin-carousel__dot[aria-current="true"]::before { width: 22px; height: 8px; background: var(--vin-accent); }`,
+      chart: `
+& .vin-chart__bar { rx: 12px; }
+& .vin-chart__swatch { border-radius: var(--vin-pill); }
+& .vin-chart__tooltip { border-color: transparent; border-radius: 16px; }`,
     },
   },
 
@@ -461,6 +474,13 @@ export const STYLES = [
 & .vin-carousel__dot { width: 30px; border-radius: 0; }
 & .vin-carousel__dot::before { width: 16px; height: 2px; border-radius: 0; }
 & .vin-carousel__dot[aria-current="true"]::before { width: 26px; background: var(--vin-fg); }`,
+      chart: `
+& .vin-chart__bar { rx: 0; }
+& .vin-chart__swatch { border-radius: 0; }
+& .vin-chart__legend { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }
+& .vin-chart__grid { stroke-dasharray: 1 4; stroke: color-mix(in srgb, var(--vin-fg) 30%, transparent); }
+& .vin-chart__axis { stroke: var(--vin-fg); }
+& .vin-chart__tooltip { border-top: 2px solid var(--vin-fg); }`,
     },
   },
 
@@ -582,6 +602,13 @@ export const STYLES = [
 & .vin-carousel__dot { border-radius: 0; }
 & .vin-carousel__dot::before { box-sizing: border-box; width: 9px; height: 9px; border-radius: 0; background: transparent; border: 1px solid var(--vin-muted); }
 & .vin-carousel__dot[aria-current="true"]::before { width: 9px; background: var(--vin-accent); border-color: var(--vin-accent); }`,
+      chart: `
+& .vin-chart__bar { rx: 0; }
+& .vin-chart__swatch { border-radius: 0; }
+& .vin-chart__grid { stroke-dasharray: 4 4; stroke: color-mix(in srgb, var(--vin-fg) 22%, transparent); }
+& .vin-chart__line { stroke-linejoin: miter; stroke-linecap: square; stroke-width: 2; }
+& .vin-chart__tooltip { border-style: dashed; border-radius: var(--vin-radius); }
+& .vin-chart__tooltip-title::before { content: "$ "; color: var(--vin-accent-text); }`,
     },
   },
 
@@ -682,6 +709,11 @@ export const STYLES = [
       carousel: `
 & .vin-carousel__dot::before { width: 9px; height: 8px; border-radius: 60% 40% 55% 45% / 45% 60% 40% 55%; }
 & .vin-carousel__dot[aria-current="true"]::before { width: 20px; height: 9px; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
+      chart: `
+& .vin-chart__bar { rx: 3px; }
+& :is(.vin-chart__legend, .vin-chart__tooltip-title) { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-sm) + 2px); }
+& .vin-chart__tooltip { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
+& .vin-chart__line { stroke-width: 2.5; }`,
     },
   },
 
@@ -755,6 +787,10 @@ export const STYLES = [
       "code-block": `
 & .vin-code-block, & .vin-code-block__header { border-color: transparent; }`,
       carousel: "",
+      chart: `
+& .vin-chart__bar { rx: 6px; }
+& .vin-chart__swatch { border-radius: var(--vin-pill); }
+& .vin-chart__tooltip { border-color: transparent; border-radius: 14px; }`,
     },
   },
 ];

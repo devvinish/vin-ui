@@ -83,3 +83,5 @@ export { CodeBlock, copyText } from "./code-block";
 export type { CodeBlockProps } from "./code-block";
 export { Carousel } from "./carousel";
 export type { CarouselProps } from "./carousel";
+export { Chart, niceTicks } from "./chart";
+export type { ChartProps, ChartType, ChartSeries, ChartRow } from "./chart";

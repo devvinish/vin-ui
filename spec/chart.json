@@ -1,0 +1,127 @@
+{
+  "$comment": "Single source of truth for the Chart API. Every framework package is tested against this file.",
+  "name": "chart",
+  "title": "Chart",
+  "category": "Data display",
+  "description": "Bar, line and area charts drawn in your theme, with a legend, tooltips and a data table for screen readers.",
+  "baseClass": "vin-chart",
+  "classes": [
+    "vin-chart",
+    "vin-chart--bar",
+    "vin-chart--line",
+    "vin-chart--area",
+    "vin-chart__legend",
+    "vin-chart__key",
+    "vin-chart__swatch",
+    "vin-chart__body",
+    "vin-chart__y",
+    "vin-chart__x",
+    "vin-chart__tick",
+    "vin-chart__plot",
+    "vin-chart__svg",
+    "vin-chart__grid",
+    "vin-chart__axis",
+    "vin-chart__hit",
+    "vin-chart__series",
+    "vin-chart__bar",
+    "vin-chart__line",
+    "vin-chart__area",
+    "vin-chart__point",
+    "vin-chart__tooltip",
+    "vin-chart__tooltip-title",
+    "vin-chart__tooltip-row",
+    "vin-chart__value",
+    "vin-chart__table"
+  ],
+  "thumb": "<div class=\"vin-chart\" style=\"width:180px\"><svg viewBox=\"0 0 120 60\" width=\"180\" height=\"90\" aria-hidden=\"true\" style=\"overflow:visible\"><path d=\"M0 20H120M0 40H120\" stroke=\"currentColor\" stroke-opacity=\".12\"/><rect x=\"8\" y=\"30\" width=\"10\" height=\"30\" rx=\"2\" style=\"fill:var(--vin-chart-1)\"/><rect x=\"20\" y=\"42\" width=\"10\" height=\"18\" rx=\"2\" style=\"fill:var(--vin-chart-2)\"/><rect x=\"48\" y=\"10\" width=\"10\" height=\"50\" rx=\"2\" style=\"fill:var(--vin-chart-1)\"/><rect x=\"60\" y=\"28\" width=\"10\" height=\"32\" rx=\"2\" style=\"fill:var(--vin-chart-2)\"/><rect x=\"88\" y=\"22\" width=\"10\" height=\"38\" rx=\"2\" style=\"fill:var(--vin-chart-1)\"/><rect x=\"100\" y=\"36\" width=\"10\" height=\"24\" rx=\"2\" style=\"fill:var(--vin-chart-2)\"/><path d=\"M0 60H120\" stroke=\"currentColor\" stroke-opacity=\".3\"/></svg></div>",
+  "props": {
+    "type": {
+      "values": [
+        "bar",
+        "line",
+        "area"
+      ],
+      "default": "bar",
+      "class": "vin-chart--{type}"
+    },
+    "label": {
+      "type": "string",
+      "description": "What the chart shows. Names the picture and captions the data table. Required.",
+      "html": "aria-label on svg.vin-chart__svg[role=img] and the table's caption"
+    },
+    "data": {
+      "type": "Record<string, string | number>[]",
+      "description": "One row per category, in order."
+    },
+    "index": {
+      "type": "string",
+      "description": "The field that names each category (the x axis).",
+      "html": "span.vin-chart__tick in .vin-chart__x"
+    },
+    "series": {
+      "type": "{ key: string; label?: string; color?: string }[]",
+      "description": "The fields to draw. Colours default to the theme's --vin-chart-1 to --vin-chart-5.",
+      "html": "g.vin-chart__series style=\"--vin-series: var(--vin-chart-1)\""
+    },
+    "format": {
+      "type": "(value: number) => string",
+      "description": "Formats values in the tooltip and table. Default: 12,400."
+    },
+    "tickFormat": {
+      "type": "(value: number) => string",
+      "description": "Formats the y-axis ticks. Default: compact (12K)."
+    },
+    "indexLabel": {
+      "type": "string",
+      "description": "Heading of the first table column, e.g. \"Month\"."
+    },
+    "aspectRatio": {
+      "type": "number",
+      "default": 2.4,
+      "description": "Width ÷ height of the plot. The chart scales with its container; labels stay full size.",
+      "html": "the svg viewBox, e.g. \"0 0 600 250\""
+    },
+    "legend": {
+      "type": "boolean",
+      "description": "Show the legend. Default: when there's more than one series.",
+      "html": ".vin-chart__legend > .vin-chart__key > .vin-chart__swatch"
+    },
+    "theme colours": {
+      "type": "CSS",
+      "description": "--vin-chart-1 is the accent; 2 to 5 turn its hue around the colour wheel at a readable lightness, so they suit any accent. Override any of them on .vin-chart.",
+      "html": "--vin-chart-1 … --vin-chart-5"
+    }
+  },
+  "react": {
+    "components": [
+      "Chart"
+    ],
+    "helpers": [
+      "niceTicks"
+    ]
+  },
+  "examples": [
+    {
+      "id": "bar",
+      "title": "Bar",
+      "description": "Two series side by side. Hover a month, or focus the chart and use the arrow keys, to see its values. In HTML the SVG is static; add data-vin-chart and include vinui.js for the tooltip."
+    },
+    {
+      "id": "line",
+      "title": "Line",
+      "description": "This week against last week, with a point on each day."
+    },
+    {
+      "id": "area",
+      "title": "Area",
+      "description": "One series, so no legend. Values and ticks are formatted as rupees."
+    }
+  ],
+  "a11y": [
+    "The SVG has role=\"img\" and a label that says what it shows; the same numbers are in a visually hidden table (caption, column and row headers) right after it.",
+    "The legend and axis labels are hidden from screen readers because the table already says it all.",
+    "The chart can be focused: Left and Right (or Up and Down), Home and End move between categories and show a tooltip; Escape hides it. The tooltip also follows the pointer.",
+    "Series colours start from your accent and keep a mid lightness, so lines and bars stand out on light and dark backgrounds. Colour is never the only cue: the tooltip and table name every series.",
+    "Lines keep a 2px stroke at any size, and labels stay full size on small screens because they are HTML, not SVG text."
+  ]
+}

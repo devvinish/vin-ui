@@ -1,0 +1,90 @@
+/* ==========================================================================
+   VinUI · Chart
+   API (see spec/chart.json):
+     div.vin-chart.vin-chart--{bar|line|area}[data-vin-chart] style="--vin-chart-axis: 5ch"   (y-label column)
+       > div.vin-chart__legend[aria-hidden] > span.vin-chart__key > span.vin-chart__swatch[style=--vin-series] + name
+       > div.vin-chart__body
+           > div.vin-chart__y[aria-hidden] > span.vin-chart__tick[style=top:40%]
+           > div.vin-chart__plot
+               > svg.vin-chart__svg[viewBox="0 0 600 250"][role=img][aria-label][tabindex=0]
+                   path.vin-chart__grid, rect.vin-chart__hit[data-i] (one per category),
+                   g.vin-chart__series[style=--vin-series] > rect.vin-chart__bar[data-i] | path.vin-chart__area
+                       + path.vin-chart__line + circle.vin-chart__point[data-i],
+                   path.vin-chart__axis (the zero line)
+               > div.vin-chart__tooltip[aria-hidden] > p.vin-chart__tooltip-title
+                   + div.vin-chart__tooltip-row > span.vin-chart__swatch + name + span.vin-chart__value
+           > div.vin-chart__x[aria-hidden] > span.vin-chart__tick[style=left:8.33%]
+       > table.vin-chart__table (visually hidden: the same data for screen readers)
+     [data-active] on the svg and on the active category's hit, bars and points.
+     Colours: --vin-chart-1 is the accent; --vin-chart-2…5 rotate its hue at a readable lightness.
+   ========================================================================== */
+
+.vin-chart {
+  --vin-chart-1: var(--vin-accent);
+  --vin-chart-2: #d97706;
+  --vin-chart-3: #0891b2;
+  --vin-chart-4: #db2777;
+  --vin-chart-5: #16a34a;
+  --vin-chart-line: color-mix(in srgb, var(--vin-fg) 9%, transparent);
+  position: relative; display: grid; gap: 14px; box-sizing: border-box; width: 100%; min-width: 0;
+  font-family: var(--vin-font); color: var(--vin-fg); text-align: start;
+}
+@supports (color: oklch(from red l c h)) {
+  .vin-chart {
+    --vin-chart-2: oklch(from var(--vin-accent) clamp(.6, l, .7) clamp(.11, c, .18) calc(h + 150));
+    --vin-chart-3: oklch(from var(--vin-accent) clamp(.58, l, .68) clamp(.09, c, .15) calc(h + 270));
+    --vin-chart-4: oklch(from var(--vin-accent) clamp(.58, l, .68) clamp(.11, c, .19) calc(h + 60));
+    --vin-chart-5: oklch(from var(--vin-accent) clamp(.58, l, .68) clamp(.11, c, .17) calc(h + 210));
+  }
+}
+
+.vin-chart__legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--vin-text-sm); color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 35%); }
+.vin-chart__key { display: inline-flex; align-items: center; gap: 7px; }
+.vin-chart__swatch { flex: none; width: 10px; height: 10px; border-radius: min(var(--vin-radius), 3px); background: var(--vin-series); }
+
+.vin-chart__body {
+  display: grid; grid-template-columns: var(--vin-chart-axis, 4ch) minmax(0, 1fr); column-gap: 10px; row-gap: 8px;
+  padding-top: .6em; font-size: 11.5px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--vin-muted);
+}
+.vin-chart__y { position: relative; grid-area: 1 / 1; }
+.vin-chart__y .vin-chart__tick { position: absolute; inset-inline-end: 0; transform: translateY(-50%); white-space: nowrap; }
+.vin-chart__plot { position: relative; grid-area: 1 / 2; min-width: 0; }
+.vin-chart__x { position: relative; grid-area: 2 / 2; height: 1.2em; }
+.vin-chart__x .vin-chart__tick { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+[dir="rtl"] .vin-chart__plot, [dir="rtl"] .vin-chart__x { transform: scaleX(-1); }
+[dir="rtl"] .vin-chart__x .vin-chart__tick { transform: translateX(-50%) scaleX(-1); }
+
+.vin-chart__svg { display: block; width: 100%; height: auto; overflow: visible; outline: none; border-radius: min(var(--vin-radius), 6px); }
+.vin-chart__svg:focus-visible { box-shadow: var(--vin-focus); }
+.vin-chart__grid, .vin-chart__axis { fill: none; stroke: var(--vin-chart-line); stroke-width: 1; vector-effect: non-scaling-stroke; shape-rendering: crispEdges; }
+.vin-chart__axis { stroke: color-mix(in srgb, var(--vin-fg) 26%, transparent); }
+.vin-chart__hit { fill: transparent; }
+.vin-chart--bar .vin-chart__hit[data-active] { fill: color-mix(in srgb, var(--vin-fg) 5.5%, transparent); }
+:is(.vin-chart--line, .vin-chart--area) .vin-chart__hit[data-active] { fill: color-mix(in srgb, var(--vin-fg) 4%, transparent); }
+.vin-chart__series { pointer-events: none; }
+.vin-chart__bar { fill: var(--vin-series); rx: min(var(--vin-radius), 4px); transition: opacity var(--vin-dur) var(--vin-ease); }
+.vin-chart__svg[data-active] .vin-chart__bar:not([data-active]) { opacity: .5; }
+.vin-chart__line { fill: none; stroke: var(--vin-series); stroke-width: 2.25; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.vin-chart__area { fill: color-mix(in srgb, var(--vin-series) 18%, transparent); }
+.vin-chart__point {
+  fill: var(--vin-series); stroke: color-mix(in srgb, var(--vin-series) 28%, transparent); stroke-width: 0; vector-effect: non-scaling-stroke;
+  r: 3.5px; transition: r var(--vin-dur) var(--vin-ease), stroke-width var(--vin-dur) var(--vin-ease);
+}
+.vin-chart__point[data-active] { r: 5px; stroke-width: 8px; }
+.vin-chart--area .vin-chart__point:not([data-active]) { opacity: 0; }
+
+.vin-chart__tooltip {
+  position: absolute; top: 4px; z-index: 2; display: grid; gap: 5px; box-sizing: border-box; min-width: 132px; padding: 9px 11px;
+  font-size: var(--vin-text-sm); line-height: 1.2; white-space: nowrap; color: var(--vin-fg);
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: min(var(--vin-radius), 10px); box-shadow: var(--vin-shadow-lg); pointer-events: none;
+}
+.vin-chart__tooltip-title { margin: 0 0 2px; font-weight: var(--vin-title-weight); }
+.vin-chart__tooltip-row { display: flex; align-items: center; gap: 7px; color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 35%); }
+.vin-chart__value { margin-inline-start: auto; padding-inline-start: 14px; font-weight: var(--vin-weight); font-variant-numeric: tabular-nums; color: var(--vin-fg); }
+[dir="rtl"] .vin-chart__tooltip { transform: scaleX(-1); }
+
+.vin-chart__table {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
