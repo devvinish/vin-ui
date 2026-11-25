@@ -31,6 +31,8 @@
 .vin-dialog[open]::backdrop { background: rgb(8 8 12 / .5); }
 @starting-style { .vin-dialog[open]::backdrop { background: rgb(8 8 12 / 0); } }
 html:has(.vin-dialog[open]:modal) { overflow: hidden; }
+/* While it fades out, clicks go to the page, not the fading dialog or backdrop. */
+.vin-dialog:not([open]), .vin-dialog:not([open])::backdrop { pointer-events: none; }
 
 .vin-dialog__header { display: grid; gap: 6px; padding-inline-end: 28px; }
 .vin-dialog__title { margin: 0; font-size: calc(var(--vin-text-md) + 4px); font-weight: var(--vin-title-weight); line-height: 1.3; letter-spacing: -.01em; }

@@ -1,0 +1,30 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { href } from "../../lib/site";
+const toc = [{ id: "react", text: "React, Vue, Svelte" }, { id: "html", text: "Plain HTML" }, { id: "own", text: "You own the code" }];
+---
+<Docs title="Installation" description="Add VinUI to a React, Vue, Svelte or plain HTML project." current="installation" toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>Installation</span></div>
+  <h1 class="page-title">Installation</h1>
+  <p class="page-lead">Pick your style and accent in the header first. The commands on this site then use them.</p>
+  <div class="prose">
+    <h2 id="react">React, Vue, Svelte</h2>
+    <p>Run this in your project folder. It finds your framework, asks for a style, an accent colour and a folder, then writes <code>vin.json</code> and <code>vin.css</code>.</p>
+    <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui init" />
+    <p>Import <code>vin.css</code> once in your app's entry file (for example <code>src/main.tsx</code> or <code>app/layout.tsx</code>). <code>init</code> puts <code>data-vin-style</code> on your <code>&lt;html&gt;</code> tag when it can find it; if it can't, it tells you what to add.</p>
+    <CodeBlock title="src/main.tsx" lang="tsx" code={`import "./vin.css";`} />
+    <p>Then add components. Each one is copied into your project, with anything it needs.</p>
+    <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui add button card dialog" />
+    <CodeBlock title="App.tsx" lang="tsx" code={`import { Button } from "@/components/vin/button";\n\nexport function App() {\n  return <Button>Save</Button>;\n}`} />
+
+    <h2 id="html">Plain HTML</h2>
+    <p>No build step and no CLI. Link one stylesheet for your style, set the style on <code>&lt;html&gt;</code>, and copy any component's HTML from its page.</p>
+    <CodeBlock title="index.html" lang="html" code={`<html data-vin-style="precision" style="--vin-accent: #5b5bd6">\n  <head>\n    <link rel="stylesheet" href="https://vinish.dev/ui/v1/precision.css">\n    <!-- Only for interactive components (Select, Tabs, Dropdown Menu…) -->\n    <script src="https://vinish.dev/ui/v1/vinui.js" defer></script>\n  </head>`} />
+    <p>Each component page says when it needs <code>vinui.js</code>. Dialog, Accordion, Popover and others use the browser's own elements and work without it.</p>
+
+    <h2 id="own">You own the code</h2>
+    <p>Nothing runs from our servers. Edit the files as much as you like; <code>npx @vinish/ui diff</code> shows what changed in VinUI since you added a component, and <code>add --overwrite</code> takes the new version.</p>
+    <p>Next: <a href={href("/docs/theming/")}>Theming</a>, <a href={href("/docs/cli/")}>the CLI</a> and <a href={href("/docs/mcp/")}>AI tools</a>.</p>
+  </div>
+</Docs>

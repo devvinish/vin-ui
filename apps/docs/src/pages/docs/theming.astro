@@ -1,0 +1,42 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { href } from "../../lib/site";
+const toc = [{ id: "root", text: "The theme root" }, { id: "accent", text: "Accent colour" }, { id: "options", text: "Options" }, { id: "files", text: "Theme files" }];
+---
+<Docs title="Theming" description="How VinUI themes work: one element, a few data attributes and an accent colour." current="theming" toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>Theming</span></div>
+  <h1 class="page-title">Theming</h1>
+  <p class="page-lead">A theme is a style, an accent colour and a few options, set on one element. Every component reads the same tokens, so they all follow.</p>
+  <div class="prose">
+    <h2 id="root">The theme root</h2>
+    <p>Put the settings on <code>&lt;html&gt;</code> (or any element, to theme just that part of the page).</p>
+    <CodeBlock title="HTML" lang="html" code={`<html data-vin-style="tactile" data-vin-mode="dark" data-vin-radius="lg" style="--vin-accent: #0d9488">`} />
+    <p>Without <code>data-vin-mode</code>, light or dark follows the visitor's system setting.</p>
+
+    <h2 id="accent">Accent colour</h2>
+    <p>Any colour works. VinUI works out readable text on top of it, and a darker or lighter shade where the accent is used as text, so contrast stays at WCAG AA. The CLI writes these into <code>vin.css</code>; in plain HTML, setting <code>--vin-accent</code> is enough.</p>
+
+    <h2 id="options">Options</h2>
+    <div class="table-wrap">
+      <table class="api">
+        <thead><tr><th>Attribute</th><th>Values</th></tr></thead>
+        <tbody>
+          <tr><td><code>data-vin-style</code></td><td>precision, tactile, clay, tonal, editorial, terminal, paper, bento</td></tr>
+          <tr><td><code>data-vin-mode</code></td><td>light, dark (leave off for system)</td></tr>
+          <tr><td><code>data-vin-radius</code></td><td>none, sm, md, lg, full</td></tr>
+          <tr><td><code>data-vin-gray</code></td><td>slate, stone</td></tr>
+          <tr><td><code>data-vin-font</code></td><td>inter, geist, system, mono, custom (with <code>--vin-font</code>)</td></tr>
+          <tr><td><code>data-vin-density</code></td><td>compact, comfortable</td></tr>
+          <tr><td><code>data-vin-motion</code></td><td>reduced, off</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="files">Theme files</h2>
+    <p>The Customize panel in the header exports your theme as <code>vin-theme.json</code> and saves named themes in your browser. Start a project from one:</p>
+    <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui init --theme ./vin-theme.json" />
+    <p>Switch styles later without touching your components; only <code>vin.css</code> changes.</p>
+    <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui style editorial" />
+  </div>
+</Docs>

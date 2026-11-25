@@ -1,4 +1,9 @@
+"use client";
+
 import * as React from "react";
+
+/** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
+const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
 /*
  * VinUI · Switch (React). API: spec/switch.json.
@@ -25,7 +30,7 @@ export function Switch({ label, description, size = "md", controlPosition = "sta
   const cls = cx("vin-switch", size === "sm" && "vin-switch--sm");
 
   if (!label) {
-    if (process.env.NODE_ENV !== "production" && !rest["aria-label"] && !rest["aria-labelledby"]) {
+    if (isDev() && !rest["aria-label"] && !rest["aria-labelledby"]) {
       console.warn("VinUI Switch: pass a label or an aria-label.");
     }
     return <input {...rest} id={id} type="checkbox" role="switch" className={cx(cls, className)} style={style} />;

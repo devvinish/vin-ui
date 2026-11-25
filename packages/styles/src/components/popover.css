@@ -23,3 +23,4 @@
 .vin-popover__title { margin: 0; font-size: var(--vin-text-md); font-weight: var(--vin-title-weight); line-height: 1.35; }
 .vin-popover__description { margin: 2px 0 0; font-size: calc(var(--vin-text-md) - 1px); color: var(--vin-muted); }
 .vin-popover__title + .vin-popover__description + *, .vin-popover__description + * { margin-top: 14px; }
+.vin-popover[popover]:not(:popover-open) { pointer-events: none; }

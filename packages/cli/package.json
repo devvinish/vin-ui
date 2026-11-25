@@ -1,0 +1,19 @@
+{
+  "name": "@vinish/ui",
+  "version": "0.1.0",
+  "description": "VinUI CLI and MCP server: add VinUI components to your project in your style and accent colour.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://vinish.dev/ui",
+  "repository": { "type": "git", "url": "git+https://github.com/devvinish/vin-ui.git", "directory": "packages/cli" },
+  "keywords": ["vinui", "components", "ui", "react", "vue", "svelte", "html", "cli", "mcp"],
+  "bin": { "vinui": "bin/vinui.mjs" },
+  "exports": { ".": "./src/index.mjs" },
+  "files": ["bin", "src"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "vendor": "node scripts/vendor-theme.mjs",
+    "prepack": "node scripts/vendor-theme.mjs",
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

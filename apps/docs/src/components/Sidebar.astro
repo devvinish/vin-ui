@@ -4,6 +4,10 @@ import { href } from "../lib/site";
 const { current = "" } = Astro.props as { current?: string };
 const start = [
   { key: "home", label: "Introduction", path: "/" },
+  { key: "installation", label: "Installation", path: "/docs/installation/" },
+  { key: "theming", label: "Theming", path: "/docs/theming/" },
+  { key: "cli", label: "CLI", path: "/docs/cli/" },
+  { key: "mcp", label: "AI and MCP", path: "/docs/mcp/" },
   { key: "components", label: "All components", path: "/components/" },
   { key: "styles", label: "Styles", path: "/styles/" },
 ];

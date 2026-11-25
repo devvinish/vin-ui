@@ -1,5 +1,8 @@
 import * as React from "react";
 
+/** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
+const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
+
 /*
  * VinUI · Button (React)
  * API: spec/button.json. Styling comes from @vinui/styles (the vin-btn classes),
@@ -42,7 +45,7 @@ export function Button(props: ButtonProps) {
   const { variant, size, className, children, ...rest } = props;
   const classes = buttonClasses({ variant, size, className });
 
-  if (process.env.NODE_ENV !== "production" && size === "icon" && !rest["aria-label"] && !rest["aria-labelledby"]) {
+  if (isDev() && size === "icon" && !rest["aria-label"] && !rest["aria-labelledby"]) {
     console.warn("VinUI Button: icon-only buttons need an aria-label so screen readers can name them.");
   }
 

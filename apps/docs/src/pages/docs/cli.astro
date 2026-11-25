@@ -1,0 +1,46 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { href } from "../../lib/site";
+const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" }, { id: "add", text: "add" }, { id: "diff", text: "diff" }, { id: "config", text: "vin.json" }, { id: "offline", text: "Offline" }];
+---
+<Docs title="CLI" description="npx @vinish/ui: set up a project, add components, switch styles and see upstream changes." current="cli" toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>CLI</span></div>
+  <h1 class="page-title">CLI</h1>
+  <p class="page-lead"><code>npx</code> comes with Node.js. It downloads the small VinUI CLI, runs it and leaves nothing installed. The CLI has no dependencies.</p>
+  <div class="prose">
+    <h2 id="commands">Commands</h2>
+    <div class="table-wrap">
+      <table class="api">
+        <thead><tr><th>Command</th><th>Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>init</code></td><td>Set up the project: framework, style, accent and folder. Writes <code>vin.json</code> and <code>vin.css</code>.</td></tr>
+          <tr><td><code>add &lt;names…&gt;</code></td><td>Copy components (and the ones they need) into your project.</td></tr>
+          <tr><td><code>style &lt;name&gt;</code></td><td>Switch the style. Rewrites <code>vin.css</code> only.</td></tr>
+          <tr><td><code>diff [names…]</code></td><td>Show what changed in VinUI since you added a component.</td></tr>
+          <tr><td><code>list</code></td><td>List the components.</td></tr>
+          <tr><td><code>mcp</code></td><td>Start the MCP server for AI tools. See <a href={href("/docs/mcp/")}>AI and MCP</a>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="init">init</h2>
+    <p>Asks only what it can't work out. Every answer can be given as a flag instead, which is handy in scripts (<code>-y</code> skips the questions).</p>
+    <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui init --framework react --style tactile --accent "#0d9488" --radius lg -y`} />
+    <p>The "Copy CLI" button in the Customize panel gives you this command for the theme you've built.</p>
+
+    <h2 id="add">add</h2>
+    <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui add dialog dropdown-menu" />
+    <p>If you've changed a file, <code>add</code> asks before replacing it (or keeps yours with <code>-y</code>). <code>--overwrite</code> replaces without asking. Mistyped names get a suggestion.</p>
+
+    <h2 id="diff">diff</h2>
+    <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui diff button" />
+    <p>Lines with <code>-</code> are yours, <code>+</code> are VinUI's. It exits with code 1 when something differs, so you can use it in CI.</p>
+
+    <h2 id="config">vin.json</h2>
+    <CodeBlock title="vin.json" lang="json" code={`{\n  "$schema": "https://vinish.dev/ui/r/vin.schema.json",\n  "framework": "react",\n  "style": "tactile",\n  "accent": "#0d9488",\n  "path": "src/components/vin",\n  "css": "src/vin.css",\n  "components": { "button": "0.1.0" }\n}`} />
+
+    <h2 id="offline">Offline and self-hosting</h2>
+    <p>Components come from <code>https://vinish.dev/ui/r/</code>. Point the CLI at a folder or another server with <code>--registry</code> or the <code>VINUI_REGISTRY</code> environment variable, for example a build of this site.</p>
+  </div>
+</Docs>

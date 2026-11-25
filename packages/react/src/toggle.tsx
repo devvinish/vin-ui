@@ -1,4 +1,9 @@
+"use client";
+
 import * as React from "react";
+
+/** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
+const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
 /*
  * VinUI · Toggle (React). API: spec/toggle.json.
@@ -25,7 +30,7 @@ export function toggleClasses({ variant = "default", size = "md", className }: P
 export function Toggle({ pressed, defaultPressed = false, onPressedChange, variant, size, className, onClick, ...rest }: ToggleProps) {
   const [inner, setInner] = React.useState(defaultPressed);
   const on = pressed ?? inner;
-  if (process.env.NODE_ENV !== "production" && size === "icon" && !rest["aria-label"] && !rest["aria-labelledby"]) {
+  if (isDev() && size === "icon" && !rest["aria-label"] && !rest["aria-labelledby"]) {
     console.warn("VinUI Toggle: icon-only toggles need an aria-label.");
   }
   return (

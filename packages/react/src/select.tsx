@@ -1,4 +1,9 @@
+"use client";
+
 import * as React from "react";
+
+/** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
+const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
 /*
  * VinUI · Select (React). API: spec/select.json.
@@ -133,7 +138,7 @@ export function Select({
     else if (printable) typeahead(k);
   };
 
-  if (process.env.NODE_ENV !== "production" && !label && !aria["aria-label"]) {
+  if (isDev() && !label && !aria["aria-label"]) {
     console.warn("VinUI Select: pass a label or an aria-label.");
   }
   const optionId = (i: number) => `${base}-opt-${i}`;

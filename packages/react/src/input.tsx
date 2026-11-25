@@ -1,4 +1,9 @@
+"use client";
+
 import * as React from "react";
+
+/** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
+const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
 /*
  * VinUI · Input (React): Input, Label and Field. For a full Textarea (count, auto-grow), see textarea.tsx.
@@ -20,7 +25,7 @@ export function inputClasses({ size = "md", className }: { size?: InputSize; cla
 }
 
 export function Input({ size, className, ...rest }: InputProps) {
-  if (process.env.NODE_ENV !== "production" && !rest.id && !rest["aria-label"] && !rest["aria-labelledby"]) {
+  if (isDev() && !rest.id && !rest["aria-label"] && !rest["aria-labelledby"]) {
     console.warn("VinUI Input: give it an id with a matching <Label htmlFor>, an aria-label, or use <Field label>.");
   }
   return <input {...rest} className={inputClasses({ size, className })} />;

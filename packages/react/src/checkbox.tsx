@@ -1,4 +1,9 @@
+"use client";
+
 import * as React from "react";
+
+/** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
+const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
 /*
  * VinUI · Checkbox (React). API: spec/checkbox.json.
@@ -35,7 +40,7 @@ export function Checkbox({ label, description, indeterminate = false, controlPos
   const descId = description ? `${inputId}-desc` : undefined;
 
   if (!label) {
-    if (process.env.NODE_ENV !== "production" && !rest["aria-label"] && !rest["aria-labelledby"]) {
+    if (isDev() && !rest["aria-label"] && !rest["aria-labelledby"]) {
       console.warn("VinUI Checkbox: pass a label or an aria-label.");
     }
     return <input {...rest} ref={setRef} id={id} type="checkbox" className={cx("vin-checkbox", className)} style={style} />;
