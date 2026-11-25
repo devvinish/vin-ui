@@ -47,8 +47,8 @@
     const cs = getComputedStyle(el);
     el.style.height = `${el.scrollHeight + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)}px`;
   }
-  // Grow when the text changes from outside too.
-  $effect.pre(() => {
+  // Grow when the text changes, typed or set from outside.
+  $effect(() => {
     void value;
     grow();
   });

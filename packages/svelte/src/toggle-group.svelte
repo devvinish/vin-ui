@@ -30,8 +30,9 @@
   let focused = $state<string>();
 
   // Items register in document order, so the first enabled one can be the Tab stop when nothing is on.
-  const items: { value: string; disabled: () => boolean }[] = $state([]);
-  const first = $derived(items.find((i) => !i.disabled())?.value);
+  type Registered = { readonly value: string; disabled: () => boolean };
+  let items = $state.raw<Registered[]>([]);
+  const first = () => items.find((i) => !i.disabled())?.value;
 
   function toggle(v: string) {
     const next = single ? [v] : current.includes(v) ? current.filter((x) => x !== v) : [...current, v];
@@ -49,13 +50,12 @@
       return size;
     },
     isOn: (v: string) => current.includes(v),
-    isStop: (v: string) => (focused ?? current[0] ?? first) === v,
+    isStop: (v: string) => (focused ?? current[0] ?? first()) === v,
     toggle,
-    register(item: { value: string; disabled: () => boolean }) {
-      items.push(item);
+    register(item: Registered) {
+      items = [...items, item];
       return () => {
-        const i = items.indexOf(item);
-        if (i >= 0) items.splice(i, 1);
+        items = items.filter((i) => i !== item);
       };
     },
   });
