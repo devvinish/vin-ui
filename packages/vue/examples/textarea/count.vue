@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import Textarea from "@/components/vin/textarea.vue";
+
+</script>
+
+<template>
+  <Textarea
+    label="Bio"
+    :rows="3"
+    :maxlength="160"
+    default-value="Designer and developer in Delhi."
+    hint="Shown on your profile."
+    style="width: 100%; max-width: 360px"
+  />
+</template>
