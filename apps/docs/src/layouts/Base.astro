@@ -6,7 +6,6 @@ import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
 import Header from "../components/Header.astro";
 import Customize from "../components/Customize.astro";
 import Search from "../components/Search.astro";
-import { ads } from "../config/ads";
 import { href, fontsHref } from "../lib/site";
 
 export interface Props { title: string; description?: string; current?: string; hasSidebar?: boolean }
@@ -44,9 +43,6 @@ const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
         } catch (e) {}
       })();
     </script>
-    {ads.enabled && ads.scriptSrc && (
-      <script is:inline async data-noptimize="1" data-cfasync="false" src={ads.scriptSrc}></script>
-    )}
   </head>
   <body>
     <a class="sr-only" href="#main">Skip to content</a>

@@ -66,7 +66,7 @@ The site is built under `/ui`, so no paths are rewritten. `npm test --prefix wor
 
 The docs pages have a right-sidebar Mediavine unit, using the same markup as the vinish.dev game pages: an `<aside class="mv-siderail-slot">` with an empty `300x600` slot inside. Mediavine fills it.
 
-The Worker serves these pages, not WordPress, so the Mediavine plugin does not add its script. `apps/docs/src/config/ads.ts` loads the same site script the plugin uses on vinish.dev (`scriptSrc`). In `npm run dev` the slot shows a dashed 300 × 600 preview.
+The site does not load the Mediavine script: Mediavine adds it when the pages are published through WordPress. In `npm run dev` the slot shows a dashed 300 × 600 preview.
 
 ## Contributing
 
