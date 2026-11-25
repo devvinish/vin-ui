@@ -9,7 +9,7 @@ import Search from "../components/Search.astro";
 import { href, fontsHref } from "../lib/site";
 
 export interface Props { title: string; description?: string; current?: string; hasSidebar?: boolean }
-const { title, description = "VinUI: free, MIT-licensed UI components for HTML and React. One set of components, 8 styles, any accent colour.", current, hasSidebar = false } = Astro.props;
+const { title, description = "VinUI: free, MIT-licensed UI components for HTML, React, Vue and Svelte. One set of components, 8 styles, any accent colour.", current, hasSidebar = false } = Astro.props;
 const fullTitle = title === "VinUI" ? "VinUI: components in 8 styles" : `${title} · VinUI`;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const { vars } = themeToAttributes(DEFAULT_THEME);

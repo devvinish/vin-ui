@@ -66,6 +66,30 @@ test("add: writes the component and what it needs; keeps local edits unless --ov
   assert.match(await readFile(join(dir, "src/components/vin/dialog.tsx"), "utf8"), /export function Dialog/);
 });
 
+test("Svelte: add writes the parts and the components it imports, into src/lib", async () => {
+  const dir = await project({ dependencies: { svelte: "^5.30.0", "@sveltejs/kit": "^2" } });
+  await mkdir(join(dir, "src/lib"));
+  await run(dir, "init");
+  assert.equal(JSON.parse(await readFile(join(dir, "vin.json"), "utf8")).framework, "svelte");
+  await run(dir, "add", "toggle-group", "alert-dialog");
+  const base = join(dir, "src/lib/components/vin");
+  for (const f of ["toggle-group.svelte", "toggle-group-item.svelte", "alert-dialog.svelte", "dialog.svelte"]) {
+    assert.ok(await readFile(join(base, f), "utf8"), f);
+  }
+  // A shorter name's files don't come along: toggle-group-item belongs to toggle-group, not toggle.
+  await run(dir, "add", "toggle");
+  const toggle = JSON.parse(readFileSync(join(REG, "r/svelte/toggle.json"), "utf8"));
+  assert.deepEqual(toggle.files.map((f) => f.path), ["toggle.svelte"]);
+});
+
+test("Vue: add writes .vue files", async () => {
+  const dir = await project({ dependencies: { vue: "^3.5.0" } });
+  await run(dir, "init");
+  await run(dir, "add", "sheet");
+  assert.match(await readFile(join(dir, "src/components/vin/sheet.vue"), "utf8"), /from "\.\/dialog\.vue"/);
+  assert.ok(await readFile(join(dir, "src/components/vin/dialog.vue"), "utf8"));
+});
+
 test("add: a typo gets a suggestion", async () => {
   const dir = await project({ dependencies: { react: "19" } });
   await run(dir, "init");

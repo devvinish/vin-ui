@@ -20,7 +20,7 @@ const toc = [
 const props = Object.entries(spec.props);
 const reactImport = `import { ${[...spec.react.components, ...(spec.react.helpers ?? [])].join(", ")} } from "@/components/vin/${spec.name}";`;
 ---
-<Docs title={spec.title} description={`VinUI ${spec.title}: ${spec.description} In 8 styles, for HTML and React.`} current={spec.name} toc={toc}>
+<Docs title={spec.title} description={`VinUI ${spec.title}: ${spec.description} In 8 styles, for HTML, React, Vue and Svelte.`} current={spec.name} toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><a href={href("/components/")}><span>Components</span></a><span>{spec.title}</span></div>
   <h1 class="page-title">{spec.title}</h1>
   <p class="page-lead">{spec.description} Same markup and props in every style: switch the style in the header to see it change.</p>
@@ -34,12 +34,12 @@ const reactImport = `import { ${[...spec.react.components, ...(spec.react.helper
       <>
         <h2 id={ex.id}>{ex.title}</h2>
         <p>{ex.description}</p>
-        <Example id={`${spec.name}-${ex.id}`} html={ex.html} react={ex.react}><ReactExample slot="react" client:load name={spec.name} id={ex.id} /></Example>
+        <Example id={`${spec.name}-${ex.id}`} html={ex.html} react={ex.react} vue={ex.vue} svelte={ex.svelte}><ReactExample slot="react" client:load name={spec.name} id={ex.id} /></Example>
       </>
     ))}
 
     <h2 id="install">Installation</h2>
-    <p>React: add the component file to your project with the CLI, then import it. HTML: the classes come with <code>vinui.css</code>.</p>
+    <p>React, Vue and Svelte: add the component file to your project with the CLI (it reads your framework from <code>vin.json</code>), then import it. Each example's code starts with the imports it needs. HTML: the classes come with <code>vinui.css</code>.</p>
     <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui add ${spec.name}`} />
     <CodeBlock title="React" lang="tsx" code={reactImport} />
 

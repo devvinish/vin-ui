@@ -45,7 +45,7 @@ function siblingDeps(code, spec) {
 }
 
 /** Every file of a component for one framework, or null if that framework doesn't have it yet. */
-function frameworkEntry(spec, fw, scriptAttrs) {
+function frameworkEntry(spec, fw, scriptAttrs, specNames) {
   const name = spec.name;
   const base = {
     name, title: spec.title, category: spec.category, description: spec.description, framework: fw,
@@ -60,26 +60,45 @@ function frameworkEntry(spec, fw, scriptAttrs) {
   const F = FRAMEWORKS[fw];
   const file = `${F.src}/${name}.${F.ext}`;
   if (!has(file)) return null;
-  const content = read(file);
+  // Svelte has one component per file, so a component's parts live next to it
+  // (card-header.svelte). A part belongs to the longest component name it starts with,
+  // so toggle-group-item.svelte goes with toggle-group, not toggle.
+  const paths = [`${name}.${F.ext}`, ...partFiles(F, name, specNames)];
+  const files = paths.map((p) => ({ path: p, content: read(`${F.src}/${p}`) }));
   const examples = spec.examples
     .filter((ex) => has(`${F.examples}/${name}/${ex.id}.${F.ext}`))
     .map((ex) => ({ ...ex, code: read(`${F.examples}/${name}/${ex.id}.${F.ext}`) }));
+  const deps = siblingDeps(files.map((f) => f.content).join("\n"), spec).filter((d) => d !== name && specNames.includes(d));
   return {
     ...base, components: spec[fw]?.components ?? spec.react?.components ?? [],
-    dependencies: siblingDeps(content, spec), files: [{ path: `${name}.${F.ext}`, content }], examples,
+    dependencies: deps, files, examples,
   };
+}
+
+/** The extra part files of a component (Svelte), e.g. card → card-header.svelte, card-title.svelte. */
+function partFiles(F, name, specNames) {
+  return readdirSync(join(ROOT, F.src))
+    .filter((f) => f.endsWith(`.${F.ext}`) && f.startsWith(`${name}-`))
+    .filter((f) => {
+      const base = f.slice(0, -(F.ext.length + 1));
+      if (specNames.includes(base)) return false;
+      const owner = specNames.filter((n) => base.startsWith(`${n}-`)).sort((a, b) => b.length - a.length)[0];
+      return owner === name;
+    })
+    .sort();
 }
 
 /** Builds the registry in memory: { "path/inside/site": string }. */
 export function buildRegistry() {
   const specs = loadSpecs();
   const scriptAttrs = scriptAttributes();
+  const specNames = specs.map((s) => s.name);
   const out = {};
   const index = [];
   for (const spec of specs) {
     const frameworks = [];
     for (const fw of Object.keys(FRAMEWORKS)) {
-      const entry = frameworkEntry(spec, fw, scriptAttrs);
+      const entry = frameworkEntry(spec, fw, scriptAttrs, specNames);
       if (!entry) continue;
       frameworks.push(fw);
       out[`r/${fw}/${spec.name}.json`] = JSON.stringify(entry, null, 2) + "\n";

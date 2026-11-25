@@ -250,12 +250,14 @@ document.addEventListener("keydown", (e) => {
 
 /* ───────────── docs page helpers ───────────── */
 
-// Example tabs (HTML / React), remembered across examples.
+// Example tabs (HTML / React / Vue / Svelte), remembered across examples.
 const savedFw = (() => { try { return localStorage.getItem("vinui:framework") || "html"; } catch { return "html"; } })();
 function showFramework(fw: string) {
   for (const tabs of $$("[data-tabs]")) {
-    for (const t of $$("[data-tab]", tabs)) t.setAttribute("aria-selected", String(t.dataset.tab === fw));
-    for (const p of $$("[data-panel]", tabs)) p.hidden = p.dataset.panel !== fw;
+    // A component not yet ported to that framework falls back to HTML.
+    const show = $$("[data-tab]", tabs).some((t) => t.dataset.tab === fw) ? fw : "html";
+    for (const t of $$("[data-tab]", tabs)) { t.setAttribute("aria-selected", String(t.dataset.tab === show)); t.tabIndex = t.dataset.tab === show ? 0 : -1; }
+    for (const p of $$("[data-panel]", tabs)) p.hidden = p.dataset.panel !== show;
   }
 }
 showFramework(savedFw);
@@ -264,6 +266,18 @@ document.addEventListener("click", (e) => {
   if (!tab) return;
   showFramework(tab.dataset.tab!);
   try { localStorage.setItem("vinui:framework", tab.dataset.tab!); } catch {}
+});
+
+// Arrow keys move between the framework tabs.
+document.addEventListener("keydown", (e) => {
+  const tab = (e.target as Element).closest<HTMLElement>("[data-tabs] [data-tab]");
+  if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+  const all = $$("[data-tab]", tab.parentElement!);
+  const i = all.indexOf(tab);
+  const next = e.key === "Home" ? all[0] : e.key === "End" ? all[all.length - 1] : all[(i + (e.key === "ArrowRight" ? 1 : -1) + all.length) % all.length];
+  e.preventDefault();
+  next.click();
+  next.focus();
 });
 
 // Copy buttons on code blocks.

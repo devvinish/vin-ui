@@ -1,20 +1,33 @@
 ---
 /**
- * One example: live preview + code, with HTML / React tabs.
+ * One example: live preview + code, with HTML / React / Vue / Svelte tabs.
  * The HTML preview is the snippet itself; the React preview is the real React
  * component rendered on the server (slot "react"), so both stay honest.
+ * Vue and Svelte show their source under the HTML preview: their tests check they render
+ * the same markup, and repeating the preview would repeat its ids on the page.
  */
 import { Code } from "astro:components";
 import Icon from "./Icon.astro";
 
-const { id, html, react } = Astro.props as { id: string; html: string; react: string };
+const { id, html, react, vue, svelte } = Astro.props as { id: string; html: string; react: string; vue?: string; svelte?: string };
 const themes = { light: "github-light", dark: "github-dark" } as const;
+const tabs = [
+  { fw: "html", label: "HTML" },
+  { fw: "react", label: "React" },
+  ...(vue ? [{ fw: "vue", label: "Vue" }] : []),
+  ...(svelte ? [{ fw: "svelte", label: "Svelte" }] : []),
+];
+const extra = [
+  ...(vue ? [{ fw: "vue", label: "Vue", ext: "vue", lang: "vue", code: vue }] : []),
+  ...(svelte ? [{ fw: "svelte", label: "Svelte", ext: "svelte", lang: "svelte", code: svelte }] : []),
+];
 ---
 <div class="example" data-tabs id={`ex-${id}`}>
   <div class="example-bar">
     <div class="seg" role="tablist" aria-label="Framework">
-      <button type="button" role="tab" aria-selected="true" aria-controls={`${id}-html`} id={`${id}-tab-html`} data-tab="html">HTML</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls={`${id}-react`} id={`${id}-tab-react`} data-tab="react">React</button>
+      {tabs.map((t, i) => (
+        <button type="button" role="tab" aria-selected={String(i === 0)} tabindex={i === 0 ? 0 : -1} aria-controls={`${id}-${t.fw}`} id={`${id}-tab-${t.fw}`} data-tab={t.fw}>{t.label}</button>
+      ))}
     </div>
     <span class="now" data-style-now></span>
   </div>
@@ -32,4 +45,13 @@ const themes = { light: "github-light", dark: "github-dark" } as const;
       <Code code={react.trim()} lang="tsx" themes={themes} defaultColor={false} />
     </div>
   </div>
+  {extra.map((x) => (
+    <div role="tabpanel" id={`${id}-${x.fw}`} aria-labelledby={`${id}-tab-${x.fw}`} data-panel={x.fw} hidden>
+      <p class="example-note">The {x.label} version renders the same markup as the HTML tab, so it looks and works the same.</p>
+      <div class="code">
+        <div class="code-head"><span>{id}.{x.ext}</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+        <Code code={x.code.trim()} lang={x.lang} themes={themes} defaultColor={false} />
+      </div>
+    </div>
+  ))}
 </div>
