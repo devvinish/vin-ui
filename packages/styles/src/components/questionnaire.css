@@ -1,0 +1,49 @@
+/* ==========================================================================
+   VinUI · Questionnaire
+   API (see spec/questionnaire.json):
+     form.vin-questionnaire[aria-labelledby] [data-state="submitted" | "skipped"]
+       > .vin-questionnaire__header > .vin-questionnaire__title + .vin-questionnaire__description   optional
+       > fieldset.vin-questionnaire__question ...
+           > legend.vin-questionnaire__prompt + p.vin-questionnaire__hint?
+           > .vin-choice > input.vin-radio | input.vin-checkbox + .vin-choice__body > label.vin-choice__label
+           > .vin-choice (Other) > input + .vin-choice__body > label + input.vin-input.vin-input--sm.vin-questionnaire__other
+       > .vin-questionnaire__actions > button.vin-btn--ghost[data-vin-skip] + button[type=submit].vin-btn
+       > p.vin-questionnaire__status[role=status]       after Submit or Skip
+   Single choice = radios, several = checkboxes; real inputs, so forms and keys just work.
+   The "Other" text box shows when its option is chosen.
+   Submitted: the fieldsets are disabled and only the chosen answers stay. vinui.js does this
+   for data-vin-questionnaire forms and fires vin-submit (detail.answers) and vin-skip.
+   ========================================================================== */
+
+.vin-questionnaire {
+  display: grid; gap: 18px; box-sizing: border-box; width: 100%; min-width: 0; margin: 0; padding: 16px 18px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); color: var(--vin-fg); text-align: start;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-soft);
+}
+.vin-questionnaire__header { display: grid; gap: 2px; }
+.vin-questionnaire__title { margin: 0; font-weight: var(--vin-title-weight); line-height: 1.35; }
+.vin-questionnaire__description { margin: 0; font-size: calc(var(--vin-text-md) - 1px); line-height: 1.45; color: var(--vin-muted); }
+
+.vin-questionnaire__question { display: grid; gap: 9px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.vin-questionnaire__prompt { float: left; width: 100%; margin: 0 0 2px; padding: 0; font-weight: var(--vin-title-weight); line-height: 1.4; }
+.vin-questionnaire__prompt + * { clear: left; }
+.vin-questionnaire__hint { margin: -6px 0 2px; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.4; color: var(--vin-muted); }
+.vin-questionnaire__question .vin-choice__body { flex: 1; }
+
+.vin-questionnaire__other.vin-input { width: min(100%, 300px); margin-top: 6px; }
+.vin-choice:not(:has(> :checked)) .vin-questionnaire__other { display: none; }
+
+.vin-questionnaire__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.vin-questionnaire__status { display: flex; align-items: center; gap: 7px; margin: 0; font-size: calc(var(--vin-text-md) - 1px); line-height: 1.4; color: var(--vin-muted); }
+.vin-questionnaire__status:focus { outline: none; }
+.vin-questionnaire__status > svg { flex: none; width: 15px; height: 15px; color: color-mix(in srgb, var(--vin-success) 75%, var(--vin-fg)); }
+
+/* Answered: read-only, only the chosen answers stay. */
+.vin-questionnaire[data-state] .vin-questionnaire__actions { display: none; }
+.vin-questionnaire[data-state] .vin-choice:not(:has(> :checked)) { display: none; }
+.vin-questionnaire[data-state] :is(.vin-radio, .vin-checkbox, .vin-input):disabled,
+.vin-questionnaire[data-state] .vin-choice:has(:disabled) .vin-choice__label { opacity: 1; cursor: default; }
+.vin-questionnaire[data-state] .vin-questionnaire__other.vin-input { color: var(--vin-fg); }
+.vin-questionnaire[data-state="skipped"] .vin-questionnaire__question { display: none; }
+.vin-questionnaire[data-state="skipped"] .vin-questionnaire__status > svg { color: var(--vin-muted); }

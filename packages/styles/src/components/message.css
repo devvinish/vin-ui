@@ -1,0 +1,74 @@
+/* ==========================================================================
+   VinUI · Message
+   API (see spec/message.json):
+     article.vin-message [.vin-message--end] [.vin-message--streaming aria-busy="true"]
+       > .vin-message__avatar[aria-hidden=true] > .vin-avatar      optional
+       > .vin-message__body
+           > .vin-message__header > .vin-message__author + time.vin-message__time
+           > .vin-message__content        paragraphs, lists, code; or a .vin-bubble
+           > .vin-message__actions[role=group][aria-label]
+               > button.vin-btn.vin-btn--ghost.vin-btn--icon[aria-label] ...   (drawn small here)
+                 [data-vin-copy]                   copies the content (vinui.js)
+                 [data-vin-feedback=up|down][aria-pressed]   thumbs; one at a time (vinui.js)
+   .vin-message--end puts the avatar on the end side (the person's own messages).
+   .vin-message--streaming shows a caret after the text while the reply is written.
+   In HTML, add data-vin-message to the article for copy and feedback.
+   ========================================================================== */
+
+.vin-message {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; align-items: start;
+  box-sizing: border-box; width: 100%; min-width: 0; margin: 0;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.6; color: var(--vin-fg); text-align: start;
+}
+.vin-message:not(:has(> .vin-message__avatar)) { grid-template-columns: minmax(0, 1fr); }
+.vin-message__avatar { display: flex; padding-top: 1px; }
+.vin-message__body { display: grid; justify-items: start; gap: 4px; min-width: 0; }
+.vin-message__body > * { max-width: 100%; }
+
+.vin-message__header { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; min-height: 28px; align-content: center; }
+.vin-message__author { margin: 0; font-weight: var(--vin-title-weight); line-height: 1.3; }
+.vin-message__time { font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.3; font-variant-numeric: tabular-nums; color: var(--vin-muted); }
+
+.vin-message__content { min-width: 0; overflow-wrap: anywhere; }
+.vin-message__content > * { margin-block: 0; }
+.vin-message__content > * + * { margin-top: .65em; }
+.vin-message__content :is(ul, ol) { padding-inline-start: 1.35em; }
+.vin-message__content li + li { margin-top: .2em; }
+.vin-message__content :not(pre) > code {
+  padding: .1em .35em; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: .88em;
+  background: color-mix(in srgb, var(--vin-fg) 7%, transparent); border-radius: calc(var(--vin-radius) / 2);
+}
+.vin-message__content pre {
+  box-sizing: border-box; max-width: 100%; padding: 10px 12px; overflow-x: auto;
+  font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.55;
+  background: color-mix(in srgb, var(--vin-fg) 5%, var(--vin-surface)); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 6%);
+  border-radius: var(--vin-radius);
+}
+.vin-message__content a { color: var(--vin-accent-text); text-underline-offset: 2px; }
+
+.vin-message__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; margin-inline-start: -6px; }
+.vin-message__actions > .vin-btn { width: var(--vin-h-sm); height: var(--vin-h-sm); color: var(--vin-muted); }
+.vin-message__actions > .vin-btn > svg { width: 15px; height: 15px; }
+.vin-message__actions > .vin-btn:hover { color: var(--vin-fg); }
+.vin-message__actions > .vin-btn[aria-pressed="true"] { color: var(--vin-accent-text); background-color: color-mix(in srgb, var(--vin-accent) 12%, transparent); }
+.vin-message__actions > .vin-btn[data-copied] { color: color-mix(in srgb, var(--vin-success) 70%, var(--vin-fg)); }
+
+/* The person's own messages: avatar on the end side. */
+.vin-message--end { grid-template-columns: minmax(0, 1fr) auto; }
+.vin-message--end:not(:has(> .vin-message__avatar)) { grid-template-columns: minmax(0, 1fr); }
+.vin-message--end > .vin-message__avatar { grid-column: 2; grid-row: 1; }
+.vin-message--end > .vin-message__body { grid-column: 1; grid-row: 1; justify-items: end; }
+.vin-message--end .vin-message__header { flex-direction: row-reverse; }
+.vin-message--end .vin-message__actions { margin-inline: 0 -6px; }
+.vin-message--end .vin-message__content > .vin-bubble { margin-inline: auto 0; max-width: 100%; }
+
+/* Streaming: a caret after the last bit of text. It blinks unless motion is reduced. */
+.vin-message--streaming .vin-message__content > :last-child::after {
+  content: ""; display: inline-block; width: .5em; height: 1.05em; margin-inline-start: 3px; vertical-align: -.16em;
+  background: var(--vin-accent); border-radius: 1px; animation: vin-message-caret 1s steps(1) infinite;
+}
+@keyframes vin-message-caret { 50% { opacity: 0; } }
+:is([data-vin-motion="reduced"], [data-vin-motion="off"]) .vin-message--streaming .vin-message__content > :last-child::after { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-vin-style]:not([data-vin-motion="full"]) .vin-message--streaming .vin-message__content > :last-child::after { animation: none; }
+}

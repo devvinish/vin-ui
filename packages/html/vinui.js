@@ -7,6 +7,9 @@
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select, Scroll Area…) don't use it.
  * Data display: data-vin-copy (Code Block copy button), data-vin-carousel (Carousel), data-vin-chart (Chart tooltips),
  * data-vin-data-table (Data Table: sorting, filtering, selection and paging).
+ * AI chat: data-vin-message (copy, thumbs up / down), data-vin-message-scroller (stick to the newest
+ * message, "Jump to latest"), data-vin-questionnaire (Submit / Skip, then read-only), and Escape hides
+ * an open Marker preview.
  */
 (function () {
   "use strict";
@@ -1293,6 +1296,137 @@
     render();
   }
 
+  /* ---------------- Message: copy the content, thumbs up / down (one at a time) ---------------- */
+  function initMessage(msg) {
+    msg.addEventListener("click", function (e) {
+      var btn = e.target.closest && e.target.closest("button");
+      if (!btn || !msg.contains(btn)) return;
+      if (btn.hasAttribute("data-vin-copy")) {
+        var content = msg.querySelector(".vin-message__content");
+        var text = content ? (content.innerText || content.textContent).trim() : "";
+        if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () {});
+        var label = btn.getAttribute("data-vin-label") || btn.getAttribute("aria-label");
+        btn.setAttribute("data-vin-label", label);
+        btn.setAttribute("aria-label", "Copied");
+        btn.setAttribute("data-copied", "");
+        clearTimeout(btn._vinCopied);
+        btn._vinCopied = setTimeout(function () { btn.setAttribute("aria-label", label); btn.removeAttribute("data-copied"); }, 2000);
+        return;
+      }
+      var kind = btn.getAttribute("data-vin-feedback");
+      if (!kind) return;
+      var on = btn.getAttribute("aria-pressed") !== "true";
+      Array.prototype.forEach.call(msg.querySelectorAll("[data-vin-feedback]"), function (b) {
+        b.setAttribute("aria-pressed", b === btn && on ? "true" : "false");
+      });
+      msg.dispatchEvent(new CustomEvent("vin-feedback", { bubbles: true, detail: { value: on ? kind : null } }));
+    });
+  }
+
+  /* ---------------- Message Scroller: stick to the newest message while at the bottom ---------------- */
+  function initMessageScroller(root) {
+    var view = root.querySelector(".vin-message-scroller__viewport");
+    var content = root.querySelector(".vin-message-scroller__content");
+    var jump = root.querySelector(".vin-message-scroller__jump");
+    if (!view || !content) return;
+    var threshold = 32, stuck = true, pinning = false;
+    var reduced = function () {
+      return (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) ||
+        /^(reduced|off)$/.test(document.documentElement.getAttribute("data-vin-motion") || "");
+    };
+    var atBottom = function () { return view.scrollHeight - view.scrollTop - view.clientHeight <= threshold; };
+    var toBottom = function (smooth) { view.scrollTo({ top: view.scrollHeight, behavior: smooth && !reduced() ? "smooth" : "auto" }); };
+    var show = function (on, fresh) {
+      if (!jump) return;
+      jump.hidden = !on;
+      if (!on) jump.removeAttribute("data-new");
+      else if (fresh) jump.setAttribute("data-new", "");
+    };
+    toBottom(false);
+    var lastTop = view.scrollTop;
+    view.addEventListener("scroll", function () {
+      // Only scrolling up lets go: content growing (or the browser re-anchoring it) never does.
+      var top = view.scrollTop, bottom = atBottom(), up = top < lastTop - 1;
+      lastTop = top;
+      if (pinning) { if (!bottom) return; pinning = false; }
+      if (bottom) { stuck = true; show(false); }
+      else if (up) { stuck = false; if (jump && jump.hidden) show(true, false); }
+    }, { passive: true });
+    var cancel = function () { pinning = false; };
+    view.addEventListener("wheel", cancel, { passive: true });
+    view.addEventListener("touchstart", cancel, { passive: true });
+    view.addEventListener("keydown", cancel);
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () {
+        if (stuck || pinning) toBottom(pinning);
+        else if (!atBottom()) show(true, true);
+      }).observe(content);
+    }
+    if (jump) jump.addEventListener("click", function () {
+      stuck = true; pinning = true;
+      show(false);
+      view.focus({ preventScroll: true });
+      toBottom(true);
+    });
+  }
+
+  /* ---------------- Questionnaire: Submit / Skip, then read-only ---------------- */
+  function initQuestionnaire(form) {
+    var questions = function () { return Array.prototype.slice.call(form.querySelectorAll(".vin-questionnaire__question")); };
+    function finish(state) {
+      form.setAttribute("data-state", state);
+      questions().forEach(function (f) { f.disabled = true; });
+      var status = form.querySelector(".vin-questionnaire__status");
+      if (!status) {
+        status = document.createElement("p");
+        status.className = "vin-questionnaire__status";
+        status.setAttribute("role", "status");
+        status.tabIndex = -1;
+        form.appendChild(status);
+      }
+      var icon = state === "skipped" ? '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>' : '<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/>';
+      var text = state === "skipped" ? form.getAttribute("data-skipped-text") || "Skipped"
+        : form.getAttribute("data-submitted-text") || (questions().length > 1 ? "Answers sent" : "Answer sent");
+      status.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + icon + "</svg>";
+      status.appendChild(document.createTextNode(text));
+      status.focus();
+    }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (form.hasAttribute("data-state")) return;
+      var answers = {};
+      questions().forEach(function (f) {
+        var inputs = Array.prototype.slice.call(f.querySelectorAll(".vin-radio, .vin-checkbox"));
+        if (!inputs.length) return;
+        var other = f.querySelector(".vin-questionnaire__other");
+        var chosen = inputs.filter(function (i) { return i.checked; }).map(function (i) {
+          return i.value === "other" && other && other.value.trim() ? other.value.trim() : i.value;
+        });
+        answers[inputs[0].name] = inputs[0].type === "checkbox" ? chosen : chosen[0] || "";
+      });
+      form.dispatchEvent(new CustomEvent("vin-submit", { bubbles: true, detail: { answers: answers } }));
+      finish("submitted");
+    });
+    form.addEventListener("click", function (e) {
+      var skip = e.target.closest && e.target.closest("[data-vin-skip]");
+      if (!skip || !form.contains(skip) || form.hasAttribute("data-state")) return;
+      form.dispatchEvent(new CustomEvent("vin-skip", { bubbles: true }));
+      finish("skipped");
+    });
+  }
+
+  /* ---------- Marker: Escape hides an open citation preview (WCAG 1.4.13) ---------- */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    Array.prototype.forEach.call(document.querySelectorAll(".vin-marker:hover, .vin-marker:focus"), function (m) {
+      if (!m.querySelector(".vin-marker__preview")) return;
+      m.setAttribute("data-dismissed", "");
+      var undo = function () { m.removeAttribute("data-dismissed"); m.removeEventListener("mouseleave", undo); m.removeEventListener("blur", undo); };
+      m.addEventListener("mouseleave", undo);
+      m.addEventListener("blur", undo);
+    });
+  });
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
@@ -1301,6 +1435,7 @@
     "data-vin-context-menu": initContextMenu, "data-vin-drawer": initDrawer, "data-vin-hover-card": initHoverCard, "data-vin-command": initCommand,
     "data-vin-resizable": initResizable,
     "data-vin-copy": initCopy, "data-vin-carousel": initCarousel, "data-vin-chart": initChart, "data-vin-data-table": initDataTable,
+    "data-vin-message": initMessage, "data-vin-message-scroller": initMessageScroller, "data-vin-questionnaire": initQuestionnaire,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

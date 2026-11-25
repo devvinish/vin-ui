@@ -1,0 +1,33 @@
+{
+  "$comment": "Single source of truth for the Trace API. Every framework package is tested against this file.",
+  "name": "trace",
+  "title": "Trace",
+  "category": "AI chat",
+  "description": "What an agent did, step by step: thoughts, tool calls and results, each with a status icon, how long it took and details you can open.",
+  "baseClass": "vin-trace",
+  "classes": ["vin-trace", "vin-trace__step", "vin-trace__step--running", "vin-trace__step--error", "vin-trace__step--pending", "vin-trace__icon", "vin-trace__details", "vin-trace__head", "vin-trace__title", "vin-trace__meta", "vin-trace__body", "vin-trace__code"],
+  "thumb": "<ol class=\"vin-trace\" style=\"width:190px;font-size:11.5px;--vin-trace-icon:16px;--vin-h-sm:22px\"><li class=\"vin-trace__step\" style=\"column-gap:8px\"><span class=\"vin-trace__icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" style=\"width:10px;height:10px\"><path d=\"m5 12.5 4.5 4.5L19 7.5\"/></svg></span><div class=\"vin-trace__head\"><span class=\"vin-trace__title\">Searched the web</span><span class=\"vin-trace__meta\" style=\"font-size:10px\">1.2s</span></div></li><li class=\"vin-trace__step vin-trace__step--running\" style=\"column-gap:8px\"><span class=\"vin-trace__icon\"><span class=\"vin-spinner vin-spinner--sm\"></span></span><div class=\"vin-trace__head\"><span class=\"vin-trace__title\">Writing the answer</span></div></li></ol>",
+  "props": {
+    "Trace": { "type": "children", "description": "The ordered list of steps. label names it (default \"Agent steps\").", "html": "ol.vin-trace[aria-label]" },
+    "TraceStep": { "type": "component", "description": "One step.", "html": "li.vin-trace__step" },
+    "status": { "values": ["done", "running", "error", "pending"], "default": "done", "class": "vin-trace__step--{value}", "description": "A check, a spinner, a cross or an empty dashed circle.", "html": "span.vin-trace__icon[role=img][aria-label=\"Done\"] > svg or .vin-spinner.vin-spinner--sm" },
+    "title": { "type": "ReactNode", "description": "What happened, e.g. \"Searched the web\".", "html": ".vin-trace__title" },
+    "kind / duration": { "type": "string", "description": "Shown as \"Tool call · 1.2s\" at the end of the row.", "html": ".vin-trace__meta" },
+    "meta": { "type": "ReactNode", "description": "Your own text instead of kind and duration." },
+    "children": { "type": "ReactNode", "description": "Details: the step opens and closes like a Collapsible. Put code in pre.vin-trace__code.", "html": "details.vin-collapsible.vin-trace__details > summary.vin-collapsible__trigger.vin-trace__head + .vin-collapsible__content.vin-trace__body" },
+    "open / defaultOpen": { "type": "boolean", "description": "With details. Use onOpenChange to hear about changes." }
+  },
+  "react": { "components": ["Trace", "TraceStep"], "helpers": [] },
+  "dependencies": ["collapsible"],
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A thought, two tool calls (one open) and the answer being written." },
+    { "id": "error", "title": "Failed step", "description": "A tool call that failed, with the error in its details, and a step that hasn't started." },
+    { "id": "grouped", "title": "Folded away", "description": "The whole trace inside a Collapsible, as \"Worked for 9s\", so the reply stays short." }
+  ],
+  "a11y": [
+    "The steps are an ordered list, so screen readers say how many there are and where each one is.",
+    "Each status icon is an image with a name (\"Done\", \"Running\", \"Failed\", \"Not started\"); colour is never the only signal.",
+    "Details use the native <details> element: they open with Enter or Space and screen readers say whether they are expanded. No JavaScript is needed.",
+    "The spinner slows down when the reader prefers reduced motion. If you update a trace live, announce the important changes (for example with a StatusMarker) rather than every step."
+  ]
+}

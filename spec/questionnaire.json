@@ -1,0 +1,33 @@
+{
+  "$comment": "Single source of truth for the Questionnaire API. Every framework package is tested against this file.",
+  "name": "questionnaire",
+  "title": "Questionnaire",
+  "category": "AI chat",
+  "description": "Multiple-choice questions the assistant asks inside a chat: one answer (radios) or several (checkboxes), an optional \"Other\" text box, Submit and Skip, and a read-only view once answered.",
+  "baseClass": "vin-questionnaire",
+  "classes": ["vin-questionnaire", "vin-questionnaire__header", "vin-questionnaire__title", "vin-questionnaire__description", "vin-questionnaire__question", "vin-questionnaire__prompt", "vin-questionnaire__hint", "vin-questionnaire__other", "vin-questionnaire__actions", "vin-questionnaire__status"],
+  "thumb": "<div class=\"vin-questionnaire\" style=\"width:190px;padding:10px 12px;gap:8px;font-size:11.5px\"><p class=\"vin-questionnaire__title\">How long a hike?</p><div style=\"display:grid;gap:5px\"><span class=\"vin-choice\" style=\"gap:6px\"><span class=\"vin-radio\" style=\"width:13px;height:13px\"></span>Half a day</span><span class=\"vin-choice\" style=\"gap:6px\"><span class=\"vin-radio\" style=\"width:13px;height:13px;background:var(--vin-primary-bg);border-color:transparent\"></span>A full day</span></div></div>",
+  "props": {
+    "questions": { "type": "Question[]", "description": "{ id, prompt, hint?, multiple?, options: (string | { value, label })[], other?: boolean | string }. multiple uses checkboxes; other adds an \"Other\" option with a text box.", "html": "fieldset.vin-questionnaire__question > legend.vin-questionnaire__prompt + .vin-choice (Radio or Checkbox) ..." },
+    "title / description": { "type": "ReactNode", "description": "A heading above the questions; it names the form.", "html": ".vin-questionnaire__header > .vin-questionnaire__title + .vin-questionnaire__description" },
+    "label": { "type": "string", "description": "Name for the form when there's no title.", "html": "aria-label on the form" },
+    "defaultValues / defaultOther": { "type": "Record<string, string[]> / Record<string, string>", "description": "Chosen values (\"other\" for the Other option) and the typed Other text, by question id." },
+    "onSubmit": { "type": "(answers) => void", "description": "Answers by question id: a string, or a list for multiple. Other gives the typed text.", "html": "vinui.js fires vin-submit with detail.answers, keyed by each question's input name (add data-vin-questionnaire to the form)" },
+    "onSkip": { "type": "() => void", "html": "button[data-vin-skip]; vinui.js fires vin-skip" },
+    "state / defaultState": { "values": ["open", "submitted", "skipped"], "default": "open", "description": "After Submit only the chosen answers stay, read-only; after Skip the questions fold away.", "html": "data-state on the form, fieldsets disabled, p.vin-questionnaire__status[role=status]" },
+    "submitLabel / skipLabel": { "type": "string", "default": "Submit / Skip", "description": "skipLabel={null} hides Skip." },
+    "submittedText / skippedText": { "type": "ReactNode", "default": "Answers sent / Skipped" }
+  },
+  "react": { "components": ["Questionnaire"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "One question with an \"Other\" text box that shows when you choose it. In HTML, add data-vin-questionnaire to the form." },
+    { "id": "multiple", "title": "Several questions", "description": "A title, a single-choice question and a choose-any question with Other filled in." },
+    { "id": "submitted", "title": "Answered", "description": "Read-only after Submit: only the chosen answer stays, with a note that it was sent." }
+  ],
+  "a11y": [
+    "Each question is a fieldset with its prompt as the legend, so screen readers read the question with every option.",
+    "Options are real radios and checkboxes: arrow keys move between radios, Space toggles checkboxes, and they work in forms without JavaScript.",
+    "The \"Other\" text box has its own label and only appears once Other is chosen.",
+    "After Submit or Skip, focus moves to the status line (role=\"status\"), which says what happened; the answered questions stay readable but disabled."
+  ]
+}

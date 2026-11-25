@@ -1,0 +1,29 @@
+<ol class="vin-trace" aria-label="Agent steps" style="max-width: 520px">
+  <li class="vin-trace__step">
+    <span class="vin-trace__icon" role="img" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+    <div class="vin-trace__head">
+      <span class="vin-trace__title">Drafted the email</span>
+      <span class="vin-trace__meta">Result · 3s</span>
+    </div>
+  </li>
+  <li class="vin-trace__step vin-trace__step--error">
+    <span class="vin-trace__icon" role="img" aria-label="Failed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17"/><path d="m7 7 10 10"/></svg></span>
+    <details class="vin-collapsible vin-trace__details" open>
+      <summary class="vin-collapsible__trigger vin-trace__head">
+        <span class="vin-trace__title">Looked up the contact</span>
+        <span class="vin-trace__meta">Failed · 0.8s</span>
+      </summary>
+      <div class="vin-collapsible__content vin-trace__body">
+        <pre class="vin-trace__code">contacts.find({ name: "Grace" })
+Error 403: the contacts app isn't connected.</pre>
+      </div>
+    </details>
+  </li>
+  <li class="vin-trace__step vin-trace__step--pending">
+    <span class="vin-trace__icon" role="img" aria-label="Not started"></span>
+    <div class="vin-trace__head">
+      <span class="vin-trace__title">Send the email</span>
+      <span class="vin-trace__meta">Tool call</span>
+    </div>
+  </li>
+</ol>

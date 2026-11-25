@@ -1,0 +1,28 @@
+<form class="vin-questionnaire" data-vin-questionnaire aria-label="Trip length" style="max-width: 440px">
+  <fieldset class="vin-questionnaire__question">
+    <legend class="vin-questionnaire__prompt">How long do you want to hike?</legend>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qb-len-0" name="qb-len" value="short">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qb-len-0">Under 2 hours</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qb-len-1" name="qb-len" value="half-day">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qb-len-1">Half a day</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qb-len-2" name="qb-len" value="full-day">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qb-len-2">A full day</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qb-len-other" name="qb-len" value="other">
+      <div class="vin-choice__body">
+        <label class="vin-choice__label" for="qb-len-other">Other</label>
+        <input type="text" class="vin-input vin-input--sm vin-questionnaire__other" name="qb-len-other" aria-label="Other answer">
+      </div>
+    </div>
+  </fieldset>
+  <div class="vin-questionnaire__actions">
+    <button type="button" class="vin-btn vin-btn--ghost vin-btn--sm" data-vin-skip>Skip</button>
+    <button type="submit" class="vin-btn vin-btn--sm">Submit</button>
+  </div>
+</form>

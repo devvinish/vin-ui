@@ -1,0 +1,59 @@
+/* ==========================================================================
+   VinUI · Attachment
+   API (see spec/attachment.json):
+     .vin-attachment            div, or a[href][download] once it has been sent
+       > .vin-attachment__icon > svg   |   img.vin-attachment__thumb[alt=""]
+       > .vin-attachment__body > .vin-attachment__name + .vin-attachment__meta
+           [+ .vin-progress.vin-progress--sm[role=progressbar]]    while uploading
+       > button.vin-btn.vin-btn--ghost.vin-btn--icon.vin-attachment__action[aria-label]   remove, retry (optional)
+     .vin-attachment--error     the upload failed: red edge and message
+     .vin-attachment--image     a square picture tile, 56px (set --vin-attachment-tile to change it):
+                                img.vin-attachment__thumb[alt=name] + remove button
+     ul.vin-attachment-list > li > .vin-attachment ...      a wrapping row (e.g. above the message box)
+   ========================================================================== */
+
+.vin-attachment-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.vin-attachment-list > li { display: flex; min-width: 0; max-width: 100%; }
+
+.vin-attachment {
+  --vin-attachment-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 12%);
+  position: relative; display: flex; align-items: center; gap: 10px;
+  box-sizing: border-box; width: 240px; max-width: 100%; min-width: 0; min-height: 56px; padding: 8px 8px 8px 9px;
+  font-family: var(--vin-font); font-size: var(--vin-text-sm); color: var(--vin-fg); text-align: start; text-decoration: none;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid var(--vin-attachment-line); border-radius: var(--vin-radius-lg);
+  box-shadow: var(--vin-shadow-soft);
+  transition: background-color var(--vin-dur) var(--vin-ease);
+}
+a.vin-attachment:hover { background: color-mix(in srgb, var(--vin-fg) 4%, var(--vin-surface)); }
+a.vin-attachment:focus-visible { outline: none; box-shadow: var(--vin-shadow-soft), var(--vin-focus); }
+
+.vin-attachment__icon {
+  display: grid; place-items: center; flex: none; width: 36px; height: 36px;
+  color: var(--vin-accent-text); background: color-mix(in srgb, var(--vin-accent) 11%, var(--vin-surface)); border-radius: var(--vin-radius);
+}
+.vin-attachment__icon > svg { width: 18px; height: 18px; }
+.vin-attachment__thumb { display: block; flex: none; width: 36px; height: 36px; object-fit: cover; border-radius: var(--vin-radius); background: color-mix(in srgb, var(--vin-fg) 6%, var(--vin-surface)); }
+
+.vin-attachment__body { display: grid; gap: 1px; flex: 1; min-width: 0; }
+.vin-attachment__name { overflow: hidden; font-weight: var(--vin-weight); line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.vin-attachment__meta { overflow: hidden; font-size: calc(var(--vin-text-sm) - 1px); line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--vin-muted); }
+.vin-attachment__body > .vin-progress { margin-block: 4px 2px; }
+
+.vin-attachment__action.vin-btn { width: 26px; height: 26px; flex: none; color: var(--vin-muted); border-radius: var(--vin-radius); }
+.vin-attachment__action.vin-btn:hover { color: var(--vin-fg); }
+.vin-attachment__action.vin-btn > svg { width: 15px; height: 15px; }
+.vin-attachment__action + .vin-attachment__action { margin-inline-start: -8px; }
+
+.vin-attachment--error { --vin-attachment-line: color-mix(in srgb, var(--vin-danger) 50%, transparent); }
+.vin-attachment--error .vin-attachment__icon { color: var(--vin-danger-text); background: color-mix(in srgb, var(--vin-danger) 11%, var(--vin-surface)); }
+.vin-attachment--error .vin-attachment__meta { color: var(--vin-danger-text); }
+
+/* Picture tile */
+.vin-attachment--image { width: var(--vin-attachment-tile, 56px); height: var(--vin-attachment-tile, 56px); min-height: 0; padding: 0; overflow: hidden; border-radius: min(var(--vin-radius-lg), 14px); }
+.vin-attachment--image > .vin-attachment__thumb { width: 100%; height: 100%; border-radius: 0; }
+.vin-attachment--image > .vin-attachment__action.vin-btn {
+  position: absolute; top: 4px; inset-inline-end: 4px; width: 20px; height: 20px;
+  color: var(--vin-fg); background: color-mix(in srgb, var(--vin-surface) 88%, transparent); border-radius: var(--vin-pill);
+  box-shadow: 0 1px 3px rgb(0 0 0 / .2);
+}
+.vin-attachment--image > .vin-attachment__action.vin-btn > svg { width: 12px; height: 12px; }

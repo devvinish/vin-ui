@@ -1,0 +1,39 @@
+/* ==========================================================================
+   VinUI · Message Scroller
+   API (see spec/message-scroller.json):
+     .vin-message-scroller [.vin-message-scroller--outline] [data-vin-message-scroller]   give it a height
+       > .vin-message-scroller__viewport[role=log][aria-live=polite][aria-label][tabindex=0]   scrolls
+           > .vin-message-scroller__content > messages, bubbles…
+       > button.vin-btn.vin-btn--secondary.vin-btn--sm.vin-message-scroller__jump[hidden]   "Jump to latest"
+   It stays pinned to the newest message while you are at the bottom. Scroll up and it stops
+   following; the jump button appears (with a dot, data-new, once something new arrives below).
+   In HTML, vinui.js does this for data-vin-message-scroller.
+   ========================================================================== */
+
+.vin-message-scroller {
+  position: relative; display: flex; flex-direction: column; box-sizing: border-box; min-width: 0; min-height: 0;
+  font-family: var(--vin-font); color: var(--vin-fg);
+}
+.vin-message-scroller--outline {
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-soft); overflow: hidden;
+}
+.vin-message-scroller__viewport {
+  flex: 1; min-height: 0; box-sizing: border-box; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  padding: 16px; border-radius: inherit;
+  /* Older messages fade out under the top edge instead of being cut off. */
+  mask-image: linear-gradient(to bottom, transparent, #000 18px);
+}
+.vin-message-scroller__viewport:focus-visible { outline: none; }
+.vin-message-scroller:has(> .vin-message-scroller__viewport:focus-visible) { outline: 2px solid color-mix(in srgb, var(--vin-accent) 70%, transparent); outline-offset: 2px; }
+.vin-message-scroller__content { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+.vin-message-scroller__jump.vin-btn {
+  position: absolute; z-index: 1; bottom: 12px; inset-inline: 0; width: fit-content; margin-inline: auto;
+  border-radius: var(--vin-pill); box-shadow: var(--vin-shadow-lg), var(--vin-shadow-soft);
+}
+.vin-message-scroller__jump.vin-btn:focus-visible { box-shadow: var(--vin-shadow-lg), var(--vin-focus); }
+.vin-message-scroller__jump[hidden] { display: none; }
+.vin-message-scroller__jump[data-new]::after {
+  content: ""; width: 7px; height: 7px; margin-inline-start: 2px; border-radius: 50%; background: var(--vin-accent);
+}

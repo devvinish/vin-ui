@@ -956,3 +956,121 @@ for (const side of ["html", "react"] as const) {
     });
   });
 }
+
+/* AI chat: Message, Message Scroller, Questionnaire, Marker, Trace. */
+for (const side of ["html", "react"] as const) {
+  test.describe(`${side} · AI chat`, () => {
+    test("message: copy says Copied, thumbs are one at a time", async ({ page }) => {
+      await ready(page, "message");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      await root.getByRole("button", { name: "Copy" }).click();
+      await expect(root.getByRole("button", { name: "Copied" })).toHaveAttribute("data-copied", /.*/);
+      const up = root.getByRole("button", { name: "Good response" });
+      const down = root.getByRole("button", { name: "Bad response" });
+      await expect(up).toHaveAttribute("aria-pressed", "false");
+      await up.click();
+      await expect(up).toHaveAttribute("aria-pressed", "true");
+      await down.click();
+      await expect(down).toHaveAttribute("aria-pressed", "true");
+      await expect(up).toHaveAttribute("aria-pressed", "false");
+      await down.click();
+      await expect(down).toHaveAttribute("aria-pressed", "false");
+    });
+
+    test("message scroller: sticks to the bottom, stops when scrolled up, jumps back", async ({ page }) => {
+      await ready(page, "message-scroller");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const log = root.getByRole("log", { name: "Conversation" });
+      const jump = root.getByRole("button", { name: "Jump to latest" });
+      const gap = () => log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight);
+      const add = (text: string) => log.evaluate((el, t) => {
+        const p = document.createElement("p");
+        p.className = "vin-bubble";
+        p.textContent = t;
+        el.querySelector(".vin-message-scroller__content")!.appendChild(p);
+      }, text);
+
+      await expect.poll(gap).toBeLessThan(2);
+      await expect(jump).toBeHidden();
+      // A new message while at the bottom: it follows.
+      await add("Anything else?");
+      await expect.poll(gap).toBeLessThan(2);
+      await expect(jump).toBeHidden();
+      // Scroll up: the jump button appears, and new messages don't pull you down.
+      await log.evaluate((el) => el.scrollTo({ top: 0 }));
+      await expect(jump).toBeVisible();
+      await add("One more thing: pack a rain jacket.");
+      await expect(jump).toHaveAttribute("data-new", /.*/);
+      expect(await log.evaluate((el) => el.scrollTop)).toBe(0);
+      // Jump back: at the bottom, the button hides and focus goes to the log.
+      await jump.click();
+      await expect.poll(gap).toBeLessThan(2);
+      await expect(jump).toBeHidden();
+      await expect(log).toBeFocused();
+    });
+
+    test("questionnaire: Other shows a text box; Submit makes it read-only; Skip folds it", async ({ page }) => {
+      await ready(page, "questionnaire");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const other = root.getByRole("textbox", { name: "Other answer" });
+      await expect(other).toBeHidden();
+      await root.getByRole("radio", { name: "Other" }).check();
+      await expect(other).toBeVisible();
+      await other.fill("Two days");
+      await root.getByRole("radio", { name: "Half a day" }).check();
+      await expect(other).toBeHidden();
+      await root.getByRole("button", { name: "Submit" }).click();
+      await expect(root.locator("form")).toHaveAttribute("data-state", "submitted");
+      const status = root.getByRole("status");
+      await expect(status).toHaveText("Answer sent");
+      await expect(status).toBeFocused();
+      await expect(root.getByRole("radio", { name: "Half a day" })).toBeDisabled();
+      await expect(root.getByRole("radio", { name: "Half a day" })).toBeChecked();
+      await expect(root.getByText("Under 2 hours")).toBeHidden();
+      await expect(root.getByRole("button", { name: "Submit" })).toHaveCount(0);
+
+      const multi = page.locator(`[data-fixture="${side}-multiple"]`);
+      await multi.getByRole("button", { name: "Skip" }).click();
+      await expect(multi.locator("form")).toHaveAttribute("data-state", "skipped");
+      await expect(multi.getByRole("status")).toHaveText("Skipped");
+      await expect(multi.getByText("Who is coming?")).toBeHidden();
+    });
+
+    test("questionnaire: Submit sends the answers, with the Other text", async ({ page }) => {
+      await ready(page, "questionnaire");
+      const root = page.locator(`[data-fixture="${side}-multiple"]`);
+      const logs: unknown[] = [];
+      page.on("console", async (m) => { logs.push(await m.args()[0]?.jsonValue().catch(() => null)); });
+      // HTML fires vin-submit; the React example logs the answers it gets from onSubmit.
+      if (side === "html") await root.locator("form").evaluate((f) => f.addEventListener("vin-submit", (e) => console.log((e as CustomEvent).detail.answers)));
+      await root.getByRole("checkbox", { name: "Waterfalls" }).check();
+      await root.getByRole("button", { name: "Submit" }).click();
+      await expect.poll(() => logs.map((v) => (v && typeof v === "object" ? JSON.stringify(Object.values(v)) : "")).join("\n"))
+        .toContain(JSON.stringify(["solo", ["lakes", "waterfalls", "Wildflowers"]]));
+    });
+
+    test("marker: the preview shows on focus and Escape hides it", async ({ page }) => {
+      await ready(page, "marker");
+      const root = page.locator(`[data-fixture="${side}-citations"]`);
+      const link = root.getByRole("link", { name: "Source 1: Using the Fetch API, developer.mozilla.org" });
+      const preview = link.locator(".vin-marker__preview");
+      await expect(preview).toBeHidden();
+      await link.focus();
+      await expect(preview).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(preview).toBeHidden();
+      await expect(link).toBeFocused();
+    });
+
+    test("trace: a step's details open and close", async ({ page }) => {
+      await ready(page, "trace");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const step = root.locator("details").filter({ hasText: "Read 3 pages" });
+      await expect(step).not.toHaveAttribute("open");
+      await step.locator("summary").click();
+      await expect(step).toHaveAttribute("open", "");
+      await expect(step.getByText("alltrails.com")).toBeVisible();
+      await expect(root.getByRole("img", { name: "Running" })).toBeVisible();
+    });
+  });
+}

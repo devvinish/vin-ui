@@ -1,0 +1,48 @@
+<form class="vin-questionnaire" data-vin-questionnaire aria-labelledby="qm-title" style="max-width: 440px">
+  <div class="vin-questionnaire__header">
+    <p class="vin-questionnaire__title" id="qm-title">A few questions first</p>
+    <p class="vin-questionnaire__description">So I can plan the right trip for you.</p>
+  </div>
+  <fieldset class="vin-questionnaire__question">
+    <legend class="vin-questionnaire__prompt">Who is coming?</legend>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qm-who-0" name="qm-who" value="solo" checked>
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qm-who-0">Just me</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qm-who-1" name="qm-who" value="friends">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qm-who-1">Friends</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="radio" class="vin-radio" id="qm-who-2" name="qm-who" value="kids">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qm-who-2">Family with kids</label></div>
+    </div>
+  </fieldset>
+  <fieldset class="vin-questionnaire__question">
+    <legend class="vin-questionnaire__prompt">What would you like to see?</legend>
+    <p class="vin-questionnaire__hint">Choose any.</p>
+    <div class="vin-choice">
+      <input type="checkbox" class="vin-checkbox" id="qm-see-0" name="qm-see" value="lakes" checked>
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qm-see-0">Lakes</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="checkbox" class="vin-checkbox" id="qm-see-1" name="qm-see" value="views">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qm-see-1">Mountain views</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="checkbox" class="vin-checkbox" id="qm-see-2" name="qm-see" value="waterfalls">
+      <div class="vin-choice__body"><label class="vin-choice__label" for="qm-see-2">Waterfalls</label></div>
+    </div>
+    <div class="vin-choice">
+      <input type="checkbox" class="vin-checkbox" id="qm-see-other" name="qm-see" value="other" checked>
+      <div class="vin-choice__body">
+        <label class="vin-choice__label" for="qm-see-other">Other</label>
+        <input type="text" class="vin-input vin-input--sm vin-questionnaire__other" name="qm-see-other" value="Wildflowers" aria-label="Other answer">
+      </div>
+    </div>
+  </fieldset>
+  <div class="vin-questionnaire__actions">
+    <button type="button" class="vin-btn vin-btn--ghost vin-btn--sm" data-vin-skip>Skip</button>
+    <button type="submit" class="vin-btn vin-btn--sm">Submit</button>
+  </div>
+</form>
