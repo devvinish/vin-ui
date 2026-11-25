@@ -1,0 +1,62 @@
+/* ==========================================================================
+   VinUI · Trace
+   API (see spec/trace.json):
+     ol.vin-trace[aria-label]
+       > li.vin-trace__step [.vin-trace__step--running | --error | --pending]     done by default
+           > span.vin-trace__icon[role=img][aria-label="Done"]  > svg | .vin-spinner.vin-spinner--sm
+           > details.vin-collapsible.vin-trace__details          a step with details (native <details>)
+               > summary.vin-collapsible__trigger.vin-trace__head > .vin-trace__title + .vin-trace__meta
+               > .vin-collapsible__content.vin-trace__body > p | pre.vin-trace__code
+           | > div.vin-trace__head > .vin-trace__title + .vin-trace__meta    a step without details
+   .vin-trace__meta holds the kind and the duration, e.g. "Tool call · 1.2s".
+   ========================================================================== */
+
+.vin-trace {
+  --vin-trace-icon: 20px;
+  --vin-trace-line: color-mix(in srgb, var(--vin-border), var(--vin-fg) 14%);
+  display: grid; box-sizing: border-box; width: 100%; min-width: 0; margin: 0; padding: 0; list-style: none;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); color: var(--vin-fg); text-align: start;
+}
+.vin-trace__step {
+  position: relative; display: grid; grid-template-columns: var(--vin-trace-icon) minmax(0, 1fr); column-gap: 12px; align-items: start;
+  padding-bottom: 6px;
+}
+.vin-trace__step:last-child { padding-bottom: 0; }
+/* The line that joins one step's icon to the next. */
+.vin-trace__step:not(:last-child)::before {
+  content: ""; position: absolute; inset-inline-start: calc(var(--vin-trace-icon) / 2 - .75px); top: calc((var(--vin-h-sm) + var(--vin-trace-icon)) / 2 + 3px); bottom: -2px;
+  width: 1.5px; background: var(--vin-trace-line); border-radius: 1px;
+}
+
+.vin-trace__icon {
+  --vin-trace-tone: color-mix(in srgb, var(--vin-success) 75%, var(--vin-fg));
+  display: grid; place-items: center; box-sizing: border-box; width: var(--vin-trace-icon); height: var(--vin-trace-icon);
+  margin-top: calc((var(--vin-h-sm) - var(--vin-trace-icon)) / 2);
+  color: var(--vin-trace-tone); background: color-mix(in srgb, var(--vin-trace-tone) 13%, var(--vin-surface)); border-radius: 50%;
+}
+.vin-trace__icon > svg { width: 12px; height: 12px; }
+.vin-trace__step--running .vin-trace__icon { --vin-trace-tone: var(--vin-accent-text); background: transparent; }
+.vin-trace__step--error .vin-trace__icon { --vin-trace-tone: var(--vin-danger-text); }
+.vin-trace__step--pending .vin-trace__icon { --vin-trace-tone: var(--vin-muted); background: transparent; border: 1.5px dashed color-mix(in srgb, var(--vin-muted) 70%, transparent); }
+
+.vin-trace__head { display: flex; align-items: center; gap: 10px; box-sizing: border-box; min-width: 0; min-height: var(--vin-h-sm); }
+.vin-trace__head.vin-collapsible__trigger { display: flex; width: calc(100% + 20px); margin-inline: -10px; }
+.vin-trace__head.vin-collapsible__trigger::before { order: 3; margin-inline-start: 2px; }
+/* Rows without details keep their meta in line with the rows that have a chevron. */
+.vin-trace__head:not(.vin-collapsible__trigger) { padding-inline-end: 19px; }
+.vin-trace__title { flex: 1; min-width: 0; overflow: hidden; font-weight: var(--vin-weight); line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.vin-trace__meta { flex: none; font-size: calc(var(--vin-text-md) - 1.5px); font-weight: 400; line-height: 1.35; font-variant-numeric: tabular-nums; color: var(--vin-muted); }
+.vin-trace__step--pending .vin-trace__title { color: var(--vin-muted); }
+.vin-trace__step--error .vin-trace__meta { color: var(--vin-danger-text); }
+
+.vin-trace__details { min-width: 0; }
+.vin-trace__body { display: grid; gap: 8px; padding-top: 4px; padding-bottom: 6px; font-size: calc(var(--vin-text-md) - .5px); color: var(--vin-muted); }
+.vin-trace__body > * { margin: 0; min-width: 0; }
+.vin-trace__code {
+  box-sizing: border-box; max-width: 100%; max-height: 220px; padding: 9px 11px; overflow: auto;
+  font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: calc(var(--vin-text-md) - 2px); line-height: 1.55;
+  color: var(--vin-fg); white-space: pre-wrap; overflow-wrap: anywhere;
+  background: color-mix(in srgb, var(--vin-fg) 5%, var(--vin-surface)); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 6%);
+  border-radius: var(--vin-radius);
+}
+.vin-trace__step--error .vin-trace__code { border-color: color-mix(in srgb, var(--vin-danger) 40%, transparent); }

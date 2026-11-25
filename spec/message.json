@@ -1,0 +1,34 @@
+{
+  "$comment": "Single source of truth for the Message API. Every framework package is tested against this file.",
+  "name": "message",
+  "title": "Message",
+  "category": "AI chat",
+  "description": "One chat message: who wrote it and when, the content, and small icon actions such as copy, retry and thumbs up or down.",
+  "baseClass": "vin-message",
+  "classes": ["vin-message", "vin-message--end", "vin-message--streaming", "vin-message__avatar", "vin-message__body", "vin-message__header", "vin-message__author", "vin-message__time", "vin-message__content", "vin-message__actions"],
+  "thumb": "<article class=\"vin-message\" style=\"width:200px;column-gap:8px;font-size:11px;line-height:1.45\"><div class=\"vin-message__avatar\"><span class=\"vin-avatar vin-avatar--square\" style=\"--vin-avatar:22px\"><span class=\"vin-avatar__fallback\">AI</span></span></div><div class=\"vin-message__body\" style=\"gap:2px\"><header class=\"vin-message__header\" style=\"min-height:22px\"><p class=\"vin-message__author\">Assistant</p><span class=\"vin-message__time\" style=\"font-size:10px\">10:42</span></header><div class=\"vin-message__content\"><p>Cache your modules and run tests in parallel.</p></div></div></article>",
+  "props": {
+    "author": { "type": "ReactNode", "description": "Who wrote it.", "html": ".vin-message__author" },
+    "avatar": { "type": "ReactNode", "description": "Usually an Avatar. Hidden from screen readers, because the author name says who it is.", "html": ".vin-message__avatar[aria-hidden=true] > .vin-avatar" },
+    "time / dateTime": { "type": "ReactNode / string", "description": "The time to show, and the machine-readable time (then it is a <time> element).", "html": "time.vin-message__time[datetime]" },
+    "align": { "values": ["start", "end"], "default": "start", "class": "vin-message--end", "description": "\"end\" puts the avatar on the end side, for the person's own messages." },
+    "streaming": { "type": "boolean", "default": false, "class": "vin-message--streaming", "description": "The reply is still being written: a caret after the text, and aria-busy so screen readers wait.", "html": ".vin-message--streaming[aria-busy=true]" },
+    "actions": { "type": "ReactNode", "description": "Icon buttons under the content.", "html": ".vin-message__actions[role=group][aria-label]" },
+    "MessageAction": { "type": "component", "description": "A small icon button with a label (its aria-label). pressed makes it a toggle.", "html": "button.vin-btn.vin-btn--ghost.vin-btn--icon[aria-label]" },
+    "MessageCopy": { "type": "component", "description": "Copies the content (or text) and says \"Copied\" for two seconds.", "html": "the button with data-vin-copy (vinui.js; add data-vin-message to the article)" },
+    "MessageFeedback": { "type": "component", "description": "Thumbs up and down; one at a time. value, defaultValue, onValueChange (\"up\" | \"down\" | null).", "html": "buttons with data-vin-feedback=\"up|down\" and aria-pressed (vinui.js); listen for the vin-feedback event" }
+  },
+  "react": { "components": ["Message", "MessageAction", "MessageCopy", "MessageFeedback"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "An assistant message with copy, retry and thumbs up or down. In HTML, add data-vin-message to the article so copy and feedback work." },
+    { "id": "conversation", "title": "Conversation", "description": "The person's message on the end side in a Bubble, and a reply they liked." },
+    { "id": "streaming", "title": "Streaming", "description": "While the reply is written: a caret after the text and aria-busy. Add the actions when it's done." }
+  ],
+  "a11y": [
+    "Each message is an <article>; the author and a <time> element come first, so screen readers say who and when before the content.",
+    "The avatar is hidden from screen readers because the author name already says who it is.",
+    "Actions are a labelled group of buttons. Every icon button has a label, and the thumbs use aria-pressed so their state is read out.",
+    "Actions are always visible, not only on hover, so they work with touch and the keyboard.",
+    "While a reply streams, aria-busy=\"true\" asks screen readers to wait until it is finished. The caret stops blinking when motion is reduced."
+  ]
+}

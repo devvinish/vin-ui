@@ -1,0 +1,35 @@
+{
+  "$comment": "Single source of truth for the Attachment API. Every framework package is tested against this file.",
+  "name": "attachment",
+  "title": "Attachment",
+  "category": "AI chat",
+  "description": "A file or picture attached to a message: an icon or thumbnail, the name, its size and type, and an optional remove button. Shows upload progress and failed uploads too.",
+  "baseClass": "vin-attachment",
+  "classes": ["vin-attachment", "vin-attachment--error", "vin-attachment--image", "vin-attachment__icon", "vin-attachment__thumb", "vin-attachment__body", "vin-attachment__name", "vin-attachment__meta", "vin-attachment__action", "vin-attachment-list"],
+  "thumb": "<div class=\"vin-attachment\" style=\"width:190px;min-height:0;padding:6px;gap:8px\"><span class=\"vin-attachment__icon\" style=\"width:28px;height:28px\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" style=\"width:15px;height:15px\"><path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5\"/></svg></span><span class=\"vin-attachment__body\"><span class=\"vin-attachment__name\" style=\"font-size:11.5px\">design-brief.pdf</span><span class=\"vin-attachment__meta\" style=\"font-size:10.5px\">PDF · 2.4 MB</span></span></div>",
+  "props": {
+    "name": { "type": "string", "description": "The file name. Also the picture's alt text and part of each button's label.", "html": ".vin-attachment__name" },
+    "type / size": { "type": "string / number", "description": "Shown as \"PDF · 2.4 MB\" (size is in bytes; formatBytes does the rounding).", "html": ".vin-attachment__meta" },
+    "meta": { "type": "ReactNode", "description": "Your own line under the name instead of type and size." },
+    "variant": { "values": ["file", "image"], "default": "file", "class": "vin-attachment--image", "description": "\"image\" is a square picture tile." },
+    "thumbnail": { "type": "string", "description": "A picture: replaces the icon in a file row, or fills the tile.", "html": "img.vin-attachment__thumb" },
+    "icon": { "type": "ReactNode", "description": "Your own icon instead of the file icon.", "html": ".vin-attachment__icon > svg" },
+    "href / download": { "type": "string / boolean", "description": "Makes it a link, for files already sent.", "html": "a.vin-attachment[href][download]" },
+    "progress": { "type": "number", "description": "0–100 while uploading: shows \"Uploading… 64%\" and a small progress bar.", "html": ".vin-progress.vin-progress--sm[role=progressbar] inside .vin-attachment__body" },
+    "error": { "type": "ReactNode", "class": "vin-attachment--error", "description": "The upload failed: the message replaces the size." },
+    "onRemove / onRetry": { "type": "() => void", "description": "Show a remove (or cancel) button, and a retry button after an error.", "html": "button.vin-btn.vin-btn--ghost.vin-btn--icon.vin-attachment__action[aria-label=\"Remove name\"]" },
+    "AttachmentList": { "type": "children", "description": "A wrapping row of attachments, e.g. above the message box. label names the list.", "html": "ul.vin-attachment-list[aria-label] > li > .vin-attachment" }
+  },
+  "react": { "components": ["Attachment", "AttachmentList"], "helpers": ["formatBytes"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Files waiting to be sent: a document, one with a thumbnail and a picture tile, each with a remove button." },
+    { "id": "upload", "title": "Uploading and failed", "description": "A progress bar while the file uploads, then an error with retry." },
+    { "id": "sent", "title": "In a sent message", "description": "Once sent, attachments are links that open or download the file." }
+  ],
+  "a11y": [
+    "Attachments sit in a labelled list, so screen readers say how many files there are.",
+    "Every button names its file: \"Remove design-brief.pdf\", \"Retry recording.mov\".",
+    "Upload progress is a progressbar named after the file, with its value. The error is plain text next to the name, and is shown by an icon and a red edge, not colour alone.",
+    "A picture tile uses the file name as its alt text; thumbnails in a file row are decorative (alt=\"\") because the name is right next to them."
+  ]
+}

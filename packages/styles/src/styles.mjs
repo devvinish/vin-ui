@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "message", "bubble", "message-scroller", "attachment", "marker", "questionnaire", "trace"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -108,6 +108,13 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      message: "",
+      bubble: "",
+      "message-scroller": "",
+      attachment: "",
+      marker: "",
+      questionnaire: "",
+      trace: "",
     },
   },
 
@@ -186,6 +193,15 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      message: "",
+      bubble: `
+& .vin-bubble:not(.vin-bubble--solid) { box-shadow: var(--vin-shadow-soft); }
+& .vin-bubble--solid { background: var(--vin-primary-bg); box-shadow: var(--vin-shadow); }`,
+      "message-scroller": "",
+      attachment: "",
+      marker: "",
+      questionnaire: "",
+      trace: "",
     },
   },
 
@@ -265,6 +281,19 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      message: "",
+      bubble: `
+& .vin-bubble { border-color: transparent; box-shadow: var(--vin-shadow-soft); }
+& .vin-bubble--solid { box-shadow: var(--vin-shadow); }`,
+      "message-scroller": `
+& .vin-message-scroller--outline { border-color: transparent; box-shadow: var(--vin-shadow-lg); }`,
+      attachment: `
+& .vin-attachment { border-color: transparent; }
+& .vin-attachment--error { box-shadow: var(--vin-shadow-soft), inset 0 0 0 1.5px color-mix(in srgb, var(--vin-danger) 45%, transparent); }`,
+      marker: "",
+      questionnaire: `
+& .vin-questionnaire { border-color: transparent; box-shadow: var(--vin-shadow-lg); }`,
+      trace: "",
     },
   },
 
@@ -341,6 +370,13 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      message: "",
+      bubble: "",
+      "message-scroller": "",
+      attachment: "",
+      marker: "",
+      questionnaire: "",
+      trace: "",
     },
   },
 
@@ -431,6 +467,23 @@ export const STYLES = [
       sheet: "",
       "dropdown-menu": `
 & .vin-menu__label { text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 500; }`,
+      message: `
+& .vin-message__author { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; }`,
+      bubble: `
+& .vin-bubble:not(.vin-bubble--user) { background: transparent; border-color: color-mix(in srgb, var(--vin-border), var(--vin-fg) 25%); }`,
+      "message-scroller": `
+& .vin-message-scroller--outline { border-top: 2px solid var(--vin-fg); }`,
+      attachment: `
+& .vin-attachment__meta { text-transform: uppercase; font-size: 10px; letter-spacing: .08em; }`,
+      marker: `
+& .vin-marker:not(.vin-marker--status) { padding-inline: .25em; background: transparent; border-width: 0 0 1px; border-radius: 0; }`,
+      questionnaire: `
+& .vin-questionnaire { border-top: 2px solid var(--vin-fg); }
+& .vin-questionnaire__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 9px); line-height: 1.1; }
+& .vin-questionnaire__prompt { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 5px); line-height: 1.2; }
+& .vin-questionnaire__hint { margin-top: -4px; text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }`,
+      trace: `
+& .vin-trace__meta { text-transform: uppercase; font-size: 10px; letter-spacing: .1em; }`,
     },
   },
 
@@ -541,6 +594,26 @@ export const STYLES = [
 & .vin-menu__item:focus > svg, & .vin-menu__item:hover > svg, & .vin-menu__item:focus .vin-menu__shortcut, & .vin-menu__item:hover .vin-menu__shortcut { color: inherit; }
 & .vin-menu__item--danger:focus, & .vin-menu__item--danger:hover { background: var(--vin-danger); color: #fff; }
 & .vin-menu__separator { height: 0; background: none; border-top: 1px dashed color-mix(in srgb, var(--vin-border), var(--vin-fg) 25%); }`,
+      message: `
+& .vin-message__author::before { content: "> "; color: var(--vin-accent-text); }
+& .vin-message--end .vin-message__author::before { content: none; }
+& .vin-message--end .vin-message__author::after { content: " <"; color: var(--vin-accent-text); }`,
+      bubble: `
+& .vin-bubble { border-style: dashed; }`,
+      "message-scroller": `
+& .vin-message-scroller--outline { border-style: dashed; }
+& .vin-message-scroller__jump[data-new]::after { content: "*]"; width: auto; height: auto; margin: 0; background: none; border-radius: 0; }`,
+      attachment: `
+& .vin-attachment { border-style: dashed; }
+& .vin-attachment__icon, & .vin-attachment__thumb { border-radius: 0; }`,
+      marker: `
+& .vin-marker:not(.vin-marker--status) { border-style: dashed; border-radius: 2px; }`,
+      questionnaire: `
+& .vin-questionnaire { border-style: dashed; }
+& .vin-questionnaire__prompt::before { content: "? "; color: var(--vin-accent-text); }`,
+      trace: `
+& .vin-trace__step:not(:last-child)::before { width: 0; background: none; border-inline-start: 1.5px dashed var(--vin-trace-line); border-radius: 0; }
+& .vin-trace__icon { border-radius: 2px; }`,
     },
   },
 
@@ -635,6 +708,21 @@ export const STYLES = [
       sheet: "",
       "dropdown-menu": `
 & .vin-menu { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      message: `
+& .vin-message__author { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 2px); font-weight: 700; }`,
+      bubble: `
+& .vin-bubble { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
+& .vin-bubble--user { border-radius: 6px 18px 8px 20px / 20px 8px 18px 6px; }`,
+      "message-scroller": `
+& .vin-message-scroller--outline { border-radius: 22px 8px 24px 10px / 10px 24px 8px 22px; }`,
+      attachment: `
+& .vin-attachment { border-radius: 14px 5px 16px 6px / 6px 16px 5px 14px; }`,
+      marker: "",
+      questionnaire: `
+& .vin-questionnaire { border-radius: 22px 8px 24px 10px / 10px 24px 8px 22px; }
+& :is(.vin-questionnaire__title, .vin-questionnaire__prompt) { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 3px); font-weight: 700; }`,
+      trace: `
+& .vin-trace__code { border-radius: 12px 4px 14px 5px / 5px 14px 4px 12px; }`,
     },
   },
 
@@ -705,6 +793,13 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      message: "",
+      bubble: "",
+      "message-scroller": "",
+      attachment: "",
+      marker: "",
+      questionnaire: "",
+      trace: "",
     },
   },
 ];

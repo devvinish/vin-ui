@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Bubble API. Every framework package is tested against this file.",
+  "name": "bubble",
+  "title": "Bubble",
+  "category": "AI chat",
+  "description": "A chat bubble. The assistant sits on the left in a soft grey; the person sits on the right, tinted with your accent colour. A typing bubble shows three dots while a reply is coming.",
+  "baseClass": "vin-bubble",
+  "classes": ["vin-bubble", "vin-bubble--user", "vin-bubble--solid", "vin-bubble--typing", "vin-bubble__dot", "vin-bubble__label", "vin-bubble-group"],
+  "thumb": "<div class=\"vin-bubble-group\" style=\"width:190px;gap:4px\"><p class=\"vin-bubble vin-bubble--user\" style=\"font-size:11px;padding:5px 10px\">Name my app?</p><p class=\"vin-bubble\" style=\"font-size:11px;padding:5px 10px\">How about Trailmark?</p><div class=\"vin-bubble vin-bubble--typing\" style=\"min-height:24px;padding-inline:10px;gap:3px\"><span class=\"vin-bubble__dot\" style=\"width:5px;height:5px\"></span><span class=\"vin-bubble__dot\" style=\"width:5px;height:5px\"></span><span class=\"vin-bubble__dot\" style=\"width:5px;height:5px\"></span></div></div>",
+  "props": {
+    "from": { "values": ["assistant", "user"], "default": "assistant", "class": "vin-bubble--user", "description": "Who is speaking. The person's bubbles sit on the end side." },
+    "solid": { "type": "boolean", "default": false, "class": "vin-bubble--solid", "description": "With from=\"user\": a solid accent fill instead of a tint." },
+    "as": { "values": ["div", "p"], "default": "div", "description": "Use p for a single line of text.", "html": "p.vin-bubble or div.vin-bubble" },
+    "BubbleGroup": { "type": "children", "description": "A column of bubbles; bubbles from the same speaker sit close together.", "html": ".vin-bubble-group" },
+    "TypingBubble": { "type": "component", "description": "Three dots while a reply is coming. label is what screen readers hear (default \"Assistant is typing\").", "html": ".vin-bubble.vin-bubble--typing[role=status] > .vin-bubble__dot ×3 + .vin-bubble__label" }
+  },
+  "react": { "components": ["Bubble", "BubbleGroup", "TypingBubble"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "The person on the right in the accent tint, the assistant on the left." },
+    { "id": "solid", "title": "Solid", "description": "A solid accent fill for the person's bubbles, as in messenger apps." },
+    { "id": "typing", "title": "Typing", "description": "Three dots while the reply is on its way. They stay still when the reader prefers reduced motion." }
+  ],
+  "a11y": [
+    "Bubbles are plain text, so screen readers read them in order. Say who is speaking in nearby text (see Message) when it isn't obvious.",
+    "The typing bubble is a status message with hidden text (\"Assistant is typing\"), so screen readers announce it without moving focus.",
+    "The dots stop moving when the reader prefers reduced motion or VinUI motion is off.",
+    "Text colours are mixed from the theme so they keep 4.5:1 contrast on the tinted and solid fills."
+  ]
+}

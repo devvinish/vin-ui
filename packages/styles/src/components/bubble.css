@@ -1,0 +1,61 @@
+/* ==========================================================================
+   VinUI · Bubble
+   API (see spec/bubble.json):
+     .vin-bubble                               assistant: start side, soft neutral fill
+     .vin-bubble--user                         the person: end side, tinted with the accent
+     .vin-bubble--solid                        with --user: solid accent fill (messenger look)
+     .vin-bubble--typing[role=status]          three animated dots while a reply is coming
+       > span.vin-bubble__dot ×3 + span.vin-bubble__label  (label is read out, not shown)
+     .vin-bubble-group > .vin-bubble ...       a column of bubbles; consecutive ones sit close
+   The corner nearest the speaker is less rounded, like a tail.
+   ========================================================================== */
+
+.vin-bubble-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-family: var(--vin-font); }
+.vin-bubble-group > .vin-bubble + .vin-bubble--user, .vin-bubble-group > .vin-bubble--user + .vin-bubble:not(.vin-bubble--user) { margin-top: 10px; }
+
+.vin-bubble {
+  --vin-bubble-r: var(--vin-radius-lg);
+  --vin-bubble-tail: min(var(--vin-bubble-r), max(4px, calc(var(--vin-radius) / 3)));
+  box-sizing: border-box; width: fit-content; max-width: min(80%, 36rem); min-width: 0;
+  margin: 0; margin-inline-end: auto; padding: 9px 14px;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.5; color: var(--vin-fg);
+  overflow-wrap: anywhere; text-align: start;
+  background: color-mix(in srgb, var(--vin-fg) 6%, var(--vin-surface));
+  border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 6%);
+  border-radius: var(--vin-bubble-r); border-end-start-radius: var(--vin-bubble-tail);
+}
+.vin-bubble > :first-child { margin-top: 0; }
+.vin-bubble > :last-child { margin-bottom: 0; }
+.vin-bubble > p { margin: 0 0 .6em; }
+
+.vin-bubble--user {
+  margin-inline: auto 0;
+  background: color-mix(in srgb, var(--vin-accent) 13%, var(--vin-surface));
+  border-color: color-mix(in srgb, var(--vin-accent) 22%, transparent);
+  border-end-start-radius: var(--vin-bubble-r); border-end-end-radius: var(--vin-bubble-tail);
+}
+.vin-bubble--user.vin-bubble--solid { color: var(--vin-accent-fg); background: var(--vin-accent); border-color: transparent; }
+.vin-bubble--solid :is(a, code) { color: inherit; }
+
+/* Typing: three dots that rise in turn. With reduced motion they stay still. */
+.vin-bubble--typing { position: relative; display: inline-flex; align-items: center; gap: 5px; min-height: calc(1.5em + 18px); padding-block: 0; }
+.vin-bubble__dot {
+  width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .45;
+  animation: vin-bubble-typing 1.2s var(--vin-ease) infinite;
+}
+.vin-bubble__dot:nth-child(2) { animation-delay: .15s; }
+.vin-bubble__dot:nth-child(3) { animation-delay: .3s; }
+@keyframes vin-bubble-typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+  30% { transform: translateY(-4px); opacity: .9; }
+}
+:is([data-vin-motion="reduced"], [data-vin-motion="off"]) .vin-bubble__dot { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-vin-style]:not([data-vin-motion="full"]) .vin-bubble__dot { animation: none; }
+}
+.vin-bubble__dot:nth-child(2) { opacity: .6; }
+.vin-bubble__dot:nth-child(3) { opacity: .75; }
+.vin-bubble__label {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}

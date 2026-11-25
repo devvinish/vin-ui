@@ -1,0 +1,29 @@
+{
+  "$comment": "Single source of truth for the Marker API. Every framework package is tested against this file.",
+  "name": "marker",
+  "title": "Marker",
+  "category": "AI chat",
+  "description": "Small inline markers inside a reply: numbered citations that link to their sources (with a preview on hover and focus), and status markers such as \"Searching…\", \"Done\" or \"Error\".",
+  "baseClass": "vin-marker",
+  "classes": ["vin-marker", "vin-marker__preview", "vin-marker__title", "vin-marker__source", "vin-marker--status", "vin-marker--success", "vin-marker--danger", "vin-marker__icon"],
+  "thumb": "<div style=\"display:grid;gap:8px;width:190px;font-size:12px;line-height:1.5\"><span>Fetch returns a promise<span class=\"vin-marker\">1</span><span class=\"vin-marker\">2</span></span><span class=\"vin-marker vin-marker--status\" style=\"font-size:11px\"><span class=\"vin-spinner vin-spinner--sm\"></span>Searching the web…</span></div>",
+  "props": {
+    "index": { "type": "number | string", "description": "The number in the citation chip.", "html": "the text of a.vin-marker" },
+    "href": { "type": "string", "description": "Where the source lives." },
+    "title / source": { "type": "string", "description": "The source's title and where it's from. They fill the preview and the link's name (\"Source 1: Title, domain\").", "html": "aria-label on the link + span.vin-marker__preview[aria-hidden] > .vin-marker__title + .vin-marker__source" },
+    "StatusMarker": { "type": "component", "description": "What the assistant is doing, inline.", "html": "span.vin-marker.vin-marker--status" },
+    "status": { "values": ["running", "done", "error"], "default": "running", "class": "vin-marker--success | vin-marker--danger", "description": "StatusMarker: a spinner, a check or a warning sign.", "html": ".vin-spinner.vin-spinner--sm or svg.vin-marker__icon" },
+    "live": { "type": "boolean", "description": "StatusMarker: announce changes (role=\"status\"). Default: true while running.", "html": "role=\"status\"" }
+  },
+  "react": { "components": ["Marker", "StatusMarker"], "helpers": [] },
+  "examples": [
+    { "id": "citations", "title": "Citations", "description": "Numbered chips after a sentence. Hover or focus one to see the source; Escape hides the preview." },
+    { "id": "status", "title": "Status", "description": "Inline steps while the assistant works: running, done and failed." }
+  ],
+  "a11y": [
+    "A citation is a link named \"Source 1: Title, domain\", so it makes sense out of context. The preview repeats the same words and is hidden from screen readers.",
+    "The preview shows on keyboard focus as well as hover, stays open while the pointer is over it, and Escape hides it (WCAG 1.4.13). In HTML, vinui.js adds the Escape key.",
+    "A running status marker is a status message, so screen readers announce it when its text changes. Use role=\"status\" on one marker that you update, not on every finished one.",
+    "Done and error are told apart by their icon and words, not colour alone."
+  ]
+}

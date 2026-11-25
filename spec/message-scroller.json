@@ -1,0 +1,30 @@
+{
+  "$comment": "Single source of truth for the Message Scroller API. Every framework package is tested against this file.",
+  "name": "message-scroller",
+  "title": "Message Scroller",
+  "category": "AI chat",
+  "description": "The scrolling chat list. It stays on the newest message while you're at the bottom, stops following when you scroll up to read, and shows a \"Jump to latest\" button when there's more below.",
+  "baseClass": "vin-message-scroller",
+  "classes": ["vin-message-scroller", "vin-message-scroller--outline", "vin-message-scroller__viewport", "vin-message-scroller__content", "vin-message-scroller__jump"],
+  "thumb": "<div class=\"vin-message-scroller vin-message-scroller--outline\" style=\"width:190px;height:112px\"><div class=\"vin-message-scroller__viewport\" style=\"padding:8px;overflow:hidden\"><div class=\"vin-message-scroller__content\" style=\"gap:4px\"><p class=\"vin-bubble vin-bubble--user\" style=\"font-size:10.5px;padding:4px 9px\">Any tips for Lisbon?</p><p class=\"vin-bubble\" style=\"font-size:10.5px;padding:4px 9px\">Bring good shoes.</p></div></div><span class=\"vin-btn vin-btn--secondary vin-btn--sm vin-message-scroller__jump\" style=\"height:22px;font-size:10.5px;padding:0 9px;bottom:8px\">Jump to latest</span></div>",
+  "props": {
+    "children": { "type": "ReactNode", "description": "The messages, oldest first.", "html": ".vin-message-scroller__viewport[role=log] > .vin-message-scroller__content > …" },
+    "label": { "type": "string", "default": "Conversation", "description": "Name for the log.", "html": "aria-label on the viewport" },
+    "outline": { "type": "boolean", "default": false, "class": "vin-message-scroller--outline", "description": "Draw a frame: surface, border and rounded corners." },
+    "jumpLabel": { "type": "string", "default": "Jump to latest", "html": "button.vin-btn.vin-btn--secondary.vin-btn--sm.vin-message-scroller__jump[hidden]" },
+    "threshold": { "type": "number", "default": 32, "description": "How close to the bottom, in pixels, still counts as \"at the bottom\"." },
+    "viewportProps": { "type": "HTMLAttributes", "description": "Props for the scrolling element." },
+    "height": { "type": "CSS", "description": "Give the scroller a height (or put it in a flex column); the viewport scrolls inside it.", "html": "style=\"height: …\" on .vin-message-scroller" }
+  },
+  "react": { "components": ["MessageScroller"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A conversation of bubbles that opens at the newest message. Scroll up and the jump button appears. In HTML, add data-vin-message-scroller." },
+    { "id": "messages", "title": "With messages", "description": "Messages and a typing bubble at the end. New messages keep it pinned while you're at the bottom." }
+  ],
+  "a11y": [
+    "The scrolling area is a log (role=\"log\", aria-live=\"polite\"): screen readers announce new messages as they arrive, without moving focus.",
+    "It is focusable (tabindex=\"0\") and labelled, so keyboard users can scroll it with the arrow keys and Page Up / Page Down.",
+    "It never pulls you down while you're reading older messages; the jump button is a real button and moves focus back to the log.",
+    "With reduced motion the jump is instant instead of a smooth scroll. Set aria-busy=\"true\" on a message while it streams so it is read once, when finished."
+  ]
+}

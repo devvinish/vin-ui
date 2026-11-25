@@ -1,0 +1,56 @@
+/* ==========================================================================
+   VinUI · Marker
+   API (see spec/marker.json):
+     Citation: a small numbered chip after a sentence, linking to its source
+       a.vin-marker[href][aria-label="Source 1: Title"] > 1
+         + span.vin-marker__preview[aria-hidden=true]          shown on hover and focus (optional)
+             > span.vin-marker__title + span.vin-marker__source
+     Status: what the assistant is doing, inline in the reply
+       span.vin-marker--status [.vin-marker--success | .vin-marker--danger] [role=status]
+         > .vin-spinner.vin-spinner--sm[aria-hidden] | svg.vin-marker__icon   + text
+   Escape hides an open preview (vinui.js / React).
+   ========================================================================== */
+
+.vin-marker:not(.vin-marker--status) {
+  /* Inline (not inline-block), so a line never breaks between the sentence and its marker. */
+  position: relative; display: inline; padding: .14em .5em .1em; margin-inline-start: 2px;
+  font-family: var(--vin-font); font-size: .72em; font-weight: var(--vin-title-weight); font-variant-numeric: tabular-nums;
+  line-height: 1; vertical-align: .3em; text-decoration: none; white-space: nowrap;
+  color: var(--vin-accent-text); background: color-mix(in srgb, var(--vin-accent) 11%, var(--vin-surface));
+  border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-accent) 22%, transparent); border-radius: var(--vin-pill);
+  transition: background-color var(--vin-dur) var(--vin-ease);
+}
+a.vin-marker:hover { background: color-mix(in srgb, var(--vin-accent) 19%, var(--vin-surface)); }
+a.vin-marker:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+
+.vin-marker__preview {
+  position: absolute; z-index: 10; bottom: calc(100% + 8px); inset-inline-start: 50%;
+  display: none; gap: 2px; box-sizing: border-box; width: max-content; max-width: min(260px, 80vw); padding: 8px 11px;
+  font-size: var(--vin-text-sm); font-weight: 400; line-height: 1.4; white-space: normal; text-align: start;
+  color: var(--vin-fg); background: var(--vin-surface);
+  border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 12%);
+  border-radius: var(--vin-radius); box-shadow: var(--vin-shadow-lg);
+  transform: translateX(-50%);
+  transition: opacity var(--vin-dur) var(--vin-ease), transform var(--vin-dur) var(--vin-ease), display var(--vin-dur) allow-discrete;
+}
+[dir="rtl"] .vin-marker__preview { transform: translateX(50%); }
+/* A bridge over the gap, so the pointer can move onto the preview. */
+.vin-marker__preview::after { content: ""; position: absolute; inset-inline: 0; top: 100%; height: 10px; }
+.vin-marker:is(:hover, :focus-visible):not([data-dismissed]) > .vin-marker__preview { display: grid; }
+@starting-style {
+  .vin-marker:is(:hover, :focus-visible) > .vin-marker__preview { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  [dir="rtl"] .vin-marker:is(:hover, :focus-visible) > .vin-marker__preview { transform: translateX(50%) translateY(4px); }
+}
+.vin-marker__title { font-weight: var(--vin-title-weight); }
+.vin-marker__source { font-size: calc(var(--vin-text-sm) - 1px); color: var(--vin-muted); }
+
+/* Status */
+.vin-marker--status {
+  --vin-marker-tone: var(--vin-muted);
+  display: inline-flex; align-items: center; gap: 7px; vertical-align: middle;
+  font-family: var(--vin-font); font-size: var(--vin-text-sm); font-weight: var(--vin-weight); line-height: 1.4; color: var(--vin-muted);
+}
+.vin-marker--status > .vin-spinner { margin-inline: 1.5px; color: var(--vin-accent-text); }
+.vin-marker__icon { flex: none; width: 15px; height: 15px; color: var(--vin-marker-tone); }
+.vin-marker--success { --vin-marker-tone: color-mix(in srgb, var(--vin-success) 75%, var(--vin-fg)); }
+.vin-marker--danger { --vin-marker-tone: var(--vin-danger-text); color: var(--vin-danger-text); }
