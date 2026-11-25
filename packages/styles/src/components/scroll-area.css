@@ -1,0 +1,34 @@
+/* ==========================================================================
+   VinUI · Scroll Area
+   API (see spec/scroll-area.json):
+     div.vin-scroll-area role="region" aria-label="…" tabindex="0"     scrolls up and down
+     div.vin-scroll-area.vin-scroll-area--horizontal                    scrolls sideways
+     div.vin-scroll-area.vin-scroll-area--both                          both ways
+   Native scrolling with thin, themed scrollbars. Give it a height (or a width) to scroll.
+   ========================================================================== */
+
+.vin-scroll-area {
+  --vin-scroll-frame: color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  --vin-scroll-thumb: color-mix(in srgb, var(--vin-fg) 32%, transparent);
+  --vin-scroll-thumb-hover: color-mix(in srgb, var(--vin-fg) 50%, transparent);
+  display: block; box-sizing: border-box; min-width: 0; min-height: 0;
+  overflow-x: hidden; overflow-y: auto;
+  font-size: var(--vin-text-md); line-height: 1.5; color: var(--vin-fg); background: var(--vin-surface);
+  border: max(1px, var(--vin-bw)) solid var(--vin-scroll-frame); border-radius: var(--vin-radius);
+  scrollbar-width: thin; scrollbar-color: var(--vin-scroll-thumb) transparent;
+  transition: box-shadow var(--vin-dur);
+}
+.vin-scroll-area--horizontal { overflow-x: auto; overflow-y: hidden; }
+.vin-scroll-area--both { overflow: auto; }
+.vin-scroll-area:hover { --vin-scroll-thumb: var(--vin-scroll-thumb-hover); }
+.vin-scroll-area:focus { outline: none; }
+.vin-scroll-area:focus-visible { box-shadow: var(--vin-focus); }
+
+/* Browsers without scrollbar-color (older Safari) style the scrollbar parts instead. */
+@supports not (scrollbar-color: auto) {
+  .vin-scroll-area::-webkit-scrollbar { width: 10px; height: 10px; }
+  .vin-scroll-area::-webkit-scrollbar-track, .vin-scroll-area::-webkit-scrollbar-corner { background: transparent; }
+  .vin-scroll-area::-webkit-scrollbar-thumb {
+    background: var(--vin-scroll-thumb) content-box; border: 3px solid transparent; border-radius: 999px;
+  }
+}

@@ -1,10 +1,10 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds elements with data-vin-tabs, -select, -combobox, -calendar, -date-picker, -context-menu, -drawer, -hover-card, -command, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
- * Used by: Tabs, Select, Combobox, Calendar, Date Picker, Context Menu, Drawer (drag), Hover Card, Command, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
+ * It finds elements with data-vin-tabs, -select, -combobox, -calendar, -date-picker, -context-menu, -drawer, -hover-card, -command, -resizable, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
+ * Used by: Tabs, Select, Combobox, Calendar, Date Picker, Context Menu, Drawer (drag), Hover Card, Command, Resizable, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
- * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
+ * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select, Scroll Area…) don't use it.
  */
 (function () {
   "use strict";
@@ -989,12 +989,89 @@
     });
   }
 
+  /* ---------- Resizable: panels with WAI-ARIA window splitter handles ---------- */
+  function initResizable(group) {
+    var vertical = group.classList.contains("vin-resizable--vertical");
+    var kids = function (cls) { return Array.prototype.filter.call(group.children, function (c) { return c.classList.contains(cls); }); };
+    var panels = kids("vin-resizable__panel"), handles = kids("vin-resizable__handle");
+    if (panels.length < 2) return;
+    var mins = panels.map(function (p) { var m = p.getAttribute("data-min"); return m === null || m === "" ? 10 : +m; });
+    var sizes = panels.map(function (p) { return parseFloat(p.style.getPropertyValue("--vin-size")); });
+    // Panels without a size share what is left.
+    var given = 0, missing = 0;
+    sizes.forEach(function (s) { if (isNaN(s)) missing++; else given += s; });
+    sizes = sizes.map(function (s) { return isNaN(s) ? Math.max(0, 100 - given) / missing : s; });
+    var saved = [];
+    var rtl = function () { return !vertical && getComputedStyle(group).direction === "rtl"; };
+
+    function render() {
+      panels.forEach(function (p, i) { p.style.setProperty("--vin-size", String(sizes[i])); });
+      handles.forEach(function (h, i) {
+        if (!panels[i + 1]) return;
+        h.setAttribute("aria-orientation", vertical ? "horizontal" : "vertical");
+        h.setAttribute("aria-valuenow", String(Math.round(sizes[i])));
+        h.setAttribute("aria-valuemin", String(mins[i]));
+        h.setAttribute("aria-valuemax", String(Math.round(sizes[i] + sizes[i + 1] - mins[i + 1])));
+        if (panels[i].id) h.setAttribute("aria-controls", panels[i].id);
+      });
+    }
+    // Handle i moves the line between panel i and panel i + 1; the two always add up to the same.
+    function set(i, v) {
+      var pair = sizes[i] + sizes[i + 1];
+      v = Math.min(pair - mins[i + 1], Math.max(mins[i], Math.round(v)));
+      if (v === sizes[i]) return;
+      sizes[i] = v;
+      sizes[i + 1] = pair - v;
+      render();
+      group.dispatchEvent(new CustomEvent("vin-resize", { bubbles: true, detail: { sizes: sizes.slice() } }));
+    }
+
+    handles.forEach(function (h, i) {
+      if (!panels[i + 1]) return;
+      h.addEventListener("keydown", function (e) {
+        var step = 5, back = rtl() ? step : -step;
+        var d = vertical ? { ArrowUp: -step, ArrowDown: step }[e.key] : { ArrowLeft: back, ArrowRight: -back }[e.key];
+        if (d) set(i, sizes[i] + d);
+        else if (e.key === "Home") set(i, mins[i]);
+        else if (e.key === "End") set(i, Infinity);
+        else if (e.key === "Enter") {
+          // Collapse the panel before the handle to its minimum; Enter again restores it.
+          if (sizes[i] > mins[i]) { saved[i] = sizes[i]; set(i, mins[i]); }
+          else if (saved[i] != null) { set(i, saved[i]); saved[i] = null; }
+        } else return;
+        e.preventDefault();
+      });
+      h.addEventListener("pointerdown", function (e) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        h.focus();
+        var start = vertical ? e.clientY : e.clientX, from = sizes[i], dir = rtl() ? -1 : 1;
+        var free = vertical ? group.clientHeight : group.clientWidth;
+        handles.forEach(function (x) { free -= vertical ? x.offsetHeight : x.offsetWidth; });
+        h.setPointerCapture(e.pointerId);
+        h.setAttribute("data-dragging", "");
+        group.setAttribute("data-dragging", "");
+        var move = function (ev) { set(i, from + (dir * ((vertical ? ev.clientY : ev.clientX) - start) / Math.max(1, free)) * 100); };
+        var up = function () {
+          h.removeAttribute("data-dragging");
+          group.removeAttribute("data-dragging");
+          h.removeEventListener("pointermove", move); h.removeEventListener("pointerup", up); h.removeEventListener("pointercancel", up);
+        };
+        h.addEventListener("pointermove", move);
+        h.addEventListener("pointerup", up);
+        h.addEventListener("pointercancel", up);
+      });
+    });
+    render();
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
     "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
     "data-vin-combobox": initCombobox, "data-vin-calendar": initCalendar, "data-vin-date-picker": initDatePicker,
     "data-vin-context-menu": initContextMenu, "data-vin-drawer": initDrawer, "data-vin-hover-card": initHoverCard, "data-vin-command": initCommand,
+    "data-vin-resizable": initResizable,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

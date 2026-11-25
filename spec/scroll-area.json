@@ -1,0 +1,27 @@
+{
+  "$comment": "Single source of truth for the Scroll Area API. Every framework package is tested against this file.",
+  "name": "scroll-area",
+  "title": "Scroll Area",
+  "category": "Layout",
+  "description": "A box that scrolls its content, with thin scrollbars in the colours of the style. It is the browser's own scrolling, so touch, wheel, keyboard and find-in-page all work.",
+  "baseClass": "vin-scroll-area",
+  "classes": ["vin-scroll-area", "vin-scroll-area--horizontal", "vin-scroll-area--both"],
+  "dependencies": [],
+  "thumb": "<div class=\"vin-scroll-area\" style=\"width:150px;height:96px;padding:6px 12px;font-size:12px;line-height:1.9\"><div>v1.4.0</div><div>v1.3.2</div><div>v1.3.1</div><div>v1.3.0</div><div>v1.2.0</div><div>v1.1.0</div></div>",
+  "props": {
+    "orientation": { "values": ["vertical", "horizontal", "both"], "default": "vertical", "description": "Which way the content scrolls.", "class": "vin-scroll-area--horizontal / vin-scroll-area--both" },
+    "label": { "type": "string", "description": "A name for the region, read by screen readers. Needed when nothing inside can take focus, so the box itself is in the Tab order.", "html": "role=\"region\" aria-label=\"…\" tabindex=\"0\"" },
+    "children": { "type": "ReactNode", "description": "The content. Give the box a height (or a width) so it has something to scroll.", "html": "the content of div.vin-scroll-area" }
+  },
+  "react": { "components": ["ScrollArea"], "helpers": [] },
+  "examples": [
+    { "id": "vertical", "title": "Vertical", "description": "A fixed-height list that scrolls up and down. Click it or Tab to it, then use the arrow keys, Page Up/Down, Home and End." },
+    { "id": "horizontal", "title": "Horizontal", "description": "A row wider than its box, like a shelf of cards. Shift + wheel, a trackpad swipe or the arrow keys scroll it sideways." }
+  ],
+  "a11y": [
+    "It is native scrolling: nothing is faked, so the wheel, touch, the keyboard and assistive technology work as on any page.",
+    "The box has tabindex=\"0\", so keyboard users can focus it and scroll with the arrow keys, Page Up/Down and Home/End. A focus ring shows when it has focus.",
+    "Because it can take focus, it has a name: role=\"region\" with an aria-label (React: label) that says what is inside.",
+    "Scrollbars are thin, but they stay visible and draggable, in the style's colours."
+  ]
+}
