@@ -66,3 +66,29 @@ test("everything else is the static site", async () => {
   assert.equal(res.status, 200);
   assert.match(await res.text(), /^# VinUI/);
 });
+
+test("refuses oversized requests and batches", async () => {
+  const big = await call({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "search_components", arguments: { query: "x".repeat(40000) } } });
+  assert.equal(big.status, 413);
+  const many = await call(Array.from({ length: 11 }, (_, i) => ({ jsonrpc: "2.0", id: i, method: "tools/list" })));
+  assert.equal(many.status, 400);
+  assert.match((await many.json()).error.message, /At most 10/);
+});
+
+test("get_component only takes component names, so it can't be pointed at other files", async () => {
+  for (const name of ["../../index", "../r/index", "dialog/../../x", "a".repeat(60), "%2e%2e"]) {
+    const res = await call({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "get_component", arguments: { name, framework: "html" } } });
+    const { result } = await res.json();
+    assert.equal(result.isError, true, name);
+    assert.match(result.content[0].text, /isn't a component name/, name);
+  }
+  const ok = await call({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "get_component", arguments: { name: "Dialog", framework: "html" } } });
+  assert.notEqual((await ok.json()).result.isError, true);
+});
+
+test("search text is capped", async () => {
+  const res = await call({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "search_components", arguments: { query: "x".repeat(500) } } });
+  const { result } = await res.json();
+  assert.equal(result.isError, true);
+  assert.match(result.content[0].text, /too long/);
+});

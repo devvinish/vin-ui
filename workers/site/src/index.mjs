@@ -18,6 +18,10 @@ const CORS = {
 };
 const ABOUT = "VinUI MCP server. Add https://vinish.dev/ui/mcp to your AI tool as a remote MCP server (Streamable HTTP). Docs: https://vinish.dev/ui/docs/mcp/";
 
+/* Limits for the public endpoint. A real MCP request is well under 1 KB. */
+const MAX_BODY = 32 * 1024;
+const MAX_BATCH = 10;
+
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json", "cache-control": "no-store", ...CORS } });
 const rpcError = (code, message, status = 400) => json({ jsonrpc: "2.0", id: null, error: { code, message } }, status);
@@ -38,10 +42,14 @@ export async function handleMcp(request, env) {
     // No server-sent stream: this server never sends requests or notifications of its own.
     return new Response(ABOUT + "\n", { status: 405, headers: { allow: "POST, OPTIONS", "content-type": "text/plain; charset=utf-8", ...CORS } });
   }
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY) return rpcError(-32600, "Request too large", 413);
+  const body = await request.text();
+  if (body.length > MAX_BODY) return rpcError(-32600, "Request too large", 413);
   let msg;
-  try { msg = await request.json(); } catch { return rpcError(-32700, "Parse error"); }
+  try { msg = JSON.parse(body); } catch { return rpcError(-32700, "Parse error"); }
   const batch = Array.isArray(msg);
   const list = batch ? msg : [msg];
+  if (list.length > MAX_BATCH) return rpcError(-32600, `At most ${MAX_BATCH} messages per batch`);
   if (!list.length || list.some((m) => !m || typeof m !== "object" || m.jsonrpc !== "2.0")) return rpcError(-32600, "Invalid Request");
 
   const origin = new URL(request.url).origin;

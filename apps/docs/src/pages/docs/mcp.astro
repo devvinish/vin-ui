@@ -36,6 +36,7 @@ const config = `{\n  "mcpServers": {\n    "vinui": { "command": "npx", "args": [
     <p>In a JSON config file (Claude Code, Cursor, VS Code and others):</p>
     <CodeBlock title="mcp.json" lang="json" code={`{\n  "mcpServers": {\n    "vinui": { "type": "http", "url": "https://vinish.dev/ui/mcp" }\n  }\n}`} />
     <p>It has <code>list_components</code>, <code>search_components</code>, <code>get_component</code> and <code>list_styles</code>. Your AI tool then adds the files itself, or tells you the <code>npx @vinish/ui add</code> command to run.</p>
+    <p>The hosted server is read-only. It needs no account or key, reads only the public component files this site already serves, and keeps nothing about you or your project.</p>
 
     <h2 id="llms">llms.txt</h2>
     <p>Any AI that reads web pages can use <a href={href("/llms.txt")}>/ui/llms.txt</a> (an index) or <a href={href("/llms-full.txt")}>/ui/llms-full.txt</a> (with HTML for each component). They're rebuilt with every release.</p>

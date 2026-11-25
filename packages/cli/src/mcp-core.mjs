@@ -78,14 +78,19 @@ export function createMcpHandler({ reg, project = null, server = SERVER }) {
   };
   const tools_list = project ? TOOLS : TOOLS.filter((t) => !LOCAL_ONLY.includes(t.name));
 
+  const NAME = /^[a-z0-9][a-z0-9-]{0,39}$/;
+  const short = (v, what) => { const s = String(v ?? ""); if (s.length > 200) throw new Error(`${what} is too long (200 characters at most).`); return s; };
+
   const tools = {
     async list_components({ category }) {
+      category = category == null ? category : short(category, "category");
       const idx = await reg.index();
       const items = idx.components.filter((c) => !category || c.category.toLowerCase() === String(category).toLowerCase());
       if (!items.length) return `No components in "${category}". Categories: ${[...new Set(idx.components.map((c) => c.category))].join(", ")}.`;
       return items.map((c) => `- ${c.name} (${c.category}): ${c.description} [${c.frameworks.join(", ")}]`).join("\n");
     },
     async search_components({ query }) {
+      query = short(query, "query");
       const idx = await reg.index();
       const hits = searchComponents(idx.components, query).slice(0, 6);
       if (!hits.length) return `Nothing matches "${query}". Call list_components to see everything.`;
@@ -93,7 +98,9 @@ export function createMcpHandler({ reg, project = null, server = SERVER }) {
     },
     async get_component({ name, framework }) {
       const f = await frameworkFor(framework);
-      const e = await reg.component(f, String(name).toLowerCase());
+      const slug = String(name ?? "").trim().toLowerCase();
+      if (!NAME.test(slug)) throw new Error(`"${short(name, "name").slice(0, 40)}" isn't a component name. Names look like "dialog" or "date-picker"; call list_components to see them.`);
+      const e = await reg.component(f, slug);
       let style = "";
       try { const cfg = await readConfig(); style = `The project uses the ${cfg.theme.style} style with accent ${cfg.theme.accent}; components pick it up from vin.css automatically.`; } catch {}
       const parts = [`# ${e.title} (${f})`, e.description, `Docs: ${e.docs}`, style];

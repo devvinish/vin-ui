@@ -168,8 +168,10 @@ describe("NavigationMenu", () => {
     expect(document.activeElement).toBe(btn);
   });
 
-  it("Right Arrow moves between top-level items", () => {
+  it("Right Arrow moves between top-level items", async () => {
     const { w, btn } = make();
+    // Vue ignores an event stamped in the same millisecond its listener was attached; a person can't be that fast.
+    await new Promise((r) => setTimeout(r, 2));
     btn.focus();
     key(btn, "ArrowRight");
     expect(document.activeElement).toBe(w.get(".vin-nav-menu__link").element);
