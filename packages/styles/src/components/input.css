@@ -22,7 +22,8 @@
 }
 .vin-input::placeholder { color: var(--vin-muted); opacity: 1; }
 .vin-input:focus { outline: none; box-shadow: var(--vin-input-shadow), var(--vin-focus); }
-.vin-input[aria-invalid="true"] { border-color: var(--vin-danger); }
+/* Error ring works in borderless styles too (Clay, Tonal, Bento). */
+.vin-input[aria-invalid="true"] { border-color: var(--vin-danger); box-shadow: var(--vin-input-shadow), 0 0 0 1px var(--vin-danger); }
 .vin-input[aria-invalid="true"]:focus { box-shadow: var(--vin-input-shadow), 0 0 0 3px color-mix(in srgb, var(--vin-danger) 28%, transparent); }
 .vin-input:disabled { opacity: .55; cursor: not-allowed; }
 textarea.vin-input { height: auto; min-height: calc(var(--vin-h-md) * 2.2); padding-block: 8px; line-height: 1.5; resize: vertical; }
@@ -32,4 +33,4 @@ textarea.vin-input { height: auto; min-height: calc(var(--vin-h-md) * 2.2); padd
 
 .vin-hint, .vin-error { margin: 0; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.4; }
 .vin-hint { color: var(--vin-muted); }
-.vin-error { color: color-mix(in srgb, var(--vin-danger) 60%, var(--vin-fg)); font-weight: var(--vin-weight); }
+.vin-error { color: var(--vin-danger-text); font-weight: var(--vin-weight); }

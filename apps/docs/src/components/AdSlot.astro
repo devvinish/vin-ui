@@ -1,15 +1,10 @@
 ---
 /**
- * Right-sidebar ad unit (Mediavine siderail), same markup pattern as the vinish.dev game pages.
- * Settings live in src/config/ads.ts.
+ * Right-sidebar ad unit (Mediavine siderail), same markup as the vinish.dev game pages.
+ * An empty 300 × 600 region: Mediavine fills it. Settings in src/config/ads.ts.
  */
 import { ads } from "../config/ads";
-const showPlaceholder = import.meta.env.DEV && ads.placeholderInDev;
 ---
 {ads.enabled && (
-  <aside class="ad-slot mv-siderail-slot" aria-label="Advertisement">
-    <div id={ads.slotId}>
-      {showPlaceholder && <div class="ad-placeholder" aria-hidden="true"><span>Mediavine siderail<br />300 × 600 (dev preview)</span></div>}
-    </div>
-  </aside>
+  <aside class="ad-slot mv-siderail-slot" aria-label="Advertisement"><div id={ads.slotId}></div></aside>
 )}

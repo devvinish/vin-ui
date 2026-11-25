@@ -68,7 +68,7 @@ function block(selector, body) {
   return `${selector} {\n${body}\n}`;
 }
 
-const DARK_EXTRA = "  --vin-accent-text: var(--vin-accent-ink-dark);";
+const DARK_EXTRA = "  --vin-accent-text: var(--vin-accent-ink-dark);\n  --vin-danger-text: color-mix(in srgb, var(--vin-danger) 55%, var(--vin-fg));";
 
 export function styleCss(style) {
   const out = [`/* ── ${style.name} ── ${style.short} */`];

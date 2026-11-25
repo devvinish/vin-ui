@@ -153,7 +153,7 @@ export const STYLES = [
 & .vin-btn:hover { filter: none; transform: translateY(-2px); }
 & .vin-btn:active { transform: scale(.96); }`,
       badge: `
-& .vin-badge { border-color: transparent; }`,
+& .vin-badge:not(.vin-badge--outline) { border-color: transparent; }`,
       card: "",
       input: "",
     },
@@ -267,8 +267,8 @@ export const STYLES = [
       button: `
 & .vin-btn { font-size: calc(var(--vin-text-md) - 1px); }
 & :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost) { gap: .4em; border-style: dashed; }
-& :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost)::before { content: "["; color: var(--vin-accent-text); }
-& :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost)::after { content: "]"; color: var(--vin-accent-text); }`,
+& :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost):not(.vin-btn--icon)::before { content: "["; color: var(--vin-accent-text); }
+& :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost):not(.vin-btn--icon)::after { content: "]"; color: var(--vin-accent-text); }`,
       badge: `
 & .vin-badge { text-transform: lowercase; border-style: dashed; }`,
       card: `
@@ -337,8 +337,8 @@ export const STYLES = [
       font: '"Inter", system-ui, sans-serif',
       stage: "#f2f2f5", "stage-img": "none", surface: "#ffffff", fg: "#1d1d1f", muted: "#6a6a70", border: "transparent",
       "primary-bg": accent, "primary-fg": onAccent,
-      secondary: "#f2f2f5", "secondary-fg": "#1d1d1f",
-      danger: "#d9332a", success: "#23913c", warning: "#c77700", "input-bg": "#f2f2f5", track: "#e3e3e8",
+      secondary: "rgb(29 29 31 / .07)", "secondary-fg": "#1d1d1f",
+      danger: "#d9332a", success: "#23913c", warning: "#c77700", "input-bg": "rgb(29 29 31 / .06)", track: "#e3e3e8",
       radius: "12px", "radius-lg": "24px", pill: "999px", bw: "0px", "btn-border": "transparent",
       shadow: "none", "shadow-soft": "none",
       "shadow-lg": "0 1px 2px rgb(0 0 0 / .04), 0 8px 24px -8px rgb(0 0 0 / .08)", "input-shadow": "none",

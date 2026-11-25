@@ -25,6 +25,8 @@
   --vin-dur: 150ms;
   /* Accent shade that is readable as text on this mode's surfaces */
   --vin-accent-text: var(--vin-accent-ink-light);
+  /* Danger shade for error text: clearly red, still 4.5:1 (lighter in dark mode) */
+  --vin-danger-text: color-mix(in srgb, var(--vin-danger) 88%, var(--vin-fg));
 
   font-family: var(--vin-font);
   color: var(--vin-fg);

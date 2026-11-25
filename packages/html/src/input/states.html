@@ -1,13 +1,15 @@
-<div class="vin-field" style="width: 100%; max-width: 320px">
-  <label class="vin-label" for="username">Username</label>
-  <input id="username" class="vin-input" value="vinish" aria-invalid="true" aria-describedby="username-error">
-  <p class="vin-error" id="username-error">That username is taken.</p>
-</div>
-<div class="vin-field" style="width: 100%; max-width: 320px">
-  <label class="vin-label" for="plan">Plan</label>
-  <input id="plan" class="vin-input" value="Free" disabled>
-</div>
-<div class="vin-field" style="width: 100%; max-width: 320px">
-  <label class="vin-label" for="bio">Bio</label>
-  <textarea id="bio" class="vin-input" rows="3" placeholder="A few words about you"></textarea>
+<div style="display: grid; gap: 16px; width: 100%; max-width: 320px">
+  <div class="vin-field">
+    <label class="vin-label" for="username">Username</label>
+    <input id="username" class="vin-input" value="vinish" aria-invalid="true" aria-describedby="username-error">
+    <p class="vin-error" id="username-error">That username is taken.</p>
+  </div>
+  <div class="vin-field">
+    <label class="vin-label" for="plan">Plan</label>
+    <input id="plan" class="vin-input" value="Free" disabled>
+  </div>
+  <div class="vin-field">
+    <label class="vin-label" for="bio">Bio</label>
+    <textarea id="bio" class="vin-input" rows="3" placeholder="A few words about you"></textarea>
+  </div>
 </div>

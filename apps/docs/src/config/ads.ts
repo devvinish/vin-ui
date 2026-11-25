@@ -15,6 +15,4 @@ export const ads = {
   scriptSrc: "",
   /** Inner slot id. Keeps "300x600" in the name like the game pages. */
   slotId: "vinui-ad-300x600-r",
-  /** Dashed preview box in `npm run dev` only, so the layout can be checked locally. */
-  placeholderInDev: true,
 };
