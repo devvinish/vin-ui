@@ -5,6 +5,9 @@ import { defineConfig, devices } from "@playwright/test";
  * Run `npm run build` first; Playwright serves apps/docs/dist.
  * Baselines are per platform (fonts render differently on macOS and Linux), so CI keeps its own.
  */
+// PORT lets two checkouts (git worktrees) run the suite at the same time.
+const port = Number(process.env.PORT ?? 4340);
+
 export default defineConfig({
   testDir: "tests/visual",
   snapshotPathTemplate: "tests/visual/__screenshots__/{platform}/{arg}{ext}",
@@ -13,6 +16,6 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: "disabled" } },
-  use: { baseURL: "http://localhost:4340", ...devices["Desktop Chrome"], viewport: { width: 900, height: 700 } },
-  webServer: { command: "node tests/visual/serve.mjs", url: "http://localhost:4340/ui/", reuseExistingServer: !process.env.CI },
+  use: { baseURL: `http://localhost:${port}`, ...devices["Desktop Chrome"], viewport: { width: 900, height: 700 } },
+  webServer: { command: "node tests/visual/serve.mjs", url: `http://localhost:${port}/ui/`, reuseExistingServer: !process.env.CI },
 });
