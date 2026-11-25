@@ -1,0 +1,20 @@
+---
+import Base from "../layouts/Base.astro";
+import { href } from "../lib/site";
+---
+<Base title="Page not found" description="This VinUI page doesn't exist.">
+  <main id="main">
+    <section class="section cta-band">
+      <div class="container">
+        <span class="eyebrow">404</span>
+        <h1 style="margin:10px 0">Page not found</h1>
+        <p>This page doesn't exist, or it moved. Try search (⌘K), or start from one of these.</p>
+        <div class="hero-cta" style="justify-content:center">
+          <a class="btn btn-primary" href={href("/components/")}>Components</a>
+          <a class="btn" href={href("/docs/installation/")}>Docs</a>
+          <a class="btn" href={href("/")}>VinUI home</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Base>
