@@ -1,0 +1,34 @@
+{
+  "$comment": "Single source of truth for the Date Picker API. Every framework package is tested against this file.",
+  "name": "date-picker",
+  "title": "Date Picker",
+  "category": "Forms",
+  "description": "A field that opens a calendar to pick a date or a range.",
+  "baseClass": "vin-date-picker",
+  "classes": ["vin-date-picker", "vin-date-picker__trigger", "vin-date-picker__icon", "vin-date-picker__value", "vin-date-picker__content"],
+  "dependencies": ["calendar", "popover", "input"],
+  "thumb": "<div class=\"vin-field\" style=\"width:190px\"><span class=\"vin-label\">Due date</span><span class=\"vin-input vin-date-picker__trigger\"><svg class=\"vin-date-picker__icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><rect x=\"3\" y=\"4.5\" width=\"18\" height=\"16.5\" rx=\"2.5\"/><path d=\"M3 9.5h18M8 2.5v4M16 2.5v4\"/></svg><span class=\"vin-date-picker__value\">Nov 14, 2026</span></span></div>",
+  "props": {
+    "mode": { "values": ["single", "range"], "default": "single", "html": "data-mode=\"range\" on the calendar" },
+    "value / defaultValue": { "type": "string | { from, to }", "description": "\"YYYY-MM-DD\", or { from, to } for a range.", "html": "the calendar's data-value and the hidden input" },
+    "label": { "type": "ReactNode", "description": "Visible label. Without it, pass an aria-label.", "html": "<span class=\"vin-label\"> + aria-labelledby" },
+    "placeholder": { "type": "string", "default": "Pick a date", "html": "<span class=\"vin-date-picker__value\" data-placeholder>" },
+    "hint / error": { "type": "ReactNode", "html": "aria-describedby, aria-invalid=\"true\"" },
+    "min / max / isDateDisabled / weekStartsOn / locale": { "type": "see Calendar", "html": "on the calendar" },
+    "name": { "type": "string", "description": "Adds a hidden input: \"YYYY-MM-DD\", or \"from/to\" for a range.", "html": "<input type=\"hidden\" name=\"…\">" },
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-input--{value}" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled on the button" }
+  },
+  "react": { "components": ["DatePicker"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "The button opens a calendar; choosing a day closes it. In HTML, add data-vin-date-picker and include vinui.js once." },
+    { "id": "range", "title": "Range", "description": "Pick the first and last day; the field updates when the range is complete." },
+    { "id": "states", "title": "Placeholder, error, disabled", "description": "A placeholder until a date is chosen, an error that is read out with the field, and a disabled picker." }
+  ],
+  "a11y": [
+    "The button opens a dialog (aria-haspopup=\"dialog\") in the browser's popover, so Esc and a click outside close it and focus goes back to the button.",
+    "The button's name is the label plus the chosen date, e.g. \"Due date Nov 14, 2026\".",
+    "Focus moves to the chosen day (or today) when the calendar opens; every Calendar key works inside.",
+    "Without JavaScript the button still opens the calendar; vinui.js adds choosing and placement."
+  ]
+}

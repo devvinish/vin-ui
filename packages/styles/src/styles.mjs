@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu", "combobox", "calendar", "date-picker"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -108,6 +108,10 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      combobox: "",
+      calendar: `
+& .vin-calendar__title { letter-spacing: -.01em; }`,
+      "date-picker": "",
     },
   },
 
@@ -186,6 +190,9 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      combobox: "",
+      calendar: "",
+      "date-picker": "",
     },
   },
 
@@ -265,6 +272,9 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      combobox: "",
+      calendar: "",
+      "date-picker": "",
     },
   },
 
@@ -341,6 +351,9 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      combobox: "",
+      calendar: "",
+      "date-picker": "",
     },
   },
 
@@ -431,6 +444,11 @@ export const STYLES = [
       sheet: "",
       "dropdown-menu": `
 & .vin-menu__label { text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 500; }`,
+      combobox: "",
+      calendar: `
+& .vin-calendar__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 6px); }
+& .vin-calendar__grid th { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; }`,
+      "date-picker": "",
     },
   },
 
@@ -541,6 +559,9 @@ export const STYLES = [
 & .vin-menu__item:focus > svg, & .vin-menu__item:hover > svg, & .vin-menu__item:focus .vin-menu__shortcut, & .vin-menu__item:hover .vin-menu__shortcut { color: inherit; }
 & .vin-menu__item--danger:focus, & .vin-menu__item--danger:hover { background: var(--vin-danger); color: #fff; }
 & .vin-menu__separator { height: 0; background: none; border-top: 1px dashed color-mix(in srgb, var(--vin-border), var(--vin-fg) 25%); }`,
+      combobox: "",
+      calendar: "",
+      "date-picker": "",
     },
   },
 
@@ -635,6 +656,10 @@ export const STYLES = [
       sheet: "",
       "dropdown-menu": `
 & .vin-menu { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      combobox: "",
+      calendar: `
+& .vin-calendar__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 4px); }`,
+      "date-picker": "",
     },
   },
 
@@ -705,6 +730,9 @@ export const STYLES = [
       "alert-dialog": "",
       sheet: "",
       "dropdown-menu": "",
+      combobox: "",
+      calendar: "",
+      "date-picker": "",
     },
   },
 ];

@@ -1,0 +1,36 @@
+{
+  "$comment": "Single source of truth for the Combobox API. Every framework package is tested against this file.",
+  "name": "combobox",
+  "title": "Combobox",
+  "category": "Forms",
+  "description": "A text field that filters a list as you type, for picking one value from many.",
+  "baseClass": "vin-combobox",
+  "classes": ["vin-combobox", "vin-combobox__input", "vin-combobox__content", "vin-combobox__group", "vin-combobox__label", "vin-combobox__empty"],
+  "dependencies": ["select"],
+  "thumb": "<div class=\"vin-field\" style=\"width:190px\"><span class=\"vin-label\">Framework</span><span class=\"vin-input vin-combobox__input\" style=\"display:flex;align-items:center;color:var(--vin-muted)\">Search…</span></div>",
+  "props": {
+    "options": { "type": "(string | { value, label, disabled?, group? })[]", "description": "The choices. Options with the same group are shown under one heading.", "html": "<div class=\"vin-select__item\" role=\"option\" data-value=\"…\">, inside .vin-combobox__group for headings" },
+    "value / defaultValue": { "type": "string", "description": "The chosen value (controlled or not). Use onValueChange to hear about changes.", "html": "aria-selected=\"true\" on the option, the hidden input's value" },
+    "label": { "type": "ReactNode", "description": "Visible label. Without it, pass an aria-label.", "html": "<label class=\"vin-label\" for=\"…\">" },
+    "placeholder": { "type": "string", "default": "Search…", "html": "placeholder on the input" },
+    "emptyText": { "type": "ReactNode", "default": "No results.", "description": "Shown when nothing matches.", "html": "<p class=\"vin-combobox__empty\" role=\"status\">" },
+    "filter": { "type": "(option, query) => boolean", "description": "Your own matching. The default matches any part of the label, ignoring case and accents." },
+    "hint / error": { "type": "ReactNode", "description": "Help text, or an error that also marks the field invalid.", "html": "aria-describedby, aria-invalid=\"true\"" },
+    "size": { "values": ["sm", "md", "lg"], "default": "md", "class": "vin-input--{value}" },
+    "name": { "type": "string", "description": "Adds a hidden input so the chosen value is submitted with forms.", "html": "<input type=\"hidden\" name=\"…\">" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled on the input" }
+  },
+  "react": { "components": ["Combobox"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Type to filter, ↓ ↑ to move, Enter to choose, Esc to close. In HTML, add data-vin-combobox and include vinui.js once." },
+    { "id": "groups", "title": "Groups", "description": "Options under headings. Headings disappear when none of their options match." },
+    { "id": "states", "title": "Error and disabled", "description": "An error is read out with the field; a disabled combobox can't be focused." }
+  ],
+  "a11y": [
+    "Follows the WAI-ARIA combobox pattern with list autocomplete: role=\"combobox\" on the input, aria-expanded, aria-controls, and a role=\"listbox\" of role=\"option\" items.",
+    "Focus stays in the input while you move through the list; aria-activedescendant tells screen readers which option is highlighted.",
+    "Keys: type to filter, ↓ ↑ to move (↓ opens), Home End PageUp PageDown, Enter chooses, Esc closes (a second Esc clears), Alt+↓ opens without moving.",
+    "When focus leaves, the text goes back to the chosen option, so the field never shows a value that isn't selected.",
+    "\"No results\" is a status message, so screen readers announce it."
+  ]
+}

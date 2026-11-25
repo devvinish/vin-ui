@@ -1,8 +1,8 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds elements with data-vin-tabs, -select, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
- * Used by: Tabs, Select, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
+ * It finds elements with data-vin-tabs, -select, -combobox, -calendar, -date-picker, -toggle, -toggle-group, -textarea, -otp, -slider, -dismiss, -tooltip, -popover and -toast on load (and hides avatar pictures that fail to load). For markup added later, call VinUI.init(element).
+ * Used by: Tabs, Select, Combobox, Calendar, Date Picker, Toggle, Toggle Group, Textarea (count, auto-grow), Input OTP, Slider, Alert (close), Tooltip,
  * Popover (placement), Toast (VinUI.toast). Components that need no
  * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
  */
@@ -543,10 +543,271 @@
     });
   }
 
+  /* ---------- Combobox: an input that filters a listbox (WAI-ARIA combobox, list autocomplete) ---------- */
+  var fold = function (s) { return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); };
+  function initCombobox(root) {
+    var input = root.querySelector('[role="combobox"]');
+    var list = input && document.getElementById(input.getAttribute("aria-controls"));
+    var panel = list && (list.closest("[popover]") || list);
+    var hidden = root.querySelector('input[type="hidden"]');
+    var empty = root.querySelector(".vin-combobox__empty");
+    if (!input || !list) return;
+    var filtering = false;
+
+    var options = function () { return Array.prototype.slice.call(list.querySelectorAll('[role="option"]')); };
+    var visible = function () { return options().filter(function (o) { return !o.hidden && o.getAttribute("aria-disabled") !== "true"; }); };
+    var selected = function () { return list.querySelector('[aria-selected="true"]'); };
+    var active = function () { return list.querySelector("[data-active]"); };
+    var isOpen = function () { return input.getAttribute("aria-expanded") === "true"; };
+
+    function setActive(opt) {
+      options().forEach(function (o) { o.toggleAttribute("data-active", o === opt); });
+      if (opt) { input.setAttribute("aria-activedescendant", opt.id); opt.scrollIntoView({ block: "nearest" }); }
+      else input.removeAttribute("aria-activedescendant");
+    }
+    function filter(query) {
+      var q = fold(query.trim());
+      options().forEach(function (o) { o.hidden = !!q && fold(o.textContent).indexOf(q) < 0; });
+      Array.prototype.forEach.call(list.querySelectorAll(".vin-combobox__group"), function (g) {
+        g.hidden = !g.querySelector('[role="option"]:not([hidden])');
+      });
+      if (empty) empty.hidden = options().some(function (o) { return !o.hidden; });
+    }
+    function place() {
+      var r = input.getBoundingClientRect();
+      panel.style.minWidth = r.width + "px";
+      panel.style.left = r.left + "px";
+      var below = window.innerHeight - r.bottom, h = panel.offsetHeight;
+      panel.style.top = (below < h + 8 && r.top > below ? r.top - h - 4 : r.bottom + 4) + "px";
+    }
+    function open(which) {
+      if (input.disabled) return;
+      if (!isOpen()) {
+        input.setAttribute("aria-expanded", "true");
+        panel.showPopover ? panel.showPopover() : (panel.style.display = "block");
+        window.addEventListener("scroll", place, true);
+        window.addEventListener("resize", place);
+      }
+      place();
+      var all = visible(), sel = selected();
+      setActive(which === "first" ? all[0] : which === "last" ? all[all.length - 1] : which === "none" ? null : sel && all.indexOf(sel) >= 0 ? sel : all[0]);
+    }
+    function close() {
+      if (!isOpen()) return;
+      input.setAttribute("aria-expanded", "false");
+      panel.hidePopover ? panel.hidePopover() : (panel.style.display = "");
+      setActive(null);
+      window.removeEventListener("scroll", place, true);
+      window.removeEventListener("resize", place);
+    }
+    function restore() {
+      var sel = selected();
+      input.value = sel ? sel.textContent.trim() : "";
+      filtering = false;
+      filter("");
+    }
+    function choose(opt) {
+      if (!opt || opt.getAttribute("aria-disabled") === "true") return;
+      options().forEach(function (o) { o.setAttribute("aria-selected", o === opt ? "true" : "false"); });
+      var value = opt.getAttribute("data-value") || opt.textContent.trim();
+      if (hidden) hidden.value = value;
+      restore();
+      root.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { value: value } }));
+    }
+    function clear() {
+      options().forEach(function (o) { o.setAttribute("aria-selected", "false"); });
+      if (hidden) hidden.value = "";
+      restore();
+      root.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { value: "" } }));
+    }
+    function move(step) {
+      var all = visible(), i = all.indexOf(active());
+      setActive(all[i < 0 ? (step > 0 ? 0 : all.length - 1) : Math.min(all.length - 1, Math.max(0, i + step))]);
+    }
+
+    input.addEventListener("input", function () {
+      filtering = true;
+      filter(input.value);
+      open("first");
+    });
+    input.addEventListener("click", function () { isOpen() ? close() : (filter(filtering ? input.value : ""), open()); });
+    input.addEventListener("keydown", function (e) {
+      var k = e.key;
+      if (k === "ArrowDown" || k === "ArrowUp") {
+        e.preventDefault();
+        if (!isOpen()) { if (!filtering) filter(""); open(e.altKey ? "none" : k === "ArrowUp" ? "last" : undefined); }
+        else if (!e.altKey) move(k === "ArrowDown" ? 1 : -1);
+      } else if (!isOpen()) {
+        if (k === "Escape" && input.value) { e.preventDefault(); clear(); }
+        return;
+      } else if (k === "PageDown" || k === "PageUp") { e.preventDefault(); move(k === "PageDown" ? 10 : -10); }
+      else if (k === "Enter") { e.preventDefault(); if (active()) choose(active()); close(); }
+      else if (k === "Escape") { e.preventDefault(); close(); restore(); }
+      else if (k === "Tab") { if (active() && filtering) choose(active()); close(); }
+    });
+    input.addEventListener("blur", function () {
+      setTimeout(function () { if (document.activeElement !== input) { close(); restore(); } }, 0);
+    });
+    panel.addEventListener("pointermove", function (e) {
+      var opt = e.target.closest('[role="option"]');
+      if (opt && opt.getAttribute("aria-disabled") !== "true" && opt !== active()) setActive(opt);
+    });
+    panel.addEventListener("mousedown", function (e) { e.preventDefault(); });
+    panel.addEventListener("click", function (e) {
+      var opt = e.target.closest('[role="option"]');
+      if (!opt || opt.getAttribute("aria-disabled") === "true") return;
+      choose(opt); close(); input.focus();
+    });
+    document.addEventListener("pointerdown", function (e) {
+      if (isOpen() && !root.contains(e.target) && !panel.contains(e.target)) { close(); restore(); }
+    }, true);
+  }
+
+  /* ---------- Calendar: month grid for a date or a range (WAI-ARIA date grid). Dates are YYYY-MM-DD ---------- */
+  var cal = {
+    pad: function (n) { return (n < 10 ? "0" : "") + n; },
+    iso: function (d) { return d.getUTCFullYear() + "-" + cal.pad(d.getUTCMonth() + 1) + "-" + cal.pad(d.getUTCDate()); },
+    parse: function (s) { var p = s.split("-"); return new Date(Date.UTC(+p[0], +p[1] - 1, +(p[2] || 1))); },
+    addDays: function (s, n) { var d = cal.parse(s); d.setUTCDate(d.getUTCDate() + n); return cal.iso(d); },
+    addMonths: function (s, n) {
+      var d = cal.parse(s), day = d.getUTCDate(), t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + n, 1));
+      var last = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth() + 1, 0)).getUTCDate();
+      t.setUTCDate(Math.min(day, last));
+      return cal.iso(t);
+    },
+    today: function () { var n = new Date(); return n.getFullYear() + "-" + cal.pad(n.getMonth() + 1) + "-" + cal.pad(n.getDate()); },
+  };
+  function initCalendar(root) {
+    var grid = root.querySelector(".vin-calendar__grid");
+    var title = root.querySelector(".vin-calendar__title");
+    if (!grid || !title) return;
+    var range = root.getAttribute("data-mode") === "range";
+    var weekStart = root.getAttribute("data-week-start") === "0" ? 0 : 1;
+    var min = root.getAttribute("data-min"), max = root.getAttribute("data-max");
+    var offDays = (root.getAttribute("data-disabled-days") || "").split(",").filter(Boolean).map(Number);
+    var langEl = root.closest("[lang]"), locale = (langEl && langEl.getAttribute("lang")) || "en-US";
+    var parts = (root.getAttribute("data-value") || "").split("/");
+    var from = parts[0] || null, to = parts[1] || null;
+    var month = root.getAttribute("data-month") || (from || cal.today()).slice(0, 7);
+    var focusDate = null, today = cal.today();
+    var F = function (o) { o.timeZone = "UTC"; return new Intl.DateTimeFormat(locale, o); };
+    var fTitle = F({ month: "long", year: "numeric" }), fDay = F({ weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    var fShort = F({ weekday: "short" }), fLong = F({ weekday: "long" });
+    var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;"); };
+
+    var off = function (d) { return (min && d < min) || (max && d > max) || offDays.indexOf(cal.parse(d).getUTCDay()) >= 0; };
+    var inMonth = function (d) { return d.slice(0, 7) === month; };
+    var selected = function (d) { return range ? !!from && (d === from || d === to || (!!to && d > from && d < to)) : d === from; };
+    var band = function (d) {
+      if (!range || !from || !to || from === to) return "";
+      return d === from ? "start" : d === to ? "end" : d > from && d < to ? "middle" : "";
+    };
+
+    function render(focus) {
+      var first = cal.parse(month + "-01");
+      var start = cal.addDays(month + "-01", -((first.getUTCDay() - weekStart + 7) % 7));
+      var tab = [focusDate, from, today, month + "-01"].filter(function (d) { return d && inMonth(d); })[0];
+      title.textContent = fTitle.format(first);
+      var head = "<tr>";
+      for (var i = 0; i < 7; i++) {
+        var wd = cal.parse("2024-01-" + cal.pad(7 + ((i + weekStart) % 7)));
+        head += '<th scope="col" abbr="' + esc(fLong.format(wd)) + '">' + esc(fShort.format(wd)) + "</th>";
+      }
+      var body = "";
+      for (var w = 0; w < 6; w++) {
+        body += "<tr>";
+        for (var c = 0; c < 7; c++) {
+          var d = cal.addDays(start, w * 7 + c), b = band(d);
+          body += '<td aria-selected="' + selected(d) + '"' + (b ? ' data-range="' + b + '"' : "") + ">" +
+            '<button type="button" class="vin-calendar__day" tabindex="' + (d === tab ? 0 : -1) + '" data-date="' + d + '"' +
+            (inMonth(d) ? "" : " data-outside") + ' aria-label="' + esc(fDay.format(cal.parse(d))) + '"' +
+            (off(d) ? ' aria-disabled="true"' : "") + (d === today ? ' aria-current="date"' : "") + ">" + Number(d.slice(8)) + "</button></td>";
+        }
+        body += "</tr>";
+      }
+      grid.querySelector("thead").innerHTML = head;
+      grid.querySelector("tbody").innerHTML = body;
+      if (focus) { var btn = grid.querySelector('[data-date="' + tab + '"]'); if (btn) btn.focus(); }
+    }
+    function setMonth(m) { month = m; root.setAttribute("data-month", m); }
+    function choose(d) {
+      if (off(d)) return;
+      if (!range) from = d;
+      else if (!from || to) { from = d; to = null; }
+      else if (d < from) { to = from; from = d; }
+      else to = d;
+      root.setAttribute("data-value", range ? from + "/" + (to || "") : from);
+      focusDate = d;
+      if (!inMonth(d)) setMonth(d.slice(0, 7));
+      render(true);
+      root.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { value: range ? { from: from, to: to || undefined } : from } }));
+    }
+
+    Array.prototype.forEach.call(root.querySelectorAll(".vin-calendar__nav"), function (btn, i) {
+      btn.addEventListener("click", function () { setMonth(cal.addMonths(month + "-01", i === 0 ? -1 : 1).slice(0, 7)); render(false); });
+    });
+    grid.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-date]");
+      if (btn && grid.contains(btn)) choose(btn.getAttribute("data-date"));
+    });
+    grid.addEventListener("focusin", function (e) {
+      var d = e.target.getAttribute && e.target.getAttribute("data-date");
+      if (d && inMonth(d)) focusDate = d;
+    });
+    grid.addEventListener("keydown", function (e) {
+      var btn = e.target.closest && e.target.closest("[data-date]");
+      if (!btn) return;
+      var d = btn.getAttribute("data-date"), rtl = getComputedStyle(grid).direction === "rtl";
+      var dow = (cal.parse(d).getUTCDay() - weekStart + 7) % 7;
+      var next = {
+        ArrowRight: cal.addDays(d, rtl ? -1 : 1), ArrowLeft: cal.addDays(d, rtl ? 1 : -1), ArrowDown: cal.addDays(d, 7), ArrowUp: cal.addDays(d, -7),
+        Home: cal.addDays(d, -dow), End: cal.addDays(d, 6 - dow),
+        PageDown: cal.addMonths(d, e.shiftKey ? 12 : 1), PageUp: cal.addMonths(d, e.shiftKey ? -12 : -1),
+      }[e.key];
+      if (!next) return;
+      e.preventDefault();
+      focusDate = next;
+      if (!inMonth(next)) setMonth(next.slice(0, 7));
+      render(true);
+    });
+    render(false);
+    root._vinCalendar = { focus: function () { render(true); } };
+  }
+
+  /* ---------- Date Picker: a button that opens a Calendar in a popover ---------- */
+  function initDatePicker(root) {
+    var trigger = root.querySelector("[popovertarget]");
+    var pop = trigger && document.getElementById(trigger.getAttribute("popovertarget"));
+    var calendar = pop && pop.querySelector(".vin-calendar");
+    var out = root.querySelector(".vin-date-picker__value");
+    var hidden = root.querySelector('input[type="hidden"]');
+    if (!trigger || !pop || !calendar) return;
+    if (!calendar._vinReady) { calendar._vinReady = true; initCalendar(calendar); }
+    var langEl = root.closest("[lang]"), locale = (langEl && langEl.getAttribute("lang")) || "en-US";
+    var fmt = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+    var fmtShort = new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", timeZone: "UTC" });
+    pop.addEventListener("toggle", function (e) {
+      if (e.newState === "open" && calendar._vinCalendar) calendar._vinCalendar.focus();
+    });
+    calendar.addEventListener("vin-change", function (e) {
+      e.stopPropagation();
+      var v = e.detail.value, text, raw;
+      if (typeof v === "string") { text = fmt.format(cal.parse(v)); raw = v; }
+      else if (v.to) { text = (v.from.slice(0, 4) === v.to.slice(0, 4) ? fmtShort : fmt).format(cal.parse(v.from)) + " – " + fmt.format(cal.parse(v.to)); raw = v.from + "/" + v.to; }
+      else return; // a range waits for its second day
+      if (out) { out.textContent = text; out.removeAttribute("data-placeholder"); }
+      if (hidden) hidden.value = raw;
+      pop.hidePopover();
+      trigger.focus();
+      root.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { value: v } }));
+    });
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
     "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
+    "data-vin-combobox": initCombobox, "data-vin-calendar": initCalendar, "data-vin-date-picker": initDatePicker,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

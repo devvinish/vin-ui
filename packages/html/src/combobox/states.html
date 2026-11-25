@@ -1,0 +1,32 @@
+<div style="display: grid; gap: 16px; width: 100%; max-width: 320px">
+  <div class="vin-field">
+    <label class="vin-label" for="cbx-country">Country</label>
+    <div class="vin-combobox" data-vin-combobox>
+      <input id="cbx-country" class="vin-input vin-combobox__input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cbx-country-list" autocomplete="off" placeholder="Search countries…" aria-invalid="true" aria-describedby="cbx-country-error">
+      <div class="vin-select__content vin-combobox__content" popover="manual">
+        <div id="cbx-country-list" role="listbox" aria-label="Country">
+          <div class="vin-select__item" id="cbx-country-opt-0" role="option" aria-selected="false" data-value="au">Australia</div>
+          <div class="vin-select__item" id="cbx-country-opt-1" role="option" aria-selected="false" data-value="ca">Canada</div>
+          <div class="vin-select__item" id="cbx-country-opt-2" role="option" aria-selected="false" data-value="in">India</div>
+          <div class="vin-select__item" id="cbx-country-opt-3" role="option" aria-selected="false" aria-disabled="true" data-value="jp">Japan</div>
+          <div class="vin-select__item" id="cbx-country-opt-4" role="option" aria-selected="false" data-value="gb">United Kingdom</div>
+        </div>
+        <p class="vin-combobox__empty" role="status" hidden>No results.</p>
+      </div>
+    </div>
+    <p class="vin-error" id="cbx-country-error">Choose your country.</p>
+  </div>
+  <div class="vin-field">
+    <label class="vin-label" for="cbx-lang">Language</label>
+    <div class="vin-combobox" data-vin-combobox>
+      <input id="cbx-lang" class="vin-input vin-combobox__input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cbx-lang-list" autocomplete="off" placeholder="Search…" value="English" disabled>
+      <div class="vin-select__content vin-combobox__content" popover="manual">
+        <div id="cbx-lang-list" role="listbox" aria-label="Language">
+          <div class="vin-select__item" id="cbx-lang-opt-0" role="option" aria-selected="true" data-value="en">English</div>
+          <div class="vin-select__item" id="cbx-lang-opt-1" role="option" aria-selected="false" data-value="hi">Hindi</div>
+        </div>
+        <p class="vin-combobox__empty" role="status" hidden>No results.</p>
+      </div>
+    </div>
+  </div>
+</div>

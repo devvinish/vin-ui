@@ -1,0 +1,34 @@
+{
+  "$comment": "Single source of truth for the Calendar API. Every framework package is tested against this file.",
+  "name": "calendar",
+  "title": "Calendar",
+  "category": "Forms",
+  "description": "A month grid for picking a date or a range, with full keyboard support.",
+  "baseClass": "vin-calendar",
+  "classes": ["vin-calendar", "vin-calendar__header", "vin-calendar__title", "vin-calendar__nav", "vin-calendar__grid", "vin-calendar__day"],
+  "dependencies": ["button"],
+  "thumb": "<div style=\"display:grid;grid-template-columns:repeat(7,18px);gap:3px;font-size:10px;text-align:center;color:var(--vin-muted)\"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span style=\"background:var(--vin-accent);color:var(--vin-accent-fg);border-radius:4px\">14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>",
+  "props": {
+    "mode": { "values": ["single", "range"], "default": "single", "html": "data-mode=\"range\"" },
+    "value / defaultValue": { "type": "string | { from, to }", "description": "\"YYYY-MM-DD\", or { from, to } for a range. Strings never shift a day across time zones.", "html": "data-value=\"2026-11-14\" or data-value=\"from/to\"" },
+    "onValueChange": { "type": "(value) => void", "html": "a vin-change event with detail.value" },
+    "month / defaultMonth": { "type": "string", "description": "The month shown, \"YYYY-MM\". Defaults to the chosen date's month, else today's.", "html": "data-month=\"2026-11\"" },
+    "min / max": { "type": "string", "description": "Earliest and latest dates that can be chosen.", "html": "data-min, data-max" },
+    "isDateDisabled": { "type": "(date) => boolean", "description": "Dates that can't be chosen.", "html": "data-disabled-days=\"0,6\" (days of the week, 0 = Sunday)" },
+    "weekStartsOn": { "values": [1, 0], "default": 1, "description": "1 = Monday, 0 = Sunday.", "html": "data-week-start=\"0\"" },
+    "locale": { "type": "string", "default": "en-US", "description": "Month and day names.", "html": "the nearest lang attribute" }
+  },
+  "react": { "components": ["Calendar"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Click a day, or use the arrow keys and Enter. In HTML, add data-vin-calendar and include vinui.js once." },
+    { "id": "range", "title": "Range", "description": "The first click starts the range, the second ends it." },
+    { "id": "limits", "title": "Limits", "description": "Only weekdays between two dates, with weeks starting on Sunday." }
+  ],
+  "a11y": [
+    "Follows the WAI-ARIA date grid pattern: a table with role=\"grid\", labelled by the month, with the chosen days marked aria-selected.",
+    "Only one day takes Tab; arrow keys move by day and week, Home and End to the start and end of the week, PageUp and PageDown by month (with Shift, by year).",
+    "Every day has a full label (\"Saturday, November 14, 2026\"), today is marked aria-current=\"date\", and the month name is announced when it changes.",
+    "Days that can't be chosen stay focusable (aria-disabled), so keyboard users can move past them.",
+    "Arrow keys follow the reading direction in right-to-left pages."
+  ]
+}

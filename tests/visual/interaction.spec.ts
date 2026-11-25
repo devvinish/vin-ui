@@ -5,6 +5,7 @@ import { test, expect, type Page } from "@playwright/test";
  * HTML (driven by vinui.js) and React (hydrated islands). Same keys, same results.
  */
 const ready = async (page: Page, name: string) => {
+  await page.clock.setFixedTime(new Date("2026-11-25T10:00:00"));
   await page.goto(`/ui/fixtures/${name}/?style=precision&mode=light`);
   await page.waitForFunction(() => !document.querySelector("astro-island[ssr]"));
 };
@@ -447,6 +448,134 @@ for (const side of ["html", "react"] as const) {
       await expect(t).toHaveCount(0);
       await page.locator(`[data-fixture="${side}-variants"]`).getByRole("button", { name: "Error" }).click();
       await expect(page.locator(".vin-toaster").getByRole("alert")).toContainText("Upload failed");
+    });
+
+    test("combobox: typing filters, arrows move, Enter chooses, blur restores", async ({ page }) => {
+      await ready(page, "combobox");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const input = root.getByRole("combobox", { name: "Framework" });
+      const active = async () => page.locator(`#${await input.getAttribute("aria-activedescendant")}`);
+      await input.click();
+      await expect(input).toHaveAttribute("aria-expanded", "true");
+      await input.press("Escape");
+      await input.pressSequentially("ne");
+      await expect(input).toHaveAttribute("aria-expanded", "true");
+      const list = page.getByRole("listbox", { name: "Framework" }).filter({ visible: true });
+      await expect(list.getByRole("option")).toHaveText(["Next.js"]);
+      await input.fill("s");
+      await expect(list.getByRole("option")).toHaveText(["Astro", "Next.js", "SolidStart", "SvelteKit"]);
+      await expect(await active()).toHaveText("Astro");
+      await input.press("ArrowDown");
+      await expect(await active()).toHaveText("Next.js");
+      await input.press("End");
+      await input.press("ArrowDown");
+      await input.press("ArrowDown");
+      await input.press("Enter");
+      await expect(input).toHaveAttribute("aria-expanded", "false");
+      await expect(input).toHaveValue("SvelteKit");
+      await expect(root.locator('input[type="hidden"]')).toHaveValue("sveltekit");
+      // Nothing matches: a status message.
+      await input.fill("zzz");
+      await expect(page.locator(".vin-combobox__empty").filter({ visible: true })).toHaveText("No results.");
+      // Leaving restores the chosen option's text.
+      await input.press("Tab");
+      await expect(input).toHaveValue("SvelteKit");
+      // Escape on a closed field clears it.
+      await input.focus();
+      await input.press("Escape");
+      await expect(input).toHaveValue("");
+      // Disabled options can't be chosen; groups hide when empty.
+      const tz = page.locator(`[data-fixture="${side}-groups"]`).getByRole("combobox", { name: "Time zone" });
+      await expect(tz).toHaveValue("London");
+      await tz.fill("pa");
+      const tzList = page.getByRole("listbox", { name: "Time zone" }).filter({ visible: true });
+      await expect(tzList.getByRole("option")).toHaveText(["Paris", "São Paulo"]);
+      await expect(tzList.getByRole("group")).toHaveCount(2);
+      await tzList.getByRole("option", { name: "São Paulo" }).click();
+      await expect(tz).toHaveValue("São Paulo");
+      await expect(tz).toBeFocused();
+    });
+
+    test("calendar: arrows, Home/End, PageDown change the day and month; Enter chooses", async ({ page }) => {
+      await ready(page, "calendar");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const grid = root.getByRole("grid");
+      await expect(grid).toHaveAccessibleName("November 2026");
+      const chosen = root.getByRole("button", { name: "Saturday, November 14, 2026" });
+      await expect(chosen).toHaveAttribute("tabindex", "0");
+      await expect(root.getByRole("button", { name: "Wednesday, November 25, 2026" })).toHaveAttribute("aria-current", "date");
+      await chosen.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(root.getByRole("button", { name: "Sunday, November 15, 2026" })).toBeFocused();
+      await page.keyboard.press("Home");
+      await expect(root.getByRole("button", { name: "Monday, November 9, 2026" })).toBeFocused();
+      await page.keyboard.press("End");
+      await expect(root.getByRole("button", { name: "Sunday, November 15, 2026" })).toBeFocused();
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("ArrowDown");
+      await expect(root.locator(".vin-calendar__title")).toHaveText("December 2026");
+      await expect(root.getByRole("button", { name: "Sunday, December 6, 2026" })).toBeFocused();
+      await page.keyboard.press("PageUp");
+      await expect(root.locator(".vin-calendar__title")).toHaveText("November 2026");
+      await expect(root.getByRole("button", { name: "Friday, November 6, 2026" })).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(root.locator('td[aria-selected="true"]')).toHaveCount(1);
+      await expect(root.locator('td[aria-selected="true"] button')).toHaveAccessibleName("Friday, November 6, 2026");
+      await root.getByRole("button", { name: "Next month" }).click();
+      await expect(root.locator(".vin-calendar__title")).toHaveText("December 2026");
+    });
+
+    test("calendar: a range takes two clicks; limits can't be chosen", async ({ page }) => {
+      await ready(page, "calendar");
+      const range = page.locator(`[data-fixture="${side}-range"]`);
+      await expect(range.locator('td[aria-selected="true"]')).toHaveCount(7);
+      await range.getByRole("button", { name: "Tuesday, November 17, 2026" }).click();
+      await expect(range.locator('td[aria-selected="true"]')).toHaveCount(1);
+      await range.getByRole("button", { name: "Friday, November 20, 2026" }).click();
+      await expect(range.locator('td[aria-selected="true"]')).toHaveCount(4);
+      await expect(range.locator('td[data-range="start"] button')).toHaveText("17");
+      await expect(range.locator('td[data-range="end"] button')).toHaveText("20");
+      const limits = page.locator(`[data-fixture="${side}-limits"]`);
+      await expect(limits.locator("th").first()).toHaveText("Sun");
+      const weekend = limits.getByRole("button", { name: "Saturday, November 21, 2026" });
+      await expect(weekend).toHaveAttribute("aria-disabled", "true");
+      await weekend.click({ force: true });
+      await expect(limits.locator('td[aria-selected="true"] button')).toHaveText("18");
+    });
+
+    test("date picker: opens on the chosen day, choosing closes and updates the field", async ({ page }) => {
+      await ready(page, "date-picker");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const trigger = root.locator(".vin-date-picker__trigger");
+      await expect(trigger).toHaveAccessibleName("Due date Nov 14, 2026");
+      await trigger.click();
+      const dialog = page.getByRole("dialog", { name: "Choose due date" }).filter({ visible: true });
+      await expect(dialog).toBeVisible();
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
+      await expect(dialog.getByRole("button", { name: "Saturday, November 14, 2026" })).toBeFocused();
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("Enter");
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+      await expect(trigger).toHaveAccessibleName("Due date Nov 15, 2026");
+      await expect(root.locator('input[type="hidden"]')).toHaveValue("2026-11-15");
+      // Escape closes without changing it.
+      await trigger.click();
+      await expect(dialog).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(root.locator('input[type="hidden"]')).toHaveValue("2026-11-15");
+      // A range updates the field when both ends are chosen.
+      const trip = page.locator(`[data-fixture="${side}-range"]`);
+      await trip.getByRole("button", { name: /Trip dates/ }).click();
+      const tripDialog = page.getByRole("dialog", { name: "Choose trip dates" }).filter({ visible: true });
+      await tripDialog.getByRole("button", { name: "Monday, November 2, 2026" }).click();
+      await expect(tripDialog).toBeVisible();
+      await tripDialog.getByRole("button", { name: "Thursday, November 5, 2026" }).click();
+      await expect(tripDialog).toBeHidden();
+      await expect(trip.locator(".vin-date-picker__value")).toHaveText("Nov 2 – Nov 5, 2026");
+      await expect(trip.locator('input[type="hidden"]')).toHaveValue("2026-11-02/2026-11-05");
     });
 
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {

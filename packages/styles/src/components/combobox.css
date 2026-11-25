@@ -1,0 +1,34 @@
+/* ==========================================================================
+   VinUI · Combobox
+   API (see spec/combobox.json):
+     .vin-combobox[data-vin-combobox]
+       > input.vin-input.vin-combobox__input[role=combobox][aria-controls="list-id"]
+       > .vin-select__content.vin-combobox__content[popover]          the list's panel (top layer)
+           > [role=listbox]#list-id
+               > .vin-select__item[role=option]                     options (Select's look)
+               > .vin-combobox__group[role=group] > .vin-combobox__label + options
+           > p.vin-combobox__empty[role=status]                     "No results"
+       > input[type=hidden]                                         the value, for forms
+   Options use Select's classes, so both look the same in every style.
+   ========================================================================== */
+
+.vin-combobox { position: relative; min-width: 0; }
+.vin-input.vin-combobox__input {
+  width: 100%; padding-inline-end: calc(var(--vin-px-md) + 14px);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--vin-muted) 50%),
+    linear-gradient(135deg, var(--vin-muted) 50%, transparent 50%);
+  background-size: 5px 5px, 5px 5px;
+  background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+  background-repeat: no-repeat;
+}
+[dir="rtl"] .vin-input.vin-combobox__input { background-position: 12px 50%, 17px 50%; }
+.vin-combobox__content [role="listbox"] { outline: none; }
+.vin-combobox__content .vin-select__item[hidden], .vin-combobox__group[hidden] { display: none; }
+.vin-combobox__group + .vin-combobox__group, .vin-select__item + .vin-combobox__group { margin-top: 4px; }
+.vin-combobox__label {
+  padding: 6px 10px 4px; font-size: 12px; font-weight: var(--vin-title-weight); line-height: 1.3;
+  color: var(--vin-muted); user-select: none;
+}
+.vin-combobox__empty { margin: 0; padding: 10px; font-size: calc(var(--vin-text-md) - 1px); color: var(--vin-muted); text-align: center; }
+.vin-combobox__empty[hidden] { display: none; }

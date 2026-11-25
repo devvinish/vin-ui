@@ -1,0 +1,17 @@
+/* ==========================================================================
+   VinUI · Date Picker
+   API (see spec/date-picker.json):
+     .vin-date-picker[data-vin-date-picker]
+       > button.vin-input.vin-date-picker__trigger[popovertarget] > svg.vin-date-picker__icon + .vin-date-picker__value
+       > .vin-popover.vin-date-picker__content[popover][role=dialog] > .vin-calendar
+       > input[type=hidden]
+   The popover and the calendar are the Popover and Calendar components.
+   ========================================================================== */
+
+.vin-date-picker { position: relative; min-width: 0; }
+.vin-input.vin-date-picker__trigger { display: flex; align-items: center; gap: 8px; width: 100%; text-align: start; cursor: pointer; }
+.vin-date-picker__trigger:disabled { cursor: not-allowed; }
+.vin-date-picker__icon { flex: none; width: 16px; height: 16px; color: var(--vin-muted); }
+.vin-date-picker__value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vin-date-picker__value[data-placeholder] { color: color-mix(in srgb, var(--vin-muted) 85%, var(--vin-fg)); }
+.vin-popover.vin-date-picker__content { width: auto; max-width: calc(100vw - 16px); padding: 10px; }
