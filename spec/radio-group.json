@@ -1,0 +1,33 @@
+{
+  "$comment": "Single source of truth for the Radio Group API. Every framework package is tested against this file.",
+  "name": "radio-group",
+  "title": "Radio Group",
+  "category": "Forms",
+  "description": "Pick exactly one option from a short list.",
+  "baseClass": "vin-radio-group",
+  "classes": ["vin-radio-group", "vin-radio-group--horizontal", "vin-radio-group--cards", "vin-radio-group__legend", "vin-radio"],
+  "thumb": "<div style=\"display:grid;gap:10px\"><span class=\"vin-choice\"><input class=\"vin-radio\" type=\"radio\" name=\"thumb-r\" checked aria-label=\"Daily\"><span class=\"vin-choice__body\"><span class=\"vin-choice__label\">Daily</span></span></span><span class=\"vin-choice\"><input class=\"vin-radio\" type=\"radio\" name=\"thumb-r\" aria-label=\"Weekly\"><span class=\"vin-choice__body\"><span class=\"vin-choice__label\">Weekly</span></span></span></div>",
+  "props": {
+    "label": { "type": "ReactNode", "description": "The group's name, shown as the legend.", "html": "<legend class=\"vin-radio-group__legend\">" },
+    "options": { "type": "(string | { value, label, description?, disabled? })[]", "description": "The choices.", "html": ".vin-choice > input.vin-radio per option" },
+    "value / defaultValue": { "type": "string", "description": "The chosen value (controlled or not). Use onValueChange to hear about changes.", "html": "checked attribute" },
+    "name": { "type": "string", "description": "Form field name. Generated if you leave it out.", "html": "name attribute (the same on every radio)" },
+    "orientation": { "values": ["vertical", "horizontal"], "default": "vertical", "class": "vin-radio-group--horizontal" },
+    "variant": { "values": ["default", "cards"], "default": "default", "class": "vin-radio-group--cards" },
+    "error": { "type": "ReactNode", "description": "An error message. Also marks the radios invalid.", "html": "<p class=\"vin-error\"> + aria-describedby on the fieldset" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled on the fieldset, or on one radio" }
+  },
+  "react": { "components": ["RadioGroup"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Native radios in a fieldset. The legend names the group, and ↑ ↓ move between options with no JavaScript. Uses the same label layout as Checkbox." },
+    { "id": "horizontal", "title": "Horizontal", "description": "Short options can sit in a row. A disabled option stays readable." },
+    { "id": "cards", "title": "Cards", "description": "Bigger targets with a description each, for plans and other important choices. The whole card is clickable." }
+  ],
+  "a11y": [
+    "Native <input type=\"radio\"> with one shared name: arrow keys move and select, Tab enters and leaves the group.",
+    "A <fieldset> with a <legend> gives the group its name.",
+    "Every radio has a <label for>; descriptions are linked with aria-describedby.",
+    "In cards, the label covers the whole card, so the click target is large and still one labelled control.",
+    "Visible focus ring in every style and mode."
+  ]
+}

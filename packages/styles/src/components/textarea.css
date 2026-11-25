@@ -1,0 +1,14 @@
+/* ==========================================================================
+   VinUI · Textarea
+   API (see spec/textarea.json):
+     .vin-field > .vin-label + textarea.vin-input.vin-textarea + .vin-textarea__foot
+       > .vin-hint + .vin-textarea__count
+     .vin-textarea--auto               grows with its content (up to --vin-textarea-max)
+     .vin-textarea__count[data-over]   over the limit
+   ========================================================================== */
+
+.vin-input.vin-textarea { min-height: calc(var(--vin-h-md) * 2.4); }
+.vin-input.vin-textarea--auto { --vin-textarea-max: 260px; field-sizing: content; resize: none; max-height: var(--vin-textarea-max); overflow-y: auto; }
+.vin-textarea__foot { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-width: 0; }
+.vin-textarea__count { flex: none; margin: 0 0 0 auto; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.4; font-variant-numeric: tabular-nums; color: var(--vin-muted); }
+.vin-textarea__count[data-over] { color: var(--vin-danger-text); font-weight: var(--vin-weight); }

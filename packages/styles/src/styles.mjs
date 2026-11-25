@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -76,6 +76,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 
@@ -123,6 +127,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 
@@ -171,6 +179,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 
@@ -216,6 +228,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 
@@ -253,7 +269,7 @@ export const STYLES = [
 & .vin-card { border-top: 2px solid var(--vin-fg); }
 & .vin-card__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 10px); line-height: 1.1; }`,
       input: `
-& .vin-label { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--vin-muted); }
+& :is(.vin-label, .vin-radio-group__legend) { text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em; color: var(--vin-muted); }
 & .vin-input { border-width: 0 0 1px; border-radius: 0; padding-left: 0; background-color: transparent; }
 & .vin-input:focus { box-shadow: inset 0 -1px 0 var(--vin-fg); }
 & textarea.vin-input { border-width: 1px; padding-left: 10px; }`,
@@ -262,6 +278,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 
@@ -301,12 +321,17 @@ export const STYLES = [
 & .vin-card__title::before { content: "# "; color: var(--vin-accent-text); }`,
       input: `
 & .vin-input { border-style: dashed; }
-& .vin-label::before { content: "$ "; color: var(--vin-accent-text); }`,
+& :is(.vin-label, .vin-radio-group__legend)::before { content: "$ "; color: var(--vin-accent-text); }`,
       checkbox: "",
       switch: "",
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": `
+& .vin-btn-group > .vin-btn::after, & .vin-btn-group > :is(.vin-btn--outline, .vin-btn--secondary, .vin-btn--ghost)::before { content: none; }`,
     },
   },
 
@@ -357,6 +382,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 
@@ -396,6 +425,10 @@ export const STYLES = [
       "native-select": "",
       select: "",
       tabs: "",
+      "radio-group": "",
+      textarea: "",
+      toggle: "",
+      "button-group": "",
     },
   },
 ];

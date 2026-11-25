@@ -1,0 +1,34 @@
+/* ==========================================================================
+   VinUI · Toggle
+   API (see spec/toggle.json):
+     button.vin-toggle[aria-pressed]     on/off button
+     .vin-toggle--outline                 with a border
+     .vin-toggle--{sm|lg|icon}            sizes; icon = square
+   ========================================================================== */
+
+.vin-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: .45em;
+  box-sizing: border-box; flex: none;
+  height: var(--vin-h-md); padding: 0 calc(var(--vin-px-md) - 4px);
+  font: inherit; font-family: var(--vin-font); font-size: var(--vin-text-md); font-weight: var(--vin-weight);
+  line-height: 1; white-space: nowrap;
+  color: color-mix(in srgb, var(--vin-muted), var(--vin-fg) 25%);
+  background: transparent;
+  border: var(--vin-bw) solid transparent; border-radius: var(--vin-radius);
+  cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--vin-dur), color var(--vin-dur), box-shadow var(--vin-dur), border-color var(--vin-dur);
+}
+.vin-toggle:hover { color: var(--vin-fg); background: color-mix(in srgb, var(--vin-fg) 6%, transparent); }
+.vin-toggle[aria-pressed="true"] { color: var(--vin-fg); background: color-mix(in srgb, var(--vin-accent) 16%, transparent); }
+.vin-toggle:focus-visible { outline: none; box-shadow: var(--vin-focus); }
+.vin-toggle:disabled { opacity: .5; cursor: not-allowed; pointer-events: none; }
+.vin-toggle svg { width: 1.15em; height: 1.15em; flex: none; }
+
+.vin-toggle--outline { border-color: var(--vin-border); box-shadow: var(--vin-outline-shadow); }
+.vin-toggle--outline[aria-pressed="true"] { border-color: color-mix(in srgb, var(--vin-accent) 55%, var(--vin-border)); }
+
+.vin-toggle--sm { height: var(--vin-h-sm); padding: 0 calc(var(--vin-px-sm) - 4px); font-size: var(--vin-text-sm); }
+.vin-toggle--lg { height: var(--vin-h-lg); padding: 0 calc(var(--vin-px-lg) - 6px); font-size: var(--vin-text-lg); }
+.vin-toggle--icon { width: var(--vin-h-md); padding: 0; }
+.vin-toggle--icon.vin-toggle--sm { width: var(--vin-h-sm); }
+.vin-toggle--icon.vin-toggle--lg { width: var(--vin-h-lg); }

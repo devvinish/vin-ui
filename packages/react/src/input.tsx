@@ -1,7 +1,7 @@
 import * as React from "react";
 
 /*
- * VinUI · Input (React): Input, Textarea, Label and Field.
+ * VinUI · Input (React): Input, Label and Field. For a full Textarea (count, auto-grow), see textarea.tsx.
  * API: spec/input.json. Field wires up the label, hint and error for you.
  */
 
@@ -24,11 +24,6 @@ export function Input({ size, className, ...rest }: InputProps) {
     console.warn("VinUI Input: give it an id with a matching <Label htmlFor>, an aria-label, or use <Field label>.");
   }
   return <input {...rest} className={inputClasses({ size, className })} />;
-}
-
-export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & { ref?: React.Ref<HTMLTextAreaElement> };
-export function Textarea({ className, ...rest }: TextareaProps) {
-  return <textarea {...rest} className={cx("vin-input", className)} />;
 }
 
 export function Label({ className, ...rest }: React.LabelHTMLAttributes<HTMLLabelElement>) {
@@ -67,7 +62,7 @@ export function Field({ label, hint, error, multiline, rows, id, className, styl
     <div className={cx("vin-field", className)} style={style}>
       <Label htmlFor={inputId}>{label}</Label>
       {multiline ? (
-        <Textarea {...(rest as TextareaProps)} {...control} rows={rows} />
+        <textarea {...(rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>)} {...control} rows={rows} className="vin-input" />
       ) : (
         <Input {...rest} {...control} size={size} />
       )}

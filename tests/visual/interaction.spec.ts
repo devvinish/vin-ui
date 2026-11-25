@@ -86,6 +86,53 @@ for (const side of ["html", "react"] as const) {
       await expect(tab("Overview")).toHaveAttribute("tabindex", "-1");
     });
 
+    test("radio group: arrow keys move the choice; disabled options are skipped", async ({ page }) => {
+      await ready(page, "radio-group");
+      const root = page.locator(`[data-fixture="${side}-horizontal"]`);
+      const m = root.getByRole("radio", { name: "M", exact: true });
+      await m.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(root.getByRole("radio", { name: "L", exact: true })).toBeChecked();
+      await page.keyboard.press("ArrowRight"); // XL is disabled: wraps to S
+      await expect(root.getByRole("radio", { name: "S", exact: true })).toBeChecked();
+      const cards = page.locator(`[data-fixture="${side}-cards"]`);
+      // The label stretches over the whole card: a click anywhere on it (here, on the description) selects.
+      const box = (await cards.getByText("Single sign-on and priority support.").boundingBox())!;
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await expect(cards.getByRole("radio", { name: "Enterprise" })).toBeChecked();
+    });
+
+    test("textarea: the count follows the text and marks the limit", async ({ page }) => {
+      await ready(page, "textarea");
+      const root = page.locator(`[data-fixture="${side}-count"]`);
+      const ta = root.getByRole("textbox", { name: "Bio" });
+      const count = root.locator(".vin-textarea__count");
+      await expect(count).toHaveText("32 / 160");
+      await ta.fill("Hi");
+      await expect(count).toHaveText("2 / 160");
+      await expect(count).not.toHaveAttribute("data-over");
+      await ta.fill("x".repeat(160));
+      await expect(count).toHaveText("160 / 160");
+      await expect(count).toHaveAttribute("data-over", "");
+      const auto = page.locator(`[data-fixture="${side}-auto"]`).getByRole("textbox", { name: "Notes" });
+      const h0 = await auto.evaluate((e) => e.getBoundingClientRect().height);
+      await auto.fill("one\ntwo\nthree\nfour\nfive");
+      const h1 = await auto.evaluate((e) => e.getBoundingClientRect().height);
+      expect(h1).toBeGreaterThan(h0 + 30);
+    });
+
+    test("toggle: click and Space flip aria-pressed; disabled stays put", async ({ page }) => {
+      await ready(page, "toggle");
+      const root = page.locator(`[data-fixture="${side}-icons"]`);
+      const italic = root.getByRole("button", { name: "Italic" });
+      await expect(italic).toHaveAttribute("aria-pressed", "false");
+      await italic.click();
+      await expect(italic).toHaveAttribute("aria-pressed", "true");
+      await page.keyboard.press("Space");
+      await expect(italic).toHaveAttribute("aria-pressed", "false");
+      await expect(page.locator(`[data-fixture="${side}-outline"]`).getByRole("button", { name: "Locked" })).toBeDisabled();
+    });
+
     test("checkbox and switch toggle with the label and Space", async ({ page }) => {
       await ready(page, "switch");
       const root = page.locator(`[data-fixture="${side}-basic"]`);

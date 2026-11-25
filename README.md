@@ -8,7 +8,7 @@ npx @vinish/ui init
 npx @vinish/ui add button
 ```
 
-> Status: **Phase 1 in progress**. Ready in all 8 styles, HTML and React: Button, Badge, Card, Input, Checkbox, Switch, Native Select, Select, Tabs. Select and Tabs in plain HTML need `vinui.js` (one small script). Roadmap: 62 components (39 in Phase 1, 23 in Phase 2 including AI chat), listed in `apps/docs/src/data/components.ts`.
+> Status: **Phase 1 in progress**. Ready in all 8 styles, HTML and React: Button, Button Group, Toggle, Badge, Card, Input, Textarea, Checkbox, Radio Group, Switch, Native Select, Select, Tabs. Select, Tabs, Toggle and the Textarea count need `vinui.js` (one small script) in plain HTML. Roadmap: 63 components (40 in Phase 1, 23 in Phase 2 including AI chat), listed in `apps/docs/src/data/components.ts`.
 
 ## How it works
 

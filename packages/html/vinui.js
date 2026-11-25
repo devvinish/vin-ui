@@ -1,8 +1,9 @@
 /*! VinUI behaviours | MIT | vinish.dev/ui
  * Adds keyboard and mouse behaviour to the HTML versions of the interactive components.
  * Include once, anywhere:  <script src="vinui.js" defer></script>
- * It finds [data-vin-tabs] and [data-vin-select] on load. For markup added later, call VinUI.init(element).
- * Components that need no JavaScript (Button, Checkbox, Switch, Native Select…) don't use it.
+ * It finds elements with data-vin-tabs, -select, -toggle and -textarea on load. For markup added later, call VinUI.init(element).
+ * Used by: Tabs, Select, Toggle, Textarea (count and auto-grow). Components that need no
+ * JavaScript (Button, Checkbox, Radio Group, Switch, Native Select…) don't use it.
  */
 (function () {
   "use strict";
@@ -140,7 +141,36 @@
     });
   }
 
-  var KINDS = { "data-vin-tabs": initTabs, "data-vin-select": initSelect };
+  /* ---------------- Toggle: flips aria-pressed ---------------- */
+  function initToggle(btn) {
+    btn.addEventListener("click", function () {
+      var on = btn.getAttribute("aria-pressed") !== "true";
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.dispatchEvent(new CustomEvent("vin-change", { bubbles: true, detail: { pressed: on } }));
+    });
+  }
+
+  /* ---------------- Textarea: character count and auto-grow ---------------- */
+  var canFieldSize = typeof CSS !== "undefined" && CSS.supports && CSS.supports("field-sizing", "content");
+  function initTextarea(ta) {
+    var count = document.getElementById(ta.getAttribute("data-vin-textarea"));
+    var max = parseInt(ta.getAttribute("maxlength"), 10);
+    function update() {
+      if (count && max) {
+        count.textContent = ta.value.length + " / " + max;
+        count.toggleAttribute("data-over", ta.value.length >= max);
+      }
+      if (!canFieldSize && ta.classList.contains("vin-textarea--auto")) {
+        ta.style.height = "auto";
+        var cs = getComputedStyle(ta);
+        ta.style.height = ta.scrollHeight + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth) + "px";
+      }
+    }
+    ta.addEventListener("input", update);
+    update();
+  }
+
+  var KINDS = { "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea };
 
   function init(scope) {
     scope = scope || document;

@@ -15,7 +15,7 @@
     "multiline (Field)": { "type": "boolean", "default": false, "description": "Field only: render a textarea.", "html": "<textarea class=\"vin-input\">" },
     "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
   },
-  "react": { "components": ["Field", "Input", "Textarea", "Label"] },
+  "react": { "components": ["Field", "Input", "Label"] },
   "examples": [
     { "id": "basic", "title": "Basic", "description": "Field connects the label, the input and the hint for you. In HTML, match the for/id and aria-describedby yourself." },
     { "id": "sizes", "title": "Sizes", "description": "Three heights that line up with the Button sizes. Inputs without a visible label need an aria-label." },

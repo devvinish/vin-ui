@@ -1,0 +1,30 @@
+/* ==========================================================================
+   VinUI · Button Group
+   API (see spec/button-group.json):
+     .vin-btn-group[role=group] > .vin-btn ...   buttons joined into one control
+     .vin-btn-group--vertical                    stacked
+   ========================================================================== */
+
+.vin-btn-group { display: inline-flex; align-items: stretch; isolation: isolate; max-width: 100%; }
+.vin-btn-group > .vin-btn { position: relative; }
+.vin-btn-group > .vin-btn:hover, .vin-btn-group > .vin-btn:focus-visible { z-index: 1; }
+/* Joined buttons stay put: no per-style lift, tilt or press movement. */
+.vin-btn-group.vin-btn-group > .vin-btn:is(:hover, :active) { transform: none; }
+
+.vin-btn-group:not(.vin-btn-group--vertical) > .vin-btn:not(:last-child) { border-start-end-radius: 0; border-end-end-radius: 0; }
+.vin-btn-group:not(.vin-btn-group--vertical) > .vin-btn:not(:first-child) { border-start-start-radius: 0; border-end-start-radius: 0; margin-inline-start: calc(-1 * var(--vin-bw)); }
+
+.vin-btn-group--vertical { flex-direction: column; }
+/* Pill-shaped styles (Tonal) would become a capsule when stacked: use the normal radius. */
+.vin-btn-group--vertical.vin-btn-group > .vin-btn { border-radius: var(--vin-radius); }
+.vin-btn-group--vertical > .vin-btn:not(:last-child) { border-end-start-radius: 0; border-end-end-radius: 0; }
+.vin-btn-group--vertical > .vin-btn:not(:first-child) { border-start-start-radius: 0; border-start-end-radius: 0; margin-top: calc(-1 * var(--vin-bw)); }
+
+/* Filled buttons (primary, danger) next to each other get a thin divider. */
+.vin-btn-group > .vin-btn:not(.vin-btn--secondary, .vin-btn--outline, .vin-btn--ghost) + .vin-btn:not(.vin-btn--secondary, .vin-btn--outline, .vin-btn--ghost)::before {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: calc(-1 * var(--vin-bw)); width: 1px;
+  background: color-mix(in srgb, var(--vin-primary-fg) 38%, transparent);
+}
+.vin-btn-group--vertical > .vin-btn:not(.vin-btn--secondary, .vin-btn--outline, .vin-btn--ghost) + .vin-btn:not(.vin-btn--secondary, .vin-btn--outline, .vin-btn--ghost)::before {
+  inset-block: auto; top: calc(-1 * var(--vin-bw)); inset-inline: 0; width: auto; height: 1px;
+}

@@ -1,0 +1,47 @@
+/* ==========================================================================
+   VinUI · Radio Group
+   API (see spec/radio-group.json):
+     fieldset.vin-radio-group > legend.vin-radio-group__legend
+       + .vin-choice > input[type=radio].vin-radio + .vin-choice__body (see Checkbox)
+     .vin-radio-group--horizontal     options in a row
+     .vin-radio-group--cards          each option is a bordered card
+   Native radios: arrow keys move between options with no JavaScript.
+   ========================================================================== */
+
+.vin-radio-group { display: grid; gap: 10px; min-width: 0; margin: 0; padding: 0; border: 0; font-family: var(--vin-font); }
+.vin-radio-group__legend { float: left; width: 100%; padding: 0; margin: 0 0 4px; font-size: calc(var(--vin-text-md) - 1px); font-weight: var(--vin-weight); line-height: 1.3; color: var(--vin-fg); }
+.vin-radio-group__legend + * { clear: left; }
+.vin-radio-group--horizontal { display: flex; flex-wrap: wrap; column-gap: 20px; row-gap: 10px; }
+
+.vin-radio {
+  appearance: none; flex: none; box-sizing: border-box;
+  width: 18px; height: 18px; margin: 1px 0 0;
+  display: inline-grid; place-content: center;
+  background: var(--vin-input-bg);
+  border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 32%);
+  border-radius: 50%;
+  box-shadow: var(--vin-input-shadow);
+  cursor: pointer;
+  transition: background var(--vin-dur) var(--vin-ease), border-color var(--vin-dur), box-shadow var(--vin-dur);
+}
+.vin-radio::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--vin-primary-fg); transform: scale(0); transition: transform var(--vin-dur) var(--vin-ease); }
+.vin-radio:checked { background: var(--vin-primary-bg); background-origin: border-box; border-color: transparent; box-shadow: none; }
+.vin-radio:checked::before { transform: scale(1); }
+.vin-radio:focus-visible { outline: none; box-shadow: var(--vin-input-shadow), var(--vin-focus); }
+.vin-radio:checked:focus-visible { box-shadow: var(--vin-focus); }
+.vin-radio[aria-invalid="true"] { border-color: var(--vin-danger); box-shadow: 0 0 0 1px var(--vin-danger); }
+.vin-radio:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Cards: the whole card is the click target (the label stretches over it). */
+.vin-radio-group--cards .vin-choice {
+  position: relative; padding: 12px 14px;
+  background: var(--vin-surface);
+  border: max(var(--vin-bw), 1px) solid var(--vin-border);
+  border-radius: var(--vin-radius);
+  transition: border-color var(--vin-dur), box-shadow var(--vin-dur);
+}
+.vin-radio-group--cards .vin-choice__label::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.vin-radio-group--cards .vin-choice:has(.vin-radio:checked) { border-color: var(--vin-accent); box-shadow: 0 0 0 1px var(--vin-accent); }
+.vin-radio-group--cards .vin-choice:has(.vin-radio:disabled) { opacity: .6; }
+.vin-radio-group--cards .vin-choice:has(.vin-radio:disabled) .vin-choice__label { opacity: 1; }
+.vin-radio-group > .vin-error { flex-basis: 100%; }

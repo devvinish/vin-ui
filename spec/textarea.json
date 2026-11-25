@@ -1,0 +1,31 @@
+{
+  "$comment": "Single source of truth for the Textarea API. Every framework package is tested against this file.",
+  "name": "textarea",
+  "title": "Textarea",
+  "category": "Forms",
+  "description": "Multi-line text with a label, a character count and optional auto-grow.",
+  "baseClass": "vin-textarea",
+  "classes": ["vin-textarea", "vin-textarea--auto", "vin-textarea__foot", "vin-textarea__count"],
+  "thumb": "<div class=\"vin-field\" style=\"width:200px\"><span class=\"vin-label\">Bio</span><span class=\"vin-input vin-textarea\" style=\"display:block;min-height:58px;padding-top:8px;color:var(--vin-muted)\">A few words…</span><div class=\"vin-textarea__foot\"><span class=\"vin-textarea__count\">0 / 160</span></div></div>",
+  "props": {
+    "label": { "type": "ReactNode", "description": "Visible label. Without it, pass an aria-label.", "html": "<label class=\"vin-label\" for=\"…\">" },
+    "hint": { "type": "ReactNode", "description": "Help text under the field.", "html": "<p class=\"vin-hint\"> inside .vin-textarea__foot" },
+    "error": { "type": "ReactNode", "description": "An error message. Also marks the textarea invalid.", "html": "<p class=\"vin-error\"> + aria-invalid=\"true\"" },
+    "maxLength": { "type": "number", "description": "Limit, shown as a count under the field.", "html": "maxlength + data-vin-textarea=\"<count id>\" + vinui.js" },
+    "showCount": { "type": "boolean", "description": "Show the count. On by default when maxLength is set.", "html": "<p class=\"vin-textarea__count\">" },
+    "autoResize": { "type": "boolean", "default": false, "description": "Grow with the text, up to 260px, then scroll.", "class": "vin-textarea--auto" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["Textarea"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A textarea with the Input classes plus vin-textarea, a label and a hint." },
+    { "id": "count", "title": "Character count", "description": "Set maxLength and the count appears. It turns red when the limit is reached. In HTML, add data-vin-textarea with the count's id and include vinui.js." },
+    { "id": "auto", "title": "Auto-grow", "description": "Grows as you type instead of showing a scrollbar, then scrolls after 260px. Pure CSS in modern browsers, with a JavaScript fallback for the rest." }
+  ],
+  "a11y": [
+    "Every textarea has a label: a <label for> or an aria-label.",
+    "Hint, error and count are linked with aria-describedby, so they are read with the field.",
+    "The count is not a live region, so screen readers aren't interrupted on every key; it is read when the field gets focus.",
+    "An error sets aria-invalid=\"true\" and is shown as text."
+  ]
+}

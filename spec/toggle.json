@@ -1,0 +1,28 @@
+{
+  "$comment": "Single source of truth for the Toggle API. Every framework package is tested against this file.",
+  "name": "toggle",
+  "title": "Toggle",
+  "category": "Actions",
+  "description": "A button that stays pressed until you press it again.",
+  "baseClass": "vin-toggle",
+  "classes": ["vin-toggle", "vin-toggle--outline", "vin-toggle--sm", "vin-toggle--lg", "vin-toggle--icon"],
+  "thumb": "<span class=\"vin-toggle vin-toggle--outline vin-toggle--icon\" aria-pressed=\"true\" style=\"font-weight:700\">B</span><span class=\"vin-toggle vin-toggle--outline vin-toggle--icon\" style=\"font-style:italic\">I</span><span class=\"vin-toggle vin-toggle--outline vin-toggle--icon\" style=\"text-decoration:underline\">U</span>",
+  "props": {
+    "pressed / defaultPressed": { "type": "boolean", "description": "On or off (controlled or not). Use onPressedChange to hear about changes.", "html": "aria-pressed=\"true|false\"" },
+    "variant": { "values": ["default", "outline"], "default": "default", "class": "vin-toggle--{value}" },
+    "size": { "values": ["sm", "md", "lg", "icon"], "default": "md", "class": "vin-toggle--{value}" },
+    "disabled": { "type": "boolean", "default": false, "html": "disabled attribute" }
+  },
+  "react": { "components": ["Toggle"], "helpers": ["toggleClasses"] },
+  "examples": [
+    { "id": "icons", "title": "Icon toggles", "description": "Square toggles for a toolbar. Icon-only toggles need an aria-label. In HTML, add data-vin-toggle and include vinui.js." },
+    { "id": "outline", "title": "Outline, with text", "description": "A border and a text label, for toggles that stand alone." },
+    { "id": "sizes", "title": "Sizes", "description": "Small, medium and large, matching the Button heights." }
+  ],
+  "a11y": [
+    "A <button> with aria-pressed: screen readers say \"pressed\" or \"not pressed\".",
+    "Keep the label the same when pressed (\"Bold\", not \"Unbold\"); aria-pressed tells the state.",
+    "Icon-only toggles have an aria-label.",
+    "The pressed state is shown by a filled background, not only by colour of the text."
+  ]
+}

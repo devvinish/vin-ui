@@ -1,0 +1,26 @@
+{
+  "$comment": "Single source of truth for the Button Group API. Every framework package is tested against this file.",
+  "name": "button-group",
+  "title": "Button Group",
+  "category": "Actions",
+  "description": "Related buttons joined into one control.",
+  "baseClass": "vin-btn-group",
+  "classes": ["vin-btn-group", "vin-btn-group--vertical"],
+  "thumb": "<div class=\"vin-btn-group\"><span class=\"vin-btn vin-btn--outline\">Day</span><span class=\"vin-btn vin-btn--outline\">Week</span><span class=\"vin-btn vin-btn--outline\">Month</span></div>",
+  "props": {
+    "orientation": { "values": ["horizontal", "vertical"], "default": "horizontal", "class": "vin-btn-group--vertical" },
+    "aria-label": { "type": "string", "description": "Names the group for screen readers.", "html": "role=\"group\" aria-label=\"…\"" }
+  },
+  "react": { "components": ["ButtonGroup"] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "Put any Buttons inside. The corners and borders between them join up in every style." },
+    { "id": "split", "title": "Split button", "description": "A main action with a second button for more options." },
+    { "id": "vertical", "title": "Vertical", "description": "Stacked buttons, for side panels and narrow toolbars." }
+  ],
+  "a11y": [
+    "role=\"group\" with an aria-label tells screen readers the buttons belong together.",
+    "Each button keeps its own label and stays in the Tab order.",
+    "Icon-only buttons in a group still need an aria-label.",
+    "For on/off choices, use Toggle Group instead, so the pressed state is announced."
+  ]
+}

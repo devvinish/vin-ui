@@ -15,9 +15,10 @@ const ROADMAP: Omit<ComponentEntry, "ready">[] = [
   { slug: "toggle-group", name: "Toggle Group", category: "Actions", description: "A set of toggles, one or many on.", phase: 1 },
 
   // Forms
-  { slug: "input", name: "Input", category: "Forms", description: "Text field with label, hint and error (Field, Label, Textarea).", phase: 1 },
+  { slug: "input", name: "Input", category: "Forms", description: "Text field with label, hint and error (Field, Label).", phase: 1 },
   { slug: "input-group", name: "Input Group", category: "Forms", description: "Input with icons, text or buttons attached.", phase: 1 },
   { slug: "input-otp", name: "Input OTP", category: "Forms", description: "One-time code entry, one box per digit.", phase: 1 },
+  { slug: "textarea", name: "Textarea", category: "Forms", description: "Multi-line text with a character count.", phase: 1 },
   { slug: "checkbox", name: "Checkbox", category: "Forms", description: "Select one or many options.", phase: 1 },
   { slug: "radio-group", name: "Radio Group", category: "Forms", description: "Pick exactly one option from a few.", phase: 1 },
   { slug: "switch", name: "Switch", category: "Forms", description: "Turn a setting on or off.", phase: 1 },
