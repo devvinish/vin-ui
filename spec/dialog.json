@@ -1,0 +1,31 @@
+{
+  "$comment": "Single source of truth for the Dialog API. Every framework package is tested against this file.",
+  "name": "dialog",
+  "title": "Dialog",
+  "category": "Overlays",
+  "description": "A modal window over the page, for a task the user should finish or cancel before going on.",
+  "baseClass": "vin-dialog",
+  "classes": ["vin-dialog", "vin-dialog__header", "vin-dialog__title", "vin-dialog__description", "vin-dialog__body", "vin-dialog__footer", "vin-dialog__close"],
+  "thumb": "<div class=\"vin-dialog\" style=\"position:static;opacity:1;transform:none;width:190px;padding:12px\"><div class=\"vin-dialog__header\" style=\"padding:0\"><p class=\"vin-dialog__title\" style=\"font-size:13px\">Edit profile</p><p class=\"vin-dialog__description\" style=\"font-size:11px\">Change your details.</p></div><div class=\"vin-dialog__footer\" style=\"margin-top:10px\"><span class=\"vin-btn vin-btn--sm\">Save</span></div></div>",
+  "props": {
+    "trigger": { "type": "ReactElement", "description": "The button that opens it.", "html": "button[commandfor=\"id\"][command=\"show-modal\"]" },
+    "title / description": { "type": "ReactNode", "html": ".vin-dialog__title, .vin-dialog__description (wire them up with aria-labelledby and aria-describedby)" },
+    "footer": { "type": "ReactNode", "description": "Actions at the end. Wrap a button in DialogClose to make it close the dialog.", "html": ".vin-dialog__footer; button[commandfor][command=\"close\"] closes" },
+    "open / defaultOpen": { "type": "boolean", "description": "Use onOpenChange to hear about changes." },
+    "onSubmit": { "type": "(data: FormData) => void", "description": "Wraps the body and footer in a form; a submit button sends it and closes the dialog.", "html": "form[method=dialog]" },
+    "dismissible": { "type": "boolean", "default": "true", "description": "Close on a click outside.", "html": "closedby=\"any\" on the dialog" },
+    "showClose": { "type": "boolean", "default": "true", "html": "button.vin-dialog__close" }
+  },
+  "react": { "components": ["Dialog", "DialogClose"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "A short form. In HTML it's the browser's <dialog>: commandfor opens it, form method=dialog closes it on submit." },
+    { "id": "message", "title": "Message", "description": "A note with one button." },
+    { "id": "scroll", "title": "Long content", "description": "The dialog scrolls inside; the page behind it stays put." }
+  ],
+  "a11y": [
+    "It's a native modal <dialog>: the page behind is inert, so Tab only reaches the dialog (and the browser's own toolbar). Escape closes it.",
+    "The title names it (aria-labelledby) and the description describes it (aria-describedby).",
+    "Focus moves to the first field when it opens, and back to the trigger when it closes. The close button comes last, so it isn't the first stop.",
+    "A click outside closes it (closedby=\"any\"). Leave that off for forms where losing input would hurt."
+  ]
+}

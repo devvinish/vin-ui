@@ -1,0 +1,31 @@
+{
+  "$comment": "Single source of truth for the Dropdown Menu API. Every framework package is tested against this file.",
+  "name": "dropdown-menu",
+  "title": "Dropdown Menu",
+  "category": "Overlays",
+  "description": "A list of actions or options that opens from a button.",
+  "baseClass": "vin-menu",
+  "classes": ["vin-menu", "vin-menu__item", "vin-menu__item--danger", "vin-menu__label", "vin-menu__separator", "vin-menu__shortcut"],
+  "thumb": "<div class=\"vin-menu\" style=\"position:static;opacity:1;transform:none;min-width:0;width:150px\"><span class=\"vin-menu__item\" style=\"font-size:12px;min-height:26px\">Profile</span><span class=\"vin-menu__item\" style=\"font-size:12px;min-height:26px;background:color-mix(in srgb,var(--vin-fg) 8%,transparent)\">Settings</span><span class=\"vin-menu__separator\" style=\"display:block\"></span><span class=\"vin-menu__item vin-menu__item--danger\" style=\"font-size:12px;min-height:26px\">Sign out</span></div>",
+  "props": {
+    "trigger": { "type": "ReactElement", "description": "The button that opens it.", "html": "button[popovertarget=\"id\"]" },
+    "side": { "values": ["top", "bottom"], "default": "bottom", "html": "data-side on .vin-menu" },
+    "align": { "values": ["start", "center", "end"], "default": "start", "html": "data-align on .vin-menu" },
+    "DropdownMenuItem": { "type": "{ onSelect, icon, shortcut, danger, disabled }", "html": "button.vin-menu__item[role=menuitem] (.vin-menu__item--danger)" },
+    "DropdownMenuCheckboxItem": { "type": "{ checked, defaultChecked, onCheckedChange }", "html": "button.vin-menu__item[role=menuitemcheckbox][aria-checked]" },
+    "DropdownMenuRadioGroup / DropdownMenuRadioItem": { "type": "{ value, defaultValue, onValueChange } / { value }", "html": "div[role=group] > button.vin-menu__item[role=menuitemradio][aria-checked]" },
+    "DropdownMenuLabel / DropdownMenuSeparator": { "html": ".vin-menu__label, .vin-menu__separator[role=separator]" }
+  },
+  "react": { "components": ["DropdownMenu", "DropdownMenuItem", "DropdownMenuCheckboxItem", "DropdownMenuRadioGroup", "DropdownMenuRadioItem", "DropdownMenuLabel", "DropdownMenuSeparator"], "helpers": [] },
+  "examples": [
+    { "id": "basic", "title": "Basic", "description": "An account menu with a heading, shortcuts and a sign-out at the end. In HTML it's a popover; vinui.js adds the keyboard." },
+    { "id": "icons", "title": "With icons", "description": "An icon button that opens a menu lined up with its end." },
+    { "id": "checkboxes", "title": "Checkboxes and radios", "description": "Options that stay open as you change them." }
+  ],
+  "a11y": [
+    "role=\"menu\" with menuitem, menuitemcheckbox and menuitemradio items. The trigger says it opens a menu and whether it's open.",
+    "Enter, Space or Down Arrow opens it on the first item; Up Arrow opens it on the last.",
+    "Arrow keys move, Home and End jump, typing a letter goes to the next item that starts with it. Escape or Tab closes it and returns focus to the trigger.",
+    "Only one item is in the tab order at a time, so Tab leaves the menu instead of walking through it."
+  ]
+}

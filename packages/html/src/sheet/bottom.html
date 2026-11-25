@@ -1,0 +1,14 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="sheet-share" command="show-modal">Share</button>
+<dialog class="vin-dialog vin-sheet" id="sheet-share" data-side="bottom" aria-labelledby="sheet-share-title" aria-describedby="sheet-share-desc" closedby="any">
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="sheet-share-title">Share this page</h2>
+    <p class="vin-dialog__description" id="sheet-share-desc">Anyone with the link can view it.</p>
+  </div>
+  <div class="vin-dialog__body">
+    <div class="vin-field">
+      <label class="vin-label" for="sheet-link">Link</label>
+      <input id="sheet-link" class="vin-input" value="https://vinish.dev/ui" readonly>
+    </div>
+  </div>
+  <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-dialog__close" commandfor="sheet-share" command="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+</dialog>

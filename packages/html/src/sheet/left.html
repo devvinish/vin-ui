@@ -1,0 +1,15 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="sheet-nav" command="show-modal">Menu</button>
+<dialog class="vin-dialog vin-sheet" id="sheet-nav" data-side="left" aria-labelledby="sheet-nav-title" closedby="any">
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="sheet-nav-title">VinUI</h2>
+  </div>
+  <div class="vin-dialog__body">
+    <nav aria-label="Main" style="display: grid; gap: 12px">
+      <a class="vin-link" href="#docs">Docs</a>
+      <a class="vin-link" href="#components">Components</a>
+      <a class="vin-link" href="#styles">Styles</a>
+      <a class="vin-link" href="#changelog">Changelog</a>
+    </nav>
+  </div>
+  <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-dialog__close" commandfor="sheet-nav" command="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+</dialog>

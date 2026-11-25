@@ -300,6 +300,142 @@ for (const side of ["html", "react"] as const) {
       await expect(dialog).toBeHidden();
     });
 
+    test("dialog: opens on the first field, keeps Tab off the page behind, closes with Escape, Cancel, a click outside or submit", async ({ page }) => {
+      await ready(page, "dialog");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const btn = root.getByRole("button", { name: "Edit profile" });
+      const dialog = page.getByRole("dialog", { name: "Edit profile" });
+      await expect(dialog).toBeHidden();
+      await btn.click();
+      await expect(dialog).toBeVisible();
+      await expect(dialog.getByRole("textbox", { name: "Name", exact: true })).toBeFocused();
+      for (let i = 0; i < 6; i++) {
+        await page.keyboard.press("Tab");
+        // Never the page behind (the browser may take focus to its own toolbar, which is fine).
+        expect(await dialog.evaluate((d) => d.contains(document.activeElement) || document.activeElement === document.body)).toBe(true);
+      }
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(btn).toBeFocused();
+
+      await btn.click();
+      await dialog.getByRole("button", { name: "Cancel" }).click();
+      await expect(dialog).toBeHidden();
+      await btn.click();
+      await expect(dialog).toBeVisible();
+      await page.mouse.click(5, 5);
+      await expect(dialog).toBeHidden();
+      await btn.click();
+      await dialog.getByRole("button", { name: "Close" }).click();
+      await expect(dialog).toBeHidden();
+      await btn.click();
+      await dialog.getByRole("button", { name: "Save changes" }).click();
+      await expect(dialog).toBeHidden();
+      await expect(btn).toBeFocused();
+    });
+
+    test("alert dialog: focus starts on Cancel, a click outside doesn't close it, the answer closes it", async ({ page }) => {
+      await ready(page, "alert-dialog");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const btn = root.getByRole("button", { name: "Delete project" });
+      const dialog = page.getByRole("alertdialog", { name: "Delete this project?" });
+      await btn.click();
+      await expect(dialog).toBeVisible();
+      await expect(dialog.getByRole("button", { name: "Cancel" })).toBeFocused();
+      await page.mouse.click(5, 5);
+      await expect(dialog).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(dialog).toBeHidden();
+      await expect(btn).toBeFocused();
+      await btn.click();
+      await dialog.getByRole("button", { name: "Delete project" }).click();
+      await expect(dialog).toBeHidden();
+      if (side === "html") expect(await page.evaluate(() => (document.getElementById("adlg-delete") as HTMLDialogElement).returnValue)).toBe("delete");
+    });
+
+    test("sheet: slides in against the edge and closes with Escape", async ({ page }) => {
+      await ready(page, "sheet");
+      for (const [example, name, edge] of [["basic", "Filters", "right"], ["left", "Menu", "left"], ["bottom", "Share", "bottom"]] as const) {
+        const btn = page.locator(`[data-fixture="${side}-${example}"]`).getByRole("button", { name });
+        const sheet = page.locator("dialog[open]");
+        await btn.click();
+        await expect(sheet).toBeVisible();
+        const vp = page.viewportSize()!;
+        await expect.poll(async () => {
+          const r = (await sheet.boundingBox())!;
+          return edge === "right" ? Math.round(r.x + r.width) - vp.width : edge === "left" ? Math.round(r.x) : Math.round(r.y + r.height) - vp.height;
+        }).toBe(0);
+        await page.keyboard.press("Escape");
+        await expect(sheet).toHaveCount(0);
+        await expect(btn).toBeFocused();
+      }
+    });
+
+    test("dropdown menu: arrows, Home/End, type-ahead, Escape; Up Arrow opens on the last item", async ({ page }) => {
+      await ready(page, "dropdown-menu");
+      const root = page.locator(`[data-fixture="${side}-basic"]`);
+      const btn = root.getByRole("button", { name: "My account" });
+      const menu = root.getByRole("menu", { name: "My account" });
+      const item = (name: string) => menu.getByRole("menuitem", { name });
+      await expect(btn).toHaveAttribute("aria-haspopup", "menu");
+      await btn.click();
+      await expect(menu).toBeVisible();
+      await expect(btn).toHaveAttribute("aria-expanded", "true");
+      await expect(item("Profile")).toBeFocused();
+      await page.keyboard.press("ArrowDown");
+      await expect(item("Billing")).toBeFocused();
+      await page.keyboard.press("End");
+      await expect(item("Sign out")).toBeFocused();
+      await page.keyboard.press("ArrowDown");
+      await expect(item("Profile")).toBeFocused();
+      await page.keyboard.press("ArrowUp");
+      await expect(item("Sign out")).toBeFocused();
+      await page.keyboard.press("ArrowUp"); // skips the disabled item
+      await expect(item("Invite people")).toBeFocused();
+      await page.keyboard.press("Home");
+      await page.keyboard.press("s");
+      await expect(item("Settings")).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(menu).toBeHidden();
+      await expect(btn).toHaveAttribute("aria-expanded", "false");
+      await expect(btn).toBeFocused();
+
+      await page.keyboard.press("ArrowUp");
+      await expect(menu).toBeVisible();
+      await expect(item("Sign out")).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(menu).toBeHidden();
+      await expect(btn).toBeFocused();
+      await page.keyboard.press("Enter");
+      await expect(item("Profile")).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(menu).toBeHidden();
+      await expect(btn).toBeFocused();
+    });
+
+    test("dropdown menu: checkbox and radio items change without closing", async ({ page }) => {
+      await ready(page, "dropdown-menu");
+      const root = page.locator(`[data-fixture="${side}-checkboxes"]`);
+      const btn = root.getByRole("button", { name: "View" });
+      const menu = root.getByRole("menu", { name: "View" });
+      await btn.click();
+      const toolbar = menu.getByRole("menuitemcheckbox", { name: "Toolbar" });
+      await expect(toolbar).toBeFocused();
+      await expect(toolbar).toHaveAttribute("aria-checked", "true");
+      await page.keyboard.press("Space");
+      await expect(toolbar).toHaveAttribute("aria-checked", "false");
+      await expect(menu).toBeVisible();
+      await page.keyboard.press("End");
+      await page.keyboard.press("Enter");
+      await expect(menu.getByRole("menuitemradio", { name: "Size" })).toHaveAttribute("aria-checked", "true");
+      await expect(menu.getByRole("menuitemradio", { name: "Name" })).toHaveAttribute("aria-checked", "false");
+      await menu.getByRole("menuitemradio", { name: "Date modified" }).click();
+      await expect(menu.getByRole("menuitemradio", { name: "Date modified" })).toHaveAttribute("aria-checked", "true");
+      await expect(menu).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(menu).toBeHidden();
+    });
+
     test("toast: a button shows a toast that can be closed", async ({ page }) => {
       await ready(page, "toast");
       await page.locator(`[data-fixture="${side}-variants"]`).getByRole("button", { name: "Success" }).click();

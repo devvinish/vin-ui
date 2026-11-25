@@ -1,0 +1,12 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="adlg-revoke" command="show-modal">Revoke key</button>
+<dialog class="vin-dialog vin-alert-dialog" id="adlg-revoke" role="alertdialog" aria-labelledby="adlg-revoke-title" aria-describedby="adlg-revoke-desc">
+  <div class="vin-dialog__header">
+    <svg class="vin-alert-dialog__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+    <h2 class="vin-dialog__title" id="adlg-revoke-title">Revoke this API key?</h2>
+    <p class="vin-dialog__description" id="adlg-revoke-desc">Apps that use it stop working at once. Make a new key first if you still need access.</p>
+  </div>
+  <form method="dialog" class="vin-dialog__footer">
+    <button type="submit" class="vin-btn vin-btn--outline" value="cancel" autofocus>Keep key</button>
+    <button type="submit" class="vin-btn vin-btn--danger" value="revoke">Revoke key</button>
+  </form>
+</dialog>

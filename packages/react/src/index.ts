@@ -69,3 +69,13 @@ export { Popover } from "./popover";
 export type { PopoverProps } from "./popover";
 export { Toaster, Toast, toast, dismissToast } from "./toast";
 export type { ToastProps, ToastOptions, ToastVariant } from "./toast";
+export { Dialog, DialogClose } from "./dialog";
+export type { DialogProps } from "./dialog";
+export { AlertDialog } from "./alert-dialog";
+export type { AlertDialogProps } from "./alert-dialog";
+export { Sheet, SheetClose } from "./sheet";
+export type { SheetProps } from "./sheet";
+export {
+  DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator,
+} from "./dropdown-menu";
+export type { DropdownMenuProps, DropdownMenuItemProps, DropdownMenuCheckboxItemProps, DropdownMenuRadioGroupProps } from "./dropdown-menu";

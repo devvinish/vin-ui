@@ -31,6 +31,29 @@ for (const name of components) {
   }
 }
 
+/*
+ * Overlays, open: the first HTML example's trigger is clicked, then the whole screen is checked
+ * (axe + a screenshot), because the panel sits in the top layer, outside the fixture.
+ */
+const OPEN: Record<string, string> = { dialog: "Edit profile", "alert-dialog": "Delete project", sheet: "Filters", "dropdown-menu": "My account", popover: "Dimensions" };
+for (const [name, trigger] of Object.entries(OPEN)) {
+  for (const style of STYLE_IDS) {
+    for (const mode of ["light", "dark"] as const) {
+      test(`${name} open · ${style} · ${mode}`, async ({ page }) => {
+        await page.goto(`/ui/fixtures/${name}/?style=${style}&mode=${mode}`);
+        await page.evaluate(() => document.fonts.ready);
+        await page.locator("[data-fixture^='html-']").getByRole("button", { name: trigger }).first().click();
+        const panel = page.locator("dialog[open], [popover]:popover-open").first();
+        await expect(panel).toBeVisible();
+        await page.waitForTimeout(400); // let the open transition finish
+        const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+        expect(results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
+        await expect(page).toHaveScreenshot(`${name}-open-${style}-${mode}.png`);
+      });
+    }
+  }
+}
+
 test("keyboard: the first button shows a focus ring", async ({ page }) => {
   await page.goto("/ui/fixtures/button/?style=precision&mode=light");
   await page.keyboard.press("Tab");

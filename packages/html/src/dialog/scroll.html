@@ -1,0 +1,18 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="dlg-terms" command="show-modal">Read the terms</button>
+<dialog class="vin-dialog" id="dlg-terms" aria-labelledby="dlg-terms-title" closedby="any">
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="dlg-terms-title">Terms of use</h2>
+  </div>
+  <div class="vin-dialog__body">
+    <p>VinUI is free and MIT licensed. You can use it in personal and commercial work, change it, and ship it in your own products.</p>
+    <p>Keep the licence notice in copies of the source. You don't need to credit VinUI in your app, though a link is always welcome.</p>
+    <p>The components come as they are, without a warranty. Test them in your own product before you ship.</p>
+    <p>Fonts and icons used in the examples have their own licences. Check them before you use them.</p>
+    <p>When the content is longer than the screen, the dialog scrolls inside and the page behind it stays put.</p>
+  </div>
+  <div class="vin-dialog__footer">
+    <button type="button" class="vin-btn vin-btn--outline" commandfor="dlg-terms" command="close">Decline</button>
+    <button type="button" class="vin-btn" commandfor="dlg-terms" command="close">Accept</button>
+  </div>
+  <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-dialog__close" commandfor="dlg-terms" command="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+</dialog>

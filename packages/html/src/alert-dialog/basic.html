@@ -1,0 +1,11 @@
+<button type="button" class="vin-btn vin-btn--danger" commandfor="adlg-delete" command="show-modal">Delete project</button>
+<dialog class="vin-dialog vin-alert-dialog" id="adlg-delete" role="alertdialog" aria-labelledby="adlg-delete-title" aria-describedby="adlg-delete-desc">
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="adlg-delete-title">Delete this project?</h2>
+    <p class="vin-dialog__description" id="adlg-delete-desc">This deletes "Website redesign" and its 24 files for everyone. You can't undo it.</p>
+  </div>
+  <form method="dialog" class="vin-dialog__footer">
+    <button type="submit" class="vin-btn vin-btn--outline" value="cancel" autofocus>Cancel</button>
+    <button type="submit" class="vin-btn vin-btn--danger" value="delete">Delete project</button>
+  </form>
+</dialog>

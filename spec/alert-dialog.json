@@ -1,0 +1,88 @@
+{
+  "$comment": "Single source of truth for the Alert Dialog API. Every framework package is tested against this file.",
+  "name": "alert-dialog",
+  "title": "Alert Dialog",
+  "category": "Overlays",
+  "description": "Asks the user to confirm before something that can't be undone, like deleting.",
+  "baseClass": "vin-alert-dialog",
+  "classes": [
+    "vin-alert-dialog",
+    "vin-alert-dialog__icon"
+  ],
+  "thumb": "<div class=\"vin-dialog vin-alert-dialog\" style=\"position:static;opacity:1;transform:none;width:190px;padding:12px\"><div class=\"vin-dialog__header\"><p class=\"vin-dialog__title\" style=\"font-size:13px\">Delete project?</p><p class=\"vin-dialog__description\" style=\"font-size:11px\">You can't undo it.</p></div><div class=\"vin-dialog__footer\" style=\"margin-top:10px\"><span class=\"vin-btn vin-btn--sm vin-btn--danger\">Delete</span></div></div>",
+  "props": {
+    "trigger": {
+      "type": "ReactElement",
+      "description": "The button that opens it.",
+      "html": "button[commandfor=\"id\"][command=\"show-modal\"]"
+    },
+    "title / description": {
+      "type": "ReactNode",
+      "html": ".vin-dialog__title, .vin-dialog__description"
+    },
+    "action": {
+      "type": "string",
+      "default": "\"Continue\"",
+      "description": "The confirm button's text."
+    },
+    "cancel": {
+      "type": "string",
+      "default": "\"Cancel\"",
+      "description": "The cancel button's text. It has focus when the dialog opens."
+    },
+    "variant": {
+      "values": [
+        "default",
+        "danger"
+      ],
+      "default": "danger",
+      "description": "The confirm button's look."
+    },
+    "icon": {
+      "type": "ReactNode",
+      "description": "A warning icon beside the title.",
+      "html": "svg.vin-alert-dialog__icon as the header's first child"
+    },
+    "onAction": {
+      "type": "() => void",
+      "description": "Called when the user confirms.",
+      "html": "dialog.returnValue in the close event"
+    },
+    "open / defaultOpen": {
+      "type": "boolean",
+      "description": "Use onOpenChange to hear about changes."
+    }
+  },
+  "react": {
+    "components": [
+      "AlertDialog"
+    ],
+    "helpers": []
+  },
+  "dependencies": [
+    "dialog"
+  ],
+  "examples": [
+    {
+      "id": "basic",
+      "title": "Basic",
+      "description": "Confirm a delete. In HTML both buttons submit a form[method=dialog]; read the answer from dialog.returnValue."
+    },
+    {
+      "id": "icon",
+      "title": "With an icon",
+      "description": "A warning icon beside the title."
+    },
+    {
+      "id": "discard",
+      "title": "Discard changes",
+      "description": "A softer question: the confirm button isn't red (variant=\"default\")."
+    }
+  ],
+  "a11y": [
+    "role=\"alertdialog\" tells screen readers it needs an answer; the title and description are read out when it opens.",
+    "Focus starts on the safe answer (autofocus), so Enter never deletes by accident.",
+    "There's no close button and a click outside doesn't close it. Escape cancels.",
+    "Say what will happen in the button text (\"Delete project\", not \"OK\")."
+  ]
+}

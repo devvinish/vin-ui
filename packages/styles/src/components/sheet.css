@@ -1,0 +1,36 @@
+/* ==========================================================================
+   VinUI · Sheet
+   API (see spec/sheet.json): a Dialog that slides in from an edge.
+     dialog.vin-dialog.vin-sheet[data-side="right" | "left" | "top" | "bottom"]  (right by default)
+       > the Dialog parts: __header, __body, __footer, __close
+   ========================================================================== */
+
+.vin-dialog.vin-sheet {
+  --vin-sheet-from: 100%;
+  inset: 0 0 0 auto; width: min(var(--vin-sheet-width, 380px), calc(100vw - 40px)); height: 100dvh; max-height: none; margin: 0;
+  flex-direction: column; padding: 24px;
+  border-width: 0; border-inline-start-width: max(var(--vin-bw), 1px); border-radius: 0;
+  opacity: 1; transform: translateX(var(--vin-sheet-from));
+}
+.vin-sheet:dir(rtl), .vin-sheet[data-side="left"] { --vin-sheet-from: -100%; inset: 0 auto 0 0; border-inline-start-width: 0; border-inline-end-width: max(var(--vin-bw), 1px); }
+.vin-sheet[data-side="left"]:dir(rtl) { --vin-sheet-from: 100%; inset: 0 0 0 auto; }
+.vin-sheet[data-side="top"], .vin-sheet[data-side="bottom"] {
+  width: 100vw; height: auto; max-height: 85dvh; border-inline-width: 0;
+}
+.vin-sheet[data-side="top"] { inset: 0 0 auto 0; transform: translateY(-100%); border-bottom-width: max(var(--vin-bw), 1px); border-radius: 0 0 var(--vin-radius-lg) var(--vin-radius-lg); }
+.vin-sheet[data-side="bottom"] { inset: auto 0 0 0; transform: translateY(100%); border-top-width: max(var(--vin-bw), 1px); border-radius: var(--vin-radius-lg) var(--vin-radius-lg) 0 0; }
+/* Only transform here, no translate property: minifiers fold the two into one, wrongly. */
+.vin-dialog.vin-sheet[open] { display: flex; opacity: 1; transform: none; }
+@starting-style {
+  .vin-dialog.vin-sheet[open] { opacity: 1; transform: translateX(var(--vin-sheet-from)); }
+  .vin-sheet[data-side="top"][open] { transform: translateY(-100%); }
+  .vin-sheet[data-side="bottom"][open] { transform: translateY(100%); }
+}
+.vin-sheet > .vin-dialog__body { flex: 1 0 auto; align-content: start; }
+.vin-sheet > .vin-dialog__footer, .vin-sheet > form > .vin-dialog__footer { margin-top: auto; padding-top: 24px; }
+.vin-sheet > form { display: flex; flex-direction: column; flex: 1 0 auto; }
+@media (prefers-reduced-motion: reduce) {
+  .vin-dialog.vin-sheet, .vin-sheet[data-side] { transform: none; opacity: 0; }
+  .vin-dialog.vin-sheet[open] { opacity: 1; }
+  @starting-style { .vin-dialog.vin-sheet[open], .vin-sheet[data-side][open] { transform: none; opacity: 0; } }
+}

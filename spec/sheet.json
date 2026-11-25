@@ -1,0 +1,70 @@
+{
+  "$comment": "Single source of truth for the Sheet API. Every framework package is tested against this file.",
+  "name": "sheet",
+  "title": "Sheet",
+  "category": "Overlays",
+  "description": "A panel that slides in from the edge of the screen, for filters, navigation or details.",
+  "baseClass": "vin-sheet",
+  "classes": [
+    "vin-sheet"
+  ],
+  "thumb": "<div style=\"position:relative;width:200px;height:110px;overflow:hidden;border-radius:6px;background:color-mix(in srgb,var(--vin-fg) 8%,transparent)\"><div class=\"vin-dialog vin-sheet\" style=\"position:absolute;opacity:1;transform:none;height:100%;width:110px;padding:10px\"><p class=\"vin-dialog__title\" style=\"font-size:12px\">Filters</p><p class=\"vin-dialog__description\" style=\"font-size:10px\">Narrow the list.</p></div></div>",
+  "props": {
+    "side": {
+      "values": [
+        "right",
+        "left",
+        "top",
+        "bottom"
+      ],
+      "default": "right",
+      "html": "data-side on the dialog"
+    },
+    "trigger / title / description / footer": {
+      "description": "The same as Dialog.",
+      "html": "the Dialog parts inside dialog.vin-dialog.vin-sheet"
+    },
+    "open / defaultOpen": {
+      "type": "boolean",
+      "description": "Use onOpenChange to hear about changes."
+    },
+    "onSubmit": {
+      "type": "(data: FormData) => void",
+      "description": "Wraps the body and footer in a form.",
+      "html": "form[method=dialog]"
+    }
+  },
+  "react": {
+    "components": [
+      "Sheet",
+      "SheetClose"
+    ],
+    "helpers": []
+  },
+  "dependencies": [
+    "dialog"
+  ],
+  "examples": [
+    {
+      "id": "basic",
+      "title": "Basic",
+      "description": "Filters from the right, with the actions pinned to the bottom."
+    },
+    {
+      "id": "left",
+      "title": "Navigation",
+      "description": "Site links from the left, as a mobile menu."
+    },
+    {
+      "id": "bottom",
+      "title": "From the bottom",
+      "description": "A short panel that comes up from the bottom edge."
+    }
+  ],
+  "a11y": [
+    "It's a modal <dialog>, so it works like Dialog: focus stays inside, Escape closes it, focus goes back to the trigger.",
+    "A click on the dimmed page closes it.",
+    "In right-to-left pages the right sheet comes from the left, and the other way round.",
+    "With reduced motion, it fades in instead of sliding."
+  ]
+}

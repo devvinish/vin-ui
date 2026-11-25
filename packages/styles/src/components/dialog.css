@@ -1,0 +1,46 @@
+/* ==========================================================================
+   VinUI · Dialog
+   API (see spec/dialog.json):
+     button[commandfor="dlg-id"][command="show-modal"]            the trigger
+     dialog.vin-dialog#dlg-id[aria-labelledby][closedby="any"]
+       > .vin-dialog__header > .vin-dialog__title + .vin-dialog__description
+       > .vin-dialog__body                                         your content
+       > .vin-dialog__footer                                       actions, at the end
+       > button.vin-dialog__close[commandfor][command="close"]     the X, last so focus starts on the content
+   The browser's modal dialog: it traps focus, Escape closes it, focus returns to the trigger.
+   vinui.js adds commandfor and closedby where the browser lacks them.
+   ========================================================================== */
+
+.vin-dialog {
+  position: fixed; box-sizing: border-box;
+  width: min(var(--vin-dialog-width, 460px), calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px);
+  margin: auto; padding: 24px; overflow: auto; overscroll-behavior: contain;
+  font-family: var(--vin-font); font-size: var(--vin-text-md); line-height: 1.5; color: var(--vin-fg); text-align: start;
+  background: var(--vin-surface); border: max(var(--vin-bw), 1px) solid color-mix(in srgb, var(--vin-border), var(--vin-fg) 10%);
+  border-radius: var(--vin-radius-lg); box-shadow: var(--vin-shadow-lg);
+  opacity: 0; transform: translateY(10px) scale(.98);
+  transition: opacity var(--vin-dur) var(--vin-ease), transform var(--vin-dur) var(--vin-ease),
+    display var(--vin-dur) allow-discrete, overlay var(--vin-dur) allow-discrete;
+}
+.vin-dialog[open] { opacity: 1; transform: none; }
+@starting-style { .vin-dialog[open] { opacity: 0; transform: translateY(10px) scale(.98); } }
+.vin-dialog::backdrop {
+  background: rgb(8 8 12 / 0);
+  transition: background-color var(--vin-dur) var(--vin-ease), display var(--vin-dur) allow-discrete, overlay var(--vin-dur) allow-discrete;
+}
+.vin-dialog[open]::backdrop { background: rgb(8 8 12 / .5); }
+@starting-style { .vin-dialog[open]::backdrop { background: rgb(8 8 12 / 0); } }
+html:has(.vin-dialog[open]:modal) { overflow: hidden; }
+
+.vin-dialog__header { display: grid; gap: 6px; padding-inline-end: 28px; }
+.vin-dialog__title { margin: 0; font-size: calc(var(--vin-text-md) + 4px); font-weight: var(--vin-title-weight); line-height: 1.3; letter-spacing: -.01em; }
+.vin-dialog__description { margin: 0; color: var(--vin-muted); }
+.vin-dialog__body { display: grid; gap: 14px; margin-top: 20px; }
+.vin-dialog__body > p { margin: 0; }
+.vin-dialog__footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+.vin-dialog__close.vin-btn { position: absolute; top: 14px; inset-inline-end: 14px; width: var(--vin-h-sm); height: var(--vin-h-sm); }
+@media (max-width: 480px) {
+  .vin-dialog { padding: 20px; }
+  .vin-dialog__footer { flex-direction: column-reverse; align-items: stretch; }
+}
+@media (prefers-reduced-motion: reduce) { .vin-dialog { transform: none; } @starting-style { .vin-dialog[open] { transform: none; } } }

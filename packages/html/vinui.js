@@ -454,10 +454,99 @@
     });
   }
 
+  /* ---------- Dialog, Alert Dialog, Sheet: the browser's <dialog> ----------
+     button[commandfor][command="show-modal" | "close"] opens and closes it natively.
+     For browsers without commandfor or closedby, this does the same. */
+  var hasCommand = typeof HTMLButtonElement !== "undefined" && "commandForElement" in HTMLButtonElement.prototype;
+  var hasClosedBy = typeof HTMLDialogElement !== "undefined" && "closedBy" in HTMLDialogElement.prototype;
+  if (!hasCommand) document.addEventListener("click", function (e) {
+    var btn = e.target.closest && e.target.closest("button[commandfor]");
+    if (!btn || btn.disabled) return;
+    var target = document.getElementById(btn.getAttribute("commandfor"));
+    var cmd = (btn.getAttribute("command") || "").toLowerCase();
+    if (!target || !target.showModal) return;
+    if (cmd === "show-modal" && !target.open) target.showModal();
+    else if ((cmd === "close" || cmd === "request-close") && target.open) target.close(btn.value || undefined);
+  });
+  if (!hasClosedBy) document.addEventListener("click", function (e) {
+    var d = e.target;
+    if (!d || d.tagName !== "DIALOG" || !d.open || d.getAttribute("closedby") !== "any") return;
+    var r = d.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close();
+  });
+
+  /* ---------- Dropdown Menu: keyboard and placement for .vin-menu[popover][data-vin-menu] ---------- */
+  function initMenu(menu) {
+    var trigger = document.querySelector('[popovertarget="' + menu.id + '"]');
+    if (!trigger || !menu.showPopover) return;
+    var side = menu.getAttribute("data-side") || "bottom", align = menu.getAttribute("data-align") || "start";
+    var place = function () { placeFloating(menu, trigger, side, align, 4); };
+    var focusLast = false;
+    var items = function () {
+      return Array.prototype.filter.call(menu.querySelectorAll('[role^="menuitem"]'), function (el) {
+        return !el.disabled && el.getAttribute("aria-disabled") !== "true";
+      });
+    };
+    var move = function (to) { var all = items(); if (all.length) all[(to + all.length) % all.length].focus(); };
+    trigger.setAttribute("aria-haspopup", "menu");
+    trigger.setAttribute("aria-expanded", "false");
+    menu.querySelectorAll('[role^="menuitem"]').forEach(function (el) { el.tabIndex = -1; });
+    trigger.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+      e.preventDefault();
+      focusLast = e.key === "ArrowUp";
+      if (!menu.matches(":popover-open")) menu.showPopover();
+      else move(focusLast ? -1 : 0);
+    });
+    menu.addEventListener("toggle", function (e) {
+      var open = e.newState === "open";
+      trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) {
+        place(); window.addEventListener("scroll", place, true); window.addEventListener("resize", place);
+        move(focusLast ? -1 : 0); focusLast = false;
+      } else { window.removeEventListener("scroll", place, true); window.removeEventListener("resize", place); }
+    });
+    var typed = "", typedAt = 0;
+    menu.addEventListener("keydown", function (e) {
+      var all = items(), at = all.indexOf(document.activeElement);
+      if (e.key === "ArrowDown") { e.preventDefault(); move(at + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); move(at < 0 ? -1 : at - 1); }
+      else if (e.key === "Home") { e.preventDefault(); move(0); }
+      else if (e.key === "End") { e.preventDefault(); move(-1); }
+      else if (e.key === "Tab") { e.preventDefault(); menu.hidePopover(); trigger.focus(); }
+      else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey && e.key !== " ") {
+        var now = Date.now();
+        typed = (now - typedAt > 600 ? "" : typed) + e.key.toLowerCase(); typedAt = now;
+        // One letter jumps to the next match; a quick run of letters refines the current one.
+        var start = typed.length > 1 ? Math.max(at, 0) : at + 1;
+        for (var i = 0; i < all.length; i++) {
+          var el = all[(start + i) % all.length];
+          if (el.textContent.trim().toLowerCase().indexOf(typed) === 0) { el.focus(); break; }
+        }
+      }
+    });
+    menu.addEventListener("pointermove", function (e) {
+      var item = e.target.closest && e.target.closest('[role^="menuitem"]');
+      if (item && items().indexOf(item) >= 0 && document.activeElement !== item) item.focus({ preventScroll: true });
+    });
+    menu.addEventListener("click", function (e) {
+      var item = e.target.closest && e.target.closest('[role^="menuitem"]');
+      if (!item || items().indexOf(item) < 0) return;
+      var role = item.getAttribute("role");
+      if (role === "menuitemcheckbox") { item.setAttribute("aria-checked", item.getAttribute("aria-checked") === "true" ? "false" : "true"); return; }
+      if (role === "menuitemradio") {
+        var group = item.closest('[role="group"]') || menu;
+        group.querySelectorAll('[role="menuitemradio"]').forEach(function (r) { r.setAttribute("aria-checked", r === item ? "true" : "false"); });
+        return;
+      }
+      menu.hidePopover(); trigger.focus();
+    });
+  }
+
   var KINDS = {
     "data-vin-tabs": initTabs, "data-vin-select": initSelect, "data-vin-toggle": initToggle, "data-vin-textarea": initTextarea,
     "data-vin-toggle-group": initToggleGroup, "data-vin-otp": initOtp, "data-vin-slider": initSlider, "data-vin-dismiss": initDismiss,
-    "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger,
+    "data-vin-tooltip": initTooltip, "data-vin-popover": initPopover, "data-vin-toast": initToastTrigger, "data-vin-menu": initMenu,
   };
 
   /* ---------- Avatar: a picture that fails to load is hidden, so the initials show ---------- */

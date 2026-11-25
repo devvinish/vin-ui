@@ -1,0 +1,32 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="sheet-filters" command="show-modal">Filters</button>
+<dialog class="vin-dialog vin-sheet" id="sheet-filters" aria-labelledby="sheet-filters-title" aria-describedby="sheet-filters-desc" closedby="any">
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="sheet-filters-title">Filters</h2>
+    <p class="vin-dialog__description" id="sheet-filters-desc">Narrow the list of components.</p>
+  </div>
+  <form method="dialog">
+    <div class="vin-dialog__body">
+      <div class="vin-field">
+        <label class="vin-label" for="sheet-q">Search</label>
+        <input id="sheet-q" class="vin-input" type="search" placeholder="Button, card…">
+      </div>
+      <div class="vin-choice">
+        <input id="sheet-forms" class="vin-checkbox" type="checkbox" checked>
+        <div class="vin-choice__body">
+          <label class="vin-choice__label" for="sheet-forms">Forms</label>
+        </div>
+      </div>
+      <div class="vin-choice">
+        <input id="sheet-overlays" class="vin-checkbox" type="checkbox">
+        <div class="vin-choice__body">
+          <label class="vin-choice__label" for="sheet-overlays">Overlays</label>
+        </div>
+      </div>
+    </div>
+    <div class="vin-dialog__footer">
+      <button type="button" class="vin-btn vin-btn--outline" commandfor="sheet-filters" command="close">Cancel</button>
+      <button type="submit" class="vin-btn" value="apply">Show results</button>
+    </div>
+  </form>
+  <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-dialog__close" commandfor="sheet-filters" command="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+</dialog>

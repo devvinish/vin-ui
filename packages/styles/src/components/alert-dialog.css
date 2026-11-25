@@ -1,0 +1,19 @@
+/* ==========================================================================
+   VinUI · Alert Dialog
+   API (see spec/alert-dialog.json): a Dialog that asks before something can't be undone.
+     dialog.vin-dialog.vin-alert-dialog[role=alertdialog][aria-labelledby][aria-describedby]
+       > .vin-dialog__header > svg.vin-alert-dialog__icon? + .vin-dialog__title + .vin-dialog__description
+       > form[method=dialog].vin-dialog__footer > button[value=cancel][autofocus] + button[value=...]
+   No close button and no click-outside: the user picks an answer (Escape cancels).
+   Read the answer from dialog.returnValue in its "close" event.
+   ========================================================================== */
+
+.vin-alert-dialog { --vin-dialog-width: 420px; }
+.vin-alert-dialog .vin-dialog__header { padding-inline-end: 0; }
+.vin-alert-dialog .vin-dialog__header:has(> .vin-alert-dialog__icon) { grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; }
+.vin-alert-dialog .vin-dialog__header:has(> .vin-alert-dialog__icon) > :not(.vin-alert-dialog__icon) { grid-column: 2; }
+.vin-alert-dialog__icon {
+  grid-row: 1 / span 2; box-sizing: border-box; width: 40px; height: 40px; padding: 9px; border-radius: 999px;
+  color: color-mix(in srgb, var(--vin-danger) 80%, var(--vin-fg)); background: color-mix(in srgb, var(--vin-danger) 13%, transparent);
+}
+.vin-alert-dialog .vin-dialog__footer { margin-block-end: 0; }

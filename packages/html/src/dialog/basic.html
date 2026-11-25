@@ -1,0 +1,24 @@
+<button type="button" class="vin-btn vin-btn--outline" commandfor="dlg-profile" command="show-modal">Edit profile</button>
+<dialog class="vin-dialog" id="dlg-profile" aria-labelledby="dlg-profile-title" aria-describedby="dlg-profile-desc" closedby="any">
+  <div class="vin-dialog__header">
+    <h2 class="vin-dialog__title" id="dlg-profile-title">Edit profile</h2>
+    <p class="vin-dialog__description" id="dlg-profile-desc">Change your public details. Save when you're done.</p>
+  </div>
+  <form method="dialog">
+    <div class="vin-dialog__body">
+      <div class="vin-field">
+        <label class="vin-label" for="dlg-name">Name</label>
+        <input id="dlg-name" class="vin-input" value="Ada Lovelace" autocomplete="name">
+      </div>
+      <div class="vin-field">
+        <label class="vin-label" for="dlg-user">Username</label>
+        <input id="dlg-user" class="vin-input" value="@ada" autocomplete="username">
+      </div>
+    </div>
+    <div class="vin-dialog__footer">
+      <button type="button" class="vin-btn vin-btn--outline" commandfor="dlg-profile" command="close">Cancel</button>
+      <button type="submit" class="vin-btn" value="save">Save changes</button>
+    </div>
+  </form>
+  <button type="button" class="vin-btn vin-btn--ghost vin-btn--icon vin-dialog__close" commandfor="dlg-profile" command="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+</dialog>

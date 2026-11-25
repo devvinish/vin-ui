@@ -29,7 +29,7 @@ export const OPTIONAL_TOKENS = ["danger-fg"];
 export const NEUTRAL_TOKENS = ["stage", "surface", "fg", "muted", "border", "secondary", "secondary-fg", "input-bg", "track"];
 
 /** Components that currently exist. Each style needs a `tweaks` entry for each. */
-export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast"];
+export const COMPONENTS = ["button", "badge", "card", "input", "checkbox", "switch", "native-select", "select", "tabs", "radio-group", "textarea", "toggle", "button-group", "toggle-group", "input-group", "input-otp", "slider", "avatar", "kbd", "separator", "skeleton", "spinner", "progress", "alert", "typography", "item", "table", "empty", "aspect-ratio", "breadcrumb", "pagination", "accordion", "collapsible", "tooltip", "popover", "toast", "dialog", "alert-dialog", "sheet", "dropdown-menu"];
 
 const accent = "var(--vin-accent)";
 const onAccent = "var(--vin-accent-fg)";
@@ -104,6 +104,10 @@ export const STYLES = [
       tooltip: "",
       popover: "",
       toast: "",
+      dialog: "",
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": "",
     },
   },
 
@@ -178,6 +182,10 @@ export const STYLES = [
       tooltip: "",
       popover: "",
       toast: "",
+      dialog: "",
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": "",
     },
   },
 
@@ -253,6 +261,10 @@ export const STYLES = [
       tooltip: "",
       popover: "",
       toast: "",
+      dialog: "",
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": "",
     },
   },
 
@@ -325,6 +337,10 @@ export const STYLES = [
       tooltip: "",
       popover: "",
       toast: "",
+      dialog: "",
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": "",
     },
   },
 
@@ -408,6 +424,13 @@ export const STYLES = [
       tooltip: "",
       popover: "",
       toast: "",
+      dialog: `
+& .vin-dialog__title { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: calc(var(--vin-text-md) + 12px); line-height: 1.1; }
+& .vin-dialog:not(.vin-sheet) { border-top: 2px solid var(--vin-fg); }`,
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": `
+& .vin-menu__label { text-transform: uppercase; letter-spacing: .08em; font-size: 11px; font-weight: 500; }`,
     },
   },
 
@@ -506,6 +529,18 @@ export const STYLES = [
 & .vin-popover { border-style: dashed; }`,
       toast: `
 & .vin-toast { border-style: dashed; }`,
+      dialog: `
+& .vin-dialog { border-style: dashed; }
+& .vin-dialog__title::before { content: "# "; color: var(--vin-accent-text); }`,
+      "alert-dialog": `
+& .vin-alert-dialog__icon { border-radius: 0; }`,
+      sheet: "",
+      "dropdown-menu": `
+& .vin-menu { border-style: dashed; }
+& .vin-menu__item:focus, & .vin-menu__item:hover { background: var(--vin-fg); color: var(--vin-surface); }
+& .vin-menu__item:focus > svg, & .vin-menu__item:hover > svg, & .vin-menu__item:focus .vin-menu__shortcut, & .vin-menu__item:hover .vin-menu__shortcut { color: inherit; }
+& .vin-menu__item--danger:focus, & .vin-menu__item--danger:hover { background: var(--vin-danger); color: #fff; }
+& .vin-menu__separator { height: 0; background: none; border-top: 1px dashed color-mix(in srgb, var(--vin-border), var(--vin-fg) 25%); }`,
     },
   },
 
@@ -593,6 +628,13 @@ export const STYLES = [
 & .vin-popover { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
       toast: `
 & .vin-toast { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
+      dialog: `
+& .vin-dialog:not(.vin-sheet) { border-radius: 22px 8px 24px 10px / 10px 24px 8px 22px; }
+& .vin-dialog__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 8px); }`,
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": `
+& .vin-menu { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }`,
     },
   },
 
@@ -659,6 +701,10 @@ export const STYLES = [
       tooltip: "",
       popover: "",
       toast: "",
+      dialog: "",
+      "alert-dialog": "",
+      sheet: "",
+      "dropdown-menu": "",
     },
   },
 ];
