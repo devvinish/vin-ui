@@ -1,5 +1,5 @@
 /*
- * vinish.dev/ui* on Cloudflare.
+ * vinish.dev/ui and vinish.dev/ui/* on Cloudflare.
  *   /ui/mcp   the VinUI MCP server over HTTP (Streamable HTTP transport, stateless, read-only)
  *   anything  the static site, served by the assets binding (wrangler.jsonc)
  *

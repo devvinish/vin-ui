@@ -57,7 +57,7 @@ In plain HTML, components with keyboard or pointer behaviour use `vinui.js` (one
 | `packages/svelte` | Svelte 5 components and their examples |
 | `packages/cli` | `@vinish/ui`: the CLI and the MCP server |
 | `apps/docs` | The website at vinish.dev/ui (Astro) |
-| `workers/site` | Cloudflare Worker for `vinish.dev/ui*`: the site plus the remote MCP endpoint |
+| `workers/site` | Cloudflare Worker for `vinish.dev/ui` and `vinish.dev/ui/*`: the site plus the remote MCP endpoint |
 | `tests/visual` | Playwright: screenshots and axe (WCAG 2.2 AA) in every style × light/dark, plus behaviour tests |
 
 ## Commands
@@ -75,12 +75,12 @@ npm run test:visual:update   # accept intentional visual changes
 
 ## Deploying
 
-vinish.dev stays on WordPress; only `vinish.dev/ui*` goes to a Cloudflare Worker (`workers/site`). The Worker serves the built site as static files and answers the remote MCP server at `/ui/mcp`.
+vinish.dev stays on WordPress; only `vinish.dev/ui` and `vinish.dev/ui/*` goes to a Cloudflare Worker (`workers/site`). The Worker serves the built site as static files and answers the remote MCP server at `/ui/mcp`.
 
 ```bash
 npm run build                 # builds apps/docs/dist (the site lives in dist/ui)
 cd workers/site
-npx wrangler deploy           # route vinish.dev/ui* on the vinish.dev zone
+npx wrangler deploy           # routes vinish.dev/ui and vinish.dev/ui/* on the vinish.dev zone
 ```
 
 The site is built under `/ui`, so no paths are rewritten. `npm test --prefix workers/site` checks the MCP endpoint against the built site.
