@@ -4,6 +4,31 @@ import { STYLES } from "@vinui/styles";
 import { href } from "../lib/site";
 import Icon from "../components/Icon.astro";
 import "../styles/preview.css";
+import CodeBlock from "../components/CodeBlock.astro";
+import { COMPONENTS, CATEGORIES } from "../data/components";
+const ready = COMPONENTS.filter((c) => c.ready);
+const groups = CATEGORIES.map((cat) => ({ cat, items: ready.filter((c) => c.category === cat) })).filter((g) => g.items.length);
+const fw = [
+  { title: "HTML", lang: "html", code: `<button class="vin-btn vin-btn--outline">Save</button>\n\n<label class="vin-label" for="email">Email</label>\n<input id="email" class="vin-input" type="email">` },
+  { title: "React", lang: "tsx", code: `import { Button } from "@/components/vin/button";\nimport { Input } from "@/components/vin/input";\n\n<Button variant="outline">Save</Button>\n<Input label="Email" type="email" />` },
+  { title: "Vue", lang: "vue", code: `<script setup>\nimport Button from "@/components/vin/button.vue";\nimport Input from "@/components/vin/input.vue";\n</script>\n\n<Button variant="outline">Save</Button>\n<Input label="Email" type="email" />` },
+  { title: "Svelte", lang: "svelte", code: `<script>\n  import Button from "$lib/components/vin/button.svelte";\n  import Input from "$lib/components/vin/input.svelte";\n</script>\n\n<Button variant="outline">Save</Button>\n<Input label="Email" type="email" />` },
+];
+const features = [
+  { t: "Accessible by default", d: "Keyboard support, focus handling and ARIA in every component. Each one is checked against WCAG 2.2 AA in all 8 styles, light and dark." },
+  { t: "You own the code", d: "The CLI copies plain source files into your project. No runtime package to update, nothing hidden. Change anything." },
+  { t: "Themes are tokens", d: "A style is a set of CSS variables. Switch style, accent, radius, font or density without touching markup." },
+  { t: "Light and dark", d: "Every style has both modes, follows the system setting, and can be fixed to one." },
+  { t: "No framework lock-in", d: "The same markup and class names in HTML, React, Vue and Svelte. Move between them without relearning anything." },
+  { t: "Ready for AI tools", d: "An MCP server and llms.txt give Claude, Cursor and other AI tools the real code in your style, so they don't guess." },
+];
+const faq = [
+  { q: "Is VinUI free?", a: "Yes. It's MIT licensed, so you can use it in personal and commercial projects without paying or asking." },
+  { q: "Do I need Tailwind or another CSS framework?", a: "No. VinUI ships its own small CSS files. It works next to Tailwind or any other CSS if you already use one." },
+  { q: "Which frameworks does it support?", a: "Plain HTML, React 18+, Vue 3.4+ and Svelte 5. The CLI detects your framework and adds the right files." },
+  { q: "How do I update a component?", a: "Run npx @vinish/ui diff to see what changed upstream, then add the component again or merge the change by hand. Your edits stay yours." },
+  { q: "Can I make my own style?", a: "Start from any of the 8 styles and change the tokens: colours, radius, shadows, fonts and spacing. Customize in the header lets you try radius, grey tone, font and density live." },
+];
 ---
 <Base title="VinUI" current="home">
   <main id="main">
@@ -135,6 +160,59 @@ import "../styles/preview.css";
       </div>
     </section>
 
+    <section class="section" aria-labelledby="l-styles">
+      <div class="container">
+        <span class="eyebrow">8 styles</span>
+        <h2 id="l-styles">Same components, eight different looks.</h2>
+        <p>Each tile below is the same markup in a different style. Pick one for your project and every component follows.</p>
+        <div class="style-tiles">
+          {STYLES.map((st) => (
+            <a class="style-tile" href={href(`/styles/#${st.id}`)}>
+              <span class="vin-stage style-tile__stage" data-vin-style={st.id} aria-hidden="true">
+                <span class="vin-card style-tile__card">
+                  <span class="vin-card__body style-tile__body">
+                    <span class="style-tile__row"><span class="vin-label">Plan</span><span class="vin-badge vin-badge--success">Pro</span></span>
+                    <span class="vin-input style-tile__input">you@example.com</span>
+                    <span class="style-tile__row"><span class="vin-btn vin-btn--sm">Save</span><span class="vin-btn vin-btn--outline vin-btn--sm">Cancel</span></span>
+                  </span>
+                </span>
+              </span>
+              <span class="style-tile__meta"><b>{st.name}</b><span>{st.tags.slice(0, 2).join(" · ")}</span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="l-comps">
+      <div class="container">
+        <span class="eyebrow">{ready.length} components</span>
+        <h2 id="l-comps">Everything a product screen needs.</h2>
+        <p>From buttons and forms to data tables, date pickers, charts and AI chat. Each has examples, props and code for every framework.</p>
+        <div class="cat-grid">
+          {groups.map((g) => (
+            <div class="cat">
+              <h3>{g.cat} <span>{g.items.length}</span></h3>
+              <ul>{g.items.map((c) => <li><a href={href(`/components/${c.slug}/`)}>{c.name}</a></li>)}</ul>
+            </div>
+          ))}
+        </div>
+        <div class="hero-cta" style="margin:28px 0 0"><a class="btn" href={href("/components/")}>See all components</a></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="l-fw">
+      <div class="container">
+        <span class="eyebrow">HTML, React, Vue and Svelte</span>
+        <h2 id="l-fw">Write it the way your framework does.</h2>
+        <p>Every version renders the same markup, so styles, screenshots and accessibility are identical. Only the syntax changes.</p>
+        <div class="fw-grid">
+          {fw.map((x) => <CodeBlock title={x.title} lang={x.lang} code={x.code} />)}
+        </div>
+        <div class="hero-cta" style="margin:20px 0 0"><a class="btn" href={href("/docs/installation/")}>Installation</a><a class="btn" href={href("/docs/frameworks/")}>How the frameworks differ</a></div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="container">
         <span class="eyebrow">How it works</span>
@@ -145,6 +223,50 @@ import "../styles/preview.css";
           <div class="step"><span class="eyebrow">02</span><b>Copy or add</b><p>Copy the HTML, or run <code>npx @vinish/ui add button</code> to get the file for your framework in your project. You own the code.</p></div>
           <div class="step"><span class="eyebrow">03</span><b>Take your theme with you</b><p>Export <code>vin-theme.json</code>, share a link, or copy the CLI command that sets up the same theme.</p></div>
         </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="l-why">
+      <div class="container">
+        <span class="eyebrow">Why VinUI</span>
+        <h2 id="l-why">Built to be dropped into real projects.</h2>
+        <div class="feature-grid">
+          {features.map((x) => <div class="step"><span class="feature-check"><Icon name="check" size={14} /></span><b>{x.t}</b><p>{x.d}</p></div>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="l-ai">
+      <div class="container split">
+        <div>
+          <span class="eyebrow">AI and MCP</span>
+          <h2 id="l-ai">Your AI assistant gets the real code.</h2>
+          <p class="muted">Connect Claude Code, Cursor, VS Code or any MCP tool. It can look up components, read props and examples, and get code in your framework and style, instead of making it up.</p>
+          <div class="hero-cta"><a class="btn" href={href("/docs/mcp/")}>Set up MCP</a><a class="btn" href={href("/llms.txt")}>llms.txt</a></div>
+        </div>
+        <CodeBlock title="Claude Code" lang="bash" code="claude mcp add vinui -- npx -y @vinish/ui mcp" />
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="l-faq">
+      <div class="container">
+        <span class="eyebrow">FAQ</span>
+        <h2 id="l-faq">Questions</h2>
+        <div class="faq">
+          {faq.map((x) => <details><summary>{x.q}</summary><p>{x.a}</p></details>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="container">
+        <h2>Start with one component.</h2>
+        <p>Set up your project, then add what you need.</p>
+        <div class="cmd" style="max-width:460px;margin:0 auto 18px">
+          <span class="p">$</span><code>npx @vinish/ui init</code>
+          <button class="copy-btn" type="button" data-copy aria-label="Copy command"><Icon name="copy" size={13} /></button>
+        </div>
+        <div class="hero-cta" style="justify-content:center"><a class="btn btn-primary" href={href("/components/button/")}>Browse components</a><a class="btn" href={href("/docs/installation/")}>Read the docs</a></div>
       </div>
     </section>
   </main>
