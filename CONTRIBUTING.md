@@ -11,7 +11,7 @@ That means:
 1. **Same API everywhere.** Names, props, anatomy and sizes come from `spec/<component>.json`. Styles never add or remove props.
 2. **Tokens only.** Component CSS (`packages/styles/src/components/*.css`) uses `var(--vin-*)` tokens, never raw colours, so it works in every style automatically.
 3. **Style-specific touches go in `tweaks`.** If a style needs something extra (Paper's wobbly corners, Terminal's brackets), add it to that style's `tweaks[component]` in `styles.mjs`. Every style must have an entry for every component, even if it is `""`; the build fails otherwise.
-4. **HTML and React must match.** The React examples render the same tags and classes as the HTML snippets. This is tested.
+4. **Every framework must match the HTML.** The React, Vue and Svelte examples render the same tags and classes as the HTML snippets. This is tested in each package.
 5. **Accessible in every style.** Text meets WCAG AA (4.5:1), focus is visible, and the axe check passes for all 16 style/mode combinations.
 
 ## Adding a component

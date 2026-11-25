@@ -1,17 +1,37 @@
 # VinUI
 
 Free, MIT-licensed UI components from [vinish.dev](https://vinish.dev/ui).
-One set of components, **8 styles** (Precision, Tactile, Clay, Tonal, Editorial, Terminal, Paper, Bento), any accent colour, light and dark. HTML and React today; Vue and Svelte next.
+One set of components, **8 styles** (Precision, Tactile, Clay, Tonal, Editorial, Terminal, Paper, Bento), any accent colour, light and dark. For **HTML, React, Vue and Svelte**.
 
 ```bash
 npx @vinish/ui init
 npx @vinish/ui add button
 ```
 
-> Status: **Phase 1 done: 40 components**, ready in all 8 styles, HTML and React: Button, Button Group, Toggle, Badge, Card, Input, Textarea, Checkbox, Radio Group, Switch, Native Select, Select, Tabs, Toggle Group, Input Group, Input OTP, Slider, Avatar, Kbd, Separator, Skeleton, Spinner, Progress, Alert, Typography, Item, Table, Empty, Aspect Ratio, Breadcrumb, Pagination, Accordion, Collapsible, Tooltip, Popover, Toast, Dialog, Alert Dialog, Sheet, Dropdown Menu. Select, Tabs, Toggle, Toggle Group, Input OTP, Slider, Tooltip, Popover, Toast, Dropdown Menu, the Alert close button and the Textarea count need `vinui.js` (one small script) in plain HTML. Dialog, Alert Dialog and Sheet are the browser's `<dialog>` and work without it; `vinui.js` only fills in `commandfor` and `closedby` for browsers that lack them. Roadmap: 63 components (40 in Phase 1, 23 in Phase 2 including AI chat), listed in `apps/docs/src/data/components.ts`.
->
-> Phase 2, data display: Code Block, Carousel, Chart, Data Table. The Code Block copy button, the Carousel buttons, the Chart tooltips and Data Table sorting, filtering, selection and paging use `vinui.js` in plain HTML (the Carousel still swipes, the Chart still draws and the Data Table still shows its first page without it).
-> Phase 2, **AI chat (7)**, ready in all 8 styles, HTML and React: Message, Bubble, Message Scroller, Attachment, Marker, Questionnaire, Trace. In plain HTML, Message (copy, thumbs), Message Scroller (sticking to the newest message) and Questionnaire (Submit / Skip) use `vinui.js`, which also lets Escape close a Marker's source preview; the rest need no JavaScript.
+The CLI reads your framework from `package.json`, writes the component files into your project (you own the code), and records them in `vin.json`. Plain HTML: one stylesheet, copy the markup, and add `vinui.js` for the interactive parts.
+
+## Components (63)
+
+Every component works in all 8 styles, light and dark, and in all four frameworks.
+
+| Group | Components |
+| --- | --- |
+| Actions | Button, Button Group, Toggle, Toggle Group |
+| Forms | Input, Input Group, Input OTP, Textarea, Checkbox, Radio Group, Switch, Native Select, Select, Combobox, Slider, Calendar, Date Picker |
+| Data display | Badge, Card, Avatar, Kbd, Table, Data Table, Item, Empty, Typography, Code Block, Carousel, Chart |
+| Feedback | Alert, Progress, Skeleton, Spinner, Toast |
+| Layout | Separator, Aspect Ratio, Accordion, Collapsible, Tabs, Scroll Area, Resizable |
+| Navigation | Breadcrumb, Pagination, Navigation Menu, Menubar, Sidebar |
+| Overlays | Dialog, Alert Dialog, Sheet, Drawer, Popover, Hover Card, Tooltip, Dropdown Menu, Context Menu, Command |
+| AI chat | Message, Bubble, Message Scroller, Attachment, Marker, Questionnaire, Trace |
+
+In plain HTML, components with keyboard or pointer behaviour use `vinui.js` (one small script, no dependencies); the rest need no JavaScript. Dialog, Alert Dialog, Sheet and Drawer are the browser's `<dialog>` and open without it. Without the script the Carousel still swipes, the Chart still draws and the Data Table still shows its first page.
+
+## AI tools
+
+- **MCP server:** `npx -y @vinish/ui mcp` (local; can also add files), or `https://vinish.dev/ui/mcp` (remote; read and search only).
+- **llms.txt:** `https://vinish.dev/ui/llms.txt` and `llms-full.txt`.
+- **Registry:** `https://vinish.dev/ui/r/{html|react|vue|svelte}/{name}.json`.
 
 ## How it works
 
@@ -22,7 +42,7 @@ npx @vinish/ui add button
   <html data-vin-style="tactile" data-vin-mode="dark" data-vin-radius="lg" style="--vin-accent: #0d9488">
   ```
 
-- Every component has one API spec (`spec/<name>.json`). The HTML snippets and the React component are both tested against it.
+- Every component has one API spec (`spec/<name>.json`). The HTML snippets are checked against it, and the React, Vue and Svelte versions are tested to render the same markup as the HTML.
 
 ## Repository
 
@@ -31,10 +51,14 @@ npx @vinish/ui add button
 | `spec/` | Component API specs: the single source of truth |
 | `packages/styles` | The 8 styles as data, the CSS generator, `vinui.css` |
 | `packages/theme` | Theme engine: apply, save, export/import `vin-theme.json`, share links, contrast-safe accent text |
-| `packages/html` | Copy-paste HTML snippets |
+| `packages/html` | Copy-paste HTML snippets and `vinui.js` |
 | `packages/react` | React components and their examples |
+| `packages/vue` | Vue 3 components and their examples |
+| `packages/svelte` | Svelte 5 components and their examples |
+| `packages/cli` | `@vinish/ui`: the CLI and the MCP server |
 | `apps/docs` | The website at vinish.dev/ui (Astro) |
-| `tests/visual` | Playwright screenshots + axe accessibility checks, every style × light/dark |
+| `workers/site` | Cloudflare Worker for `vinish.dev/ui*`: the site plus the remote MCP endpoint |
+| `tests/visual` | Playwright: screenshots and axe (WCAG 2.2 AA) in every style × light/dark, plus behaviour tests |
 
 ## Commands
 
@@ -45,7 +69,7 @@ npm install
 npm run dev            # docs at http://localhost:4321/ui/
 npm test               # unit tests for every package
 npm run build          # build styles + docs into apps/docs/dist
-npm run test:visual    # screenshots + axe (run npm run build first)
+npm run test:visual    # screenshots + axe + behaviour (run npm run build first)
 npm run test:visual:update   # accept intentional visual changes
 ```
 
