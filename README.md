@@ -57,7 +57,8 @@ In plain HTML, components with keyboard or pointer behaviour use `vinui.js` (one
 | `packages/svelte` | Svelte 5 components and their examples |
 | `packages/cli` | `@vinish/ui`: the CLI |
 | `apps/docs` | The website at vinish.dev/ui (Astro) |
-| `workers/site` | Cloudflare static-assets config for `vinish.dev/ui` and `vinish.dev/ui/*` (no Worker code) |
+| `workers/site` | Cloudflare static-assets config for the files under `vinish.dev/ui` (no Worker code) |
+| `wp` | Publishing the pages to WordPress (`publish.py`) and the page ids (`state.json`) |
 | `tests/visual` | Playwright: screenshots and axe (WCAG 2.2 AA) in every style × light/dark, plus behaviour tests |
 
 ## Commands
@@ -75,19 +76,20 @@ npm run test:visual:update   # accept intentional visual changes
 
 ## Deploying
 
-vinish.dev stays on WordPress; only `vinish.dev/ui` and `vinish.dev/ui/*` is served from Cloudflare (`workers/site`), as plain static files with no Worker code.
+The pages are WordPress pages on vinish.dev. Cloudflare (`workers/site`) serves only the files WordPress can't: the CLI registry (`/ui/r`), the CSS and JS (`/ui/v1`, `/ui/_astro`), images and `llms.txt`, as static files with no Worker code.
 
 ```bash
-npm run build                 # builds apps/docs/dist (the site lives in dist/ui)
-cd workers/site
-npx wrangler deploy           # routes vinish.dev/ui and vinish.dev/ui/* on the vinish.dev zone
+npm run deploy                  # build, export for WordPress, keep earlier files, deploy the files to Cloudflare
+npm run wp:export               # the WordPress pages and patterns (wp/out) plus a local preview (wp/preview)
+npm run wp:check                # every element must match the tested site; axe must pass (see the file for the servers it needs)
+python3 wp/publish.py draft     # create or update the pages as drafts, then: python3 wp/publish.py publish
 ```
 
-The site is built under `/ui`, so no paths are rewritten.
+The header, sidebar and footer are WordPress synced patterns (`python3 wp/publish.py patterns`), so a change to them shows on every page at once. The site and component CSS only apply inside `<div class="vinui-site">`, and the theme's styles are kept out of it.
 
 ### Releases
 
-`.github/workflows/release.yml` runs on a `v*` tag (matching `packages/cli/package.json`) or by hand. It runs CI, publishes `@vinish/ui` to npm with provenance, and deploys the static files to Cloudflare. Repository secrets: `NPM_TOKEN`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
+`.github/workflows/release.yml` runs on a `v*` tag (matching `packages/cli/package.json`) or by hand. It runs CI and publishes `@vinish/ui` to npm with provenance (secret `NPM_TOKEN`). The site is deployed with `npm run deploy`, not from CI.
 
 ### Ads
 
