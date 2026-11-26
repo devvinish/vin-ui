@@ -8,22 +8,28 @@ const { current = "", hasSidebar = false } = Astro.props as { current?: string; 
 const nav = [
   { label: "Docs", path: "/docs/installation/", key: "docs" },
   { label: "Components", path: "/components/", key: "components" },
+  { label: "Blocks", path: "/blocks/", key: "blocks" },
+  { label: "Charts", path: "/charts/", key: "charts" },
   { label: "Styles", path: "/styles/", key: "styles" },
+  { label: "Create", path: "/create/", key: "create" },
 ];
 ---
 <header class="site-header">
   <div class="inner">
-    {hasSidebar && (
-      <button class="icon-btn menu-btn" type="button" aria-label="Open navigation" aria-expanded="false" data-menu-toggle>
-        <Icon name="menu" />
-      </button>
-    )}
+    <button class:list={["icon-btn menu-btn", !hasSidebar && "menu-btn--nav"]} type="button" aria-label="Open navigation" aria-expanded="false" aria-controls={hasSidebar ? "sidebar" : "mobile-nav"} data-menu-toggle>
+      <Icon name="menu" />
+    </button>
     <a class="brand" href={href("/")}>
       <span class="brand-mark">V</span> VinUI <small>by vinish.dev</small>
     </a>
     <nav class="nav" aria-label="Main">
       {nav.map((n) => <a href={href(n.path)} aria-current={current === n.key ? "page" : undefined}>{n.label}</a>)}
     </nav>
+    {!hasSidebar && (
+      <nav class="mobile-nav" id="mobile-nav" aria-label="Main">
+        {nav.map((n) => <a href={href(n.path)} aria-current={current === n.key ? "page" : undefined}>{n.label}</a>)}
+      </nav>
+    )}
 
     <div class="header-actions">
       <button class="search-btn" type="button" data-open-search aria-label="Search">
@@ -72,7 +78,7 @@ const nav = [
         <button type="button" data-opt="mode" data-val="system" aria-pressed="true" aria-label="System" title="System"><Icon name="monitor" /></button>
         <button type="button" data-opt="mode" data-val="dark" aria-pressed="false" aria-label="Dark" title="Dark"><Icon name="moon" /></button>
       </div>
-      <a class="icon-btn gh" href={SITE.github} aria-label="VinUI on GitHub" rel="noopener"><Icon name="github" /></a>
+      <a class="icon-btn gh" href={SITE.github} aria-label="VinUI on GitHub" rel="noopener" data-gh-link><Icon name="github" /><span class="gh-stars" hidden data-gh-stars></span></a>
     </div>
   </div>
 </header>

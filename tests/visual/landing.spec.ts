@@ -85,7 +85,7 @@ test("header · the style name keeps one width, so the search box doesn't move",
   expect([...widths]).toHaveLength(1);
 });
 
-for (const path of ["docs/installation", "docs/theming", "docs/frameworks", "docs/cli", "docs/mcp", "components/tabs", "styles"]) {
+for (const path of ["docs/installation", "docs/theming", "docs/frameworks", "docs/cli", "docs/ai", "components/tabs", "styles"]) {
   test(`docs · ${path} passes axe (WCAG 2.2 AA) in light and dark`, async ({ page }) => {
     for (const colorScheme of ["light", "dark"] as const) {
       await page.emulateMedia({ colorScheme });
@@ -121,4 +121,59 @@ test("landing · the whole page passes axe (WCAG 2.2 AA) in light and dark, wide
       expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`), `${width} ${colorScheme}`).toEqual([]);
     }
   }
+});
+
+/*
+ * Blocks, Charts and Create: the whole page, previews included, in every style, light and dark.
+ * Also no sideways scrolling on a phone.
+ */
+for (const path of ["blocks", "charts", "create"]) {
+  for (const style of STYLE_IDS) {
+    test(`${path} · ${style} passes axe (WCAG 2.2 AA) in light and dark`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 900 });
+      for (const colorScheme of ["light", "dark"] as const) {
+        await page.emulateMedia({ colorScheme });
+        await page.goto(`/ui/${path}/?style=${style}`);
+        await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important;animation:none!important}" });
+        const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+        expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`), colorScheme).toEqual([]);
+      }
+    });
+  }
+  test(`${path} · fits a phone screen`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/ui/${path}/`);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+}
+
+test("header · on a phone, the menu button opens the main navigation on pages without a sidebar", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/ui/charts/");
+  const menu = page.getByRole("button", { name: "Open navigation" });
+  await menu.click();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await page.locator("#mobile-nav").getByRole("link", { name: "Blocks" }).click();
+  await expect(page).toHaveURL(/\/ui\/blocks\/$/);
+});
+
+test("create · picking options updates the command", async ({ page }) => {
+  await page.goto("/ui/create/");
+  await page.locator("[data-create-fw='svelte']").click();
+  await page.locator("[data-demo-style='terminal']").click();
+  await page.locator(".create [data-opt='radius'][data-val='none']").click();
+  await expect(page.locator("[data-create-command]")).toHaveText('npx @vinish/ui init --framework svelte --style terminal --accent "#5b5bd6" --radius none');
+  await expect(page.locator("html")).toHaveAttribute("data-vin-style", "terminal");
+  await page.locator("[data-create-fw='html']").click();
+  await expect(page.locator("[data-create-command]")).toContainText('href="https://vinish.dev/ui/v1/terminal.css"');
+});
+
+test("charts · the pie tooltip follows the slice under the pointer (vinui.js)", async ({ page }) => {
+  await page.goto("/ui/charts/#pie-simple");
+  const slice = page.locator("#pie-simple .vin-chart__slice").first();
+  await slice.hover();
+  await expect(page.locator("#pie-simple .vin-chart__tooltip")).toContainText("Chrome");
+  await page.locator("#pie-simple .vin-chart__svg").focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("#pie-simple .vin-chart__tooltip")).toContainText("Safari");
 });

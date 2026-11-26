@@ -8,9 +8,9 @@ import Customize from "../components/Customize.astro";
 import Search from "../components/Search.astro";
 import { href, fontsHref } from "../lib/site";
 
-export interface Props { title: string; description?: string; current?: string; hasSidebar?: boolean }
-const { title, description = "VinUI: free, MIT-licensed UI components for HTML, React, Vue and Svelte. One set of components, 8 styles, any accent colour.", current, hasSidebar = false } = Astro.props;
-const fullTitle = title === "VinUI" ? "VinUI: components in 8 styles" : `${title} · VinUI`;
+export interface Props { title: string; seoTitle?: string; description?: string; current?: string; hasSidebar?: boolean; jsonLd?: object }
+const { title, seoTitle, description = "VinUI is a free, open-source UI component library for HTML, React, Vue and Svelte: accessible components, blocks and charts in 8 styles, any accent colour, light and dark.", current, hasSidebar = false, jsonLd } = Astro.props;
+const fullTitle = seoTitle ?? (title === "VinUI" ? "VinUI: Free UI Component Library for HTML, React, Vue & Svelte" : `${title} · VinUI`);
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const { vars } = themeToAttributes(DEFAULT_THEME);
 const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
@@ -28,6 +28,10 @@ const ads = import.meta.env.PUBLIC_MEDIAVINE === "1";
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VinUI" />
+    <meta name="twitter:card" content="summary" />
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href={href("/favicon.svg")} type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

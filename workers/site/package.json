@@ -2,11 +2,10 @@
   "name": "@vinui/worker",
   "version": "0.1.0",
   "private": true,
-  "description": "Cloudflare Worker for vinish.dev/ui: the static site plus the remote MCP server at /ui/mcp.",
+  "description": "Cloudflare static assets for vinish.dev/ui: the built site, registry, CSS and vinui.js. No Worker code.",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "node --test \"test/*.test.mjs\"",
     "dev": "npx wrangler dev",
     "deploy": "npx wrangler deploy"
   }

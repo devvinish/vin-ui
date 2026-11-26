@@ -3,7 +3,7 @@
  * Builds everything machines read, from the same sources as the website:
  *   r/index.json                     every component, its category and frameworks
  *   r/styles.json                    the 8 styles
- *   r/{framework}/{name}.json        code + examples + props for the CLI and the MCP server
+ *   r/{framework}/{name}.json        code + examples + props for the CLI (components and blocks)
  *   v1/{style}.css, v1/vinui.css     versioned CSS for plain-HTML users (one <link>)
  *   v1/vinui.js                      the small behaviour script for plain HTML
  *   llms.txt, llms-full.txt          plain-text index for AI tools
@@ -14,6 +14,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, copyFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadBlocks, blockHtml, blockReact, blockVue, blockSvelte, blockDependencies } from "./blocks.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = "https://vinish.dev/ui";
@@ -108,6 +109,20 @@ export function buildRegistry() {
     }
     index.push({ name: spec.name, title: spec.title, category: spec.category, description: spec.description, frameworks, dependencies: spec.dependencies ?? [] });
   }
+  // Blocks: whole sections. Same registry shape as a component, so `npx @vinish/ui add login-01` just works:
+  // the block's file goes in <components folder>/blocks/, and the components it uses are added too.
+  for (const b of loadBlocks()) {
+    const deps = blockDependencies(b.html);
+    const base = { name: b.name, title: b.title, category: "Blocks", description: b.description, kind: "block", docs: `${SITE}/blocks/#${b.name}`, props: {}, a11y: [] };
+    const code = { react: blockReact(b), vue: blockVue(b), svelte: blockSvelte(b) };
+    out[`r/html/${b.name}.json`] = JSON.stringify({ ...base, framework: "html", classes: [], needsScript: /data-vin-/.test(blockHtml(b.html)), dependencies: [], files: [],
+      examples: [{ id: "block", title: b.title, description: b.description, code: blockHtml(b.html) }] }, null, 2) + "\n";
+    for (const fw of ["react", "vue", "svelte"]) {
+      out[`r/${fw}/${b.name}.json`] = JSON.stringify({ ...base, framework: fw, components: [], dependencies: deps,
+        files: [{ path: `blocks/${b.name}.${FRAMEWORKS[fw].ext}`, content: code[fw] }], examples: [] }, null, 2) + "\n";
+    }
+    index.push({ name: b.name, title: b.title, category: "Blocks", kind: "block", description: `${b.category}: ${b.description}`, frameworks: Object.keys(FRAMEWORKS), dependencies: deps });
+  }
   const styles = JSON.parse(read("packages/styles/dist/styles.json"));
   const { version } = JSON.parse(read("packages/styles/package.json"));
   out["r/index.json"] = JSON.stringify({ version, site: SITE, components: index }, null, 2) + "\n";
@@ -153,7 +168,7 @@ function llms(index, styles, full, specs) {
     "",
     "Install: `npx @vinish/ui init` then `npx @vinish/ui add <name>`. Plain HTML: `<link rel=\"stylesheet\" href=\"https://vinish.dev/ui/v1/<style>.css\">`, put `data-vin-style=\"<style>\"` on <html>, copy the HTML from the docs, and add `<script src=\"https://vinish.dev/ui/v1/vinui.js\" defer></script>` for interactive components.",
     "Theme: `--vin-accent` (any colour) and data attributes on <html>: data-vin-style, data-vin-mode (light|dark), data-vin-radius, data-vin-density.",
-    "AI tools: run the MCP server with `npx -y @vinish/ui mcp`. Machine-readable code for each component: " + `${SITE}/r/{html|react|vue|svelte}/{name}.json`,
+    "AI coding tools: run the CLI (`npx @vinish/ui add <name>`); it writes the component and everything it needs. Blocks (whole sections such as login-01 or dashboard-01) are added the same way. Machine-readable code for each component and block: " + `${SITE}/r/{html|react|vue|svelte}/{name}.json`,
     "",
     "## Styles",
     "",
@@ -164,6 +179,7 @@ function llms(index, styles, full, specs) {
   for (const [cat, list] of byCat) {
     lines.push(`## ${cat}`, "");
     for (const c of list) {
+      if (c.kind === "block") { lines.push(`- [${c.title}](${SITE}/blocks/#${c.name}): ${c.description} Add with \`npx @vinish/ui add ${c.name}\`.`); continue; }
       lines.push(`- [${c.title}](${SITE}/components/${c.name}/): ${c.description} Frameworks: ${c.frameworks.join(", ")}.`);
       if (full) {
         const spec = specs.find((s) => s.name === c.name);

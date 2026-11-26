@@ -1168,6 +1168,7 @@
     var rows = root.querySelectorAll(".vin-chart__table tbody tr");
     if (!svg || !plot || !rows.length) return;
     var names = Array.prototype.slice.call(root.querySelectorAll(".vin-chart__table thead th"), 1).map(function (th) { return th.textContent; });
+    var pie = root.classList.contains("vin-chart--pie") || root.classList.contains("vin-chart--donut");
     var colours = Array.prototype.map.call(svg.querySelectorAll(".vin-chart__series"), function (g) { return g.getAttribute("style") || ""; });
     var n = rows.length, active = null, tip = null;
     var el = function (tag, cls, text) { var e = document.createElement(tag); e.className = cls; if (text != null) e.textContent = text; return e; };
@@ -1187,14 +1188,20 @@
       var cells = rows[i].children;
       tip = el("div", "vin-chart__tooltip"); tip.setAttribute("aria-hidden", "true");
       tip.appendChild(el("p", "vin-chart__tooltip-title", cells[0].textContent));
+      var slice = pie && svg.querySelector('.vin-chart__slice[data-i="' + i + '"]');
       names.forEach(function (name, s) {
         var row = el("div", "vin-chart__tooltip-row"), sw = el("span", "vin-chart__swatch");
-        sw.setAttribute("style", colours[s] || "");
+        sw.setAttribute("style", pie ? (slice ? slice.getAttribute("style") || "" : "") : colours[s] || "");
         row.appendChild(sw); row.appendChild(document.createTextNode(name));
         row.appendChild(el("span", "vin-chart__value", cells[s + 1] ? cells[s + 1].textContent : ""));
         tip.appendChild(row);
       });
-      if (i < n / 2) tip.style.left = "calc(" + ((i + 1) / n) * 100 + "% + 8px)";
+      if (pie) {
+        // Over the middle of the slice (a slice of nothing has no shape: use the centre).
+        var p = plot.getBoundingClientRect(), b = slice ? slice.getBoundingClientRect() : p;
+        tip.style.setProperty("--vin-tip-x", (((b.left + b.width / 2 - p.left) / p.width) * 100 || 50) + "%");
+        tip.style.setProperty("--vin-tip-y", (((b.top + b.height / 2 - p.top) / p.height) * 100 || 50) + "%");
+      } else if (i < n / 2) tip.style.left = "calc(" + ((i + 1) / n) * 100 + "% + 8px)";
       else tip.style.right = "calc(" + (1 - i / n) * 100 + "% + 8px)";
       plot.appendChild(tip);
     }
@@ -1206,7 +1213,7 @@
     svg.addEventListener("focus", function () { if (active === null) show(0); });
     svg.addEventListener("blur", function () { show(null); });
     svg.addEventListener("keydown", function (e) {
-      var rtl = getComputedStyle(svg).direction === "rtl", at = active === null ? -1 : active;
+      var rtl = !pie && getComputedStyle(svg).direction === "rtl", at = active === null ? -1 : active;
       var to = { ArrowRight: rtl ? at - 1 : at + 1, ArrowLeft: rtl ? at + 1 : at - 1, ArrowDown: at + 1, ArrowUp: at - 1, Home: 0, End: n - 1 }[e.key];
       if (e.key === "Escape") { e.preventDefault(); show(null); }
       else if (to !== undefined) { e.preventDefault(); show(to); }

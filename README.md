@@ -29,7 +29,7 @@ In plain HTML, components with keyboard or pointer behaviour use `vinui.js` (one
 
 ## AI tools
 
-- **MCP server:** `npx -y @vinish/ui mcp` (local; can also add files), or `https://vinish.dev/ui/mcp` (remote; read and search only).
+- **CLI:** Claude Code, Codex, Cursor and Copilot run `npx @vinish/ui add <name>` like you do. Project rules to paste: https://vinish.dev/ui/docs/ai/
 - **llms.txt:** `https://vinish.dev/ui/llms.txt` and `llms-full.txt`.
 - **Registry:** `https://vinish.dev/ui/r/{html|react|vue|svelte}/{name}.json`.
 
@@ -55,9 +55,9 @@ In plain HTML, components with keyboard or pointer behaviour use `vinui.js` (one
 | `packages/react` | React components and their examples |
 | `packages/vue` | Vue 3 components and their examples |
 | `packages/svelte` | Svelte 5 components and their examples |
-| `packages/cli` | `@vinish/ui`: the CLI and the MCP server |
+| `packages/cli` | `@vinish/ui`: the CLI |
 | `apps/docs` | The website at vinish.dev/ui (Astro) |
-| `workers/site` | Cloudflare Worker for `vinish.dev/ui` and `vinish.dev/ui/*`: the site plus the remote MCP endpoint |
+| `workers/site` | Cloudflare static-assets config for `vinish.dev/ui` and `vinish.dev/ui/*` (no Worker code) |
 | `tests/visual` | Playwright: screenshots and axe (WCAG 2.2 AA) in every style × light/dark, plus behaviour tests |
 
 ## Commands
@@ -75,7 +75,7 @@ npm run test:visual:update   # accept intentional visual changes
 
 ## Deploying
 
-vinish.dev stays on WordPress; only `vinish.dev/ui` and `vinish.dev/ui/*` goes to a Cloudflare Worker (`workers/site`). The Worker serves the built site as static files and answers the remote MCP server at `/ui/mcp`.
+vinish.dev stays on WordPress; only `vinish.dev/ui` and `vinish.dev/ui/*` is served from Cloudflare (`workers/site`), as plain static files with no Worker code.
 
 ```bash
 npm run build                 # builds apps/docs/dist (the site lives in dist/ui)
@@ -83,11 +83,11 @@ cd workers/site
 npx wrangler deploy           # routes vinish.dev/ui and vinish.dev/ui/* on the vinish.dev zone
 ```
 
-The site is built under `/ui`, so no paths are rewritten. `npm test --prefix workers/site` checks the MCP endpoint against the built site.
+The site is built under `/ui`, so no paths are rewritten.
 
 ### Releases
 
-`.github/workflows/release.yml` runs on a `v*` tag (matching `packages/cli/package.json`) or by hand. It runs CI, publishes `@vinish/ui` to npm with provenance, and deploys the Worker. Repository secrets: `NPM_TOKEN`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
+`.github/workflows/release.yml` runs on a `v*` tag (matching `packages/cli/package.json`) or by hand. It runs CI, publishes `@vinish/ui` to npm with provenance, and deploys the static files to Cloudflare. Repository secrets: `NPM_TOKEN`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
 ### Ads
 

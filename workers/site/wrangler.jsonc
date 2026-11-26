@@ -1,9 +1,10 @@
-// VinUI website + remote MCP server, served on vinish.dev/ui and vinish.dev/ui/* (the rest of vinish.dev stays on WordPress).
+// Static files for vinish.dev/ui and vinish.dev/ui/* (the rest of vinish.dev stays on WordPress).
+// No Worker code: every request is a plain static file, which Cloudflare serves for free and
+// doesn't count against Worker request limits.
 // Deploy: npm run build (at the repo root), then `npx wrangler deploy` in this folder.
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "vinui",
-  "main": "src/index.mjs",
   "compatibility_date": "2026-11-01",
   // Only /ui and the /ui/ folder. Not "ui*": that would also catch pages like /ui-design-tips.
   "routes": [
@@ -13,11 +14,7 @@
   "assets": {
     // The built site. It lives in dist/ui, so /ui/... maps straight to files.
     "directory": "../../apps/docs/dist",
-    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page",
-    // Only the MCP endpoint runs code; every other request is a static file.
-    "run_worker_first": ["/ui/mcp", "/ui/mcp/*"]
-  },
-  "observability": { "enabled": true }
+    "not_found_handling": "404-page"
+  }
 }

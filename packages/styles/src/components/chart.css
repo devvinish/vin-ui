@@ -88,3 +88,20 @@
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap; border: 0;
 }
+
+/* Pie and donut: no axes; slices are the hit targets; the legend sits underneath. */
+:is(.vin-chart--pie, .vin-chart--donut) .vin-chart__legend { order: 2; justify-content: center; }
+:is(.vin-chart--pie, .vin-chart--donut) .vin-chart__body { grid-template-columns: minmax(0, 1fr); padding-top: 0; }
+:is(.vin-chart--pie, .vin-chart--donut) .vin-chart__plot { grid-area: 1 / 1; justify-self: center; width: min(100%, var(--vin-chart-size, 240px)); }
+[dir="rtl"] :is(.vin-chart--pie, .vin-chart--donut) .vin-chart__plot { transform: none; }
+.vin-chart__slice { fill: var(--vin-series); cursor: default; transition: opacity var(--vin-dur) var(--vin-ease); }
+.vin-chart__svg[data-active] .vin-chart__slice:not([data-active]) { opacity: .45; }
+:is(.vin-chart--pie, .vin-chart--donut) .vin-chart__tooltip,
+[dir="rtl"] :is(.vin-chart--pie, .vin-chart--donut) .vin-chart__tooltip {
+  top: var(--vin-tip-y, 50%); left: var(--vin-tip-x, 50%); right: auto; transform: translate(-50%, calc(-100% - 12px));
+}
+.vin-chart__center {
+  position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 4px; pointer-events: none;
+}
+.vin-chart__center-value { font-size: 26px; font-weight: var(--vin-title-weight); line-height: 1; font-variant-numeric: tabular-nums; color: var(--vin-fg); }
+.vin-chart__center-label { font-size: var(--vin-text-sm); color: var(--vin-muted); }

@@ -3,13 +3,15 @@
   "name": "chart",
   "title": "Chart",
   "category": "Data display",
-  "description": "Bar, line and area charts drawn in your theme, with a legend, tooltips and a data table for screen readers.",
+  "description": "Bar, line, area, pie and donut charts drawn in your theme, stacked or smooth, with a legend, tooltips and a data table for screen readers.",
   "baseClass": "vin-chart",
   "classes": [
     "vin-chart",
     "vin-chart--bar",
     "vin-chart--line",
     "vin-chart--area",
+    "vin-chart--pie",
+    "vin-chart--donut",
     "vin-chart__legend",
     "vin-chart__key",
     "vin-chart__swatch",
@@ -27,6 +29,10 @@
     "vin-chart__line",
     "vin-chart__area",
     "vin-chart__point",
+    "vin-chart__slice",
+    "vin-chart__center",
+    "vin-chart__center-value",
+    "vin-chart__center-label",
     "vin-chart__tooltip",
     "vin-chart__tooltip-title",
     "vin-chart__tooltip-row",
@@ -39,7 +45,9 @@
       "values": [
         "bar",
         "line",
-        "area"
+        "area",
+        "pie",
+        "donut"
       ],
       "default": "bar",
       "class": "vin-chart--{type}"
@@ -60,8 +68,28 @@
     },
     "series": {
       "type": "{ key: string; label?: string; color?: string }[]",
-      "description": "The fields to draw. Colours default to the theme's --vin-chart-1 to --vin-chart-5.",
+      "description": "The fields to draw. Pie and donut draw the first one, one slice per row. Colours default to the theme's --vin-chart-1 to --vin-chart-5.",
       "html": "g.vin-chart__series style=\"--vin-series: var(--vin-chart-1)\""
+    },
+    "stacked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Bar and area: stack the series, so the top is the total.",
+      "html": "one bar per category; areas sit on the series below"
+    },
+    "curve": {
+      "values": [
+        "linear",
+        "smooth"
+      ],
+      "default": "linear",
+      "description": "Line and area: smooth draws a monotone curve that never overshoots the data.",
+      "html": "C commands in path.vin-chart__line"
+    },
+    "centerLabel": {
+      "type": "string",
+      "description": "Donut: caption under the total in the middle. Without it the middle stays empty.",
+      "html": "div.vin-chart__center > span.vin-chart__center-value + span.vin-chart__center-label"
     },
     "format": {
       "type": "(value: number) => string",
@@ -83,7 +111,7 @@
     },
     "legend": {
       "type": "boolean",
-      "description": "Show the legend. Default: when there's more than one series.",
+      "description": "Show the legend. Default: when there's more than one series, and always for pie and donut (one key per slice).",
       "html": ".vin-chart__legend > .vin-chart__key > .vin-chart__swatch"
     },
     "theme colours": {
@@ -115,6 +143,26 @@
       "id": "area",
       "title": "Area",
       "description": "One series, so no legend. Values and ticks are formatted as rupees."
+    },
+    {
+      "id": "stacked",
+      "title": "Stacked bar",
+      "description": "Three series stacked into one bar per month, so the height is the total. The tooltip still lists each series."
+    },
+    {
+      "id": "smooth",
+      "title": "Stacked area, smooth",
+      "description": "Desktop and mobile stacked, drawn with a smooth curve."
+    },
+    {
+      "id": "pie",
+      "title": "Pie",
+      "description": "One slice per row. Hover a slice, or focus the chart and use the arrow keys, to see its value."
+    },
+    {
+      "id": "donut",
+      "title": "Donut",
+      "description": "The same data as a donut, with the total and a caption in the middle (centerLabel)."
     }
   ],
   "a11y": [
@@ -122,6 +170,7 @@
     "The legend and axis labels are hidden from screen readers because the table already says it all.",
     "The chart can be focused: Left and Right (or Up and Down), Home and End move between categories and show a tooltip; Escape hides it. The tooltip also follows the pointer.",
     "Series colours start from your accent and keep a mid lightness, so lines and bars stand out on light and dark backgrounds. Colour is never the only cue: the tooltip and table name every series.",
-    "Lines keep a 2px stroke at any size, and labels stay full size on small screens because they are HTML, not SVG text."
+    "Lines keep a 2px stroke at any size, and labels stay full size on small screens because they are HTML, not SVG text.",
+    "Pie and donut slices are labelled the same way: the table has one row per slice, and the arrow keys move between slices."
   ]
 }

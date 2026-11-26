@@ -7,7 +7,6 @@ import { join } from "node:path";
 import { writeRegistry } from "../../../scripts/build-registry.mjs";
 import { main, parseArgs } from "../src/cli.mjs";
 import { unifiedDiff, searchComponents, registry, closest } from "../src/core.mjs";
-import { createServer } from "../src/mcp.mjs";
 import { vendoredTheme } from "../scripts/vendor-theme.mjs";
 
 let REG;
@@ -144,22 +143,16 @@ test("search: plain words find the right component", async () => {
   assert.equal(closest("dialgo", ["dialog", "drawer"]), "dialog");
 });
 
-test("MCP: initialize, list tools, get code, add files", async () => {
+test("add a block: writes it to blocks/ and adds the components it uses", async () => {
   const dir = await project({ dependencies: { react: "19" } });
-  await run(dir, "init", "--style", "bento");
-  const handle = createServer({ cwd: dir, registrySource: REG });
-  const init = await handle({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } } });
-  assert.equal(init.result.protocolVersion, "2025-06-18");
-  assert.equal(await handle({ jsonrpc: "2.0", method: "notifications/initialized" }), null);
-  const list = await handle({ jsonrpc: "2.0", id: 2, method: "tools/list" });
-  assert.deepEqual(list.result.tools.map((t) => t.name), ["list_components", "search_components", "get_component", "list_styles", "get_theme", "add_component"]);
-  const get = await handle({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "get_component", arguments: { name: "button" } } });
-  assert.match(get.result.content[0].text, /bento style/);
-  assert.match(get.result.content[0].text, /export function Button/);
-  const add = await handle({ jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "add_component", arguments: { names: ["alert-dialog"] } } });
-  assert.match(add.result.content[0].text, /added: src\/components\/vin\/dialog.tsx/);
-  const bad = await handle({ jsonrpc: "2.0", id: 5, method: "tools/call", params: { name: "get_component", arguments: { name: "nope" } } });
-  assert.equal(bad.result.isError, true);
-  const unknown = await handle({ jsonrpc: "2.0", id: 6, method: "nope" });
-  assert.equal(unknown.error.code, -32601);
+  await run(dir, "init");
+  await run(dir, "add", "dashboard-01", "login-01");
+  assert.match(await readFile(join(dir, "src/components/vin/blocks/dashboard-01.tsx"), "utf8"), /export function Dashboard01/);
+  assert.match(await readFile(join(dir, "src/components/vin/blocks/login-01.tsx"), "utf8"), /export function Login01/);
+  assert.match(await readFile(join(dir, "src/components/vin/chart.tsx"), "utf8"), /export function Chart/);
+  const html = await project();
+  await run(html, "init", "--framework", "html");
+  await run(html, "add", "pricing-01");
+  const cfg = JSON.parse(await readFile(join(html, "vin.json"), "utf8"));
+  assert.match(await readFile(join(html, cfg.path, "pricing-01.html"), "utf8"), /Simple pricing/);
 });

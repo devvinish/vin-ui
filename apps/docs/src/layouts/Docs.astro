@@ -3,11 +3,11 @@ import Base from "./Base.astro";
 import Sidebar from "../components/Sidebar.astro";
 import RightRail from "../components/RightRail.astro";
 
-export interface Props { title: string; description?: string; current?: string; toc?: { id: string; text: string }[] }
-const { title, description, current, toc = [] } = Astro.props;
-const GUIDES = ["installation", "theming", "frameworks", "cli", "mcp"];
+export interface Props { title: string; seoTitle?: string; description?: string; current?: string; toc?: { id: string; text: string }[] }
+const { title, seoTitle, description, current, toc = [] } = Astro.props;
+const GUIDES = ["installation", "theming", "frameworks", "cli", "ai"];
 ---
-<Base title={title} description={description} current={current === "styles" ? "styles" : GUIDES.includes(current ?? "") ? "docs" : "components"} hasSidebar>
+<Base title={title} seoTitle={seoTitle} description={description} current={current === "styles" ? "styles" : GUIDES.includes(current ?? "") ? "docs" : "components"} hasSidebar>
   <div class="docs">
     <Sidebar current={current} />
     <main class="main" id="main">

@@ -1,6 +1,6 @@
 # @vinish/ui
 
-The VinUI command line tool and MCP server. VinUI is a free, MIT-licensed component library in 8 styles (Precision, Tactile, Clay, Tonal, Editorial, Terminal, Paper, Bento), any accent colour, light and dark, for HTML, React, Vue and Svelte.
+The VinUI command line tool. VinUI is a free, MIT-licensed component library in 8 styles (Precision, Tactile, Clay, Tonal, Editorial, Terminal, Paper, Bento), any accent colour, light and dark, for HTML, React, Vue and Svelte.
 
 Docs: https://vinish.dev/ui
 
@@ -18,21 +18,16 @@ npx @vinish/ui add button dialog
 | Command | What it does |
 | --- | --- |
 | `init` | Set up VinUI: framework, style, accent, folder. `-y` takes the defaults; `--style`, `--accent`, `--theme vin-theme.json` set them. |
-| `add <names…>` | Add components. Asks before replacing a file you changed (`--overwrite` replaces). |
+| `add <names…>` | Add components or blocks (`add login-01` writes `blocks/login-01.tsx` and the components it uses). Asks before replacing a file you changed (`--overwrite` replaces). |
 | `style <name>` | Switch the whole project to another style. |
 | `diff [names…]` | Show how your copies differ from the latest VinUI. |
-| `list` | Every component and the frameworks it's available for (`--json`). |
-| `mcp` | Run the MCP server for AI coding tools. |
+| `list` | Every component and block, and the frameworks each is available for (`--json`). |
 
 `--registry <folder|url>` (or `VINUI_REGISTRY`) reads components from somewhere other than vinish.dev, for example a local build when you're offline.
 
-## AI tools (MCP)
+## AI tools
 
-```json
-{ "mcpServers": { "vinui": { "command": "npx", "args": ["-y", "@vinish/ui", "mcp"] } } }
-```
-
-Or use the hosted server, which reads and searches but doesn't write files: `https://vinish.dev/ui/mcp`.
+Claude Code, Codex, Cursor and Copilot can run this CLI themselves. Lines to add to `CLAUDE.md` or `AGENTS.md` so they use it: https://vinish.dev/ui/docs/ai/
 
 ## License
 

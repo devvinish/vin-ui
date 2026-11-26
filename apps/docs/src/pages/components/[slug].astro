@@ -22,7 +22,7 @@ const toc = [
 const props = Object.entries(spec.props);
 const reactImport = `import { ${[...spec.react.components, ...(spec.react.helpers ?? [])].join(", ")} } from "@/components/vin/${spec.name}";`;
 ---
-<Docs title={spec.title} description={`VinUI ${spec.title}: ${spec.description} In 8 styles, for HTML, React, Vue and Svelte.`} current={spec.name} toc={toc}>
+<Docs title={spec.title} seoTitle={`${spec.title} Component for HTML, React, Vue & Svelte · VinUI`} description={`Free, accessible ${spec.title} component for HTML, React, Vue and Svelte. ${spec.description} In 8 styles, light and dark. Copy the code or add it with the CLI.`} current={spec.name} toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><a href={href("/components/")}><span>Components</span></a><span>{spec.title}</span></div>
   <h1 class="page-title">{spec.title}</h1>
   <p class="page-lead">{spec.description} Same markup and props in every style: switch the style in the header to see it change.</p>

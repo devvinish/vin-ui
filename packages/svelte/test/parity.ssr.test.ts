@@ -32,3 +32,17 @@ for (const spec of Object.values(specs)) {
     }
   });
 }
+
+/* Blocks: generated from packages/html/blocks by scripts/blocks.mjs; they must render the same markup. */
+const blockHtml = import.meta.glob<string>("../../html/blocks/*.html", { eager: true, query: "?raw", import: "default" });
+const blocks = import.meta.glob<Component>("../blocks/*.svelte", { eager: true, import: "default" });
+describe("blocks: Svelte versions match the HTML", () => {
+  for (const [path, snippet] of Object.entries(blockHtml)) {
+    const name = path.split("/").pop()!.replace(".html", "");
+    it(name, () => {
+      const Block = blocks[`../blocks/${name}.svelte`];
+      expect(Block, `missing blocks/${name}.svelte (run node scripts/blocks.mjs)`).toBeTruthy();
+      expect(shape(strip(render(Block).body))).toEqual(shape(snippet));
+    });
+  }
+});

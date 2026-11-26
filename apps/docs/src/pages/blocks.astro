@@ -1,0 +1,61 @@
+---
+import Gallery from "../layouts/Gallery.astro";
+import CodeTabs from "../components/CodeTabs.astro";
+import { href } from "../lib/site";
+import { BLOCKS, BLOCK_CATEGORIES, blockHtml, blockReact, blockVue, blockSvelte, blockDependencies } from "../data/blocks";
+
+const blocks = BLOCKS.map((b: any) => ({ ...b, preview: blockHtml(b.html), deps: blockDependencies(b.html) }));
+const slug = (c: string) => c.toLowerCase();
+---
+<Gallery
+  title="Free UI Blocks: Login, Dashboard, Pricing & More"
+  description={`${blocks.length} free, ready-made page sections for HTML, React, Vue and Svelte: sign-in and sign-up forms, a dashboard, settings, pricing, FAQ, contact and 404. Copy and paste, in 8 styles.`}
+  current="blocks"
+>
+  <div class="gallery-head">
+    <div class="crumbs"><a href={href("/")}>VinUI</a><span>Blocks</span></div>
+    <h1 class="page-title">Blocks</h1>
+    <p class="page-lead">Whole sections built from VinUI components: sign-in forms, a dashboard, settings, pricing and more. Copy the code, or add one with the CLI, then change the words. They follow your style, accent and dark mode, and work on phones.</p>
+    <nav class="chips" aria-label="Block categories">
+      {BLOCK_CATEGORIES.map((c) => <a class="chip" href={`#${slug(c)}`}>{c} <span>{blocks.filter((b: any) => b.category === c).length}</span></a>)}
+    </nav>
+  </div>
+
+  {BLOCK_CATEGORIES.map((cat) => (
+    <section class="gallery-section" aria-labelledby={slug(cat)}>
+      <h2 id={slug(cat)} class="gallery-title">{cat}</h2>
+      <div class="block-list">
+        {blocks.filter((b: any) => b.category === cat).map((b: any) => (
+          <article class="gallery-item block-item" id={b.name}>
+            <div class="block-head">
+              <div>
+                <h3>{b.title}</h3>
+                <p>{b.description}</p>
+              </div>
+              <div class="cmd block-cmd"><code>npx @vinish/ui add {b.name}</code><button class="copy-btn" type="button" data-copy aria-label={`Copy the command to add ${b.title}`}>Copy</button></div>
+            </div>
+            <div class="vin-stage block-stage" data-block-preview set:html={b.preview} />
+            <details class="gallery-code">
+              <summary>Code</summary>
+              {b.deps.length > 0 && <p class="example-note">Uses the <a href={href("/components/chart/")}>Chart</a> component; the CLI adds it for you.</p>}
+              <CodeTabs id={`block-${b.name}`} label={b.title} files={[
+                { fw: "html", name: `${b.name}.html`, code: b.preview },
+                { fw: "react", name: `${b.name}.tsx`, code: blockReact(b) },
+                { fw: "vue", name: `${b.name}.vue`, code: blockVue(b) },
+                { fw: "svelte", name: `${b.name}.svelte`, code: blockSvelte(b) },
+              ]} />
+            </details>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
+</Gallery>
+
+<script>
+  // Previews only: links and forms in the blocks point at pages of your app, so they don't go anywhere here.
+  for (const el of document.querySelectorAll("[data-block-preview]")) {
+    el.addEventListener("click", (e) => { if ((e.target as Element).closest("a[href]")) e.preventDefault(); });
+    el.addEventListener("submit", (e) => e.preventDefault());
+  }
+</script>

@@ -2,7 +2,7 @@
  * VinUI styles: the single source of truth for all 8 styles.
  *
  * Each style is plain data:
- *   - meta (name, description, tags) used by the docs site, the CLI and the MCP server
+ *   - meta (name, description, tags) used by the docs site and the CLI
  *   - `light` and `dark` token values (CSS custom properties without the `--vin-` prefix)
  *   - `tweaks`: small, documented per-component CSS overrides, keyed by component name.
  *     Every style MUST have an entry for every component (an empty string is allowed),

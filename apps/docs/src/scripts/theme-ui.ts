@@ -304,3 +304,26 @@ if (tocLinks.length && "IntersectionObserver" in window) {
   }, { rootMargin: "-80px 0px -70% 0px" });
   for (const id of byId.keys()) { const h = document.getElementById(id); if (h) io.observe(h); }
 }
+
+/* GitHub stars next to the GitHub icon. Asked from GitHub at most once a day per visitor (cached in
+   localStorage), so it stays current without rebuilding the site. If GitHub can't be reached, only the icon shows. */
+(async () => {
+  const link = $<HTMLAnchorElement>("[data-gh-link]"), badge = $("[data-gh-stars]");
+  if (!link || !badge || navigator.webdriver) return; // tests never call GitHub
+  const KEY = "vinui:gh-stars", DAY = 24 * 60 * 60 * 1000;
+  let stars: number | null = null;
+  try { const c = JSON.parse(localStorage.getItem(KEY) || "null"); if (c && Date.now() - c.t < DAY) stars = c.n; } catch {}
+  if (stars === null) {
+    try {
+      const res = await fetch("https://api.github.com/repos/devvinish/vin-ui", { headers: { accept: "application/vnd.github+json" } });
+      if (!res.ok) return;
+      stars = Number((await res.json()).stargazers_count);
+      try { localStorage.setItem(KEY, JSON.stringify({ n: stars, t: Date.now() })); } catch {}
+    } catch { return; }
+  }
+  if (!Number.isFinite(stars) || stars! < 1) return;
+  const text = stars! < 1000 ? String(stars) : `${(stars! / 1000).toFixed(stars! < 10000 ? 1 : 0).replace(/\.0$/, "")}k`;
+  badge.textContent = text;
+  badge.hidden = false;
+  link.setAttribute("aria-label", `VinUI on GitHub, ${text} stars`);
+})();

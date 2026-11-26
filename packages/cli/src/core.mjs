@@ -1,7 +1,7 @@
 /*
- * The parts the CLI commands and the MCP server share: reading the registry, reading and
+ * The parts the CLI commands share: reading the registry, reading and
  * writing vin.json, finding the project's framework, writing component files and diffing.
- * Everything takes a `cwd` so tests (and the MCP server) can point it anywhere.
+ * Everything takes a `cwd` so tests can point it anywhere.
  */
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import { join, dirname, resolve, relative, isAbsolute } from "node:path";

@@ -21,9 +21,7 @@ jobs:
         run: npm test
       - name: Build docs site
         run: npm run build
-      - name: Worker + remote MCP tests (read the built site)
-        run: npm test --prefix workers/site
-      - name: Worker bundles
+      - name: Static assets config is valid
         run: npx -y wrangler@4 deploy --dry-run --outdir /tmp/worker
         working-directory: workers/site
       - run: npx playwright install --with-deps chromium

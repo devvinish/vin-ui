@@ -1,0 +1,15 @@
+[
+  { "name": "login-01", "title": "Sign in", "category": "Authentication", "description": "A centred sign-in card: email, password, remember me and a second sign-in option." },
+  { "name": "login-02", "title": "Sign in, split screen", "category": "Authentication", "description": "The form on one side and your brand and a customer quote on the other. Stacks on phones." },
+  { "name": "signup-01", "title": "Create account", "category": "Authentication", "description": "Name, email and password with a hint, a terms checkbox and a link back to sign in." },
+  { "name": "forgot-password-01", "title": "Reset password", "category": "Authentication", "description": "Ask for the email address, send a reset link, and say what happens next." },
+  { "name": "dashboard-01", "title": "Dashboard", "category": "Dashboard", "description": "An app screen: side navigation, stat cards, a stacked area chart, recent sales and an orders table." },
+  { "name": "stats-01", "title": "Stat cards", "category": "Dashboard", "description": "Four key numbers with a trend badge each. They wrap from four across to one." },
+  { "name": "settings-01", "title": "Profile settings", "category": "Dashboard", "description": "Profile fields, a bio, notification switches and Save and Cancel buttons." },
+  { "name": "team-01", "title": "Team members", "category": "Dashboard", "description": "Invite by email, then list people with their role in a select." },
+  { "name": "hero-01", "title": "Hero", "category": "Marketing", "description": "A centred headline with a badge, a lead paragraph and two calls to action." },
+  { "name": "pricing-01", "title": "Pricing", "category": "Marketing", "description": "Three plans with feature lists; the middle one is highlighted as the most popular." },
+  { "name": "faq-01", "title": "FAQ", "category": "Marketing", "description": "Questions in an accordion next to a short intro and a contact link." },
+  { "name": "contact-01", "title": "Contact", "category": "Marketing", "description": "A contact form with a topic select, next to your email, phone and address." },
+  { "name": "error-01", "title": "Page not found", "category": "Marketing", "description": "A friendly 404 with a way back home and a link to search." }
+]

@@ -5,7 +5,6 @@
  *   style     switch the project's style (rewrites vin.css)
  *   diff      show what changed upstream since you added a component
  *   list      list the components
- *   mcp       start the MCP server for AI tools
  */
 import { readFile, writeFile, access, mkdir } from "node:fs/promises";
 import { join, resolve, dirname } from "node:path";
@@ -63,8 +62,7 @@ ${bold("Commands")}
   add <names…>         Add components, e.g. add button dialog
   style <name>         Switch the style (rewrites vin.css)
   diff [names…]        Show what changed in VinUI since you added a component
-  list                 List the components
-  mcp                  Start the MCP server for AI tools (Claude Code, Cursor, VS Code…)
+  list                 List the components and blocks
 
 ${bold("init options")}
   --framework <react|vue|svelte|html>   --style <${OPTIONS.style.values.join("|")}>
@@ -229,14 +227,10 @@ export async function main(argv = process.argv.slice(2)) {
   if (args.version) { console.log(VERSION); return; }
   if (!cmd || args.help || cmd === "help") { console.log(HELP); return; }
   const cwd = args.cwd ? resolve(String(args.cwd)) : process.cwd();
-  if (cmd === "mcp") {
-    const { serveMcp } = await import("./mcp.mjs");
-    return serveMcp({ cwd, registrySource: args.registry });
-  }
   const reg = registry(args.registry);
   const commands = { init, add, style, diff, list };
   if (!commands[cmd]) {
-    const near = closest(cmd, [...Object.keys(commands), "mcp"]);
+    const near = closest(cmd, Object.keys(commands));
     throw new RegistryError(`Unknown command "${cmd}".${near ? ` Did you mean \`${near}\`?` : ""} Run \`npx @vinish/ui --help\`.`);
   }
   await commands[cmd](args, cwd, reg);

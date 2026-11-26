@@ -29,3 +29,17 @@ for (const spec of Object.values(specs)) {
     }
   });
 }
+
+/* Blocks: generated from packages/html/blocks by scripts/blocks.mjs; they must render the same markup. */
+const blockHtml = import.meta.glob<string>("../../html/blocks/*.html", { eager: true, query: "?raw", import: "default" });
+const blocks = import.meta.glob<Component>("../blocks/*.vue", { eager: true, import: "default" });
+describe("blocks: Vue versions match the HTML", () => {
+  for (const [path, snippet] of Object.entries(blockHtml)) {
+    const name = path.split("/").pop()!.replace(".html", "");
+    it(name, async () => {
+      const Block = blocks[`../blocks/${name}.vue`];
+      expect(Block, `missing blocks/${name}.vue (run node scripts/blocks.mjs)`).toBeTruthy();
+      expect(shape(await renderToString(createSSRApp(Block)))).toEqual(shape(snippet));
+    });
+  }
+});

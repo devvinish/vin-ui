@@ -1,0 +1,56 @@
+---
+import Gallery from "../layouts/Gallery.astro";
+import CodeTabs from "../components/CodeTabs.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import { href } from "../lib/site";
+import { CHARTS, CHART_GROUPS, htmlCode, reactCode, vueCode, svelteCode } from "../data/charts";
+
+const charts = CHARTS.map((c) => ({ ...c, html: htmlCode(c) }));
+---
+<Gallery
+  title="Free Chart Components for HTML, React, Vue & Svelte"
+  description="16 free, accessible charts: area, bar, line, pie and donut, stacked or smooth. Copy the code for HTML, React, Vue or Svelte. They take your style and accent colour."
+  current="charts"
+>
+  <div class="gallery-head">
+    <div class="crumbs"><a href={href("/")}>VinUI</a><span>Charts</span></div>
+    <h1 class="page-title">Charts</h1>
+    <p class="page-lead">Area, bar, line, pie and donut charts, built on the <a href={href("/components/chart/")}>Chart</a> component. No chart library: plain SVG that takes your style and accent colour, with tooltips, keyboard support and a data table for screen readers.</p>
+    <div class="gallery-install">
+      <CodeBlock title="Add the Chart component" lang="bash" code="npx @vinish/ui add chart" />
+    </div>
+    <nav class="chips" aria-label="Chart types">
+      {CHART_GROUPS.map((g) => <a class="chip" href={`#${g.toLowerCase()}`}>{g} <span>{charts.filter((c) => c.group === g).length}</span></a>)}
+    </nav>
+  </div>
+
+  {CHART_GROUPS.map((g) => (
+    <section class="gallery-section" aria-labelledby={g.toLowerCase()}>
+      <h2 id={g.toLowerCase()} class="gallery-title">{g === "Pie" ? "Pie and donut" : g} charts</h2>
+      <div class="gallery-grid">
+        {charts.filter((c) => c.group === g).map((c) => (
+          <article class="gallery-item" id={c.id}>
+            <div class="vin-stage gallery-stage">
+              <div class="vin-card gallery-card">
+                <div class="vin-card__header">
+                  <h3 class="vin-card__title">{c.title}</h3>
+                  <p class="vin-card__desc">{c.description}</p>
+                </div>
+                <div class="vin-card__body" set:html={c.html} />
+              </div>
+            </div>
+            <details class="gallery-code">
+              <summary>Code</summary>
+              <CodeTabs id={`chart-${c.id}`} label={c.title} files={[
+                { fw: "html", name: `${c.id}.html`, code: c.html },
+                { fw: "react", name: `${c.id}.tsx`, code: reactCode(c) },
+                { fw: "vue", name: `${c.id}.vue`, code: vueCode(c) },
+                { fw: "svelte", name: `${c.id}.svelte`, code: svelteCode(c) },
+              ]} />
+            </details>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
+</Gallery>

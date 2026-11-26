@@ -1,0 +1,31 @@
+---
+import Docs from "../../layouts/Docs.astro";
+import CodeBlock from "../../components/CodeBlock.astro";
+import { href } from "../../lib/site";
+const toc = [{ id: "how", text: "How it works" }, { id: "rules", text: "Project rules" }, { id: "llms", text: "llms.txt" }];
+const rules = `## UI components
+This project uses VinUI (https://vinish.dev/ui). Settings are in vin.json.
+- Add components and blocks with the CLI, never by hand:
+  npx @vinish/ui add <name>     (e.g. dialog, date-picker, login-01, dashboard-01)
+- See what exists: npx @vinish/ui list
+- Styling comes from vin.css and the vin-* classes. Don't add other CSS frameworks.
+- Docs and examples for any component: https://vinish.dev/ui/components/<name>/`;
+---
+<Docs title="AI tools" description="Use VinUI with Claude Code, Codex, Cursor, Copilot and other AI coding tools: they run the CLI, which writes the real component code in your style." current="ai" toc={toc}>
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>AI tools</span></div>
+  <h1 class="page-title">AI tools</h1>
+  <p class="page-lead">AI coding tools like Claude Code, Codex, Cursor and Copilot can run terminal commands, so they use VinUI the same way you do: through the CLI. Nothing extra to install or connect.</p>
+  <div class="prose">
+    <h2 id="how">How it works</h2>
+    <p>Ask for what you want ("add a sign-in page", "I need a date picker in this form"). The tool runs the CLI, which copies the real component code into your project, in your framework, with everything it depends on. Your style and accent come from <code>vin.css</code>, so the result matches the rest of your app.</p>
+    <CodeBlock title="What the AI runs" lang="bash" code={`npx @vinish/ui list\nnpx @vinish/ui add date-picker\nnpx @vinish/ui add login-01`} />
+    <p>Because the code is in your project, the tool can then read it and wire it up like any other file.</p>
+
+    <h2 id="rules">Project rules</h2>
+    <p>To make sure the tool reaches for VinUI first, add a few lines to its instructions file: <code>CLAUDE.md</code> (Claude Code), <code>AGENTS.md</code> (Codex and others), <code>.cursor/rules</code> (Cursor) or <code>.github/copilot-instructions.md</code> (Copilot).</p>
+    <CodeBlock title="CLAUDE.md or AGENTS.md" lang="markdown" code={rules} />
+
+    <h2 id="llms">llms.txt</h2>
+    <p>Chat assistants that read web pages can use <a href={href("/llms.txt")}>/ui/llms.txt</a> (an index of every component and block) or <a href={href("/llms-full.txt")}>/ui/llms-full.txt</a> (with the HTML for each component). They're rebuilt with every release.</p>
+  </div>
+</Docs>

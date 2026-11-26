@@ -1,0 +1,182 @@
+---
+import Gallery from "../layouts/Gallery.astro";
+import StyleSample from "../components/StyleSample.astro";
+import Icon from "../components/Icon.astro";
+import { STYLES } from "@vinui/styles";
+import { ACCENTS } from "@vinui/theme";
+import { href } from "../lib/site";
+import { CHARTS, htmlCode } from "../data/charts";
+
+const chart = htmlCode(CHARTS.find((c) => c.id === "bar-stacked")!);
+const donut = htmlCode(CHARTS.find((c) => c.id === "donut-total")!);
+const frameworks = [["react", "React"], ["vue", "Vue"], ["svelte", "Svelte"], ["html", "HTML"]];
+const opts = [
+  { key: "radius", label: "Corners", values: [["default", "Style's own"], ["none", "Square"], ["sm", "S"], ["md", "M"], ["lg", "L"], ["full", "Round"]] },
+  { key: "font", label: "Font", values: [["default", "Style's own"], ["inter", "Inter"], ["geist", "Geist"], ["system", "System"], ["mono", "Mono"]] },
+  { key: "gray", label: "Grey tone", values: [["neutral", "Neutral"], ["slate", "Slate"], ["stone", "Stone"]] },
+  { key: "density", label: "Spacing", values: [["compact", "Compact"], ["default", "Default"], ["comfortable", "Roomy"]] },
+  { key: "mode", label: "Preview in", values: [["light", "Light"], ["dark", "Dark"], ["system", "System"]] },
+];
+---
+<Gallery
+  title="Create Your Own UI Theme: Free Theme Builder"
+  description="Build your own design system in a minute: pick a style, accent colour, corners, font and spacing, see it live on real components, then set up your project with one command. Free, for HTML, React, Vue and Svelte."
+  current="create"
+>
+  <div class="gallery-head">
+    <div class="crumbs"><a href={href("/")}>VinUI</a><span>Create</span></div>
+    <h1 class="page-title">Create your theme</h1>
+    <p class="page-lead">Pick a look, see it on real components, then start your project with one command. Your choices are saved in this browser and apply to the whole site, so the components and blocks pages show them too.</p>
+  </div>
+
+  <div class="create">
+    <form class="create-panel" aria-label="Theme settings" data-create-form>
+      <fieldset class="create-step">
+        <legend><span class="n">1</span>Framework</legend>
+        <div class="seg seg-wrap" role="group" aria-label="Framework">
+          {frameworks.map(([v, l]) => <button type="button" aria-pressed="false" data-create-fw={v}>{l}</button>)}
+        </div>
+      </fieldset>
+
+      <fieldset class="create-step">
+        <legend><span class="n">2</span>Style</legend>
+        <div class="create-styles" role="group" aria-label="Style">
+          {STYLES.map((s) => (
+            <button type="button" class="create-style" aria-pressed="false" data-demo-style={s.id}>
+              <span class="swatch-stage vin-stage" data-vin-style={s.id}><span class="vin-btn vin-btn--sm" aria-hidden="true">Aa</span></span>
+              <span><b>{s.name}</b><small>{s.short}</small></span>
+            </button>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="create-step">
+        <legend><span class="n">3</span>Accent colour</legend>
+        <div class="swatches" role="radiogroup" aria-label="Accent colour">
+          {ACCENTS.map((a) => <button class="swatch" type="button" role="radio" aria-checked="false" aria-label={a.name} title={a.name} data-set-accent={a.hex} style={`background:${a.hex}`}></button>)}
+        </div>
+        <label class="custom-acc">
+          <input type="color" value="#5b5bd6" data-accent-input aria-label="Custom accent colour" />
+          Any colour <code data-accent-hex>#5b5bd6</code>
+        </label>
+      </fieldset>
+
+      <fieldset class="create-step">
+        <legend><span class="n">4</span>Details</legend>
+        {opts.map((g) => (
+          <div class="opt-group">
+            <div class="lbl" id={`create-${g.key}`}>{g.label}</div>
+            <div class="seg seg-wrap" role="group" aria-labelledby={`create-${g.key}`}>
+              {g.values.map(([v, l]) => <button type="button" aria-pressed="false" data-opt={g.key} data-val={v}>{l}</button>)}
+            </div>
+          </div>
+        ))}
+      </fieldset>
+    </form>
+
+    <div class="create-main">
+      <section class="create-out" aria-labelledby="create-out-title">
+        <h2 id="create-out-title"><span class="n">5</span>Start your project</h2>
+        <p class="muted" data-create-hint>Run this in your project folder. It writes <code>vin.json</code> and <code>vin.css</code> with your theme; then add components or blocks.</p>
+        <div class="code create-code">
+          <div class="code-head"><span data-create-file>Terminal</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+          <pre><code data-create-command></code></pre>
+        </div>
+        <div class="code create-code">
+          <div class="code-head"><span>Then</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+          <pre><code data-create-next></code></pre>
+        </div>
+        <div class="btn-row create-actions">
+          <button class="btn" type="button" data-create-share><Icon name="link" />Share this theme</button>
+          <button class="btn" type="button" data-create-download><Icon name="download" />Download vin-theme.json</button>
+          <a class="btn" href={href("/blocks/")}>Browse blocks</a>
+        </div>
+      </section>
+
+      <section class="create-preview" aria-label="Preview">
+        <div class="vin-stage create-stage">
+          <StyleSample id="create" />
+        </div>
+        <div class="vin-stage create-stage create-charts">
+          <div class="vin-card">
+            <div class="vin-card__header">
+              <p class="vin-card__title">Traffic</p>
+              <p class="vin-card__desc">Stacked by source.</p>
+            </div>
+            <div class="vin-card__body" set:html={chart} />
+          </div>
+          <div class="vin-card">
+            <div class="vin-card__header">
+              <p class="vin-card__title">Browsers</p>
+              <p class="vin-card__desc">Share of visitors.</p>
+            </div>
+            <div class="vin-card__body" set:html={donut} />
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</Gallery>
+
+<script>
+  import { loadTheme, themeToCli, themeToHtml, themeToQuery, serializeTheme } from "@vinui/theme";
+  import { STYLES } from "@vinui/styles";
+
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const fwButtons = [...document.querySelectorAll<HTMLElement>("[data-create-fw]")];
+  let fw = (() => { try { const v = localStorage.getItem("vinui:create-framework"); return v && ["react", "vue", "svelte", "html"].includes(v) ? v : "react"; } catch { return "react"; } })();
+
+  function render() {
+    const theme = loadTheme();
+    for (const b of fwButtons) b.setAttribute("aria-pressed", String(b.dataset.createFw === fw));
+    const cli = themeToCli(theme).replace("npx @vinish/ui init", `npx @vinish/ui init --framework ${fw}`);
+    if (fw === "html") {
+      $("[data-create-file]").textContent = "index.html";
+      $("[data-create-hint]").innerHTML = "No build step: put the stylesheet and script in your page and the theme on <code>&lt;html&gt;</code>. Or run <code>" + cli.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</code> to have the CLI write it for you.";
+      $("[data-create-command]").textContent = [
+        themeToHtml(theme),
+        "  <head>",
+        `    <link rel="stylesheet" href="https://vinish.dev/ui/v1/${theme.style}.css">`,
+        `    <script src="https://vinish.dev/ui/v1/vinui.js" defer></` + "script>",
+        "  </head>",
+      ].join("\n");
+      $("[data-create-next]").textContent = "Copy components and blocks from the docs: each has an HTML tab.";
+    } else {
+      $("[data-create-file]").textContent = "Terminal";
+      $("[data-create-hint]").innerHTML = "Run this in your project folder. It writes <code>vin.json</code> and <code>vin.css</code> with your theme; then add components or blocks.";
+      $("[data-create-command]").textContent = cli;
+      $("[data-create-next]").textContent = "npx @vinish/ui add button card input dashboard-01";
+    }
+  }
+
+  for (const b of fwButtons) b.addEventListener("click", () => {
+    fw = b.dataset.createFw!;
+    try { localStorage.setItem("vinui:create-framework", fw); } catch {}
+    render();
+  });
+  document.addEventListener("vinui:theme", render);
+  // Theme buttons are handled by the site script; render after it has applied the change.
+  document.addEventListener("click", (e) => { if ((e.target as Element).closest("[data-demo-style],[data-set-accent],[data-opt]")) setTimeout(render); });
+  document.addEventListener("input", (e) => { if ((e.target as Element).matches("[data-accent-input]")) setTimeout(render); });
+
+  const toast = (msg: string) => {
+    const el = document.querySelector<HTMLElement>("[data-toast]");
+    if (!el) return;
+    el.textContent = msg; el.hidden = false;
+    setTimeout(() => (el.hidden = true), 2200);
+  };
+  $("[data-create-share]").addEventListener("click", async () => {
+    const url = location.origin + location.pathname + themeToQuery(loadTheme());
+    try { await navigator.clipboard.writeText(url); toast("Share link copied"); } catch { toast(url); }
+  });
+  $("[data-create-download]").addEventListener("click", () => {
+    const theme = loadTheme();
+    const name = STYLES.find((s) => s.id === theme.style)?.name ?? theme.style;
+    const blob = new Blob([serializeTheme(theme, `My VinUI theme (${name})`)], { type: "application/json" });
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "vin-theme.json" });
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast("Downloaded vin-theme.json. Use it with: npx @vinish/ui init --theme vin-theme.json");
+  });
+  render();
+</script>

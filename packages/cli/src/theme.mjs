@@ -1,7 +1,7 @@
 // GENERATED from packages/theme/src/index.mjs by scripts/vendor-theme.mjs. Do not edit.
 /**
  * VinUI theme engine.
- * Framework-free: works in the docs site, in users' apps, in the CLI and in the MCP server.
+ * Framework-free: works in the docs site, in users' apps, and in the CLI.
  *
  * A theme is a small plain object:
  *   { style, accent, mode, radius, gray, font, density, motion }

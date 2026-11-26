@@ -1,7 +1,7 @@
 {
   "name": "@vinish/ui",
   "version": "0.1.0",
-  "description": "VinUI CLI and MCP server: add VinUI components to your project in your style and accent colour.",
+  "description": "VinUI CLI: add VinUI components and blocks to your project in your style and accent colour.",
   "license": "MIT",
   "type": "module",
   "homepage": "https://vinish.dev/ui",
@@ -18,8 +18,7 @@
     "vue",
     "svelte",
     "html",
-    "cli",
-    "mcp"
+    "cli"
   ],
   "bin": {
     "vinui": "bin/vinui.mjs"

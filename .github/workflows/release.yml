@@ -73,7 +73,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Deploy the Worker (site + /ui/mcp)
+      - name: Deploy the static files to Cloudflare
         working-directory: workers/site
         run: npx -y wrangler@4 deploy
         env:

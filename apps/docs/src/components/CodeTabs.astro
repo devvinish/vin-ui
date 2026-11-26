@@ -1,0 +1,31 @@
+---
+/**
+ * Code only, with HTML / React / Vue / Svelte tabs (the framework choice is shared across the page).
+ * Used by the Charts and Blocks galleries, where the preview sits above it.
+ */
+import { Code } from "astro:components";
+import Icon from "./Icon.astro";
+
+export type CodeFile = { fw: "html" | "react" | "vue" | "svelte"; name: string; code: string };
+const { id, files, label = "Code" } = Astro.props as { id: string; files: CodeFile[]; label?: string };
+const LABEL = { html: "HTML", react: "React", vue: "Vue", svelte: "Svelte" };
+const LANG = { html: "html", react: "tsx", vue: "vue", svelte: "svelte" };
+const themes = { light: "github-light", dark: "github-dark" } as const;
+---
+<div class="code-tabs" data-tabs>
+  <div class="example-bar">
+    <div class="seg" role="tablist" aria-label={`${label}: framework`}>
+      {files.map((f, i) => (
+        <button type="button" role="tab" aria-selected={String(i === 0)} tabindex={i === 0 ? 0 : -1} aria-controls={`${id}-${f.fw}`} id={`${id}-tab-${f.fw}`} data-tab={f.fw}>{LABEL[f.fw]}</button>
+      ))}
+    </div>
+  </div>
+  {files.map((f, i) => (
+    <div role="tabpanel" id={`${id}-${f.fw}`} aria-labelledby={`${id}-tab-${f.fw}`} data-panel={f.fw} hidden={i !== 0}>
+      <div class="code">
+        <div class="code-head"><span>{f.name}</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
+        <Code code={f.code.trim()} lang={LANG[f.fw]} themes={themes} defaultColor={false} />
+      </div>
+    </div>
+  ))}
+</div>

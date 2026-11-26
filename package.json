@@ -1,7 +1,7 @@
 {
   "name": "vinui-monorepo",
   "private": true,
-  "description": "VinUI: free, open-source components in 8 styles for HTML, React, Vue and Svelte.",
+  "description": "VinUI: a free, open-source UI component library for HTML, React, Vue and Svelte, with blocks and charts, in 8 styles.",
   "license": "MIT",
   "repository": {
     "type": "git",

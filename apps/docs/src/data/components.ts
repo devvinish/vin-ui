@@ -44,7 +44,7 @@ const ROADMAP: Omit<ComponentEntry, "ready">[] = [
   { slug: "code-block", name: "Code Block", category: "Data display", description: "Code with a copy button.", phase: 2 },
   { slug: "aspect-ratio", name: "Aspect Ratio", category: "Data display", description: "Keep media at a fixed shape.", phase: 1 },
   { slug: "carousel", name: "Carousel", category: "Data display", description: "Slides you can swipe through.", phase: 2 },
-  { slug: "chart", name: "Chart", category: "Data display", description: "Bar, line and area charts in your theme.", phase: 2 },
+  { slug: "chart", name: "Chart", category: "Data display", description: "Bar, line, area, pie and donut charts in your theme.", phase: 2 },
 
   // Navigation
   { slug: "tabs", name: "Tabs", category: "Navigation", description: "Switch between related views.", phase: 1 },

@@ -4,7 +4,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
 import { href } from "../../lib/site";
 const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" }, { id: "frameworks", text: "Frameworks" }, { id: "add", text: "add" }, { id: "diff", text: "diff" }, { id: "config", text: "vin.json" }, { id: "offline", text: "Offline" }];
 ---
-<Docs title="CLI" description="npx @vinish/ui: set up a project, add components, switch styles and see upstream changes." current="cli" toc={toc}>
+<Docs title="CLI" seoTitle="VinUI CLI: Add Components and Blocks with npx · VinUI" description="npx @vinish/ui: set up a project, add components and blocks, switch styles and see upstream changes. No install, no dependencies." current="cli" toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><span>CLI</span></div>
   <h1 class="page-title">CLI</h1>
   <p class="page-lead"><code>npx</code> comes with Node.js. It downloads the small VinUI CLI, runs it and leaves nothing installed. The CLI has no dependencies.</p>
@@ -15,11 +15,10 @@ const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" },
         <thead><tr><th>Command</th><th>Does</th></tr></thead>
         <tbody>
           <tr><td><code>init</code></td><td>Set up the project: framework, style, accent and folder. Writes <code>vin.json</code> and <code>vin.css</code>.</td></tr>
-          <tr><td><code>add &lt;names…&gt;</code></td><td>Copy components (and the ones they need) into your project.</td></tr>
+          <tr><td><code>add &lt;names…&gt;</code></td><td>Copy components (and the ones they need) into your project. Blocks too: <code>add login-01</code> writes it to <code>blocks/</code> and adds the components it uses.</td></tr>
           <tr><td><code>style &lt;name&gt;</code></td><td>Switch the style. Rewrites <code>vin.css</code> only.</td></tr>
           <tr><td><code>diff [names…]</code></td><td>Show what changed in VinUI since you added a component.</td></tr>
-          <tr><td><code>list</code></td><td>List the components.</td></tr>
-          <tr><td><code>mcp</code></td><td>Start the MCP server for AI tools. See <a href={href("/docs/mcp/")}>AI and MCP</a>.</td></tr>
+          <tr><td><code>list</code></td><td>List the components and blocks.</td></tr>
         </tbody>
       </table>
     </div>
@@ -27,7 +26,7 @@ const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" },
     <h2 id="init">init</h2>
     <p>Asks only what it can't work out. Every answer can be given as a flag instead, which is handy in scripts (<code>-y</code> skips the questions).</p>
     <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui init --framework react --style tactile --accent "#0d9488" --radius lg -y`} />
-    <p>The "Copy CLI" button in the Customize panel gives you this command for the theme you've built.</p>
+    <p>The <a href={href("/create/")}>Create</a> page builds this command for you as you pick a style, accent and the rest.</p>
 
     <h2 id="frameworks">Frameworks and folders</h2>
     <p><code>init</code> reads <code>package.json</code> to pick the framework: Svelte or SvelteKit, then Vue or Nuxt, then React or Next.js. With none of them it sets up plain HTML. <code>--framework</code> overrides it.</p>

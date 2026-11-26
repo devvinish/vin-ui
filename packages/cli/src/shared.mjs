@@ -1,6 +1,6 @@
 /*
- * The parts with no Node.js imports, shared by the CLI, the stdio MCP server and the
- * remote MCP server (a Cloudflare Worker). Keep this file free of node: imports.
+ * The parts with no Node.js imports: the registry reader and component search.
+ * Keep this file free of node: imports, so it also runs in a browser.
  */
 export const DEFAULT_SITE = "https://vinish.dev/ui";
 export const FRAMEWORK_IDS = ["react", "vue", "svelte", "html"];
