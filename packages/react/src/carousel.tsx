@@ -2,6 +2,9 @@
 
 import * as React from "react";
 
+/** The inert attribute: React 19 takes a boolean, React 18 needs "" (on) or no attribute (off). */
+const inert = (on: boolean | undefined) => (on ? { inert: React.version.startsWith("18") ? "" : true } : {}) as unknown as React.HTMLAttributes<HTMLElement>;
+
 /** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
 const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
@@ -131,7 +134,7 @@ export function Carousel({ label, children, perView, gap, dots = true, controls 
             role="group"
             aria-roledescription="slide"
             aria-label={`${i + 1} of ${count}`}
-            inert={shown ? !shown[i] : undefined}
+            {...inert(shown ? !shown[i] : undefined)}
           >
             {child}
           </div>

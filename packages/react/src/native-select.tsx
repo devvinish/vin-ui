@@ -19,12 +19,13 @@ export type NativeSelectProps = Omit<React.SelectHTMLAttributes<HTMLSelectElemen
   ref?: React.Ref<HTMLSelectElement>;
 };
 
-export function NativeSelect({ size = "md", label, hint, error, id, className, style, children, ...rest }: NativeSelectProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProps>(function NativeSelect({ size = "md", label, hint, error, id, className, style, children, ...rest }, ref) {
   const auto = React.useId();
   const selectId = id ?? `vin-${auto.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const cls = cx("vin-input", "vin-native-select", size !== "md" && `vin-input--${size}`);
   if (!label) {
-    return <select {...rest} id={id} className={cx(cls, className)} style={style}>{children}</select>;
+    return <select {...rest} ref={ref} id={id} className={cx(cls, className)} style={style}>{children}</select>;
   }
   const hintId = hint ? `${selectId}-hint` : undefined;
   const errorId = error ? `${selectId}-error` : undefined;
@@ -32,7 +33,7 @@ export function NativeSelect({ size = "md", label, hint, error, id, className, s
     <div className={cx("vin-field", className)} style={style}>
       <label className="vin-label" htmlFor={selectId}>{label}</label>
       <select
-        {...rest}
+        {...rest} ref={ref}
         id={selectId}
         className={cls}
         aria-invalid={error ? true : rest["aria-invalid"]}
@@ -44,4 +45,4 @@ export function NativeSelect({ size = "md", label, hint, error, id, className, s
       {hint && <p className="vin-hint" id={hintId}>{hint}</p>}
     </div>
   );
-}
+});

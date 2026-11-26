@@ -23,7 +23,8 @@ export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & 
   ref?: React.Ref<HTMLTextAreaElement>;
 };
 
-export function Textarea({ label, hint, error, autoResize = false, showCount, id, className, style, onChange, ref, ...rest }: TextareaProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({ label, hint, error, autoResize = false, showCount, id, className, style, onChange, ...rest }, ref) {
   const auto = React.useId();
   const taId = id ?? `vin-${auto.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const inner = React.useRef<HTMLTextAreaElement | null>(null);
@@ -44,7 +45,7 @@ export function Textarea({ label, hint, error, autoResize = false, showCount, id
   const setRef = (el: HTMLTextAreaElement | null) => {
     inner.current = el;
     if (typeof ref === "function") ref(el);
-    else if (ref) (ref as React.RefObject<HTMLTextAreaElement | null>).current = el;
+    else if (ref) (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = el;
   };
   const cls = cx("vin-input", "vin-textarea", autoResize && "vin-textarea--auto");
   const handle = (e: React.ChangeEvent<HTMLTextAreaElement>) => { setTyped(e.target.value.length); grow(); onChange?.(e); };
@@ -76,4 +77,4 @@ export function Textarea({ label, hint, error, autoResize = false, showCount, id
       )}
     </div>
   );
-}
+});

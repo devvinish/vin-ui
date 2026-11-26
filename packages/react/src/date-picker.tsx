@@ -3,6 +3,12 @@
 import * as React from "react";
 import { Calendar, type DateRange } from "./calendar";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
+/** The button's popovertarget: React 19 calls the prop popoverTarget, React 18 only passes the plain attribute. */
+const popoverTarget = (id: string) => (React.version.startsWith("18") ? { popovertarget: id } : { popoverTarget: id }) as unknown as React.ButtonHTMLAttributes<HTMLButtonElement>;
+
 /** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
 const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
@@ -111,7 +117,7 @@ export function DatePicker(props: DatePickerProps) {
         type="button"
         id={base}
         className={cx("vin-input", "vin-date-picker__trigger", size !== "md" && `vin-input--${size}`)}
-        popoverTarget={ids.pop}
+        {...popoverTarget(ids.pop)}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-labelledby={label ? `${ids.label} ${base}` : undefined}
@@ -125,7 +131,7 @@ export function DatePicker(props: DatePickerProps) {
         </svg>
         {shown ? <span className="vin-date-picker__value">{shown}</span> : <span className="vin-date-picker__value" data-placeholder="">{placeholder}</span>}
       </button>
-      <div ref={pop} className="vin-popover vin-date-picker__content" id={ids.pop} popover="auto" role="dialog" aria-label={typeof label === "string" ? `Choose ${label.toLowerCase()}` : "Choose a date"}>
+      <div ref={pop} className="vin-popover vin-date-picker__content" id={ids.pop} {...popover("auto")} role="dialog" aria-label={typeof label === "string" ? `Choose ${label.toLowerCase()}` : "Choose a date"}>
         {mode === "range" ? (
           <Calendar
             mode="range"

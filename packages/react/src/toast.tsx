@@ -78,7 +78,7 @@ export function Toast({ title, description, variant = "default", action, onClose
 function Live({ entry }: { entry: Entry }) {
   // Render the live region empty first, then the text, so screen readers announce it.
   const [ready, setReady] = React.useState(false);
-  const timer = React.useRef<number>(undefined);
+  const timer = React.useRef<number | undefined>(undefined);
   const left = React.useRef(entry.duration ?? 5000);
   const started = React.useRef(0);
   const run = React.useCallback(() => { started.current = Date.now(); timer.current = window.setTimeout(() => dismissToast(entry.id), left.current); }, [entry.id]);

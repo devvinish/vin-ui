@@ -28,13 +28,14 @@ export type CheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "t
   ref?: React.Ref<HTMLInputElement>;
 };
 
-export function Checkbox({ label, description, indeterminate = false, controlPosition = "start", id, className, style, ref, ...rest }: CheckboxProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox({ label, description, indeterminate = false, controlPosition = "start", id, className, style, ...rest }, ref) {
   const inner = React.useRef<HTMLInputElement | null>(null);
   React.useEffect(() => { if (inner.current) inner.current.indeterminate = indeterminate; }, [indeterminate]);
   const setRef = (el: HTMLInputElement | null) => {
     inner.current = el;
     if (typeof ref === "function") ref(el);
-    else if (ref) (ref as React.RefObject<HTMLInputElement | null>).current = el;
+    else if (ref) (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
   };
   const inputId = useVinId(id);
   const descId = description ? `${inputId}-desc` : undefined;
@@ -54,4 +55,4 @@ export function Checkbox({ label, description, indeterminate = false, controlPos
       </div>
     </div>
   );
-}
+});

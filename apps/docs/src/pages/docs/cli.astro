@@ -27,6 +27,7 @@ const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" },
     <p>Asks only what it can't work out. Every answer can be given as a flag instead, which is handy in scripts (<code>-y</code> skips the questions).</p>
     <CodeBlock title="Terminal" lang="bash" code={`npx @vinish/ui init --framework react --style tactile --accent "#0d9488" --radius lg -y`} />
     <p>The <a href={href("/create/")}>Create</a> page builds this command for you as you pick a style, accent and the rest.</p>
+    <p><code>vin.css</code> starts with an <code>@import</code> of the style's fonts from Google Fonts, so they load wherever you import <code>vin.css</code>. <code>--no-fonts</code> leaves it out when you host the fonts yourself; <code>style &lt;name&gt; --fonts</code> puts it back. <code>style</code> switches the fonts together with the style.</p>
 
     <h2 id="frameworks">Frameworks and folders</h2>
     <p><code>init</code> reads <code>package.json</code> to pick the framework: Svelte or SvelteKit, then Vue or Nuxt, then React or Next.js. With none of them it sets up plain HTML. <code>--framework</code> overrides it.</p>
@@ -41,7 +42,7 @@ const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" },
         </tbody>
       </table>
     </div>
-    <p>Choose another folder with <code>--path</code>. Components import each other with relative paths, so any folder works. See <a href={href("/docs/frameworks/")}>Frameworks</a> for how the versions differ.</p>
+    <p>Choose another folder with <code>--path</code>. Components and blocks import each other with relative paths, so any folder works and you don't need an <code>@</code> path alias. See <a href={href("/docs/frameworks/")}>Frameworks</a> for how the versions differ.</p>
 
     <h2 id="add">add</h2>
     <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui add dialog dropdown-menu" />
@@ -54,6 +55,7 @@ const toc = [{ id: "commands", text: "Commands" }, { id: "init", text: "init" },
 
     <h2 id="config">vin.json</h2>
     <CodeBlock title="vin.json" lang="json" code={`{\n  "$schema": "https://vinish.dev/ui/r/vin.schema.json",\n  "framework": "react",\n  "style": "tactile",\n  "accent": "#0d9488",\n  "path": "src/components/vin",\n  "css": "src/vin.css",\n  "components": { "button": "0.1.0" }\n}`} />
+    <p><code>"fonts": false</code> appears after <code>--no-fonts</code>: <code>vin.css</code> then doesn't load the fonts, and <code>style</code> keeps it that way.</p>
 
     <h2 id="offline">Offline and self-hosting</h2>
     <p>Components come from <code>https://vinish.dev/ui/r/</code>. Point the CLI at a folder or another server with <code>--registry</code> or the <code>VINUI_REGISTRY</code> environment variable, for example a build of this site.</p>

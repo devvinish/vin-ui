@@ -100,7 +100,7 @@ test("diff: shows the user's changes against VinUI", async () => {
   await run(dir, "init");
   await run(dir, "add", "badge");
   const file = join(dir, "src/components/vin/badge.tsx");
-  await writeFile(file, (await readFile(file, "utf8")).replace("export function Badge", "// tweaked\nexport function Badge"));
+  await writeFile(file, (await readFile(file, "utf8")).replace("export function badgeClasses", "// tweaked\nexport function badgeClasses"));
   const out = [];
   const log = console.log;
   console.log = (s) => out.push(String(s));
@@ -117,6 +117,35 @@ test("style: switches the CSS and keeps the accent", async () => {
   assert.match(css, /--vin-accent: #e11d48;/);
   assert.equal(JSON.parse(await readFile(join(dir, "vin.json"), "utf8")).style, "paper");
   await assert.rejects(run(dir, "style", "papr"), /Did you mean "paper"/);
+});
+
+test("fonts: vin.css imports the style's fonts, style switches them, --no-fonts is remembered", async () => {
+  const dir = await project({ dependencies: { react: "19" } });
+  const css = () => readFile(join(dir, "src/vin.css"), "utf8");
+  const fontImport = async () => (await css()).match(/^@import url\("([^"]+)"\);$/m)?.[1] ?? null;
+  await run(dir, "init", "--style", "clay");
+  assert.ok((await css()).startsWith("/* Fonts for clay"), "the @import comes first, before any rule");
+  assert.equal(await fontImport(), "https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap");
+
+  await run(dir, "style", "paper");
+  assert.equal(await fontImport(), "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Kalam:wght@400;700&display=swap");
+
+  await run(dir, "style", "editorial", "--no-fonts");
+  assert.equal(await fontImport(), null);
+  assert.equal(JSON.parse(await readFile(join(dir, "vin.json"), "utf8")).fonts, false);
+  await run(dir, "style", "terminal");
+  assert.equal(await fontImport(), null, "--no-fonts stays until --fonts");
+  await run(dir, "style", "terminal", "--fonts");
+  assert.match(await fontImport(), /family=JetBrains\+Mono/);
+  assert.equal(JSON.parse(await readFile(join(dir, "vin.json"), "utf8")).fonts, undefined);
+
+  // The font option adds its font; weights of the same family merge.
+  const geist = await project({ dependencies: { vue: "3" } });
+  await run(geist, "init", "--style", "precision", "--font", "geist");
+  assert.match(await readFile(join(geist, "src/vin.css"), "utf8"), /family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap/);
+  const none = await project();
+  await run(none, "init", "--no-fonts", "--framework", "html");
+  assert.doesNotMatch(await readFile(join(none, "vin/vin.css"), "utf8"), /@import/);
 });
 
 test("plain HTML: add writes the examples and vinui.js when needed", async () => {
@@ -150,6 +179,18 @@ test("add a block: writes it to blocks/ and adds the components it uses", async 
   assert.match(await readFile(join(dir, "src/components/vin/blocks/dashboard-01.tsx"), "utf8"), /export function Dashboard01/);
   assert.match(await readFile(join(dir, "src/components/vin/blocks/login-01.tsx"), "utf8"), /export function Login01/);
   assert.match(await readFile(join(dir, "src/components/vin/chart.tsx"), "utf8"), /export function Chart/);
+  // Blocks import the components relative to themselves: a new Vite app has no "@" or "$lib" shortcut.
+  const dash = await readFile(join(dir, "src/components/vin/blocks/dashboard-01.tsx"), "utf8");
+  assert.match(dash, /from "\.\.\/chart"/);
+  assert.doesNotMatch(dash, /@\/components/);
+  for (const [deps, file, want] of [[{ vue: "3" }, "src/components/vin/blocks/dashboard-01.vue", /from "\.\.\/chart\.vue"/], [{ svelte: "5" }, "src/components/vin/blocks/dashboard-01.svelte", /from "\.\.\/chart\.svelte"/]]) {
+    const p = await project({ dependencies: deps });
+    await run(p, "init");
+    await run(p, "add", "dashboard-01");
+    const src = await readFile(join(p, file), "utf8");
+    assert.match(src, want, file);
+    assert.doesNotMatch(src, /(@|\$lib)\/components/, file);
+  }
   const html = await project();
   await run(html, "init", "--framework", "html");
   await run(html, "add", "pricing-01");

@@ -22,7 +22,8 @@ export type InputGroupProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   ref?: React.Ref<HTMLInputElement>;
 };
 
-export function InputGroup({ start, end, size = "md", label, hint, error, id, className, style, ...rest }: InputGroupProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const InputGroup = React.forwardRef<HTMLInputElement, InputGroupProps>(function InputGroup({ start, end, size = "md", label, hint, error, id, className, style, ...rest }, ref) {
   const auto = React.useId();
   const inputId = id ?? `vin-${auto.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const hintId = hint ? `${inputId}-hint` : undefined;
@@ -38,7 +39,7 @@ export function InputGroup({ start, end, size = "md", label, hint, error, id, cl
     >
       {start !== undefined && <span className="vin-input-group__addon">{start}</span>}
       <input
-        {...rest}
+        {...rest} ref={ref}
         id={inputId}
         className="vin-input-group__input"
         aria-invalid={error ? true : rest["aria-invalid"]}
@@ -56,4 +57,4 @@ export function InputGroup({ start, end, size = "md", label, hint, error, id, cl
       {hint && <p className="vin-hint" id={hintId}>{hint}</p>}
     </div>
   );
-}
+});

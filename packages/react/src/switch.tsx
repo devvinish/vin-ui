@@ -23,7 +23,8 @@ export type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "typ
   ref?: React.Ref<HTMLInputElement>;
 };
 
-export function Switch({ label, description, size = "md", controlPosition = "start", id, className, style, ...rest }: SwitchProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(function Switch({ label, description, size = "md", controlPosition = "start", id, className, style, ...rest }, ref) {
   const auto = React.useId();
   const inputId = id ?? `vin-${auto.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const descId = description ? `${inputId}-desc` : undefined;
@@ -33,15 +34,15 @@ export function Switch({ label, description, size = "md", controlPosition = "sta
     if (isDev() && !rest["aria-label"] && !rest["aria-labelledby"]) {
       console.warn("VinUI Switch: pass a label or an aria-label.");
     }
-    return <input {...rest} id={id} type="checkbox" role="switch" className={cx(cls, className)} style={style} />;
+    return <input {...rest} ref={ref} id={id} type="checkbox" role="switch" className={cx(cls, className)} style={style} />;
   }
   return (
     <div className={cx("vin-choice", controlPosition === "end" && "vin-choice--end", className)} style={style}>
-      <input {...rest} id={inputId} type="checkbox" role="switch" className={cls} aria-describedby={cx(rest["aria-describedby"], descId) || undefined} />
+      <input {...rest} ref={ref} id={inputId} type="checkbox" role="switch" className={cls} aria-describedby={cx(rest["aria-describedby"], descId) || undefined} />
       <div className="vin-choice__body">
         <label className="vin-choice__label" htmlFor={inputId}>{label}</label>
         {description && <p className="vin-choice__desc" id={descId}>{description}</p>}
       </div>
     </div>
   );
-}
+});

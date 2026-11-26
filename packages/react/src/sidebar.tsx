@@ -3,6 +3,9 @@
 import * as React from "react";
 import { Button } from "./button";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
 /*
  * VinUI · Sidebar (React). API: spec/sidebar.json. Needs button.tsx next to it.
  * 768px and wider it sits beside the page and folds to icons; narrower, the trigger slides it in.
@@ -26,8 +29,8 @@ type Ctx = {
   phone: boolean;
   open: boolean;
   setOpen: (on: boolean) => void;
-  nav: React.RefObject<HTMLElement | null>;
-  opener: React.RefObject<HTMLButtonElement | null>;
+  nav: React.MutableRefObject<HTMLElement | null>;
+  opener: React.MutableRefObject<HTMLButtonElement | null>;
 };
 const SidebarContext = React.createContext<Ctx | null>(null);
 const useSidebar = () => {
@@ -106,7 +109,7 @@ export function Sidebar({ label, className, children, onClick, ...rest }: Sideba
       ref={nav}
       id={ctx.id}
       aria-label={label}
-      popover="auto"
+      {...popover("auto")}
       className={cx("vin-sidebar", className)}
       onClick={(e) => {
         onClick?.(e);

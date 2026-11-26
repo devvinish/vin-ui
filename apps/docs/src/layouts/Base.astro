@@ -1,12 +1,14 @@
 ---
+// Fonts are served from our own files (see scripts/fonts-css.mjs), not Google Fonts.
+import "../styles/fonts.css";
 import "@vinui/styles/vinui.css";
 import "../styles/site.css";
-import { STYLES, DEFAULT_STYLE } from "@vinui/styles";
+import { DEFAULT_STYLE } from "@vinui/styles";
 import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
 import Header from "../components/Header.astro";
 import Customize from "../components/Customize.astro";
 import Search from "../components/Search.astro";
-import { href, fontsHref } from "../lib/site";
+import { href } from "../lib/site";
 
 export interface Props { title: string; seoTitle?: string; description?: string; current?: string; hasSidebar?: boolean; jsonLd?: object }
 const { title, seoTitle, description = "VinUI is a free, open-source UI component library for HTML, React, Vue and Svelte: accessible components, blocks and charts in 8 styles and any accent colour.", current, hasSidebar = false, jsonLd } = Astro.props;
@@ -32,9 +34,6 @@ const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
     {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href={href("/favicon.svg")} type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={fontsHref([...STYLES.map((s) => s.fonts), ["Space+Grotesk:wght@500;600;700", "Geist:wght@400;500;600", "JetBrains+Mono:wght@400;500"]])} />
     <!-- Apply the saved theme before first paint, so there is no flash of the default style. -->
     <script is:inline>
       (function () {

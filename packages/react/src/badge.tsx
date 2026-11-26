@@ -21,11 +21,12 @@ export function badgeClasses({ variant = "neutral", className }: { variant?: Bad
   return ["vin-badge", variant !== "neutral" && `vin-badge--${variant}`, className].filter(Boolean).join(" ");
 }
 
-export function Badge({ variant, dot, className, children, ...rest }: BadgeProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badge({ variant, dot, className, children, ...rest }, ref) {
   return (
-    <span {...rest} className={badgeClasses({ variant, className })}>
+    <span {...rest} ref={ref} className={badgeClasses({ variant, className })}>
       {dot && <span className="vin-badge__dot" aria-hidden="true" />}
       {children}
     </span>
   );
-}
+});

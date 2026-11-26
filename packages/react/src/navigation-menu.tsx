@@ -2,6 +2,12 @@
 
 import * as React from "react";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
+/** The button's popovertarget: React 19 calls the prop popoverTarget, React 18 only passes the plain attribute. */
+const popoverTarget = (id: string) => (React.version.startsWith("18") ? { popovertarget: id } : { popoverTarget: id }) as unknown as React.ButtonHTMLAttributes<HTMLButtonElement>;
+
 /*
  * VinUI · Navigation Menu (React). API: spec/navigation-menu.json.
  * Disclosure buttons whose panels open on hover, click or Down Arrow.
@@ -66,7 +72,7 @@ export function NavigationMenuItem({ trigger, onOpenChange, className, children,
   const [open, setOpen] = React.useState(false);
   const pinned = React.useRef(false);
   const focusFirst = React.useRef(false);
-  const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+  const timer = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const isOpen = () => !!panel.current?.matches(":popover-open");
   const links = () => [...(panel.current?.querySelectorAll<HTMLElement>("a[href], button:not(:disabled)") ?? [])];
@@ -127,7 +133,7 @@ export function NavigationMenuItem({ trigger, onOpenChange, className, children,
         className="vin-nav-menu__trigger"
         aria-expanded={open}
         aria-controls={id}
-        popoverTarget={id}
+        {...popoverTarget(id)}
         onClick={(e) => {
           // The click is ours: a panel opened by hover stays open when clicked, a second click closes it.
           e.preventDefault();
@@ -155,7 +161,7 @@ export function NavigationMenuItem({ trigger, onOpenChange, className, children,
         {...rest}
         ref={panel}
         id={id}
-        popover="auto"
+        {...popover("auto")}
         className={cx("vin-nav-menu__panel", className)}
         onKeyDown={onPanelKey}
         onPointerEnter={(e) => { rest.onPointerEnter?.(e); clearTimeout(timer.current); }}

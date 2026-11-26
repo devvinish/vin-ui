@@ -24,12 +24,13 @@ export function inputClasses({ size = "md", className }: { size?: InputSize; cla
   return cx("vin-input", size !== "md" && `vin-input--${size}`, className);
 }
 
-export function Input({ size, className, ...rest }: InputProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input({ size, className, ...rest }, ref) {
   if (isDev() && !rest.id && !rest["aria-label"] && !rest["aria-labelledby"]) {
     console.warn("VinUI Input: give it an id with a matching <Label htmlFor>, an aria-label, or use <Field label>.");
   }
-  return <input {...rest} className={inputClasses({ size, className })} />;
-}
+  return <input {...rest} ref={ref} className={inputClasses({ size, className })} />;
+});
 
 export function Label({ className, ...rest }: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return <label {...rest} className={cx("vin-label", className)} />;
@@ -51,7 +52,7 @@ export type FieldProps = InputProps & {
  * A labelled input with optional hint and error.
  * `className` and `style` go on the wrapper; every other prop goes to the input.
  */
-export function Field({ label, hint, error, multiline, rows, id, className, style, size, ...rest }: FieldProps) {
+export const Field = React.forwardRef<HTMLInputElement, FieldProps>(function Field({ label, hint, error, multiline, rows, id, className, style, size, ...rest }, ref) {
   const auto = React.useId();
   const inputId = id ?? `vin-${auto.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const hintId = hint ? `${inputId}-hint` : undefined;
@@ -67,12 +68,12 @@ export function Field({ label, hint, error, multiline, rows, id, className, styl
     <div className={cx("vin-field", className)} style={style}>
       <Label htmlFor={inputId}>{label}</Label>
       {multiline ? (
-        <textarea {...(rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>)} {...control} rows={rows} className="vin-input" />
+        <textarea {...(rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>)} {...control} ref={ref as unknown as React.Ref<HTMLTextAreaElement>} rows={rows} className="vin-input" />
       ) : (
-        <Input {...rest} {...control} size={size} />
+        <Input {...rest} {...control} ref={ref} size={size} />
       )}
       {error && <p className="vin-error" id={errorId}>{error}</p>}
       {hint && <p className="vin-hint" id={hintId}>{hint}</p>}
     </div>
   );
-}
+});

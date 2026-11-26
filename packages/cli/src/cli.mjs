@@ -10,18 +10,18 @@ import { readFile, writeFile, access, mkdir } from "node:fs/promises";
 import { join, resolve, dirname } from "node:path";
 import { createInterface } from "node:readline/promises";
 import {
-  registry, detectFramework, defaultPath, readConfig, writeConfig, buildCss, applyHtmlAttributes,
+  registry, detectFramework, defaultPath, readConfig, writeConfig, buildCss, themeFonts, applyHtmlAttributes,
   addComponents, diffComponents, FRAMEWORK_IDS, CONFIG_FILE, RegistryError, closest,
 } from "./core.mjs";
 import { normalizeTheme, normalizeHex, OPTIONS, ACCENTS, parseTheme } from "./theme.mjs";
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const exists = (p) => access(p).then(() => true, () => false);
 
 /** Tiny argv parser: --flag value, --flag=value, --bool, -y, positionals. */
 export function parseArgs(argv) {
   const out = { _: [] };
-  const bools = new Set(["yes", "force", "overwrite", "help", "version", "json"]);
+  const bools = new Set(["yes", "force", "overwrite", "help", "version", "json", "noFonts", "fonts"]);
   const alias = { y: "yes", f: "force", h: "help", v: "version", o: "overwrite" };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -69,7 +69,11 @@ ${bold("init options")}
   --accent "#0d9488"   --path src/components/vin   --css src/vin.css
   --radius, --gray, --font, --density, --motion, --font-family "Name"
   --theme vin-theme.json   use a theme exported from vinish.dev/ui
+  --no-fonts           don't load the style's fonts from Google Fonts in vin.css (load them yourself)
   -y, --yes            don't ask, use the defaults   --force   replace an existing vin.json
+
+${bold("style options")}
+  --accent "#0d9488"   --no-fonts / --fonts   leave the font @import out of vin.css, or put it back
 
 ${bold("Everywhere")}
   --registry <url|folder>   where components come from (default https://vinish.dev/ui)
@@ -131,14 +135,16 @@ async function init(args, cwd, reg) {
   }
 
   const t = normalizeTheme(theme);
-  const cssText = await buildCss(reg, t);
+  const fonts = !args.noFonts;
+  const cssText = await buildCss(reg, t, { fonts });
   await mkdir(dirname(join(cwd, css)), { recursive: true });
   await writeFile(join(cwd, css), cssText);
-  await writeConfig(cwd, { framework, theme: t, path, css, components: {} });
+  await writeConfig(cwd, { framework, theme: t, path, css, fonts, components: {} });
   const touched = await applyHtmlAttributes(cwd, t);
 
   console.log(`${green("✓")} Wrote ${bold(CONFIG_FILE)} and ${bold(css)} ${dim(`(${t.style}, ${t.accent})`)}`);
   if (touched.length) console.log(`${green("✓")} Added data-vin-style="${t.style}" to <html> in ${touched.join(", ")}`);
+  console.log(fontNote(await themeFonts(reg, t), fonts, css));
   console.log(`\n${bold("Next")}`);
   if (framework === "html") {
     console.log(`  1. In your page: <link rel="stylesheet" href="${css}"> and <html data-vin-style="${t.style}">`);
@@ -180,11 +186,23 @@ async function style(args, cwd, reg) {
     cfg.theme.accent = hex;
   }
   cfg.theme.style = name;
-  await writeFile(join(cwd, cfg.css), await buildCss(reg, cfg.theme));
+  if (args.noFonts) cfg.fonts = false;
+  if (args.fonts) cfg.fonts = true;
+  await writeFile(join(cwd, cfg.css), await buildCss(reg, cfg.theme, { fonts: cfg.fonts }));
   await writeConfig(cwd, cfg);
   const touched = await applyHtmlAttributes(cwd, cfg.theme);
   console.log(`${green("✓")} Switched to ${bold(name)}: rewrote ${cfg.css}${touched.length ? ` and <html> in ${touched.join(", ")}` : ""}. Your components didn't change.`);
   if (!touched.length) console.log(`  Update your <html> tag: data-vin-style="${name}"`);
+  console.log(fontNote(await themeFonts(reg, cfg.theme), cfg.fonts, cfg.css));
+}
+
+/** Which fonts vin.css loads, or which ones to load yourself. */
+function fontNote(specs, loaded, css) {
+  const names = [...new Set(specs.map((s) => s.split(":")[0].replace(/\+/g, " ")))].join(", ");
+  if (!names) return dim("  Fonts: this theme uses the system font, nothing to load.");
+  return loaded
+    ? `${green("✓")} Fonts: ${css} loads ${names} from Google Fonts ${dim("(--no-fonts to load them yourself)")}`
+    : `${yellow("!")} Fonts: load ${names} yourself, or the page falls back to a system font ${dim("(--fonts puts the import back)")}`;
 }
 
 async function diff(args, cwd, reg) {

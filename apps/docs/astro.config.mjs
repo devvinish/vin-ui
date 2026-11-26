@@ -12,6 +12,8 @@ export default defineConfig({
   trailingSlash: "ignore",
   integrations: [react()],
   vite: {
+    // Font files stay files: inlined into the CSS, every visitor would download every character set.
+    build: { assetsInlineLimit: (file) => (/\.woff2?$/.test(file) ? false : undefined) },
     resolve: {
       alias: [
         // React examples import components the way a user's project would: "@/components/vin/<name>".

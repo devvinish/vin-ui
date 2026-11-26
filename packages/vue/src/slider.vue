@@ -9,7 +9,6 @@
  */
 import { computed, ref, useAttrs, useId } from "vue";
 
-const cx = (...c: unknown[]) => c.filter((x) => typeof x === "string" && x).join(" ");
 type Val = number | [number, number];
 </script>
 

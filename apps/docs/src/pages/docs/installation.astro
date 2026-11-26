@@ -2,12 +2,15 @@
 import Docs from "../../layouts/Docs.astro";
 import CodeBlock from "../../components/CodeBlock.astro";
 import { href } from "../../lib/site";
+import { STYLES, googleFontsHref } from "@vinui/styles";
+const precisionFonts = googleFontsHref(STYLES.filter((s) => s.id === "precision"));
 const toc = [
   { id: "cli", text: "With the CLI" },
   { id: "react", text: "React" },
   { id: "vue", text: "Vue" },
   { id: "svelte", text: "Svelte" },
   { id: "html", text: "Plain HTML" },
+  { id: "fonts", text: "Fonts" },
   { id: "own", text: "You own the code" },
 ];
 ---
@@ -21,10 +24,12 @@ const toc = [
     <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui init" />
     <p>Then add components. Each one is copied into your project, with any component it needs.</p>
     <CodeBlock title="Terminal" lang="bash" code="npx @vinish/ui add button card dialog" />
-    <p>What's left is importing <code>vin.css</code> once and using the components, which differs a little per framework.</p>
+    <p>What's left is importing <code>vin.css</code> once and using the components, which differs a little per framework. <code>vin.css</code> also loads your style's fonts (see <a href="#fonts">Fonts</a>).</p>
+
+    <p>The examples on this site import components as <code>@/components/vin/&lt;name&gt;</code>, the <code>@</code> shortcut that Next.js and Nuxt set up for <code>src</code>. A new Vite app doesn't have it: import with a relative path instead (<code>./components/vin/button</code>), or add the alias to <code>vite.config</code> and <code>tsconfig</code>. The files the CLI writes use relative paths, so they work either way.</p>
 
     <h2 id="react">React</h2>
-    <p>React 18 or newer. Works with Vite, Next.js (App Router or Pages) and React Router. Components go in <code>src/components/vin</code>. The interactive ones start with <code>"use client"</code>, so they work in Server Components pages.</p>
+    <p>React 18 or 19. Works with Vite, Next.js (App Router or Pages) and React Router. Components go in <code>src/components/vin</code>. The interactive ones start with <code>"use client"</code>, so they work in Server Components pages.</p>
     <CodeBlock title="src/main.tsx (Vite) or app/layout.tsx (Next.js)" lang="tsx" code={`import "./vin.css";`} />
     <CodeBlock title="App.tsx" lang="tsx" code={`import { Button } from "@/components/vin/button";\n\nexport function App() {\n  return <Button>Save</Button>;\n}`} />
 
@@ -43,9 +48,17 @@ const toc = [
     <p>Vue and Svelte use <code>v-model</code> and <code>bind:</code>, slots and snippets where React uses props. <a href={href("/docs/frameworks/")}>Frameworks</a> lists the differences.</p>
 
     <h2 id="html">Plain HTML</h2>
-    <p>No build step and no CLI. Link one stylesheet for your style, set the style on <code>&lt;html&gt;</code>, and copy any component's HTML from its page.</p>
-    <CodeBlock title="index.html" lang="html" code={`<html data-vin-style="precision" style="--vin-accent: #5b5bd6">\n  <head>\n    <link rel="stylesheet" href="https://vinish.dev/ui/v1/precision.css">\n    <!-- Only for interactive components (Select, Tabs, Dropdown Menu…) -->\n    <script src="https://vinish.dev/ui/v1/vinui.js" defer></script>\n  </head>`} />
+    <p>No build step and no CLI. Link your style's fonts and stylesheet, set the style on <code>&lt;html&gt;</code>, and copy any component's HTML from its page.</p>
+    <CodeBlock title="index.html" lang="html" code={`<html data-vin-style="precision" style="--vin-accent: #5b5bd6">\n  <head>\n    <!-- The style's fonts: each style's link is on the Styles page -->\n    <link rel="stylesheet" href="${precisionFonts}">\n    <link rel="stylesheet" href="https://vinish.dev/ui/v1/precision.css">\n    <!-- Only for interactive components (Select, Tabs, Dropdown Menu…) -->\n    <script src="https://vinish.dev/ui/v1/vinui.js" defer></script>\n  </head>`} />
     <p>Each component page says whether it needs <code>vinui.js</code>. Dialog, Accordion, Popover and others use the browser's own elements and work without it. <code>vinui.js</code> finds components when the page loads; for markup you add later, call <code>VinUI.init(element)</code>.</p>
+
+    <h2 id="fonts">Fonts</h2>
+    <p>Each style has its own fonts: Clay uses Nunito, Terminal JetBrains Mono, Editorial adds Instrument Serif for headings and Paper adds handwritten Kalam. <a href={href("/styles/")}>Styles</a> lists them all. Without them the page falls back to a system font and loses much of the style's look.</p>
+    <ul>
+      <li><strong>CLI:</strong> <code>vin.css</code> starts with an <code>@import</code> of the style's fonts from Google Fonts, and <code>npx @vinish/ui style &lt;name&gt;</code> switches them with the style. To host the fonts yourself, add <code>--no-fonts</code> (to <code>init</code> or <code>style</code>); <code>--fonts</code> puts the import back.</li>
+      <li><strong>Plain HTML:</strong> add the style's font link from the <a href={href("/styles/")}>Styles</a> page ("Copy font link"), as in the example above.</li>
+      <li><strong>Customize → Font</strong> (Inter, Geist, Mono or your own) replaces the text font. Editorial's serif and Paper's handwriting stay, because they are part of those styles' look.</li>
+    </ul>
 
     <h2 id="own">You own the code</h2>
     <p>Nothing runs from our servers. Edit the files as much as you like; <code>npx @vinish/ui diff</code> shows what changed in VinUI since you added a component, and <code>add --overwrite</code> takes the new version.</p>

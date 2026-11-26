@@ -4,10 +4,10 @@
  * Usage: /ui/fixtures/<name>/?style=clay&mode=dark
  * The Playwright suite screenshots this page in all 8 styles × light/dark and runs axe on it.
  */
+import "../../styles/fonts.css";
 import "@vinui/styles/vinui.css";
-import { STYLES, DEFAULT_STYLE } from "@vinui/styles";
+import { DEFAULT_STYLE } from "@vinui/styles";
 import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
-import { fontsHref } from "../../lib/site";
 import ReactExample from "../../components/ReactExample";
 import { SPECS, getExamples, type Spec } from "../../data/registry";
 
@@ -26,7 +26,6 @@ const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>{spec.title} fixture · VinUI</title>
-    <link rel="stylesheet" href={fontsHref(STYLES.map((s) => s.fonts))} />
     <script is:inline>
       (function () {
         var p = new URLSearchParams(location.search), d = document.documentElement;

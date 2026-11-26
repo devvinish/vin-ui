@@ -1,4 +1,5 @@
 {
+  "//": "The lint options match Vite's project templates, so components pass the strict checks of a new Vite app.",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -8,8 +9,27 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "types": ["node", "vite/client"],
-    "paths": { "@/components/vin/*": ["./src/*"] }
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    "paths": {
+      "@/components/vin/*": [
+        "./src/*"
+      ]
+    },
+    "moduleDetection": "force",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
   },
-  "include": ["src/**/*", "examples/**/*", "blocks/**/*", "test/**/*", "vitest.config.ts"]
+  "include": [
+    "src/**/*",
+    "examples/**/*",
+    "blocks/**/*",
+    "test/**/*",
+    "vitest.config.ts"
+  ]
 }

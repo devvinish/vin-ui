@@ -43,7 +43,8 @@ export function buttonClasses({
     .join(" ");
 }
 
-export function Button(props: ButtonProps) {
+// forwardRef so `ref` works on React 18 as well as 19. The cast keeps the button/link prop types apart.
+export const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function Button(props, ref) {
   const { variant, size, className, children, ...rest } = props;
   const classes = buttonClasses({ variant, size, className });
 
@@ -56,6 +57,7 @@ export function Button(props: ButtonProps) {
     return (
       <a
         {...anchor}
+        ref={ref as React.Ref<HTMLAnchorElement>}
         className={classes}
         aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : anchor.tabIndex}
@@ -68,8 +70,8 @@ export function Button(props: ButtonProps) {
 
   const { type, ...button } = rest as ButtonAsButton;
   return (
-    <button {...button} type={type ?? "button"} className={classes}>
+    <button {...button} ref={ref as React.Ref<HTMLButtonElement>} type={type ?? "button"} className={classes}>
       {children}
     </button>
   );
-}
+}) as (props: ButtonProps) => React.ReactElement;

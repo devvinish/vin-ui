@@ -2,6 +2,9 @@
 
 import * as React from "react";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
 /** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
 const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
@@ -207,7 +210,7 @@ export function Combobox({
         onKeyDown={onKeyDown}
         onBlur={() => setTimeout(() => { if (document.activeElement !== input.current) { close(); restoreRef.current(); } }, 0)}
       />
-      <div ref={panel} className="vin-select__content vin-combobox__content" popover="manual" onMouseDown={(e) => e.preventDefault()}>
+      <div ref={panel} className="vin-select__content vin-combobox__content" {...popover("manual")} onMouseDown={(e) => e.preventDefault()}>
         <div id={ids.list} role="listbox" aria-label={typeof label === "string" ? label : aria["aria-label"]}>
           {blocks.map((b, n) =>
             b.group === undefined ? b.idx.map(renderOption) : (

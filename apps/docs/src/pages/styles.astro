@@ -1,9 +1,13 @@
 ---
 import Docs from "../layouts/Docs.astro";
-import { STYLES } from "@vinui/styles";
+import { STYLES, googleFontsHref } from "@vinui/styles";
 import { href } from "../lib/site";
 import StyleSample from "../components/StyleSample.astro";
 const toc = STYLES.map((s) => ({ id: s.id, text: s.name }));
+// What each style's second font is for (the first one is the text font).
+const FONT_USE: Record<string, string> = { "Instrument Serif": "headings and titles", Kalam: "headings, buttons and titles" };
+const fontList = (fonts: string[]) => fonts.map((f) => f.split(":")[0].replace(/\+/g, " ")).map((n, i) => (i && FONT_USE[n] ? `${n} for ${FONT_USE[n]}` : n)).join(", ");
+const fontLink = (s: (typeof STYLES)[number]) => `<link rel="stylesheet" href="${googleFontsHref([s])}">`;
 ---
 <Docs title="Styles" seoTitle="8 UI Styles for One Component Library · VinUI" description="The 8 VinUI styles: Precision, Tactile, Clay, Tonal, Editorial, Terminal, Paper and Bento. The same free components in eight looks, with any accent colour." current="styles" toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><span>Styles</span></div>
@@ -19,7 +23,11 @@ const toc = STYLES.map((s) => ({ id: s.id, text: s.name }));
           <h3>{s.name}</h3>
           <p>{s.description}</p>
           <div class="tags">{s.tags.map((t: string) => <span>{t}</span>)}</div>
-          <button type="button" class="btn" data-set-style={s.id} aria-pressed="false">Use this style</button>
+          <p class="style-fonts">Fonts: {fontList(s.fonts)}</p>
+          <div class="style-actions">
+            <button type="button" class="btn" data-set-style={s.id} aria-pressed="false">Use this style</button>
+            <button type="button" class="btn" data-copy data-copy-text={fontLink(s)} title="For plain HTML. The CLI's vin.css loads the fonts itself.">Copy font link</button>
+          </div>
         </div>
       </article>
     ))}

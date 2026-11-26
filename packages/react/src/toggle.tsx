@@ -27,7 +27,8 @@ export function toggleClasses({ variant = "default", size = "md", className }: P
   return cx("vin-toggle", variant === "outline" && "vin-toggle--outline", size !== "md" && `vin-toggle--${size}`, className);
 }
 
-export function Toggle({ pressed, defaultPressed = false, onPressedChange, variant, size, className, onClick, ...rest }: ToggleProps) {
+// forwardRef so `ref` works on React 18 as well as 19.
+export const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(function Toggle({ pressed, defaultPressed = false, onPressedChange, variant, size, className, onClick, ...rest }, ref) {
   const [inner, setInner] = React.useState(defaultPressed);
   const on = pressed ?? inner;
   if (isDev() && size === "icon" && !rest["aria-label"] && !rest["aria-labelledby"]) {
@@ -35,7 +36,7 @@ export function Toggle({ pressed, defaultPressed = false, onPressedChange, varia
   }
   return (
     <button
-      {...rest}
+      {...rest} ref={ref}
       type="button"
       aria-pressed={on}
       className={toggleClasses({ variant, size, className })}
@@ -47,4 +48,4 @@ export function Toggle({ pressed, defaultPressed = false, onPressedChange, varia
       }}
     />
   );
-}
+});

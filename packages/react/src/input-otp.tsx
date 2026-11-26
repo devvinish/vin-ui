@@ -28,10 +28,11 @@ export type InputOTPProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "v
   ref?: React.Ref<HTMLInputElement>;
 };
 
-export function InputOTP({
+// forwardRef so `ref` works on React 18 as well as 19.
+export const InputOTP = React.forwardRef<HTMLInputElement, InputOTPProps>(function InputOTP({
   length = 6, groups, value, defaultValue = "", onValueChange, onComplete, charset = "numeric",
   label, hint, error, id, className, style, onFocus, onBlur, ...rest
-}: InputOTPProps) {
+}, ref) {
   const auto = React.useId();
   const inputId = id ?? `vin-${auto.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const [inner, setInner] = React.useState(defaultValue);
@@ -54,7 +55,7 @@ export function InputOTP({
   const control = (
     <div className={cx("vin-otp", !label && className)} style={label ? undefined : style}>
       <input
-        {...rest}
+        {...rest} ref={ref}
         id={inputId}
         className="vin-otp__input"
         type="text"
@@ -94,4 +95,4 @@ export function InputOTP({
       {hint && <p className="vin-hint" id={hintId}>{hint}</p>}
     </div>
   );
-}
+});

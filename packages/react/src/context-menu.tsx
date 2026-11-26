@@ -3,6 +3,9 @@
 import * as React from "react";
 import { MenuContext } from "./dropdown-menu";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
 /*
  * VinUI · Context Menu (React). API: spec/context-menu.json. Needs dropdown-menu.tsx next to it.
  * Right-click, long-press, or focus the area and press Shift+F10 / the Menu key. The items are
@@ -24,7 +27,7 @@ export function ContextMenu({ content, label, onOpenChange, className, children,
   const id = "vin-cm-" + React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const area = React.useRef<HTMLDivElement>(null);
   const menu = React.useRef<HTMLDivElement>(null);
-  const press = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+  const press = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const items = () => [...(menu.current?.querySelectorAll<HTMLButtonElement>('[role^="menuitem"]') ?? [])]
     .filter((el) => !el.disabled && el.getAttribute("aria-disabled") !== "true");
@@ -111,7 +114,7 @@ export function ContextMenu({ content, label, onOpenChange, className, children,
       <div
         ref={menu}
         id={id}
-        popover="auto"
+        {...popover("auto")}
         role="menu"
         aria-label={label}
         className="vin-menu"

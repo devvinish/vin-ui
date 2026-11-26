@@ -2,6 +2,13 @@
 
 import * as React from "react";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
+/** The ref on a React element: React 19 keeps it in props, React 18 on the element itself. */
+const elementRef = <T,>(el: React.ReactElement): React.Ref<T> | undefined =>
+  React.version.startsWith("18") ? (el as unknown as { ref?: React.Ref<T> }).ref : (el.props as { ref?: React.Ref<T> }).ref;
+
 /*
  * VinUI · Hover Card (React). API: spec/hover-card.json.
  * A Popover that opens when the pointer rests on its trigger (after openDelay) or the trigger gets
@@ -67,12 +74,12 @@ export function HoverCard({ trigger, side = "bottom", openDelay = 500, closeDela
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const p = trigger.props;
-  const tRef = p.ref;
+  const tRef = elementRef<HTMLElement>(trigger);
   const triggerEl = React.cloneElement(trigger, {
     ref: (node: HTMLElement | null) => {
       anchor.current = node;
       if (typeof tRef === "function") tRef(node);
-      else if (tRef) (tRef as React.RefObject<HTMLElement | null>).current = node;
+      else if (tRef) (tRef as React.MutableRefObject<HTMLElement | null>).current = node;
     },
     onPointerEnter: (e: React.PointerEvent<HTMLElement>) => { p.onPointerEnter?.(e); if (e.pointerType !== "touch") show(openDelay); },
     onPointerLeave: (e: React.PointerEvent<HTMLElement>) => { p.onPointerLeave?.(e); hide(closeDelay); },
@@ -86,7 +93,7 @@ export function HoverCard({ trigger, side = "bottom", openDelay = 500, closeDela
       <div
         {...rest}
         ref={card}
-        popover="manual"
+        {...popover("manual")}
         data-side={side === "bottom" ? undefined : side}
         className={cx("vin-popover", "vin-hover-card", className)}
         onPointerEnter={(e) => { rest.onPointerEnter?.(e); clearTimeout(timers.current.hide); }}

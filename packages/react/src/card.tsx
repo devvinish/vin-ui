@@ -8,12 +8,15 @@ import * as React from "react";
 type DivProps = React.HTMLAttributes<HTMLDivElement> & { ref?: React.Ref<HTMLDivElement> };
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(" ");
 
-export function Card({ className, ...rest }: DivProps) {
-  return <div {...rest} className={cx("vin-card", className)} />;
-}
-export function CardHeader({ className, ...rest }: DivProps) {
-  return <div {...rest} className={cx("vin-card__header", className)} />;
-}
+// forwardRef so `ref` works on React 18 as well as 19.
+const part = (name: string, base: string) => {
+  const C = React.forwardRef<HTMLDivElement, DivProps>(({ className, ...rest }, ref) => <div {...rest} ref={ref} className={cx(base, className)} />);
+  C.displayName = name;
+  return C;
+};
+
+export const Card = part("Card", "vin-card");
+export const CardHeader = part("CardHeader", "vin-card__header");
 
 export type CardTitleProps = React.HTMLAttributes<HTMLHeadingElement> & {
   /** Heading level, so the title fits your page outline. Default: "h3". */
@@ -26,9 +29,5 @@ export function CardTitle({ as: Tag = "h3", className, ...rest }: CardTitleProps
 export function CardDescription({ className, ...rest }: React.HTMLAttributes<HTMLParagraphElement>) {
   return <p {...rest} className={cx("vin-card__desc", className)} />;
 }
-export function CardBody({ className, ...rest }: DivProps) {
-  return <div {...rest} className={cx("vin-card__body", className)} />;
-}
-export function CardFooter({ className, ...rest }: DivProps) {
-  return <div {...rest} className={cx("vin-card__footer", className)} />;
-}
+export const CardBody = part("CardBody", "vin-card__body");
+export const CardFooter = part("CardFooter", "vin-card__footer");

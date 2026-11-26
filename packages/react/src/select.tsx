@@ -2,6 +2,9 @@
 
 import * as React from "react";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
 /** Dev-only warnings, without needing Node's `process` (Vite and the browser don't have it). */
 const isDev = () => (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV !== "production";
 
@@ -170,7 +173,7 @@ export function Select({
         className="vin-select__content"
         role="listbox"
         id={ids.list}
-        popover="manual"
+        {...popover("manual")}
         tabIndex={-1}
         aria-labelledby={label ? ids.label : undefined}
         aria-label={label ? undefined : aria["aria-label"]}

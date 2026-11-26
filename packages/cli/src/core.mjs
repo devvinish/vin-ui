@@ -4,7 +4,7 @@
  * Everything takes a `cwd` so tests can point it anywhere.
  */
 import { readFile, writeFile, mkdir, access } from "node:fs/promises";
-import { join, dirname, resolve, relative, isAbsolute } from "node:path";
+import { join, dirname, resolve, relative, isAbsolute, posix, sep } from "node:path";
 import { normalizeTheme, themeToAttributes, OPTIONS } from "./theme.mjs";
 import { DEFAULT_SITE, FRAMEWORK_IDS, RegistryError, closest, makeRegistry, searchComponents } from "./shared.mjs";
 export { DEFAULT_SITE, FRAMEWORK_IDS, RegistryError, closest, makeRegistry, searchComponents };
@@ -60,7 +60,7 @@ export async function readConfig(cwd) {
   let data;
   try { data = JSON.parse(raw); } catch { throw new RegistryError(`${CONFIG_FILE} isn't valid JSON. Fix it or run \`npx @vinish/ui init --force\`.`); }
   if (!FRAMEWORK_IDS.includes(data.framework)) throw new RegistryError(`${CONFIG_FILE} has an unknown framework "${data.framework}". Use one of: ${FRAMEWORK_IDS.join(", ")}.`);
-  return { framework: data.framework, path: data.path ?? "src/components/vin", css: data.css ?? "vin.css", theme: normalizeTheme(data), components: data.components ?? {} };
+  return { framework: data.framework, path: data.path ?? "src/components/vin", css: data.css ?? "vin.css", fonts: data.fonts !== false, theme: normalizeTheme(data), components: data.components ?? {} };
 }
 
 export async function writeConfig(cwd, cfg) {
@@ -70,20 +70,47 @@ export async function writeConfig(cwd, cfg) {
   if (t.font === "custom") themeOut.fontFamily = t.fontFamily;
   const data = {
     $schema: `${DEFAULT_SITE}/r/vin.schema.json`,
-    framework: cfg.framework, ...themeOut, path: cfg.path, css: cfg.css,
+    framework: cfg.framework, ...themeOut, path: cfg.path, css: cfg.css, ...(cfg.fonts === false ? { fonts: false } : {}),
     components: Object.fromEntries(Object.entries(cfg.components ?? {}).sort()),
   };
   await writeFile(join(cwd, CONFIG_FILE), JSON.stringify(data, null, 2) + "\n");
   return data;
 }
 
-/** vin.css: the style's CSS, then the theme's accent and options. */
-export async function buildCss(reg, theme) {
+/** Fonts for the Customize font option (the style's own fonts come from r/styles.json). */
+const OPTION_FONTS = { inter: "Inter:wght@400;500;600;700", geist: "Geist:wght@400;500;600;700", mono: "JetBrains+Mono:wght@400;500;700" };
+
+/** One Google Fonts URL for a list like ["Inter:wght@400;500", "Inter:wght@600", "Kalam:wght@400;700"]. */
+export function fontsHref(specs) {
+  const fams = new Map();
+  for (const spec of specs) {
+    const [name, axis] = spec.split(":");
+    const weights = axis?.startsWith("wght@") ? axis.slice(5).split(";").map(Number) : [];
+    fams.set(name, new Set([...(fams.get(name) ?? []), ...weights]));
+  }
+  const parts = [...fams].map(([n, w]) => `family=${n}${w.size ? `:wght@${[...w].sort((a, b) => a - b).join(";")}` : ""}`);
+  return parts.length ? `https://fonts.googleapis.com/css2?${parts.join("&")}&display=swap` : null;
+}
+
+/** The fonts a theme uses: the style's (main and display fonts) plus the font option's. */
+export async function themeFonts(reg, theme) {
+  const t = normalizeTheme(theme);
+  const style = (await reg.styles()).find((s) => s.id === t.style);
+  return [...(style?.fonts ?? []), ...(OPTION_FONTS[t.font] ? [OPTION_FONTS[t.font]] : [])];
+}
+
+/**
+ * vin.css: the style's fonts (unless `fonts` is false), the style's CSS, then the theme's accent and options.
+ * The fonts are an @import, so `npx @vinish/ui style <name>` switches them along with the CSS.
+ */
+export async function buildCss(reg, theme, { fonts = true } = {}) {
   const t = normalizeTheme(theme);
   const css = await reg.css(t.style);
   const { attrs, vars } = themeToAttributes(t);
   const attrList = Object.entries(attrs).filter(([, v]) => v !== null).map(([k, v]) => `${k}="${v}"`).join(" ");
-  return `${css.trimEnd()}\n\n/* ── Your theme (written by npx @vinish/ui; run \`npx @vinish/ui style <name>\` to switch) ──\n   Put these on <html>: ${attrList} */\n:root {\n${Object.entries(vars).map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}\n`;
+  const href = fonts ? fontsHref(await themeFonts(reg, t)) : null;
+  const head = href ? `/* Fonts for ${t.style}, from Google Fonts. To load them yourself instead: npx @vinish/ui style ${t.style} --no-fonts */\n@import url("${href}");\n\n` : "";
+  return `${head}${css.trimEnd()}\n\n/* ── Your theme (written by npx @vinish/ui; run \`npx @vinish/ui style <name>\` to switch) ──\n   Put these on <html>: ${attrList} */\n:root {\n${Object.entries(vars).map(([k, v]) => `  ${k}: ${v};`).join("\n")}\n}\n`;
 }
 
 /**
@@ -128,10 +155,23 @@ export async function resolveWithDeps(reg, framework, names) {
 
 /** Files to write for one registry entry, relative to the project. */
 export function filesFor(entry, cfg) {
-  if (cfg.framework !== "html") return entry.files.map((f) => ({ path: join(cfg.path, f.path), content: f.content }));
+  if (cfg.framework !== "html") return entry.files.map((f) => ({ path: join(cfg.path, f.path), content: relativeImports(f.content, f.path) }));
   // Plain HTML: every example in one file, ready to copy from.
   const body = entry.examples.map((ex) => `<!-- ${entry.title}: ${ex.title}. ${ex.description} -->\n${ex.code.trimEnd()}\n`).join("\n");
   return [{ path: join(cfg.path, `${entry.name}.html`), content: `<!-- VinUI ${entry.title}. Docs: ${entry.docs} -->\n\n${body}` }];
+}
+
+/**
+ * Registry files import other VinUI files as "@/components/vin/x" (Svelte: "$lib/components/vin/x"). A new Vite
+ * app has neither shortcut, so imports are rewritten relative to the file's place in the components folder:
+ * blocks/dashboard-01.tsx gets "../chart".
+ */
+export function relativeImports(content, fileRel) {
+  return content.replace(/(["'])(?:@|\$lib)\/components\/vin\/([^"']+)\1/g, (_, q, target) => {
+    let rel = posix.relative(posix.dirname(fileRel.split(sep).join("/")), target);
+    if (!rel.startsWith(".")) rel = "./" + rel;
+    return q + rel + q;
+  });
 }
 
 /** Keep writes inside the project. */

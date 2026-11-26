@@ -3,6 +3,12 @@
 import * as React from "react";
 import { MenuContext } from "./dropdown-menu";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
+/** The button's popovertarget: React 19 calls the prop popoverTarget, React 18 only passes the plain attribute. */
+const popoverTarget = (id: string) => (React.version.startsWith("18") ? { popovertarget: id } : { popoverTarget: id }) as unknown as React.ButtonHTMLAttributes<HTMLButtonElement>;
+
 /*
  * VinUI · Menubar (React). API: spec/menubar.json. Needs dropdown-menu.tsx next to it.
  * A row of menus with the WAI-ARIA menubar keys. The items are Dropdown Menu's.
@@ -173,7 +179,7 @@ export function MenubarMenu({ label, disabled, className, children, ...rest }: M
         role="menuitem"
         aria-haspopup="menu"
         aria-expanded={open}
-        popoverTarget={id}
+        {...popoverTarget(id)}
         tabIndex={(bar?.active ?? 0) === index ? 0 : -1}
         disabled={disabled}
         onKeyDown={onTriggerKey}
@@ -186,7 +192,7 @@ export function MenubarMenu({ label, disabled, className, children, ...rest }: M
         {...rest}
         ref={menu}
         id={id}
-        popover="auto"
+        {...popover("auto")}
         role="menu"
         aria-labelledby={`${id}-trigger`}
         className={cx("vin-menu", className)}

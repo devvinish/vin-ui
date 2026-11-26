@@ -121,6 +121,11 @@ const opts = [
 <script>
   import { loadTheme, themeToCli, themeToHtml, themeToQuery, serializeTheme } from "@vinui/theme";
   import { STYLES } from "@vinui/styles";
+  import { fontsHref } from "../lib/site";
+  // The fonts the HTML snippet links: the style's, plus the Customize font option's (same as the CLI's vin.css).
+  const OPTION_FONTS: Record<string, string> = { inter: "Inter:wght@400;500;600;700", geist: "Geist:wght@400;500;600;700", mono: "JetBrains+Mono:wght@400;500;700" };
+  const fontLink = (style: string, font: string) =>
+    fontsHref([STYLES.find((s) => s.id === style)?.fonts ?? [], OPTION_FONTS[font] ? [OPTION_FONTS[font]] : []]);
 
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const fwButtons = [...document.querySelectorAll<HTMLElement>("[data-create-fw]")];
@@ -137,6 +142,7 @@ const opts = [
       $("[data-create-command]").textContent = [
         themeToHtml(theme),
         "  <head>",
+        `    <link rel="stylesheet" href="${fontLink(theme.style, theme.font)}">`,
         `    <link rel="stylesheet" href="https://vinish.dev/ui/v1/${theme.style}.css">`,
         `    <script src="https://vinish.dev/ui/v1/vinui.js" defer></` + "script>",
         "  </head>",

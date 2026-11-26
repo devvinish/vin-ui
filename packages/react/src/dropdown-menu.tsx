@@ -2,6 +2,16 @@
 
 import * as React from "react";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
+/** The button's popovertarget: React 19 calls the prop popoverTarget, React 18 only passes the plain attribute. */
+const popoverTarget = (id: string) => (React.version.startsWith("18") ? { popovertarget: id } : { popoverTarget: id }) as unknown as React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+/** The ref on a React element: React 19 keeps it in props, React 18 on the element itself. */
+const elementRef = <T,>(el: React.ReactElement): React.Ref<T> | undefined =>
+  React.version.startsWith("18") ? (el as unknown as { ref?: React.Ref<T> }).ref : (el.props as { ref?: React.Ref<T> }).ref;
+
 /*
  * VinUI · Dropdown Menu (React). API: spec/dropdown-menu.json.
  * The browser's popover with the menu keyboard: arrows, Home/End, type to jump, Escape or Tab to close.
@@ -107,10 +117,10 @@ export function DropdownMenu({ trigger, side = "bottom", align = "start", open, 
   };
 
   const t = trigger.props;
-  const tRef = t.ref;
+  const tRef = elementRef<HTMLButtonElement>(trigger);
   const triggerEl = React.cloneElement(trigger, {
     id: t.id ?? `${id}-trigger`,
-    popoverTarget: id,
+    ...popoverTarget(id),
     "aria-haspopup": "menu",
     "aria-expanded": isOpen,
     onKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -124,7 +134,7 @@ export function DropdownMenu({ trigger, side = "bottom", align = "start", open, 
     ref: (node: HTMLButtonElement | null) => {
       btn.current = node;
       if (typeof tRef === "function") tRef(node);
-      else if (tRef) (tRef as React.RefObject<HTMLButtonElement | null>).current = node;
+      else if (tRef) (tRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
     },
   } as React.ButtonHTMLAttributes<HTMLButtonElement>);
 
@@ -135,7 +145,7 @@ export function DropdownMenu({ trigger, side = "bottom", align = "start", open, 
         {...rest}
         ref={menu}
         id={id}
-        popover="auto"
+        {...popover("auto")}
         role="menu"
         aria-labelledby={t.id ?? `${id}-trigger`}
         data-side={side === "bottom" ? undefined : side}

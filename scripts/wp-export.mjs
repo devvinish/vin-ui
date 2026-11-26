@@ -194,7 +194,7 @@ const clean = (html) => wpLinks(html).replace(/href="#main"/g, 'href="#vinui-mai
 export function exportSite() {
   const files = walk(DIST).filter((p) => !SKIP.some((r) => r.test(p))).sort();
   const pages = [];
-  let header = null, sidebar = null, footer = null, cssLinks = null, baseScript = null, fonts = null, htmlTag = null;
+  let header = null, sidebar = null, footer = null, cssLinks = null, baseScript = null, htmlTag = null;
 
   for (const file of files) {
     const html = read(path.join(DIST, file));
@@ -206,7 +206,6 @@ export function exportSite() {
     const css = [...doc.head.querySelectorAll('link[rel="stylesheet"][href^="/ui/_astro/"]')].map((l) => l.getAttribute("href"));
     cssLinks ??= css;
     if (css.join() !== cssLinks.join()) throw new Error(`${file}: different site CSS (${css.join()}), expected ${cssLinks.join()}`);
-    fonts ??= doc.head.querySelector('link[rel="stylesheet"][href^="https://fonts.googleapis.com"]').outerHTML;
     htmlTag ??= { style: doc.documentElement.getAttribute("style"), vinStyle: doc.documentElement.getAttribute("data-vin-style") };
     const scripts = [...doc.body.querySelectorAll(":scope > script")];
     const base = scripts.find((s) => /Base\.astro_astro_type_script/.test(s.getAttribute("src") ?? ""));
@@ -285,8 +284,6 @@ export function exportSite() {
     header: clean([
       note("header"),
       `<style>${WP_CSS}\n${pageBackground(siteCss.map((h) => read(path.join(DIST, "..", h))).join("\n"))}</style>`,
-      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
-      fonts,
       `<link rel="stylesheet" href="/ui/_astro/${cssName}">`,
       boot,
       '<div class="vinui-site alignfull">',

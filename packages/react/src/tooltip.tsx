@@ -2,6 +2,13 @@
 
 import * as React from "react";
 
+/** The popover attribute. A plain attribute so React 18 passes it through too (React 19 knows the prop). */
+const popover = (mode: "auto" | "manual") => ({ popover: mode }) as unknown as React.HTMLAttributes<HTMLElement>;
+
+/** The ref on a React element: React 19 keeps it in props, React 18 on the element itself. */
+const elementRef = <T,>(el: React.ReactElement): React.Ref<T> | undefined =>
+  React.version.startsWith("18") ? (el as unknown as { ref?: React.Ref<T> }).ref : (el.props as { ref?: React.Ref<T> }).ref;
+
 /*
  * VinUI · Tooltip (React). API: spec/tooltip.json.
  * Wrap one trigger: <Tooltip content="Add to library"><Button>Save</Button></Tooltip>.
@@ -85,13 +92,13 @@ export function Tooltip({ content, children, side = "top", label = false, delay 
   }, [onKey]);
 
   const p = children.props;
-  const childRef = (children as unknown as { props: { ref?: React.Ref<HTMLElement> } }).props.ref;
+  const childRef = elementRef<HTMLElement>(children as React.ReactElement);
   const trig = React.cloneElement(children, {
     [label ? "aria-labelledby" : "aria-describedby"]: id,
     ref: (node: HTMLElement | null) => {
       trigger.current = node;
       if (typeof childRef === "function") childRef(node);
-      else if (childRef) (childRef as React.RefObject<HTMLElement | null>).current = node;
+      else if (childRef) (childRef as React.MutableRefObject<HTMLElement | null>).current = node;
     },
     onPointerEnter: (e: React.PointerEvent) => { p.onPointerEnter?.(e); if (e.pointerType !== "touch") show(); },
     onPointerLeave: (e: React.PointerEvent) => { p.onPointerLeave?.(e); hide(); },
@@ -107,7 +114,7 @@ export function Tooltip({ content, children, side = "top", label = false, delay 
         ref={tip}
         id={id}
         role="tooltip"
-        popover="manual"
+        {...popover("manual")}
         data-side={side}
         className={["vin-tooltip", className].filter(Boolean).join(" ")}
         onPointerEnter={() => clearTimeout(timers.current.hide)}
