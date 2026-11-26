@@ -1,4 +1,6 @@
-// Static files for vinish.dev/ui and vinish.dev/ui/* (the rest of vinish.dev stays on WordPress).
+// Static files for vinish.dev/ui that can't be WordPress pages: the CLI registry, CSS/JS,
+// the docs pages' scripts and styles, images and llms.txt. The pages themselves are on WordPress,
+// so these routes list only those folders and files; every other /ui URL stays with WordPress.
 // No Worker code: every request is a plain static file, which Cloudflare serves for free and
 // doesn't count against Worker request limits.
 // Deploy: npm run build (at the repo root), then `npx wrangler deploy` in this folder.
@@ -6,15 +8,21 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "vinui",
   "compatibility_date": "2026-11-01",
-  // Only /ui and the /ui/ folder. Not "ui*": that would also catch pages like /ui-design-tips.
   "routes": [
-    { "pattern": "vinish.dev/ui", "zone_name": "vinish.dev" },
-    { "pattern": "vinish.dev/ui/*", "zone_name": "vinish.dev" }
+    { "pattern": "vinish.dev/ui/r/*", "zone_name": "vinish.dev" },        // registry the CLI reads
+    { "pattern": "vinish.dev/ui/v1/*", "zone_name": "vinish.dev" },       // style CSS and vinui.js
+    { "pattern": "vinish.dev/ui/_astro/*", "zone_name": "vinish.dev" },   // the docs pages' own CSS/JS
+    { "pattern": "vinish.dev/ui/avatars/*", "zone_name": "vinish.dev" },  // images used in examples
+    { "pattern": "vinish.dev/ui/media/*", "zone_name": "vinish.dev" },
+    { "pattern": "vinish.dev/ui/llms.txt", "zone_name": "vinish.dev" },
+    { "pattern": "vinish.dev/ui/llms-full.txt", "zone_name": "vinish.dev" },
+    { "pattern": "vinish.dev/ui/favicon.svg", "zone_name": "vinish.dev" }
   ],
   "assets": {
     // The built site. It lives in dist/ui, so /ui/... maps straight to files.
     "directory": "../../apps/docs/dist",
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "html_handling": "none",
+    // A missing file is a plain 404, so the CLI can say "not found".
+    "not_found_handling": "none"
   }
 }
