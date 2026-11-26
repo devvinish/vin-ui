@@ -6,6 +6,7 @@ Input: wp/out (from `node scripts/wp-export.mjs`). State (WordPress ids): wp/sta
   python3 wp/publish.py plan       what would be created or updated, changes nothing
   python3 wp/publish.py patterns   create or update the 3 synced patterns (header, sidebar, footer)
   python3 wp/publish.py draft      create or update every page as a draft, with Yoast title and description
+  python3 wp/publish.py seo        set the Yoast title and description again (all pages)
   python3 wp/publish.py publish    publish every page (parents first)
   python3 wp/publish.py check      fetch the live pages and check title, description and VinUI markup
 
@@ -45,6 +46,20 @@ def backup(kind, pid):
     if not os.path.exists(path):  # keep the first (oldest) copy of the day
         open(path, 'w').write(j['content']['raw'])
     return j
+
+
+def yoast_title(page):
+    """Yoast always ends the title with " • Vinish.Dev", so the site's own " · VinUI" ending is dropped."""
+    return re.sub(r'\s*·\s*VinUI$', '', page['seoTitle']) + ' %%sep%% %%sitename%%'
+
+
+def live_title(page): return re.sub(r'\s*·\s*VinUI$', '', page['seoTitle']) + ' • Vinish.Dev'
+
+
+def set_seo(pid, page):
+    st, y = wp.req('POST', '/wp-json/wp-abilities/v1/abilities/yoast-seo/update-post-seo-data/run',
+                   {'input': {'post_id': pid, 'seo_title': yoast_title(page), 'meta_description': page['description']}})
+    return st
 
 
 def html_block(html): return '<!-- wp:html -->\n' + html + '\n<!-- /wp:html -->'
@@ -110,10 +125,13 @@ def cmd_draft():
         j = ok(st, j, 'page ' + p['path'])
         assert j['slug'] == p['slug'], ('WordPress changed the slug', p['path'], j['slug'])
         S['pages'][p['path']] = j['id']; save()
-        st, y = wp.req('POST', '/wp-json/wp-abilities/v1/abilities/yoast-seo/update-post-seo-data/run',
-                       {'input': {'post_id': j['id'], 'seo_title': p['seoTitle'], 'meta_description': p['description']}})
-        print(j['status'].ljust(7), j['id'], p['path'].ljust(36), 'yoast', st)
+        print(j['status'].ljust(7), j['id'], p['path'].ljust(36), 'yoast', set_seo(j['id'], p))
         time.sleep(0.3)
+
+
+def cmd_seo():
+    for p in PAGES:
+        print(p['path'].ljust(36), 'yoast', set_seo(S['pages'][p['path']], p), '|', live_title(p))
 
 
 def cmd_publish():
@@ -140,7 +158,7 @@ def cmd_check():
         if h and h.count('class="vinui-site') != 1: problems.append('vinui-site x%d' % h.count('class="vinui-site'))
         if h and EXPORT['css'] not in h: problems.append('css missing')
         if h and 'id="sidebar"' not in h and any(b.get('pattern') == 'sidebar' for b in p['blocks']): problems.append('sidebar missing')
-        if title and title != p['seoTitle'].replace('&amp;', '&'): problems.append('title: ' + title)
+        if title and title.replace('&#8226;', '•') != live_title(p).replace('&amp;', '&'): problems.append('title: ' + title)
         if not d: problems.append('no meta description')
         bad += bool(problems)
         print('ok ' if not problems else 'BAD', p['path'].ljust(36), '; '.join(problems))
@@ -149,4 +167,4 @@ def cmd_check():
 
 if __name__ == '__main__':
     cmd = sys.argv[1] if len(sys.argv) > 1 else ''
-    {'plan': cmd_plan, 'patterns': cmd_patterns, 'draft': cmd_draft, 'publish': cmd_publish, 'check': cmd_check}.get(cmd, lambda: print(__doc__))()
+    {'plan': cmd_plan, 'patterns': cmd_patterns, 'draft': cmd_draft, 'seo': cmd_seo, 'publish': cmd_publish, 'check': cmd_check}.get(cmd, lambda: print(__doc__))()

@@ -143,6 +143,22 @@ article:has(.vinui-site) .entry-content{margin:0!important;padding:0!important}
 .vinui-site :where(td,th){padding:1px}
 `.trim();
 
+/**
+ * The page behind the VinUI area (seen when scrolling past the top or bottom, or below a short page)
+ * gets VinUI's background too, light or dark like the area itself. Only on pages with the VinUI area.
+ */
+export function pageBackground(siteCss) {
+  const light = siteCss.match(/:root\{[^}]*?--bg:([^;}]+)/)?.[1];
+  const dark = siteCss.match(/:root\[data-vin-mode="?dark"?\]\{[^}]*?--bg:([^;}]+)/)?.[1];
+  if (!light || !dark) throw new Error("site CSS: no --bg for light and dark");
+  const on = (root) => `${root}:has(.vinui-site),${root}:has(.vinui-site) body`;
+  return [
+    `${on("html")}{background:${light}!important;color-scheme:light}`,
+    `${on('html[data-vin-mode="dark"]')}{background:${dark}!important;color-scheme:dark}`,
+    `@media (prefers-color-scheme:dark){${on('html:not([data-vin-mode="light"])')}{background:${dark}!important;color-scheme:dark}}`,
+  ].join("\n");
+}
+
 // ───────── HTML helpers ─────────
 
 /** Page links without the trailing slash, as WordPress serves them (/ui/blocks/ → /ui/blocks). */
@@ -268,7 +284,7 @@ export function exportSite() {
   const patterns = {
     header: clean([
       note("header"),
-      `<style>${WP_CSS}</style>`,
+      `<style>${WP_CSS}\n${pageBackground(siteCss.map((h) => read(path.join(DIST, "..", h))).join("\n"))}</style>`,
       '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
       fonts,
       `<link rel="stylesheet" href="/ui/_astro/${cssName}">`,
