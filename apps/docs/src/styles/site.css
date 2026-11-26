@@ -251,7 +251,11 @@ a.comp-card:hover { border-color: var(--border-strong); transform: translateY(-2
 .comp-card h3 { margin: 0; font-size: 14.5px; display: flex; justify-content: space-between; gap: 6px; }
 .comp-card p { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
 .status { font: 500 10.5px var(--mono); color: var(--muted); padding: 2px 6px; border: 1px solid var(--border); border-radius: 4px; white-space: nowrap; }
-.status.ready { color: #16a34a; border-color: color-mix(in srgb, #16a34a 40%, transparent); }
+.status.ready { color: #15803d; border-color: color-mix(in srgb, #16a34a 40%, transparent); }
+:root[data-vin-mode="dark"] .status.ready { color: #4ade80; }
+@media (prefers-color-scheme: dark) { :root:not([data-vin-mode="light"]) .status.ready { color: #4ade80; } }
+/* Wide tables and code scroll sideways on phones, so they can take keyboard focus. */
+.table-wrap:focus-visible, .create-code pre:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
 
 .style-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
 .style-card { border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--panel); }

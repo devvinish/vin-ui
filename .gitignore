@@ -9,3 +9,10 @@ playwright-report/
 .env.*
 .claude/settings.local.json
 .claude/worktrees/
+
+# WordPress export (made by scripts/wp-export.mjs), its preview, and backups of live content
+wp/out/
+wp/preview/
+wp/backups/
+# Site files from earlier builds, kept so published WordPress pages never point at a missing file
+workers/site/kept/

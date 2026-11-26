@@ -9,13 +9,11 @@ import Search from "../components/Search.astro";
 import { href, fontsHref } from "../lib/site";
 
 export interface Props { title: string; seoTitle?: string; description?: string; current?: string; hasSidebar?: boolean; jsonLd?: object }
-const { title, seoTitle, description = "VinUI is a free, open-source UI component library for HTML, React, Vue and Svelte: accessible components, blocks and charts in 8 styles, any accent colour, light and dark.", current, hasSidebar = false, jsonLd } = Astro.props;
+const { title, seoTitle, description = "VinUI is a free, open-source UI component library for HTML, React, Vue and Svelte: accessible components, blocks and charts in 8 styles and any accent colour.", current, hasSidebar = false, jsonLd } = Astro.props;
 const fullTitle = seoTitle ?? (title === "VinUI" ? "VinUI: Free UI Component Library for HTML, React, Vue & Svelte" : `${title} · VinUI`);
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const { vars } = themeToAttributes(DEFAULT_THEME);
 const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
-// Ads load only in the live build (npm run build:live). Local builds and tests never load them.
-const ads = import.meta.env.PUBLIC_MEDIAVINE === "1";
 ---
 <!doctype html>
 <html lang="en" data-vin-style={DEFAULT_STYLE} style={rootStyle}>
@@ -37,7 +35,6 @@ const ads = import.meta.env.PUBLIC_MEDIAVINE === "1";
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href={fontsHref([...STYLES.map((s) => s.fonts), ["Space+Grotesk:wght@500;600;700", "Geist:wght@400;500;600", "JetBrains+Mono:wght@400;500"]])} />
-    {ads && <script is:inline type="text/javascript" async="async" data-noptimize="1" data-cfasync="false" src="//scripts.mediavine.com/tags/53e609c8-2504-4519-ac11-c70bca527159.js"></script>}
     <!-- Apply the saved theme before first paint, so there is no flash of the default style. -->
     <script is:inline>
       (function () {

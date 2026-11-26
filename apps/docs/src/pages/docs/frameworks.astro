@@ -11,7 +11,7 @@ const toc = [
   { id: "notes", text: "Component notes" },
 ];
 ---
-<Docs title="Frameworks" description="How the React, Vue and Svelte versions of VinUI differ: values, content, events and files." current="frameworks" toc={toc}>
+<Docs title="Frameworks" seoTitle="VinUI in React, Vue, Svelte and HTML: What Differs · VinUI" description="How the HTML, React, Vue and Svelte versions of VinUI line up: the same markup and props, and what differs in values, content, events and files." current="frameworks" toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><span>Frameworks</span></div>
   <h1 class="page-title">Frameworks</h1>
   <p class="page-lead">Every component comes for HTML, React, Vue and Svelte. Each version follows its framework's own habits, so the way you pass values and content differs a little. This page lists how.</p>
@@ -25,7 +25,7 @@ const toc = [
 
     <h2 id="values">Values</h2>
     <p>React has a controlled <code>value</code> and an uncontrolled <code>defaultValue</code>. Vue and Svelte use two-way binding instead; a plain value is just the starting value.</p>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Values table">
       <table class="api">
         <thead><tr><th>React</th><th>Vue</th><th>Svelte</th></tr></thead>
         <tbody>
@@ -37,7 +37,7 @@ const toc = [
         </tbody>
       </table>
     </div>
-    <div class="table-wrap" style="margin-top:12px">
+    <div class="table-wrap" tabindex="0" role="region" aria-label="More code examples" style="margin-top:12px">
       <CodeBlock title="React" lang="tsx" code={`const [plan, setPlan] = useState("pro");\n<Select options={plans} value={plan} onValueChange={setPlan} label="Plan" />`} />
       <CodeBlock title="Vue" lang="vue" code={`<script setup>\nconst plan = ref("pro");\n</script>\n<template>\n  <Select :options="plans" v-model="plan" label="Plan" />\n</template>`} />
       <CodeBlock title="Svelte" lang="svelte" code={`<script>\n  let plan = $state("pro");\n</script>\n<Select options={plans} bind:value={plan} label="Plan" />`} />
@@ -59,7 +59,7 @@ const toc = [
     <p>React and Svelte use callback props (<code>onSelect</code>, <code>onComplete</code>, <code>onLayout</code>). Vue emits events with the same name in kebab case: <code>@select</code>, <code>@complete</code>, <code>@layout</code>, <code>@update:open</code>. Plain HTML fires DOM events where a component reports something: <code>vin-resize</code> (Resizable), <code>vin-feedback</code> (Message), <code>vin-submit</code> and <code>vin-skip</code> (Questionnaire).</p>
 
     <h2 id="files">Files and imports</h2>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Files and imports table">
       <table class="api">
         <thead><tr><th></th><th>Files</th><th>Import</th></tr></thead>
         <tbody>

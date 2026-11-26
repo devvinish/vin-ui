@@ -21,8 +21,12 @@ const toc = [
 ];
 const props = Object.entries(spec.props);
 const reactImport = `import { ${[...spec.react.components, ...(spec.react.helpers ?? [])].join(", ")} } from "@/components/vin/${spec.name}";`;
+// Search engines show about 160 characters: the component's own description when it fits, else its first sentence.
+const lead = `Free, accessible ${spec.title} component for HTML, React, Vue and Svelte.`;
+const firstSentence = spec.description.match(/^.*?[.!?](?=\s|$)/)?.[0] ?? spec.description;
+const metaDescription = [`${lead} ${spec.description}`, `${lead} ${firstSentence}`, `${lead} In 8 styles, light and dark. Copy the code or add it with the CLI.`].find((d) => d.length <= 160) ?? lead;
 ---
-<Docs title={spec.title} seoTitle={`${spec.title} Component for HTML, React, Vue & Svelte · VinUI`} description={`Free, accessible ${spec.title} component for HTML, React, Vue and Svelte. ${spec.description} In 8 styles, light and dark. Copy the code or add it with the CLI.`} current={spec.name} toc={toc}>
+<Docs title={spec.title} seoTitle={`${spec.title} Component for HTML, React, Vue & Svelte · VinUI`} description={metaDescription} current={spec.name} toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><a href={href("/components/")}><span>Components</span></a><span>{spec.title}</span></div>
   <h1 class="page-title">{spec.title}</h1>
   <p class="page-lead">{spec.description} Same markup and props in every style: switch the style in the header to see it change.</p>
@@ -54,7 +58,7 @@ const reactImport = `import { ${[...spec.react.components, ...(spec.react.helper
     <h2 id="api">API</h2>
     <p>From <code>spec/{spec.name}.json</code>, which every framework version is tested against.</p>
     {props.length > 0 && (
-      <div class="table-wrap">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="API table">
         <table class="api">
           <thead><tr><th>Prop</th><th>Values</th><th>Default</th><th>In HTML</th></tr></thead>
           <tbody>
@@ -71,7 +75,7 @@ const reactImport = `import { ${[...spec.react.components, ...(spec.react.helper
       </div>
     )}
     <h3>Parts</h3>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Parts table">
       <table class="api">
         <thead><tr><th>React, Vue, Svelte</th><th>HTML classes</th></tr></thead>
         <tbody>

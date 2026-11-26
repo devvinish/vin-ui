@@ -20,7 +20,7 @@ const opts = [
 ---
 <Gallery
   title="Create Your Own UI Theme: Free Theme Builder"
-  description="Build your own design system in a minute: pick a style, accent colour, corners, font and spacing, see it live on real components, then set up your project with one command. Free, for HTML, React, Vue and Svelte."
+  description="Build your own UI theme: pick a style, accent colour, corners, font and spacing, see it live on real components, then start your project with one command."
   current="create"
 >
   <div class="gallery-head">
@@ -80,11 +80,11 @@ const opts = [
         <p class="muted" data-create-hint>Run this in your project folder. It writes <code>vin.json</code> and <code>vin.css</code> with your theme; then add components or blocks.</p>
         <div class="code create-code">
           <div class="code-head"><span data-create-file>Terminal</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
-          <pre><code data-create-command></code></pre>
+          <pre tabindex="0" aria-label="Setup command"><code data-create-command></code></pre>
         </div>
         <div class="code create-code">
           <div class="code-head"><span>Then</span><button class="copy-btn" type="button" data-copy><Icon name="copy" size={13} />Copy</button></div>
-          <pre><code data-create-next></code></pre>
+          <pre tabindex="0" aria-label="Next command"><code data-create-next></code></pre>
         </div>
         <div class="btn-row create-actions">
           <button class="btn" type="button" data-create-share><Icon name="link" />Share this theme</button>

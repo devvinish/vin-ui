@@ -24,13 +24,14 @@
   },
   "scripts": {
     "build": "npm run build -w @vinui/styles && npm run build -w @vinui/docs",
-    "build:live": "PUBLIC_MEDIAVINE=1 npm run build && node scripts/prepare-deploy.mjs",
-    "deploy": "npm run build:live && cd workers/site && npx wrangler deploy",
+    "deploy": "npm run build && node scripts/wp-export.mjs && node scripts/keep-assets.mjs && cd workers/site && npx wrangler deploy",
     "dev": "npm run build -w @vinui/styles && npm run dev -w @vinui/docs",
     "preview": "npm run preview -w @vinui/docs",
     "test": "npm run build -w @vinui/styles && npm test --workspaces --if-present",
     "test:visual": "playwright test",
-    "test:visual:update": "playwright test --update-snapshots"
+    "test:visual:update": "playwright test --update-snapshots",
+    "wp:export": "node scripts/wp-export.mjs --preview",
+    "wp:check": "node scripts/wp-check.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.1",

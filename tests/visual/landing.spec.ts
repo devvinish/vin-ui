@@ -106,7 +106,8 @@ test("header · Docs opens the guides and stays highlighted there", async ({ pag
   await page.goto("/ui/components/button/");
   await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Components" })).toHaveAttribute("aria-current", "page");
   await page.goto("/ui/docs/");
-  await expect(page).toHaveURL(/\/ui\/docs\/installation\/$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Docs" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Docs" })).toHaveAttribute("aria-current", "page");
 });
 
 test("landing · the whole page passes axe (WCAG 2.2 AA) in light and dark, wide and narrow", async ({ page }) => {
@@ -127,7 +128,7 @@ test("landing · the whole page passes axe (WCAG 2.2 AA) in light and dark, wide
  * Blocks, Charts and Create: the whole page, previews included, in every style, light and dark.
  * Also no sideways scrolling on a phone.
  */
-for (const path of ["blocks", "charts", "create"]) {
+for (const path of ["blocks", "charts", "create", "docs"]) {
   for (const style of STYLE_IDS) {
     test(`${path} · ${style} passes axe (WCAG 2.2 AA) in light and dark`, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 900 });

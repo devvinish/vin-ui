@@ -1,15 +1,23 @@
 ---
+import Docs from "../../layouts/Docs.astro";
 import { href } from "../../lib/site";
-const to = href("/docs/installation/");
+import { COMPONENTS } from "../../data/components";
+
+const guides = [
+  { path: "/docs/installation/", name: "Installation", text: "Add VinUI to a project: one command with the CLI, or a stylesheet and a script for plain HTML." },
+  { path: "/docs/theming/", name: "Theming", text: "Styles, accent colour, corners, font, grey tone, spacing, and light and dark mode." },
+  { path: "/docs/frameworks/", name: "Frameworks", text: "How the HTML, React, Vue and Svelte versions line up, and what each one needs." },
+  { path: "/docs/cli/", name: "CLI", text: "npx @vinish/ui: set up a project, add components and blocks, switch styles, see changes." },
+  { path: "/docs/ai/", name: "AI tools", text: "Let Claude, Cursor, Copilot and other AI tools add VinUI components with the CLI." },
+];
+const ready = COMPONENTS.filter((c) => c.ready).length;
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>VinUI docs</title>
-    <meta http-equiv="refresh" content={`0; url=${to}`} />
-    <link rel="canonical" href={to} />
-    <meta name="robots" content="noindex" />
-  </head>
-  <body><a href={to}>Go to the VinUI docs</a></body>
-</html>
+<Docs title="Docs" seoTitle="VinUI Docs: Install, Theme and Use the Components · VinUI" description="VinUI documentation: install the free component library, set your theme, use it with HTML, React, Vue or Svelte, and add components with the CLI." current="docs">
+  <div class="crumbs"><a href={href("/")}>VinUI</a><span>Docs</span></div>
+  <h1 class="page-title">Docs</h1>
+  <p class="page-lead">Everything you need to use VinUI: set it up, pick your look, then add components and blocks.</p>
+  <div class="more-grid">
+    {guides.map((g) => <a class="more-card" href={href(g.path)}><b>{g.name}</b><span>{g.text}</span></a>)}
+    <a class="more-card" href={href("/components/")}><b>Components <span>{ready}</span></b><span>Every component with live examples and code for HTML, React, Vue and Svelte.</span></a>
+  </div>
+</Docs>

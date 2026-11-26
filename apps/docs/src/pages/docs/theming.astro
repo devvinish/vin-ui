@@ -4,7 +4,7 @@ import CodeBlock from "../../components/CodeBlock.astro";
 import { href } from "../../lib/site";
 const toc = [{ id: "root", text: "The theme root" }, { id: "accent", text: "Accent colour" }, { id: "options", text: "Options" }, { id: "files", text: "Theme files" }];
 ---
-<Docs title="Theming" description="How VinUI themes work: one element, a few data attributes and an accent colour." current="theming" toc={toc}>
+<Docs title="Theming" seoTitle="VinUI Theming: Styles, Accent Colour, Light and Dark · VinUI" description="How VinUI themes work: pick one of 8 styles, any accent colour, corners, font, grey tone, spacing, and light or dark mode, with a few data attributes." current="theming" toc={toc}>
   <div class="crumbs"><a href={href("/")}>VinUI</a><span>Theming</span></div>
   <h1 class="page-title">Theming</h1>
   <p class="page-lead">A theme is a style, an accent colour and a few options, set on one element. Every component reads the same tokens, so they all follow.</p>
@@ -18,7 +18,7 @@ const toc = [{ id: "root", text: "The theme root" }, { id: "accent", text: "Acce
     <p>Any colour works. VinUI works out readable text on top of it, and a darker or lighter shade where the accent is used as text, so contrast stays at WCAG AA. The CLI writes these into <code>vin.css</code>; in plain HTML, setting <code>--vin-accent</code> is enough.</p>
 
     <h2 id="options">Options</h2>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Options table">
       <table class="api">
         <thead><tr><th>Attribute</th><th>Values</th></tr></thead>
         <tbody>

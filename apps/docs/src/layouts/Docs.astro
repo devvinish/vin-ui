@@ -7,7 +7,7 @@ export interface Props { title: string; seoTitle?: string; description?: string;
 const { title, seoTitle, description, current, toc = [] } = Astro.props;
 const GUIDES = ["installation", "theming", "frameworks", "cli", "ai"];
 ---
-<Base title={title} seoTitle={seoTitle} description={description} current={current === "styles" ? "styles" : GUIDES.includes(current ?? "") ? "docs" : "components"} hasSidebar>
+<Base title={title} seoTitle={seoTitle} description={description} current={current === "styles" ? "styles" : GUIDES.includes(current ?? "") || current === "docs" ? "docs" : "components"} hasSidebar>
   <div class="docs">
     <Sidebar current={current} />
     <main class="main" id="main">
