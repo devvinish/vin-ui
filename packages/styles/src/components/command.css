@@ -53,3 +53,6 @@
 .vin-dialog.vin-command-dialog { width: min(600px, calc(100vw - 24px)); padding: 0; margin-top: min(15dvh, 120px); overflow: hidden; }
 .vin-command-dialog > .vin-command { border: 0; border-radius: inherit; box-shadow: none; background: transparent; }
 .vin-command-dialog .vin-command__list { max-height: min(360px, 55dvh); }
+
+/* Touch screens: at least 16px, or iPhone Safari zooms in on focus (see input.css). */
+@media (pointer: coarse) { [data-vin-style] .vin-command__input { font-size: max(16px, var(--vin-text-md)); } }

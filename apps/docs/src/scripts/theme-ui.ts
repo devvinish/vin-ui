@@ -248,9 +248,18 @@ document.addEventListener("keydown", (e) => {
 
 /* ───────────── docs page helpers ───────────── */
 
-// Example tabs (HTML / React / Vue / Svelte), remembered across examples.
-const savedFw = (() => { try { return localStorage.getItem("vinui:framework") || "html"; } catch { return "html"; } })();
+/* One framework setting for the whole site (HTML / React / Vue / Svelte): the code tabs on component, block and
+   chart pages, the Create page and the "Code in" row in Customize all read and write it. Other page scripts
+   (Create) listen for the "vinui:framework" event. Create used to keep its own choice; that is carried over once. */
+const FRAMEWORKS = ["html", "react", "vue", "svelte"];
+const savedFw = (() => {
+  try {
+    const v = localStorage.getItem("vinui:framework") || localStorage.getItem("vinui:create-framework");
+    return v && FRAMEWORKS.includes(v) ? v : "html";
+  } catch { return "html"; }
+})();
 function showFramework(fw: string) {
+  for (const b of $$("[data-code-in]")) b.setAttribute("aria-pressed", String(b.dataset.codeIn === fw));
   for (const tabs of $$("[data-tabs]")) {
     // A component not yet ported to that framework falls back to HTML.
     const show = $$("[data-tab]", tabs).some((t) => t.dataset.tab === fw) ? fw : "html";
@@ -259,11 +268,21 @@ function showFramework(fw: string) {
   }
 }
 showFramework(savedFw);
+function setFramework(fw: string) {
+  if (!FRAMEWORKS.includes(fw)) return;
+  showFramework(fw);
+  try { localStorage.setItem("vinui:framework", fw); } catch {}
+  document.dispatchEvent(new CustomEvent("vinui:framework", { detail: fw }));
+}
 document.addEventListener("click", (e) => {
-  const tab = (e.target as Element).closest<HTMLElement>("[data-tab]");
-  if (!tab) return;
-  showFramework(tab.dataset.tab!);
-  try { localStorage.setItem("vinui:framework", tab.dataset.tab!); } catch {}
+  const el = (e.target as Element).closest<HTMLElement>("[data-tab], [data-code-in], [data-create-fw]");
+  if (el) setFramework(el.dataset.tab ?? el.dataset.codeIn ?? el.dataset.createFw!);
+});
+// Changed in another browser tab.
+addEventListener("storage", (e) => {
+  if (e.key !== "vinui:framework" || !e.newValue || !FRAMEWORKS.includes(e.newValue)) return;
+  showFramework(e.newValue);
+  document.dispatchEvent(new CustomEvent("vinui:framework", { detail: e.newValue }));
 });
 
 // Arrow keys move between the framework tabs.

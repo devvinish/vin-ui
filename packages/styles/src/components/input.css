@@ -34,3 +34,12 @@ textarea.vin-input { height: auto; min-height: calc(var(--vin-h-md) * 2.2); padd
 .vin-hint, .vin-error { margin: 0; font-size: calc(var(--vin-text-md) - 1.5px); line-height: 1.4; }
 .vin-hint { color: var(--vin-muted); }
 .vin-error { color: var(--vin-danger-text); font-weight: var(--vin-weight); }
+
+/* Touch screens: iPhone Safari zooms the page in when a field with text under 16px gets focus, and
+   stays zoomed. So on touch screens fields use at least 16px (bigger sizes stay as they are).
+   Textarea, native select, combobox, input group and the questionnaire's "Other" field use .vin-input too. */
+@media (pointer: coarse) {
+  [data-vin-style] .vin-input { font-size: max(16px, var(--vin-text-md)); }
+  [data-vin-style] .vin-input.vin-input--sm { font-size: max(16px, var(--vin-text-sm)); }
+  [data-vin-style] .vin-input.vin-input--lg { font-size: max(16px, var(--vin-text-lg)); }
+}

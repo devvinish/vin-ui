@@ -124,7 +124,8 @@ const opts = [
 
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const fwButtons = [...document.querySelectorAll<HTMLElement>("[data-create-fw]")];
-  let fw = (() => { try { const v = localStorage.getItem("vinui:create-framework"); return v && ["react", "vue", "svelte", "html"].includes(v) ? v : "react"; } catch { return "react"; } })();
+  // The framework is the site-wide setting; the site script (theme-ui.ts) saves it when these buttons are clicked.
+  let fw = (() => { try { const v = localStorage.getItem("vinui:framework") || localStorage.getItem("vinui:create-framework"); return v && ["react", "vue", "svelte", "html"].includes(v) ? v : "html"; } catch { return "html"; } })();
 
   function render() {
     const theme = loadTheme();
@@ -149,11 +150,7 @@ const opts = [
     }
   }
 
-  for (const b of fwButtons) b.addEventListener("click", () => {
-    fw = b.dataset.createFw!;
-    try { localStorage.setItem("vinui:create-framework", fw); } catch {}
-    render();
-  });
+  document.addEventListener("vinui:framework", (e) => { fw = (e as CustomEvent<string>).detail; render(); });
   document.addEventListener("vinui:theme", render);
   // Theme buttons are handled by the site script; render after it has applied the change.
   document.addEventListener("click", (e) => { if ((e.target as Element).closest("[data-demo-style],[data-set-accent],[data-opt]")) setTimeout(render); });

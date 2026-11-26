@@ -28,3 +28,6 @@
 .vin-otp:has(> .vin-otp__input[aria-invalid="true"]) .vin-input.vin-otp__slot { border-color: var(--vin-danger); box-shadow: var(--vin-input-shadow), 0 0 0 1px var(--vin-danger); }
 .vin-otp:has(> .vin-otp__input:disabled) .vin-otp__slots { opacity: .55; }
 .vin-otp__sep { flex: none; width: 10px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--vin-muted) 70%, transparent); }
+
+/* Touch screens: at least 16px, or iPhone Safari zooms in on focus (see input.css). */
+@media (pointer: coarse) { [data-vin-style] .vin-otp__input { font-size: max(16px, calc(var(--vin-text-lg) + 3px)); } }

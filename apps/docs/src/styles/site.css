@@ -481,3 +481,6 @@ a.comp-card:hover { border-color: var(--border-strong); transform: translateY(-2
 @media (max-width: 760px) { .more-grid { grid-template-columns: minmax(0, 1fr); } }
 .icon-btn.gh:has(.gh-stars:not([hidden])) { width: auto; gap: 6px; padding: 0 9px; }
 .gh-stars { font: 500 12.5px var(--sans); font-variant-numeric: tabular-nums; color: var(--fg-2); }
+
+/* Touch screens: the site's own fields use at least 16px too, or iPhone Safari zooms in on focus. */
+@media (pointer: coarse) { .palette input, .text-input { font-size: 16px; } }

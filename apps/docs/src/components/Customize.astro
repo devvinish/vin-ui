@@ -30,6 +30,13 @@ const groups = [
     ))}
 
     <div class="opt-group">
+      <div class="lbl" id="opt-code-in">Code in <span class="hint">Code tabs on every page</span></div>
+      <div class="seg" role="group" aria-labelledby="opt-code-in">
+        {[["html", "HTML"], ["react", "React"], ["vue", "Vue"], ["svelte", "Svelte"]].map(([v, l]) => <button type="button" aria-pressed="false" data-code-in={v}>{l}</button>)}
+      </div>
+    </div>
+
+    <div class="opt-group">
       <div class="lbl">Use this theme</div>
       <div class="btn-row">
         <button class="btn" type="button" data-copy-theme="html"><Icon name="copy" />Copy HTML</button>
