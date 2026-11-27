@@ -50,7 +50,7 @@ export const STYLES = [
       "primary-bg": `linear-gradient(180deg, ${mix(86, "#fff")}, ${accent})`, "primary-fg": onAccent,
       secondary: "#f4f4f6", "secondary-fg": "#111113",
       danger: "#ce4145", success: "#30a46c", warning: "#f76b15", "input-bg": "#ffffff", track: "#e4e4e9",
-      radius: "8px", "radius-lg": "12px", pill: "999px", bw: "1px", "btn-border": mix(72, "#000"),
+      radius: "6px", "radius-lg": "10px", pill: "999px", bw: "1px", "btn-border": mix(72, "#000"),
       shadow: "inset 0 1px 0 rgb(255 255 255 / .18), 0 1px 2px rgb(16 16 20 / .12)",
       "shadow-soft": "0 1px 2px rgb(16 16 20 / .06)",
       "shadow-lg": "0 1px 2px rgb(16 16 20 / .04), 0 12px 32px -16px rgb(16 16 20 / .16)",
@@ -145,39 +145,46 @@ export const STYLES = [
     fonts: ["Inter:wght@400;500;600;700"],
     light: {
       font: '"Inter", system-ui, sans-serif',
-      stage: "#e9ebef", "stage-img": "none", surface: "linear-gradient(180deg, #ffffff, #f7f8fa)",
+      stage: "#dfe2e8", "stage-img": "none", surface: "linear-gradient(180deg, #ffffff, #f7f8fa)",
       fg: "#1d1f24", muted: "#5f6571", border: "rgb(15 20 30 / .11)",
       "primary-bg": `linear-gradient(180deg, ${mix(76, "#fff")} 0%, ${accent} 55%, ${mix(86, "#000")} 100%)`, "primary-fg": onAccent,
       secondary: "linear-gradient(180deg, #ffffff, #eef0f3)", "secondary-fg": "#1d1f24",
-      danger: "#d33a3a", success: "#2f9e5b", warning: "#e07b12", "input-bg": "#f6f7f9", track: "#dde0e6",
+      danger: "#bf2c2c", success: "#2f9e5b", warning: "#e07b12", "input-bg": "#eef0f3", track: "#dde0e6",
       radius: "10px", "radius-lg": "14px", pill: "999px", bw: "1px", "btn-border": mix(62, "#000"),
-      shadow: "inset 0 1px 0 rgb(255 255 255 / .38), inset 0 -1px 0 rgb(0 0 0 / .12), 0 1px 1px rgb(0 0 0 / .12), 0 3px 6px -2px rgb(0 0 0 / .18)",
-      "shadow-soft": "inset 0 1px 0 rgb(255 255 255 / .6), 0 1px 2px rgb(0 0 0 / .1)",
-      "shadow-lg": "inset 0 1px 0 #fff, 0 1px 2px rgb(15 20 30 / .08), 0 10px 24px -10px rgb(15 20 30 / .22)",
-      "input-shadow": "inset 0 1px 2px rgb(15 20 30 / .10), 0 1px 0 rgb(255 255 255 / .9)", "outline-shadow": "none",
+      // Light from above: a bright top edge, a darker bottom edge and a drop shadow on everything you press.
+      shadow: "inset 0 1px 0 rgb(255 255 255 / .45), inset 0 -2px 0 rgb(0 0 0 / .16), 0 1px 1px rgb(0 0 0 / .14), 0 4px 8px -3px rgb(0 0 0 / .24)",
+      "shadow-soft": "inset 0 1px 0 #fff, inset 0 -2px 0 rgb(15 20 30 / .07), 0 1px 2px rgb(15 20 30 / .16)",
+      "shadow-lg": "inset 0 1px 0 #fff, 0 1px 2px rgb(15 20 30 / .10), 0 16px 32px -14px rgb(15 20 30 / .32)",
+      "input-shadow": "inset 0 2px 3px rgb(15 20 30 / .14), 0 1px 0 rgb(255 255 255 / .9)",
+      "outline-shadow": "inset 0 1px 0 #fff, inset 0 -2px 0 rgb(15 20 30 / .07), 0 1px 2px rgb(15 20 30 / .16)",
       weight: "600", "title-weight": "650",
       // The ring's gap is a solid colour: Tactile's surface is a gradient, which box-shadow can't use.
       focus: `0 0 0 2px #f7f8fa, 0 0 0 4px var(--vin-accent-text)`, ease: "cubic-bezier(.2, .8, .2, 1)",
     },
     dark: {
-      stage: "#141518", surface: "linear-gradient(180deg, #25272c, #1d1f23)",
+      stage: "#101113", surface: "linear-gradient(180deg, #25272c, #1d1f23)",
       focus: "0 0 0 2px #1d1f23, 0 0 0 4px var(--vin-accent-text)",
       fg: "#eceef2", muted: "#9aa0ab", border: "rgb(255 255 255 / .08)",
       secondary: "linear-gradient(180deg, #2e3137, #25272c)", "secondary-fg": "#eceef2",
       "input-bg": "#16171a", track: "#0f1012",
-      "shadow-soft": "inset 0 1px 0 rgb(255 255 255 / .07), 0 1px 2px rgb(0 0 0 / .5)",
-      "shadow-lg": "inset 0 1px 0 rgb(255 255 255 / .06), 0 1px 2px rgb(0 0 0 / .4), 0 12px 28px -12px rgb(0 0 0 / .8)",
-      "input-shadow": "inset 0 1px 3px rgb(0 0 0 / .55), 0 1px 0 rgb(255 255 255 / .05)",
+      "shadow-soft": "inset 0 1px 0 rgb(255 255 255 / .08), inset 0 -2px 0 rgb(0 0 0 / .25), 0 1px 2px rgb(0 0 0 / .55)",
+      "outline-shadow": "inset 0 1px 0 rgb(255 255 255 / .08), inset 0 -2px 0 rgb(0 0 0 / .25), 0 1px 2px rgb(0 0 0 / .55)",
+      "shadow-lg": "inset 0 1px 0 rgb(255 255 255 / .06), 0 1px 2px rgb(0 0 0 / .45), 0 16px 32px -14px rgb(0 0 0 / .85)",
+      "input-shadow": "inset 0 2px 4px rgb(0 0 0 / .6), 0 1px 0 rgb(255 255 255 / .05)",
     },
     tweaks: {
       button: `
-& .vin-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 4px rgb(0 0 0 / .28); filter: none; }`,
+& .vin-btn--outline { background: var(--vin-secondary); }
+& .vin-btn--outline:hover { filter: brightness(1.03); }
+& .vin-btn:active { transform: translateY(1px); box-shadow: inset 0 3px 6px rgb(0 0 0 / .3); filter: none; }`,
       badge: `
 & .vin-badge--primary { box-shadow: inset 0 1px 0 rgb(255 255 255 / .3); }`,
       card: "",
       input: "",
       checkbox: "",
-      switch: "",
+      switch: `
+& .vin-switch { box-shadow: inset 0 1px 3px rgb(0 0 0 / .28); }
+& .vin-switch::before { background: linear-gradient(180deg, #ffffff, #e4e7ec); box-shadow: 0 1px 2px rgb(0 0 0 / .3), 0 2px 5px rgb(0 0 0 / .16); }`,
       "native-select": "",
       select: "",
       tabs: "",
@@ -188,13 +195,19 @@ export const STYLES = [
       "toggle-group": "",
       "input-group": "",
       "input-otp": "",
-      slider: "",
+      slider: `
+& .vin-slider::-webkit-slider-runnable-track { box-shadow: inset 0 1px 2px rgb(0 0 0 / .28); }
+& .vin-slider::-moz-range-track { box-shadow: inset 0 1px 2px rgb(0 0 0 / .28); }
+& .vin-slider::-webkit-slider-thumb { background: linear-gradient(180deg, #ffffff, #e4e7ec); box-shadow: 0 1px 2px rgb(0 0 0 / .3), 0 3px 6px -1px rgb(0 0 0 / .2); }
+& .vin-slider::-moz-range-thumb { background: linear-gradient(180deg, #ffffff, #e4e7ec); box-shadow: 0 1px 2px rgb(0 0 0 / .3), 0 3px 6px -1px rgb(0 0 0 / .2); }`,
       avatar: "",
       kbd: "",
       separator: "",
       skeleton: "",
       spinner: "",
-      progress: "",
+      progress: `
+& .vin-progress { box-shadow: inset 0 1px 2px rgb(0 0 0 / .22); }
+& .vin-progress::before { background-image: linear-gradient(180deg, rgb(255 255 255 / .32), transparent 70%); }`,
       alert: "",
       typography: "",
       item: "",
@@ -917,7 +930,7 @@ export const STYLES = [
     id: "bento",
     name: "Bento",
     short: "Calm, layered, borderless",
-    description: "No borders: just soft grey layers, generous 24px radii and iOS-like controls. Clean, premium and familiar.",
+    description: "No borders: soft grey layers, big rounded cards, pill buttons, segmented tabs and grouped lists, like a native phone app. Clean, premium and familiar.",
     tags: ["product sites", "settings", "mobile"],
     fonts: ["Inter:wght@400;500;600;700"],
     light: {
@@ -926,11 +939,11 @@ export const STYLES = [
       "primary-bg": accent, "primary-fg": onAccent,
       secondary: "rgb(29 29 31 / .07)", "secondary-fg": "#1d1d1f",
       danger: "#d9332a", success: "#23913c", warning: "#c77700", "input-bg": "rgb(29 29 31 / .06)", track: "#e3e3e8",
-      radius: "12px", "radius-lg": "24px", pill: "999px", bw: "0px", "btn-border": "transparent",
+      radius: "12px", "radius-lg": "28px", pill: "999px", bw: "0px", "btn-border": "transparent",
       shadow: "none", "shadow-soft": "none",
       "shadow-lg": "0 1px 2px rgb(0 0 0 / .04), 0 8px 24px -8px rgb(0 0 0 / .08)", "input-shadow": "none",
       "outline-shadow": "inset 0 0 0 1px #d2d2d7",
-      weight: "600", "title-weight": "650",
+      weight: "600", "title-weight": "700",
       focus: `0 0 0 2px var(--vin-surface), 0 0 0 4.5px var(--vin-accent-text)`, ease: "cubic-bezier(.25, .1, .25, 1)",
     },
     dark: {
@@ -939,15 +952,29 @@ export const STYLES = [
       "shadow-lg": "none", "outline-shadow": "inset 0 0 0 1px #48484a",
     },
     tweaks: {
-      button: "",
+      button: `
+& .vin-btn { border-radius: var(--vin-pill); }
+& .vin-btn--outline { background: var(--vin-secondary); box-shadow: none; }
+& .vin-btn--outline:hover { background-color: color-mix(in srgb, var(--vin-fg) 11%, transparent); }
+& .vin-btn--outline:focus-visible { box-shadow: var(--vin-focus); }
+& .vin-btn--ghost { color: color-mix(in srgb, var(--vin-accent-text) 75%, var(--vin-fg)); }`,
       badge: "",
-      card: "",
+      card: `
+& .vin-card { --vin-card-pad: calc(var(--vin-px-md) + 8px); }
+& .vin-card__title { font-size: calc(var(--vin-text-md) + 4px); letter-spacing: -.02em; }`,
       input: "",
       checkbox: "",
-      switch: "",
+      switch: `
+& .vin-switch:not(.vin-switch--sm) { --vin-sw-w: 44px; --vin-sw-h: 26px; --vin-sw-gap: 2px; }
+& .vin-switch::before { box-shadow: 0 2px 4px rgb(0 0 0 / .22), 0 0 1px rgb(0 0 0 / .1); }`,
       "native-select": "",
       select: "",
-      tabs: "",
+      tabs: `
+& .vin-tabs__list { padding: 2px; border-radius: 10px; }
+& .vin-tabs__tab { height: calc(var(--vin-h-md) - 6px); border-radius: 8px; }
+& .vin-tabs__tab[aria-selected="true"] { box-shadow: 0 1px 3px rgb(0 0 0 / .14), 0 0 1px rgb(0 0 0 / .08); }
+& .vin-tabs--line .vin-tabs__tab { border-radius: 0; }
+& .vin-tabs--line .vin-tabs__tab[aria-selected="true"] { box-shadow: inset 0 -2px 0 var(--vin-accent); }`,
       "radio-group": "",
       textarea: "",
       toggle: "",
@@ -964,7 +991,9 @@ export const STYLES = [
       progress: "",
       alert: "",
       typography: "",
-      item: "",
+      item: `
+& .vin-item-group { border-color: transparent; }
+& .vin-item-group > .vin-item + .vin-item { border-top: 0; background: linear-gradient(var(--vin-item-line), var(--vin-item-line)) no-repeat 50% 0 / calc(100% - 28px) 1px; }`,
       table: "",
       empty: "",
       "aspect-ratio": "",
