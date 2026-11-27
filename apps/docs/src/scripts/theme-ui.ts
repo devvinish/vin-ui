@@ -342,6 +342,8 @@ if (tocLinks.length && "IntersectionObserver" in window) {
   }
   if (!Number.isFinite(stars) || stars! < 1) return;
   const text = stars! < 1000 ? String(stars) : `${(stars! / 1000).toFixed(stars! < 10000 ? 1 : 0).replace(/\.0$/, "")}k`;
+  if (badge.textContent === text && !badge.hidden) return; // already shown from the cache before first paint
+  if (badge.hidden) badge.classList.add("gh-stars--new"); // first visit: fade in instead of popping
   badge.textContent = text;
   badge.hidden = false;
   link.setAttribute("aria-label", `VinUI on GitHub, ${text} stars`);

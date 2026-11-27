@@ -53,7 +53,7 @@ const toc = [
     <p>Each component page says whether it needs <code>vinui.js</code>. Dialog, Accordion, Popover and others use the browser's own elements and work without it. <code>vinui.js</code> finds components when the page loads; for markup you add later, call <code>VinUI.init(element)</code>.</p>
 
     <h2 id="fonts">Fonts</h2>
-    <p>Each style has its own fonts: Clay uses Nunito, Terminal JetBrains Mono, Editorial adds Instrument Serif for headings and Paper adds handwritten Kalam. <a href={href("/styles/")}>Styles</a> lists them all. Without them the page falls back to a system font and loses much of the style's look.</p>
+    <p>Each style has its own fonts: Clay uses Nunito, Terminal JetBrains Mono, Editorial adds Instrument Serif for headings and Paper adds handwritten Kalam for headings. <a href={href("/styles/")}>Styles</a> lists them all. Without them the page falls back to a system font and loses much of the style's look.</p>
     <ul>
       <li><strong>CLI:</strong> <code>vin.css</code> starts with an <code>@import</code> of the style's fonts from Google Fonts, and <code>npx @vinish/ui style &lt;name&gt;</code> switches them with the style. To host the fonts yourself, add <code>--no-fonts</code> (to <code>init</code> or <code>style</code>); <code>--fonts</code> puts the import back.</li>
       <li><strong>Plain HTML:</strong> add the style's font link from the <a href={href("/styles/")}>Styles</a> page ("Copy font link"), as in the example above.</li>

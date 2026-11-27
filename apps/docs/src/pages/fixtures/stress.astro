@@ -1,0 +1,139 @@
+---
+/**
+ * Visual-test fixture: a long, realistic form inside a card, with errors, disabled fields and
+ * hints. Playwright tabs to a field and a button (so the keyboard focus ring shows) and
+ * screenshots it in all 8 styles × light/dark, and checks that fields stand out from the card.
+ * Usage: /ui/fixtures/stress/?style=clay&mode=dark
+ */
+import "../../styles/fonts.css";
+import "@vinui/styles/vinui.css";
+import { DEFAULT_STYLE } from "@vinui/styles";
+import { DEFAULT_THEME, themeToAttributes } from "@vinui/theme";
+
+const { vars } = themeToAttributes(DEFAULT_THEME);
+const rootStyle = Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(";");
+---
+<!doctype html>
+<html lang="en" data-vin-style={DEFAULT_STYLE} data-vin-mode="light" style={rootStyle}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Stress form fixture · VinUI</title>
+    <script is:inline>
+      (function () {
+        var p = new URLSearchParams(location.search), d = document.documentElement;
+        if (p.get("style")) d.setAttribute("data-vin-style", p.get("style"));
+        if (p.get("mode")) d.setAttribute("data-vin-mode", p.get("mode"));
+      })();
+    </script>
+    <style>
+      body { margin: 0; font-family: var(--vin-font); color: var(--vin-fg); background: var(--vin-stage, var(--vin-surface)); }
+      main { padding: 28px 24px; }
+      .vin-card { max-width: 640px; margin: 0 auto; }
+      form { display: grid; gap: 18px; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .choices { display: grid; gap: 10px; }
+    </style>
+  </head>
+  <body>
+    <main id="fixture">
+      <div class="vin-card" data-stress-card>
+        <div class="vin-card__header">
+          <h2 class="vin-card__title">Create your account</h2>
+          <p class="vin-card__desc">Two fields need fixing before you can continue.</p>
+        </div>
+        <div class="vin-card__body">
+          <form novalidate onsubmit="return false">
+            <div class="two">
+              <div class="vin-field">
+                <label class="vin-label" for="s-first">First name</label>
+                <input id="s-first" class="vin-input" value="Asha" autocomplete="off" data-stress-field />
+              </div>
+              <div class="vin-field">
+                <label class="vin-label" for="s-last">Last name</label>
+                <input id="s-last" class="vin-input" placeholder="Rao" autocomplete="off" />
+              </div>
+            </div>
+            <div class="vin-field">
+              <label class="vin-label" for="s-email">Email</label>
+              <input id="s-email" class="vin-input" type="email" value="asha@" aria-invalid="true" aria-describedby="s-email-err" autocomplete="off" />
+              <p class="vin-error" id="s-email-err">Enter a full email address, like name@example.com.</p>
+            </div>
+            <div class="vin-field">
+              <label class="vin-label" for="s-pass">Password</label>
+              <input id="s-pass" class="vin-input" type="password" value="abc" aria-invalid="true" aria-describedby="s-pass-err" autocomplete="off" />
+              <p class="vin-error" id="s-pass-err">Use at least 8 characters.</p>
+            </div>
+            <div class="vin-field">
+              <label class="vin-label" for="s-site">Website</label>
+              <div class="vin-input vin-input-group">
+                <span class="vin-input-group__addon">https://</span>
+                <input id="s-site" class="vin-input-group__input" placeholder="example.com" autocomplete="off" />
+              </div>
+            </div>
+            <div class="two">
+              <div class="vin-field">
+                <label class="vin-label" for="s-country">Country</label>
+                <select id="s-country" class="vin-input vin-native-select">
+                  <option>India</option>
+                  <option>United Kingdom</option>
+                  <option>United States</option>
+                </select>
+              </div>
+              <div class="vin-field">
+                <label class="vin-label" for="s-plan">Plan</label>
+                <select id="s-plan" class="vin-input vin-native-select" disabled aria-describedby="s-plan-hint">
+                  <option>Team (set by your admin)</option>
+                </select>
+                <p class="vin-hint" id="s-plan-hint">Your admin picks the plan.</p>
+              </div>
+            </div>
+            <div class="vin-field">
+              <label class="vin-label" for="s-org">Organisation</label>
+              <input id="s-org" class="vin-input" value="Acme Labs" disabled autocomplete="off" />
+            </div>
+            <div class="vin-field">
+              <label class="vin-label" for="s-bio">About you</label>
+              <textarea id="s-bio" class="vin-input vin-textarea" rows="3" placeholder="A line or two for your profile" aria-describedby="s-bio-hint"></textarea>
+              <p class="vin-hint" id="s-bio-hint">Shown on your public profile.</p>
+            </div>
+            <fieldset class="vin-radio-group">
+              <legend class="vin-radio-group__legend">Email me</legend>
+              <div class="vin-choice">
+                <input id="s-f1" class="vin-radio" type="radio" name="s-freq" checked />
+                <div class="vin-choice__body"><label class="vin-choice__label" for="s-f1">Once a day</label></div>
+              </div>
+              <div class="vin-choice">
+                <input id="s-f2" class="vin-radio" type="radio" name="s-freq" />
+                <div class="vin-choice__body"><label class="vin-choice__label" for="s-f2">Once a week</label></div>
+              </div>
+              <div class="vin-choice">
+                <input id="s-f3" class="vin-radio" type="radio" name="s-freq" disabled />
+                <div class="vin-choice__body"><label class="vin-choice__label" for="s-f3">Instantly (paid plans)</label></div>
+              </div>
+            </fieldset>
+            <div class="choices">
+              <div class="vin-choice">
+                <input id="s-news" class="vin-switch" type="checkbox" role="switch" checked />
+                <div class="vin-choice__body"><label class="vin-choice__label" for="s-news">Product news</label></div>
+              </div>
+              <div class="vin-choice">
+                <input id="s-terms" class="vin-checkbox" type="checkbox" aria-invalid="true" aria-describedby="s-terms-err" />
+                <div class="vin-choice__body">
+                  <label class="vin-choice__label" for="s-terms">I accept the terms</label>
+                  <p class="vin-error" id="s-terms-err">You need to accept the terms.</p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="vin-card__footer">
+          <button type="button" class="vin-btn" data-stress-button>Create account</button>
+          <button type="button" class="vin-btn vin-btn--outline">Save draft</button>
+          <button type="button" class="vin-btn vin-btn--ghost" disabled>Import</button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

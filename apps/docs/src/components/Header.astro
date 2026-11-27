@@ -79,6 +79,8 @@ const nav = [
         <button type="button" data-opt="mode" data-val="dark" aria-pressed="false" aria-label="Dark" title="Dark"><Icon name="moon" /></button>
       </div>
       <a class="icon-btn gh" href={SITE.github} aria-label="VinUI on GitHub" rel="noopener" data-gh-link><Icon name="github" /><span class="gh-stars" hidden data-gh-stars></span></a>
+      <!-- Show the saved star count before first paint, so the button doesn't widen after the icon shows. scripts/theme-ui.ts refreshes it. -->
+      <script is:inline>(function(){try{var a=document.currentScript.previousElementSibling,s=a.querySelector("[data-gh-stars]"),c=JSON.parse(localStorage.getItem("vinui:gh-stars")||"null"),n=c&&Number(c.n);if(!(n>=1))return;var t=n<1000?String(n):(n/1000).toFixed(n<10000?1:0).replace(/\.0$/,"")+"k";s.textContent=t;s.hidden=false;a.setAttribute("aria-label","VinUI on GitHub, "+t+" stars")}catch(e){}})();</script>
     </div>
   </div>
 </header>

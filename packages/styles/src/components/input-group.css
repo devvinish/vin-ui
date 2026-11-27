@@ -9,7 +9,7 @@
 
 .vin-input.vin-input-group { display: flex; align-items: center; gap: 8px; cursor: text; }
 .vin-input.vin-input-group:focus-within { box-shadow: var(--vin-input-shadow), var(--vin-focus); }
-.vin-input.vin-input-group:has(> .vin-input-group__input[aria-invalid="true"]) { border-color: var(--vin-danger); box-shadow: var(--vin-input-shadow), 0 0 0 1px var(--vin-danger); }
+.vin-input.vin-input-group:has(> .vin-input-group__input[aria-invalid="true"]) { border-color: var(--vin-danger-text); box-shadow: var(--vin-input-shadow), 0 0 0 1px var(--vin-danger-text); }
 .vin-input.vin-input-group:has(> .vin-input-group__input:disabled) { opacity: .55; cursor: not-allowed; }
 
 .vin-input-group__input {

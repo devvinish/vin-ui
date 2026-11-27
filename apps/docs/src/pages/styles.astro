@@ -3,9 +3,15 @@ import Docs from "../layouts/Docs.astro";
 import { STYLES, googleFontsHref } from "@vinui/styles";
 import { href } from "../lib/site";
 import StyleSample from "../components/StyleSample.astro";
-const toc = STYLES.map((s) => ({ id: s.id, text: s.name }));
+// Recommended: calm looks that suit most apps. Expressive: strong personalities for a brand or a site.
+const RECOMMENDED = ["precision", "tonal", "bento"];
+const GROUPS = [
+  { id: "recommended", title: "Recommended", lead: "Calm, all-purpose looks for apps, dashboards and SaaS. Start here if you're not sure.", styles: STYLES.filter((s) => RECOMMENDED.includes(s.id)) },
+  { id: "expressive", title: "Expressive", lead: "Strong personalities for a brand, a personal site or a playful product.", styles: STYLES.filter((s) => !RECOMMENDED.includes(s.id)) },
+];
+const toc = GROUPS.flatMap((g) => g.styles.map((s) => ({ id: s.id, text: s.name })));
 // What each style's second font is for (the first one is the text font).
-const FONT_USE: Record<string, string> = { "Instrument Serif": "headings and titles", Kalam: "headings, buttons and titles" };
+const FONT_USE: Record<string, string> = { "Instrument Serif": "headings and titles", Kalam: "headings and titles" };
 const fontList = (fonts: string[]) => fonts.map((f) => f.split(":")[0].replace(/\+/g, " ")).map((n, i) => (i && FONT_USE[n] ? `${n} for ${FONT_USE[n]}` : n)).join(", ");
 const fontLink = (s: (typeof STYLES)[number]) => `<link rel="stylesheet" href="${googleFontsHref([s])}">`;
 ---
@@ -13,23 +19,29 @@ const fontLink = (s: (typeof STYLES)[number]) => `<link rel="stylesheet" href="$
   <div class="crumbs"><a href={href("/")}>VinUI</a><span>Styles</span></div>
   <h1 class="page-title">Styles</h1>
   <p class="page-lead">Every component ships in all 8. Each sample below is the same screen, built from real components and kept in its own style so you can compare them; "Use this style" switches the whole site.</p>
-  <div class="style-cards">
-    {STYLES.map((s) => (
-      <article class="style-card" id={s.id} data-current-style={s.id}>
-        <div class="vin-stage" data-vin-style={s.id}>
-          <StyleSample id={s.id} />
-        </div>
-        <div class="meta">
-          <h3>{s.name}</h3>
-          <p>{s.description}</p>
-          <div class="tags">{s.tags.map((t: string) => <span>{t}</span>)}</div>
-          <p class="style-fonts">Fonts: {fontList(s.fonts)}</p>
-          <div class="style-actions">
-            <button type="button" class="btn" data-set-style={s.id} aria-pressed="false">Use this style</button>
-            <button type="button" class="btn" data-copy data-copy-text={fontLink(s)} title="For plain HTML. The CLI's vin.css loads the fonts itself.">Copy font link</button>
-          </div>
-        </div>
-      </article>
-    ))}
-  </div>
+  {GROUPS.map((g) => (
+    <section class="style-group" aria-labelledby={`group-${g.id}`}>
+      <h2 class="style-group__title" id={`group-${g.id}`}>{g.title}</h2>
+      <p class="style-group__lead">{g.lead}</p>
+      <div class="style-cards">
+        {g.styles.map((s) => (
+          <article class="style-card" id={s.id} data-current-style={s.id}>
+            <div class="vin-stage" data-vin-style={s.id}>
+              <StyleSample id={s.id} />
+            </div>
+            <div class="meta">
+              <h3>{s.name}{RECOMMENDED.includes(s.id) && <span class="style-badge">Recommended</span>}</h3>
+              <p>{s.description}</p>
+              <div class="tags">{s.tags.map((t: string) => <span>{t}</span>)}</div>
+              <p class="style-fonts">Fonts: {fontList(s.fonts)}</p>
+              <div class="style-actions">
+                <button type="button" class="btn" data-set-style={s.id} aria-pressed="false">Use this style</button>
+                <button type="button" class="btn" data-copy data-copy-text={fontLink(s)} title="For plain HTML. The CLI's vin.css loads the fonts itself.">Copy font link</button>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
 </Docs>

@@ -56,7 +56,7 @@ export const STYLES = [
       "shadow-lg": "0 1px 2px rgb(16 16 20 / .04), 0 12px 32px -16px rgb(16 16 20 / .16)",
       "input-shadow": "0 1px 2px rgb(16 16 20 / .04)", "outline-shadow": "none",
       weight: "500", "title-weight": "600",
-      focus: `0 0 0 3px ${mix(30, "transparent")}`, ease: "cubic-bezier(.2, .8, .2, 1)",
+      focus: `0 0 0 2px var(--vin-surface), 0 0 0 4px var(--vin-accent-text)`, ease: "cubic-bezier(.2, .8, .2, 1)",
     },
     dark: {
       stage: "#08090a", surface: "#101113", fg: "#f7f8f8", muted: "#8a8f98", border: "#23252a",
@@ -156,10 +156,12 @@ export const STYLES = [
       "shadow-lg": "inset 0 1px 0 #fff, 0 1px 2px rgb(15 20 30 / .08), 0 10px 24px -10px rgb(15 20 30 / .22)",
       "input-shadow": "inset 0 1px 2px rgb(15 20 30 / .10), 0 1px 0 rgb(255 255 255 / .9)", "outline-shadow": "none",
       weight: "600", "title-weight": "650",
-      focus: `0 0 0 3px ${mix(35, "transparent")}`, ease: "cubic-bezier(.2, .8, .2, 1)",
+      // The ring's gap is a solid colour: Tactile's surface is a gradient, which box-shadow can't use.
+      focus: `0 0 0 2px #f7f8fa, 0 0 0 4px var(--vin-accent-text)`, ease: "cubic-bezier(.2, .8, .2, 1)",
     },
     dark: {
       stage: "#141518", surface: "linear-gradient(180deg, #25272c, #1d1f23)",
+      focus: "0 0 0 2px #1d1f23, 0 0 0 4px var(--vin-accent-text)",
       fg: "#eceef2", muted: "#9aa0ab", border: "rgb(255 255 255 / .08)",
       secondary: "linear-gradient(180deg, #2e3137, #25272c)", "secondary-fg": "#eceef2",
       "input-bg": "#16171a", track: "#0f1012",
@@ -256,27 +258,29 @@ export const STYLES = [
       stage: mix(9, "#fbf7f4"), "stage-img": "none", surface: "#fffdfb", fg: "#2a2433", muted: "#6f6679", border: "transparent",
       "primary-bg": accent, "primary-fg": onAccent,
       secondary: mix(11, "#fff"), "secondary-fg": mix(55, "#2a2433"),
-      danger: "#d23958", success: "#1a9a6c", warning: "#d98a06", "input-bg": mix(5, "#f5f1ed"), track: mix(14, "#ebe5df"),
+      danger: "#d23958", success: "#1a9a6c", warning: "#d98a06", "input-bg": mix(6, "#efe9e3"), track: mix(14, "#ebe5df"),
       radius: "16px", "radius-lg": "28px", pill: "999px", bw: "0px", "btn-border": "transparent",
       shadow: `inset 2px 2px 4px rgb(255 255 255 / .45), inset -3px -4px 6px rgb(0 0 0 / .18), 0 8px 16px -6px ${mix(55, "transparent")}`,
       "shadow-soft": "inset 2px 2px 4px rgb(255 255 255 / .7), inset -3px -3px 6px rgb(60 40 80 / .1)",
       "shadow-lg": `inset 6px 6px 12px rgb(255 255 255 / .9), inset -8px -8px 16px rgb(60 40 80 / .07), 0 26px 40px -22px ${mix(45, "rgb(0 0 0 / .4)")}`,
-      "input-shadow": "inset 3px 3px 6px rgb(60 40 80 / .10), inset -3px -3px 6px rgb(255 255 255 / .85)",
-      "outline-shadow": "inset 2px 2px 4px rgb(255 255 255 / .7), inset -3px -3px 6px rgb(60 40 80 / .1)",
+      "input-shadow": "inset 0 0 0 1px rgb(60 40 80 / .10), inset 3px 4px 7px rgb(60 40 80 / .16), inset -2px -2px 5px rgb(255 255 255 / .9)",
+      "outline-shadow": "inset 2px 2px 4px rgb(255 255 255 / .8), inset -2px -3px 5px rgb(60 40 80 / .08), 0 6px 12px -6px rgb(60 40 80 / .28)",
       weight: "700", "title-weight": "800",
-      focus: `0 0 0 4px ${mix(30, "transparent")}`, ease: "cubic-bezier(.34, 1.56, .64, 1)",
+      focus: `0 0 0 3px var(--vin-surface), 0 0 0 6px var(--vin-accent-text)`, ease: "cubic-bezier(.34, 1.56, .64, 1)",
     },
     dark: {
       stage: mix(10, "#16141b"), surface: "#27242f", fg: "#f3eff8", muted: "#aba3b7",
-      secondary: mix(22, "#27242f"), "secondary-fg": "#f3eff8", "input-bg": "#1f1c26", track: "#3a3545",
+      secondary: mix(22, "#27242f"), "secondary-fg": "#f3eff8", "input-bg": "#18151e", track: "#3a3545",
       "shadow-soft": "inset 2px 2px 4px rgb(255 255 255 / .06), inset -3px -3px 6px rgb(0 0 0 / .3)",
-      "outline-shadow": "inset 2px 2px 4px rgb(255 255 255 / .06), inset -3px -3px 6px rgb(0 0 0 / .3)",
+      "outline-shadow": "inset 2px 2px 4px rgb(255 255 255 / .08), inset -2px -3px 5px rgb(0 0 0 / .3), 0 6px 12px -6px rgb(0 0 0 / .6)",
       "shadow-lg": "inset 4px 4px 10px rgb(255 255 255 / .05), inset -6px -6px 12px rgb(0 0 0 / .35), 0 26px 40px -22px rgb(0 0 0 / .8)",
-      "input-shadow": "inset 3px 3px 6px rgb(0 0 0 / .35), inset -2px -2px 5px rgb(255 255 255 / .04)",
+      "input-shadow": "inset 0 0 0 1px rgb(255 255 255 / .07), inset 3px 4px 7px rgb(0 0 0 / .45), inset -2px -2px 5px rgb(255 255 255 / .04)",
     },
     tweaks: {
       button: `
 & .vin-btn--outline { background: var(--vin-secondary); }
+& .vin-btn--secondary { box-shadow: var(--vin-outline-shadow); }
+& .vin-btn--secondary:focus-visible { box-shadow: var(--vin-outline-shadow), var(--vin-focus); }
 & .vin-btn:hover { filter: none; transform: translateY(-2px); }
 & .vin-btn:active { transform: scale(.96); }`,
       badge: `
@@ -331,7 +335,7 @@ export const STYLES = [
       "code-block": `
 & .vin-code-block { box-shadow: var(--vin-shadow-soft); }
 & .vin-code-block__header { border-bottom: 0; padding-bottom: 0; }
-& .vin-code-block__pre { margin: 8px; border-radius: calc(var(--vin-radius-lg) - 10px); background: var(--vin-input-bg); box-shadow: var(--vin-input-shadow); }
+& .vin-code-block__pre { margin: 8px; border-radius: calc(var(--vin-radius-lg) - 10px); background: color-mix(in srgb, var(--vin-input-bg) 55%, var(--vin-surface)); box-shadow: var(--vin-input-shadow); }
 & .vin-code-block > .vin-code-block__copy { top: 18px; inset-inline-end: 16px; }`,
       carousel: `
 & .vin-carousel { --vin-carousel-gap: 16px; }
@@ -381,7 +385,7 @@ export const STYLES = [
       shadow: "none", "shadow-soft": "none", "shadow-lg": "none", "input-shadow": "none",
       "outline-shadow": "inset 0 0 0 1px rgb(27 27 33 / .28)",
       weight: "500", "title-weight": "600",
-      focus: `0 0 0 3px ${mix(45, "transparent")}`, ease: "cubic-bezier(.34, 1.56, .64, 1)",
+      focus: `0 0 0 2px var(--vin-surface), 0 0 0 4px var(--vin-accent-text)`, ease: "cubic-bezier(.34, 1.56, .64, 1)",
     },
     dark: {
       stage: mix(4, "#121216"), surface: mix(12, "#1b1b20"), fg: "#e6e1e9", muted: "#aaa6b4",
@@ -398,8 +402,9 @@ export const STYLES = [
       card: "",
       input: `
 & .vin-input { border-radius: 12px 12px 4px 4px; box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--vin-accent) 55%, transparent); }
-& :is(.vin-input:focus, .vin-input.vin-input-group:focus-within, .vin-input.vin-otp__slot[data-active]) { box-shadow: inset 0 -3px 0 var(--vin-accent); }
-& :is(.vin-input[aria-invalid="true"], .vin-input-group:has(> [aria-invalid="true"]), .vin-otp:has(> [aria-invalid="true"]) .vin-otp__slot) { box-shadow: inset 0 -2px 0 var(--vin-danger); }`,
+& :is(.vin-input:focus, .vin-input.vin-input-group:focus-within, .vin-input.vin-otp__slot[data-active]) { box-shadow: inset 0 -3px 0 var(--vin-accent-text); }
+& :is(.vin-input[aria-invalid="true"], .vin-input-group:has(> [aria-invalid="true"]), .vin-otp:has(> [aria-invalid="true"]) .vin-otp__slot) { box-shadow: inset 0 -2px 0 var(--vin-danger-text); }
+& :is(.vin-input[aria-invalid="true"]:focus, .vin-input-group:has(> [aria-invalid="true"]):focus-within) { box-shadow: inset 0 -3px 0 var(--vin-danger-text), 0 0 0 3px color-mix(in srgb, var(--vin-danger) 22%, transparent); }`,
       checkbox: "",
       switch: "",
       "native-select": "",
@@ -488,7 +493,7 @@ export const STYLES = [
       radius: "2px", "radius-lg": "2px", pill: "2px", bw: "1px", "btn-border": "transparent",
       shadow: "none", "shadow-soft": "none", "shadow-lg": "none", "input-shadow": "none", "outline-shadow": "none",
       weight: "500", "title-weight": "400",
-      focus: `0 0 0 2px ${mix(55, "transparent")}`, ease: "cubic-bezier(.2, .8, .2, 1)",
+      focus: `0 0 0 2px var(--vin-surface), 0 0 0 3.5px var(--vin-accent-text)`, ease: "cubic-bezier(.2, .8, .2, 1)",
     },
     dark: {
       stage: "#11110f", surface: "#161613", fg: "#ecebe6", muted: "#a29e93", border: "#302e29",
@@ -627,7 +632,7 @@ export const STYLES = [
       radius: "3px", "radius-lg": "4px", pill: "3px", bw: "1px", "btn-border": "transparent",
       shadow: "none", "shadow-soft": "none", "shadow-lg": "none", "input-shadow": "none", "outline-shadow": "none",
       weight: "500", "title-weight": "700",
-      focus: "0 0 0 2px var(--vin-accent)", ease: "linear",
+      focus: "0 0 0 2px var(--vin-accent-text)", ease: "linear",
     },
     dark: {
       stage: "#0a0d0b", surface: "#0e1210", fg: "#d7e0d8", muted: "#86938a", border: "#46544a",
@@ -645,7 +650,6 @@ export const STYLES = [
 & .vin-card { border-style: dashed; }
 & .vin-card__title::before { content: "# "; color: var(--vin-accent-text); }`,
       input: `
-& .vin-input { border-style: dashed; }
 & :is(.vin-label, .vin-radio-group__legend)::before { content: "$ "; color: var(--vin-accent-text); }`,
       checkbox: "",
       switch: "",
@@ -779,7 +783,7 @@ export const STYLES = [
     id: "paper",
     name: "Paper",
     short: "Warm, hand-made, human",
-    description: "Warm paper tones, a dotted texture, hand-drawn edges and handwritten labels. Personal and approachable.",
+    description: "Warm paper tones, a dotted texture, hand-drawn edges and handwritten headings. Personal and approachable.",
     tags: ["personal sites", "notes", "creative tools"],
     fonts: ["Inter:wght@400;500;600", "Kalam:wght@400;700"],
     light: {
@@ -794,7 +798,7 @@ export const STYLES = [
       "shadow-lg": "0 1px 2px rgb(80 50 20 / .08), 0 16px 30px -16px rgb(80 50 20 / .35)",
       "input-shadow": "inset 0 1px 2px rgb(80 50 20 / .08)", "outline-shadow": "none",
       weight: "600", "title-weight": "700",
-      focus: `0 0 0 3px ${mix(35, "transparent")}`, ease: "cubic-bezier(.2, .8, .2, 1)",
+      focus: `0 0 0 2px var(--vin-surface), 0 0 0 4px var(--vin-accent-text)`, ease: "cubic-bezier(.2, .8, .2, 1)",
     },
     dark: {
       stage: "#1c1814", "stage-img": "radial-gradient(rgb(255 230 200 / .05) 1px, transparent 1.2px)",
@@ -806,10 +810,10 @@ export const STYLES = [
     },
     tweaks: {
       button: `
-& .vin-btn { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 2px); font-weight: 700; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
+& .vin-btn { font-weight: 600; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }
 & .vin-btn:hover { filter: none; transform: rotate(-1deg); }`,
       badge: `
-& .vin-badge { font-family: "Kalam", "Inter", cursive; font-size: 13px; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
+& .vin-badge { border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
       card: `
 & .vin-card { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
 & .vin-card__title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 6px); }`,
@@ -883,11 +887,10 @@ export const STYLES = [
 & .vin-carousel__dot[aria-current="true"]::before { width: 20px; height: 9px; border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; }`,
       chart: `
 & .vin-chart__bar { rx: 3px; }
-& :is(.vin-chart__legend, .vin-chart__tooltip-title) { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-sm) + 2px); }
+& .vin-chart__tooltip-title { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-sm) + 2px); }
 & .vin-chart__tooltip { border-radius: 18px 6px 20px 8px / 8px 20px 6px 18px; }
 & .vin-chart__line { stroke-width: 2.5; }`,
-      "data-table": `
-& .vin-data-table__status { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 1px); }`,
+      "data-table": "",
       message: `
 & .vin-message__author { font-family: "Kalam", "Inter", cursive; font-size: calc(var(--vin-text-md) + 2px); font-weight: 700; }`,
       bubble: `
@@ -928,7 +931,7 @@ export const STYLES = [
       "shadow-lg": "0 1px 2px rgb(0 0 0 / .04), 0 8px 24px -8px rgb(0 0 0 / .08)", "input-shadow": "none",
       "outline-shadow": "inset 0 0 0 1px #d2d2d7",
       weight: "600", "title-weight": "650",
-      focus: `0 0 0 4px ${mix(30, "transparent")}`, ease: "cubic-bezier(.25, .1, .25, 1)",
+      focus: `0 0 0 2px var(--vin-surface), 0 0 0 4.5px var(--vin-accent-text)`, ease: "cubic-bezier(.25, .1, .25, 1)",
     },
     dark: {
       stage: "#000000", surface: "#1c1c1e", fg: "#f5f5f7", muted: "#98989d",

@@ -266,8 +266,12 @@ export function exportSite() {
   if (!header || !sidebar || !footer) throw new Error("missing a shared part");
 
   // The scoped site CSS, saved next to the other site files under a content hash.
-  const siteCss = cssLinks.filter((h) => !/registry\./.test(h));
-  const libCss = cssLinks.filter((h) => /registry\./.test(h));
+  // The VinUI library's CSS is the file with the style blocks; Vite names its chunk after whichever page
+  // imports it first (registry.*, src.*…), so it is found by content, not by name.
+  const isLib = (h) => /\[data-vin-style=["']?precision["']?\]\s*\{/.test(read(path.join(DIST, "..", h)));
+  const libCss = cssLinks.filter(isLib);
+  const siteCss = cssLinks.filter((h) => !isLib(h));
+  if (libCss.length !== 1) throw new Error(`expected one VinUI library stylesheet, found ${libCss.length}`);
   const scoped = [CODE_CSS, ...libCss.map((h) => scopeLib(read(path.join(DIST, "..", h)))), ...siteCss.map((h) => scopeCss(read(path.join(DIST, "..", h))))].join("\n");
   const cssName = `site-wp.${sha(scoped)}.css`;
   for (const f of fs.readdirSync(path.join(DIST, "_astro"))) if (/^site-wp\..*\.css$/.test(f)) fs.rmSync(path.join(DIST, "_astro", f));

@@ -49,8 +49,13 @@ export function validateStyles(styles = STYLES) {
 }
 
 /* ---------- CSS output ---------- */
+/* Shadow tokens are combined with rings (`box-shadow: var(--vin-input-shadow), var(--vin-focus)`), and
+   "none, <ring>" is invalid CSS, which would drop the focus and error rings. So "none" is written as an
+   empty shadow that combines safely. */
+const NO_SHADOW = "0 0 #0000";
+const value = (k, v) => (k.includes("shadow") && v === "none" ? NO_SHADOW : v);
 const decls = (tokens, extra = "") =>
-  Object.entries(tokens).map(([k, v]) => `  --vin-${k}: ${v};`).join("\n") + (extra ? `\n${extra}` : "");
+  Object.entries(tokens).map(([k, v]) => `  --vin-${k}: ${value(k, v)};`).join("\n") + (extra ? `\n${extra}` : "");
 
 const sel = (id) => `[data-vin-style="${id}"]`;
 
