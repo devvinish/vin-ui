@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="apps/docs/public/favicon.svg" alt="VinUI logo" width="64" height="64">
-
 # VinUI: free, open source UI component library
 
 **63 accessible UI components in 8 styles, for HTML, React, Vue and Svelte.**<br>
